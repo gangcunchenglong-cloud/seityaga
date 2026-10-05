@@ -15,7 +15,7 @@
         #event-timer { font-size: 12px; color: #f87171; font-weight: bold; }
 
         .nav-tabs { display: flex; background: #e2e8f0; padding: 5px 15px 0; gap: 5px; overflow-x: auto; }
-        .tab-button { padding: 10px 20px; border: none; border-radius: 10px 10px 0 0; background: #cbd5e1; cursor: pointer; font-weight: bold; color: #475569; white-space: nowrap; }
+        .tab-button { padding: 10px 14px; border: none; border-radius: 10px 10px 0 0; background: #cbd5e1; cursor: pointer; font-weight: bold; color: #475569; white-space: nowrap; }
         .tab-button.active { background: white; color: var(--primary); }
         .tab-button.locked { background: #e2e8f0; color: #94a3b8; cursor: not-allowed; }
         #current-place { background: #fbbf24; color: #0f172a; font-weight: bold; padding: 4px 14px; border-radius: 999px; font-size: 16px; }
@@ -75,6 +75,8 @@
         <div id="event-timer">NEXT: 10:00</div>
         <div>予算: <span id="money" class="stat-val">0</span></div>
         <div>総人口: <span id="pop" class="stat-val">0</span></div>
+        <div>満足度: <span id="satisfaction" class="stat-val">-</span></div>
+        <div title="1人あたり1時間で10円の税収">税収: <span id="tax" class="stat-val">¥0</span>/時</div>
     </div>
 </div>
 
@@ -102,6 +104,7 @@
 
 <script>
 // 1辺のマス数と、街(地区)の定義。街を増やすときはここに足す(解放に必要な資金も同時に設定)
+const TAX_PER_PERSON_HOUR = 10; // 人口1人あたり、1時間で徴収する税金(円)
 const GRID = 15;
 const DISTRICT_DEFS = [
     { name: "北街", unlock: 0 },
@@ -118,40 +121,60 @@ const game = {
     money: 3000, activeTool: 'road', currentDistrict: 0,
     districts: DISTRICT_DEFS.map(() => Array(GRID * GRID).fill(null)),
     rivalTimer: 600, isRivalBattle: false,
+    taxCarry: 0, stats: null, byEmoji: {},
     // 街の解放に必要な資金(到達したら解放。その後お金を使っても再ロックされない)
     districtNames: DISTRICT_DEFS.map(d => d.name),
     unlockCost: DISTRICT_DEFS.map(d => d.unlock),
     unlocked: DISTRICT_DEFS.map((d, n) => n === 0),
     
+    // pop: 人口, sat: 満足度への寄与(福祉・娯楽・公共施設ほど高い)
     buildings: {
-        remove: { name: "撤去", cost: 0, emoji: "REMOVE", pop: 0 },
-        road: { name: "道路", cost: 2, emoji: "ROAD", pop: 2 },
-        vending: { name: "自販機", cost: 20, emoji: "🧃", pop: 0 },
-        house: { name: "木造住宅", cost: 50, emoji: "🏠", pop: 10 },
-        tent: { name: "テント", cost: 120, emoji: "⛺", pop: 5 },
-        conveni: { name: "コンビニ", cost: 350, emoji: "🏪", pop: 5 },
-        park: { name: "小公園", cost: 600, emoji: "🌳", pop: 50 },
-        police: { name: "交番", cost: 1000, emoji: "👮", pop: 10 },
-        apt: { name: "アパート", cost: 2500, emoji: "🏢", pop: 180 },
-        factory: { name: "町工場", cost: 5000, emoji: "🏭", pop: 0 },
-        gym: { name: "ジム", cost: 8000, emoji: "💪", pop: 40 },
-        solar: { name: "ソーラー", cost: 12000, emoji: "☀️", pop: 0 },
-        museum: { name: "博物館", cost: 20000, emoji: "🏛️", pop: 300 },
-        office: { name: "ビル", cost: 45000, emoji: "🏬", pop: 100 },
-        school: { name: "学校", cost: 80000, emoji: "🏫", pop: 500 },
-        hospital: { name: "病院", cost: 150000, emoji: "🏥", pop: 800 },
-        zoo: { name: "動物園", cost: 300000, emoji: "🦁", pop: 1200 },
-        stadium: { name: "球場", cost: 600000, emoji: "🏟️", pop: 4000 },
-        mall: { name: "巨大モール", cost: 1000000, emoji: "🛍️", pop: 500 },
-        hotel: { name: "高級ホテル", cost: 2500000, emoji: "🏨", pop: 600 },
-        amusement: { name: "遊園地", cost: 5000000, emoji: "🎡", pop: 6000 },
-        tower: { name: "タワー", cost: 10000000, emoji: "🗼", pop: 2000 },
-        shinkansen: { name: "新幹線駅", cost: 30000000, emoji: "🚄", pop: 3000 },
-        castle: { name: "歴史城", cost: 80000000, emoji: "🏯", pop: 9000 },
-        pyramid: { name: "ピラミッド", cost: 200000000, emoji: "📐", pop: 10000 },
-        sea_base: { name: "海底都市", cost: 500000000, emoji: "🌊", pop: 12000 },
-        rocket: { name: "宇宙センター", cost: 1000000000, emoji: "🚀", pop: 8000 },
-        timemachine: { name: "タイムマシン", cost: 9999999999, emoji: "⏳", pop: 1 }
+        remove: { name: "撤去", cost: 0, emoji: "REMOVE", pop: 0, sat: 0 },
+        road: { name: "道路", cost: 2, emoji: "ROAD", pop: 2, sat: 0 },
+        vending: { name: "自販機", cost: 20, emoji: "🧃", pop: 1, sat: 0 },
+        house: { name: "木造住宅", cost: 50, emoji: "🏠", pop: 10, sat: 0 },
+        garden: { name: "花壇", cost: 80, emoji: "🌷", pop: 2, sat: 1 },
+        tent: { name: "テント", cost: 120, emoji: "⛺", pop: 5, sat: 0 },
+        bakery: { name: "パン屋", cost: 200, emoji: "🥖", pop: 5, sat: 1 },
+        conveni: { name: "コンビニ", cost: 350, emoji: "🏪", pop: 5, sat: 1 },
+        cafe: { name: "カフェ", cost: 450, emoji: "☕", pop: 8, sat: 2 },
+        park: { name: "小公園", cost: 600, emoji: "🌳", pop: 50, sat: 3 },
+        police: { name: "交番", cost: 1000, emoji: "👮", pop: 10, sat: 5 },
+        clinic: { name: "診療所", cost: 1500, emoji: "💊", pop: 20, sat: 4 },
+        apt: { name: "アパート", cost: 2500, emoji: "🏢", pop: 180, sat: 0 },
+        library: { name: "図書館", cost: 3500, emoji: "📚", pop: 60, sat: 6 },
+        fire: { name: "消防署", cost: 4000, emoji: "🚒", pop: 30, sat: 8 },
+        factory: { name: "町工場", cost: 5000, emoji: "🏭", pop: 30, sat: -3 },
+        supermarket: { name: "スーパー", cost: 6000, emoji: "🛒", pop: 40, sat: 3 },
+        gym: { name: "ジム", cost: 8000, emoji: "💪", pop: 40, sat: 4 },
+        solar: { name: "ソーラー", cost: 12000, emoji: "☀️", pop: 5, sat: 1 },
+        cinema: { name: "映画館", cost: 15000, emoji: "🎬", pop: 100, sat: 5 },
+        museum: { name: "博物館", cost: 20000, emoji: "🏛️", pop: 300, sat: 8 },
+        station: { name: "駅", cost: 25000, emoji: "🚉", pop: 150, sat: 4 },
+        bank: { name: "銀行", cost: 35000, emoji: "🏦", pop: 80, sat: 2 },
+        office: { name: "ビル", cost: 45000, emoji: "🏬", pop: 100, sat: 0 },
+        temple: { name: "神社", cost: 60000, emoji: "⛩️", pop: 120, sat: 6 },
+        school: { name: "学校", cost: 80000, emoji: "🏫", pop: 500, sat: 20 },
+        university: { name: "大学", cost: 120000, emoji: "🎓", pop: 700, sat: 15 },
+        hospital: { name: "病院", cost: 150000, emoji: "🏥", pop: 800, sat: 25 },
+        zoo: { name: "動物園", cost: 300000, emoji: "🦁", pop: 1200, sat: 15 },
+        stadium: { name: "球場", cost: 600000, emoji: "🏟️", pop: 4000, sat: 20 },
+        aquarium: { name: "水族館", cost: 700000, emoji: "🐠", pop: 1500, sat: 12 },
+        mall: { name: "巨大モール", cost: 1000000, emoji: "🛍️", pop: 500, sat: 6 },
+        theater: { name: "劇場", cost: 1500000, emoji: "🎭", pop: 900, sat: 15 },
+        hotel: { name: "高級ホテル", cost: 2500000, emoji: "🏨", pop: 600, sat: 3 },
+        skyscraper: { name: "超高層ビル", cost: 3500000, emoji: "🌆", pop: 1800, sat: 0 },
+        observatory: { name: "天文台", cost: 4000000, emoji: "🔭", pop: 700, sat: 10 },
+        amusement: { name: "遊園地", cost: 5000000, emoji: "🎡", pop: 6000, sat: 25 },
+        tower: { name: "タワー", cost: 10000000, emoji: "🗼", pop: 2000, sat: 10 },
+        airport: { name: "空港", cost: 20000000, emoji: "✈️", pop: 3500, sat: 5 },
+        shinkansen: { name: "新幹線駅", cost: 30000000, emoji: "🚄", pop: 3000, sat: 8 },
+        harbor: { name: "大型港", cost: 50000000, emoji: "⚓", pop: 4000, sat: 3 },
+        castle: { name: "歴史城", cost: 80000000, emoji: "🏯", pop: 9000, sat: 15 },
+        pyramid: { name: "ピラミッド", cost: 200000000, emoji: "📐", pop: 10000, sat: 10 },
+        sea_base: { name: "海底都市", cost: 500000000, emoji: "🌊", pop: 12000, sat: 12 },
+        rocket: { name: "宇宙センター", cost: 1000000000, emoji: "🚀", pop: 8000, sat: 10 },
+        timemachine: { name: "タイムマシン", cost: 9999999999, emoji: "⏳", pop: 1, sat: 0 }
     },
 
     // 読み込み画面: 進捗バーを進めてからフェードアウトして消す
@@ -174,6 +197,7 @@ const game = {
 
     init() {
         this.runLoading();
+        Object.values(this.buildings).forEach(b => { this.byEmoji[b.emoji] = b; });
         this.load();
         this.buildDistrictUI();
         this.checkUnlocks();
@@ -182,6 +206,11 @@ const game = {
         setInterval(() => this.tick(), 1000);
         setInterval(() => this.updateCars(), 500);
         
+        // ウィンドウサイズが変わったら、資金調達の描画領域も合わせる(ずれると当たり判定が見た目と合わなくなる)
+        window.addEventListener('resize', () => {
+            const cvs = document.getElementById('actionCanvas');
+            if(cvs.offsetWidth > 0) { cvs.width = cvs.offsetWidth; cvs.height = cvs.offsetHeight; }
+        });
         window.addEventListener('keydown', (e) => {
             if(e.key.toLowerCase()==='a') this.run.playerX = Math.max(0, this.run.playerX - 40);
             if(e.key.toLowerCase()==='d') this.run.playerX = Math.min(this.run.ctx.canvas.width - 50, this.run.playerX + 40);
@@ -189,12 +218,27 @@ const game = {
         document.getElementById('actionCanvas').onclick = () => { if(this.run.isGameOver) this.resetRunner(); };
     },
 
-    tick() {
-        let pop = 0;
+    // 人口・満足度の集計。人口は建物ごとの pop の合計
+    calcStats() {
+        let pop = 0, sat = 0;
         this.districts.forEach(d => d.forEach(cell => {
-            const b = Object.values(this.buildings).find(v => v.emoji === cell);
-            if(b) pop += b.pop;
+            const b = this.byEmoji[cell];
+            if(b) { pop += b.pop; sat += b.sat || 0; }
         }));
+        // 人口200人あたり満足度ポイント1が必要。足りるほど満足度が上がる(基礎30%〜最大100%)
+        const need = pop / 200;
+        const ratio = need > 0 ? sat / need : 1;
+        const satisfaction = pop === 0 ? 50 : Math.max(0, Math.min(100, Math.round(30 + 70 * Math.min(1, ratio))));
+        return { pop, sat, need, satisfaction };
+    },
+
+    tick() {
+        const st = this.calcStats(); const pop = st.pop;
+        // 税金: 1人あたり1時間で10円。毎秒 pop*10/3600 円を端数ごと蓄積して加算する
+        this.taxCarry += pop * TAX_PER_PERSON_HOUR / 3600;
+        const whole = Math.floor(this.taxCarry);
+        if(whole > 0) { this.money += whole; this.taxCarry -= whole; }
+        this.stats = st;
         this.checkUnlocks();
         this.updateUI(pop);
 
@@ -381,14 +425,33 @@ const game = {
                     if(items[idx]) items[idx].classList.add('active');
                 });
             };
-            div.innerHTML = `<span>${b.emoji==='ROAD'?'🛣️':b.emoji==='REMOVE'?'🧹':b.emoji}</span><br>${b.name}<br><b>${b.emoji==='REMOVE'?'7割返金':b.cost}</b>`;
+            div.innerHTML = `<span>${b.emoji==='ROAD'?'🛣️':b.emoji==='REMOVE'?'🧹':b.emoji}</span><br>${b.name}<br><b>${b.emoji==='REMOVE'?'7割返金':b.cost.toLocaleString()}</b>${b.emoji==='REMOVE'?'':`<br><small style="color:#64748b">👥+${b.pop}</small>`}`;
             sG.appendChild(div);
         });
     },
 
     updateUI(pop) {
+        const st = this.stats || this.calcStats();
+        const sv = st.satisfaction;
+        const face = sv >= 80 ? '😄' : sv >= 60 ? '🙂' : sv >= 40 ? '😐' : sv >= 20 ? '😟' : '😡';
+        const color = sv >= 60 ? '#4ade80' : sv >= 40 ? '#fbbf24' : '#f87171';
+        const el = document.getElementById('satisfaction');
+        el.innerText = `${face} ${sv}%`; el.style.color = color;
+        el.parentElement.title = `満足度ポイント ${st.sat.toFixed(0)} / 必要 ${st.need.toFixed(1)}(公園・病院・学校などの施設が多いほど上がります)`;
+        document.getElementById('tax').innerText = '¥' + Math.floor(pop * TAX_PER_PERSON_HOUR).toLocaleString();
         document.getElementById('money').innerText = Math.floor(this.money).toLocaleString();
         document.getElementById('pop').innerText = pop.toLocaleString();
+    },
+
+    // 当たり判定: 絵文字は描画サイズより一回り小さい矩形(内側に余白)で判定する。
+    // 岩が1フレームで動いた範囲(prevY〜現在)も含めて判定し、高速時のすり抜けを防ぐ。
+    hitsPlayer(o, prevY, h) {
+        const P = { size: 50, inset: 10 }, R = { size: 40, inset: 8 };
+        const pL = this.run.playerX + P.inset, pR = this.run.playerX + P.size - P.inset;
+        const pT = (h - 80) + P.inset, pB = (h - 80) + P.size - P.inset;
+        const rL = o.x + R.inset, rR = o.x + R.size - R.inset;
+        const rTop = prevY + R.inset, rBottom = o.y + R.size - R.inset;
+        return rL < pR && rR > pL && rTop < pB && rBottom > pT;
     },
 
     run: { ctx: null, playerX: 200, obstacles: [], distance: 0, isGameOver: false },
@@ -422,9 +485,9 @@ const game = {
             if(Math.random() < spawnRate) r.obstacles.push({ x: Math.random()*(w-40), y: -60 });
             
             r.obstacles.forEach(o => {
+                const prevY = o.y;
                 o.y += (this.isRivalBattle ? 9 : 6) + (r.distance/100);
-                // 当たり判定
-                if(Math.abs(o.x - r.playerX) < 40 && Math.abs(o.y - (h-80)) < 40) r.isGameOver = "LOSE";
+                if(this.hitsPlayer(o, prevY, h)) r.isGameOver = "LOSE";
             });
             r.obstacles = r.obstacles.filter(o => o.y < h + 100);
             if(this.isRivalBattle && r.distance > 500) r.isGameOver = "WIN";
@@ -517,12 +580,13 @@ const game = {
     },
 
     confirmReset() { if(confirm("全リセット？")) { localStorage.clear(); location.reload(); } },
-    save() { localStorage.setItem('megaTownUlt', JSON.stringify({ m: this.money, d: this.districts, u: this.unlocked, g: GRID })); },
+    save() { localStorage.setItem('megaTownUlt', JSON.stringify({ m: this.money, d: this.districts, u: this.unlocked, g: GRID, t: this.taxCarry })); },
     load() {
         const s = localStorage.getItem('megaTownUlt');
         if(!s) return;
         const data = JSON.parse(s);
         this.money = data.m;
+        this.taxCarry = data.t || 0;
         // 旧セーブ(10×10・4街)は、左上を基準に15×15・8街へ移し替える
         const oldG = data.g || 10;
         this.districts = DISTRICT_DEFS.map((def, n) => {
