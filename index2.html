@@ -34,7 +34,7 @@
         .cell.road { background: #444 !important; }
         .cell.denied { background: rgba(220,38,38,0.6) !important; }
 
-        .car { position: absolute; font-size: 14px; transition: all 0.5s linear; z-index: 2; pointer-events: none; }
+        .car { position: absolute; font-size: 14px; line-height: 1; transition: left var(--step, 0.5s) linear, top var(--step, 0.5s) linear, transform 0.25s, opacity 0.4s; z-index: 2; pointer-events: none; }
 
         .shop-card { background: white; padding: 15px; border-radius: 15px; width: 350px; display: flex; flex-direction: column; overflow: hidden; }
         .shop-scroll-area { flex: 1; overflow-y: scroll; padding-right: 10px; border: 1px solid #eee; border-radius: 8px; background: #fafafa; }
@@ -73,7 +73,7 @@
     <div style="display:flex; align-items:center; gap:15px;"><div id="cityName">🏙️ メガタウン ver1.20.2</div><div id="current-place">📍 現在地: 北街</div></div>
     <div class="stats-group">
         <div id="event-timer">NEXT: 10:00</div>
-        <div>予算: <span id="money" class="stat-val">0</span></div>
+        <div>予算: <span id="money" class="stat-val">0</span> <span id="income-rate" title="税収(満足度による倍率込み)で毎秒増える金額" style="font-size:13px; color:#4ade80; font-weight:bold;">+¥0/秒</span></div>
         <div>総人口: <span id="pop" class="stat-val">0</span></div>
         <div>満足度: <span id="satisfaction" class="stat-val">-</span></div>
         <div title="1人あたり1時間で10円の税収">税収: <span id="tax" class="stat-val">¥0</span>/時</div>
@@ -254,28 +254,82 @@ const game = {
         }
     },
 
+    // 車の生成(500msごと)。生成後の動きは runCar が車ごとに自走させる
     updateCars() {
         const containers = document.querySelectorAll('.town-grid-container');
         containers.forEach((container, distIdx) => {
             if(!this.districts[distIdx]) return; // 非表示テンプレート内のコンテナは対象外
             const roadIndices = [];
             this.districts[distIdx].forEach((d, i) => { if(d === 'ROAD') roadIndices.push(i); });
-            if(roadIndices.length > 0 && container.querySelectorAll('.car').length < roadIndices.length / 3) {
+            const count = container.querySelectorAll('.car').length;
+            if(roadIndices.length > 0 && count < Math.min(20, roadIndices.length / 3)) {
                 const startIdx = roadIndices[Math.floor(Math.random() * roadIndices.length)];
+                const dirs = [0,1,2,3].filter(d => this.carNext(startIdx, d, distIdx) >= 0);
+                if(dirs.length === 0) return; // 孤立した道路には出さない
                 const car = document.createElement('div');
                 car.className = 'car';
                 car.innerText = ["🚗","🚕","🚙","🏎️"][Math.floor(Math.random()*4)];
+                const stepMs = 250 + Math.floor(Math.random() * 450);   // 車ごとに速さが違う
+                car._s = { idx: startIdx, dir: dirs[Math.floor(Math.random() * dirs.length)], stepMs, pause: 0,
+                           dieAt: Date.now() + 6000 + Math.random() * 9000 };
+                car.style.setProperty('--step', stepMs + 'ms');
                 this.setCarPos(car, startIdx);
+                this.setCarDir(car);
                 container.appendChild(car);
-                setTimeout(() => car.remove(), 3000);
+                car._timer = setTimeout(() => this.runCar(car, distIdx), stepMs);
             }
-            container.querySelectorAll('.car').forEach(car => {
-                const currentIdx = parseInt(car.dataset.idx);
-                const neighbors = [currentIdx-1, currentIdx+1, currentIdx-GRID, currentIdx+GRID];
-                const validRoads = neighbors.filter(n => this.isNeighbor(currentIdx, n) && this.districts[distIdx][n] === 'ROAD');
-                if(validRoads.length > 0) this.setCarPos(car, validRoads[Math.floor(Math.random() * validRoads.length)]);
-            });
         });
+    },
+
+    // 方向: 0=上 1=右 2=下 3=左。進めるマス番号を返す(範囲外は -1)
+    carNext(idx, dir, distIdx) {
+        const col = idx % GRID;
+        let n = -1;
+        if(dir === 0 && idx >= GRID) n = idx - GRID;
+        if(dir === 2 && idx < GRID * (GRID - 1)) n = idx + GRID;
+        if(dir === 1 && col < GRID - 1) n = idx + 1;
+        if(dir === 3 && col > 0) n = idx - 1;
+        return (n >= 0 && this.districts[distIdx][n] === 'ROAD') ? n : -1;
+    },
+
+    // 進行方向に合わせて絵文字(左向き)を反転・回転する
+    setCarDir(car) {
+        const t = ['rotate(90deg)', 'scaleX(-1)', 'rotate(-90deg)', 'none'][car._s.dir];
+        car.style.transform = t;
+    },
+
+    removeCar(car) {
+        clearTimeout(car._timer);
+        car.style.opacity = '0';
+        setTimeout(() => car.remove(), 400);
+    },
+
+    // 1歩ぶんの判断: 停車 / 直進 / 右左折 / 行き止まりでUターン
+    runCar(car, distIdx) {
+        const s = car._s;
+        if(!car.isConnected) return;
+        if(this.districts[distIdx][s.idx] !== 'ROAD' || Date.now() > s.dieAt) return this.removeCar(car);
+        let wait = s.stepMs;
+        if(s.pause > 0) {
+            s.pause--;
+        } else if(Math.random() < 0.08) {
+            s.pause = Math.floor(Math.random() * 2); // 今回+0〜1回、止まる
+        } else {
+            const back = (s.dir + 2) % 4;
+            let opts = [0,1,2,3].filter(d => d !== back && this.carNext(s.idx, d, distIdx) >= 0);
+            if(opts.length === 0 && this.carNext(s.idx, back, distIdx) >= 0) opts = [back]; // 行き止まりだけUターン
+            if(opts.length > 0) {
+                const turns = opts.filter(d => d !== s.dir);
+                let dir;
+                if(opts.includes(s.dir) && (turns.length === 0 || Math.random() < 0.65)) dir = s.dir;
+                else dir = turns[Math.floor(Math.random() * turns.length)];
+                s.dir = dir;
+                s.idx = this.carNext(s.idx, dir, distIdx);
+                this.setCarDir(car);
+                this.setCarPos(car, s.idx);
+            }
+        }
+        car._timer = setTimeout(() => this.runCar(car, distIdx), wait);
     },
 
     setCarPos(el, idx) {
@@ -443,6 +497,10 @@ const game = {
         el.parentElement.title = `満足度ポイント ${st.sat.toFixed(0)} / 必要 ${st.need.toFixed(1)}(公園・病院・学校などの施設が多いほど上がります)\n税収倍率 ×${st.taxMultiplier.toFixed(2)}`;
         document.getElementById('tax').innerText = '¥' + Math.floor(st.taxPerHour).toLocaleString() + ` (×${st.taxMultiplier.toFixed(2)})`;
         document.getElementById('money').innerText = Math.floor(this.money).toLocaleString();
+        // 予算の横に、税収による毎秒の増加額を表示
+        const rate = st.taxPerHour / 3600;
+        const rateText = rate >= 1000 ? Math.round(rate).toLocaleString() : rate >= 1 ? rate.toFixed(1) : rate.toFixed(2);
+        document.getElementById('income-rate').innerText = `+¥${rateText}/秒`;
         document.getElementById('pop').innerText = pop.toLocaleString();
     },
 
