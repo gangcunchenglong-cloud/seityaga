@@ -95,7 +95,7 @@ const game = {
     rivalTimer: 600, isRivalBattle: false,
     
     buildings: {
-        remove: { name: "道路を撤去", cost: 0, emoji: "REMOVE", pop: 0 },
+        remove: { name: "撤去", cost: 0, emoji: "REMOVE", pop: 0 },
         road: { name: "道路", cost: 2, emoji: "ROAD", pop: 2 },
         vending: { name: "自販機", cost: 20, emoji: "🧃", pop: 0 },
         house: { name: "木造住宅", cost: 50, emoji: "🏠", pop: 10 },
@@ -237,16 +237,20 @@ const game = {
                     setTimeout(() => c.classList.remove('denied'), 400);
                 };
                 const cur = this.districts[distIdx][i];
-                // 撤去モード: 道路のみ撤去できる(建物が唯一の道路を失う場合は不可)
+                // 撤去モード: 道路・建物を撤去し、建設費の7割を返金する
+                // (建物が唯一の道路を失う場合、その道路は撤去できない)
                 if(this.activeTool === 'remove') {
-                    if(cur !== 'ROAD') return deny();
+                    if(!cur) return;
                     this.districts[distIdx][i] = null;
-                    const orphan = this.neighbors(i).some(n => {
-                        const v = this.districts[distIdx][n];
-                        return v && v !== 'ROAD' && !this.hasAdjacentRoad(distIdx, n);
-                    });
-                    if(orphan) { this.districts[distIdx][i] = 'ROAD'; return deny(); }
-                    this.money += Math.floor(this.buildings.road.cost / 2);
+                    if(cur === 'ROAD') {
+                        const orphan = this.neighbors(i).some(n => {
+                            const v = this.districts[distIdx][n];
+                            return v && v !== 'ROAD' && !this.hasAdjacentRoad(distIdx, n);
+                        });
+                        if(orphan) { this.districts[distIdx][i] = 'ROAD'; return deny(); }
+                    }
+                    const old = Object.values(this.buildings).find(v => v.emoji === cur);
+                    if(old) this.money += Math.floor(old.cost * 0.7);
                     this.renderGrid(distIdx); this.save();
                     return;
                 }
@@ -294,7 +298,7 @@ const game = {
                     if(items[idx]) items[idx].classList.add('active');
                 });
             };
-            div.innerHTML = `<span>${b.emoji==='ROAD'?'🛣️':b.emoji==='REMOVE'?'🧹':b.emoji}</span><br>${b.name}<br><b>${b.emoji==='REMOVE'?'半額返金':b.cost}</b>`;
+            div.innerHTML = `<span>${b.emoji==='ROAD'?'🛣️':b.emoji==='REMOVE'?'🧹':b.emoji}</span><br>${b.name}<br><b>${b.emoji==='REMOVE'?'7割返金':b.cost}</b>`;
             sG.appendChild(div);
         });
     },
