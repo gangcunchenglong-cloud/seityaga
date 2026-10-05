@@ -42,6 +42,8 @@
         .shop-item { background: white; border: 2px solid #e2e8f0; padding: 10px 5px; border-radius: 10px; text-align: center; cursor: pointer; font-size: 12px; }
         .shop-item.active { border-color: var(--primary); background: #eff6ff; }
         
+        .btn-remove { width: 100%; padding: 12px; border: 2px solid #f59e0b; border-radius: 8px; background: #fffbeb; color: #b45309; margin-top: 10px; cursor: pointer; font-weight: bold; font-size: 14px; }
+        .btn-remove.active { background: #f59e0b; color: white; }
         .btn-reset { width: 100%; padding: 10px; border: none; border-radius: 8px; background: #fee2e2; color: #dc2626; margin-top: 10px; cursor: pointer; font-weight: bold; }
 
         #actionCanvas { width: 100%; height: 100%; border-radius: 15px; background: #1e293b; }
@@ -88,6 +90,7 @@
     </div>
     <div class="shop-card">
         <div class="shop-scroll-area"><div class="shop-grid"></div></div>
+        <button class="btn-remove" onclick="game.toggleRemove()">🧹 撤去モード(建物・道路 / 7割返金)</button>
         <button class="btn-reset" onclick="game.confirmReset()">🔄 全リセット</button>
     </div>
 </div>
@@ -309,7 +312,7 @@ const game = {
             const div = document.createElement('div');
             div.className = `shop-item ${this.activeTool === key ? 'active' : ''}`;
             div.onclick = () => { 
-                this.activeTool = key; 
+                this.activeTool = key; this.syncRemoveButtons();
                 document.querySelectorAll('.shop-item').forEach(el => el.classList.remove('active'));
                 document.querySelectorAll('.shop-grid').forEach(grid => {
                     const items = grid.querySelectorAll('.shop-item');
@@ -402,6 +405,21 @@ const game = {
             ctx.fillText("クリックでリトライ", w/2, h/2 + 100);
         }
         requestAnimationFrame(() => this.animateRunner());
+    },
+
+    // 撤去ボタン: 撤去モードのON/OFF(OFFのときは道路に戻す)
+    toggleRemove() {
+        const key = this.activeTool === 'remove' ? 'road' : 'remove';
+        const idx = Object.keys(this.buildings).indexOf(key);
+        const items = document.querySelectorAll('.shop-grid')[this.currentDistrict].querySelectorAll('.shop-item');
+        if(items[idx]) items[idx].click();
+    },
+
+    syncRemoveButtons() {
+        document.querySelectorAll('.btn-remove').forEach(b => {
+            b.classList.toggle('active', this.activeTool === 'remove');
+            b.innerText = this.activeTool === 'remove' ? '🧹 撤去モード中(もう一度押すと解除)' : '🧹 撤去モード(建物・道路 / 7割返金)';
+        });
     },
 
     showToast(msg, color) {
