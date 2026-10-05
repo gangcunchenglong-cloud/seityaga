@@ -29,6 +29,7 @@
         .town-grid { display: grid; grid-template-columns: repeat(10, 1fr); gap: 2px; background: var(--town-bg); padding: 5px; border-radius: 8px; width: 100%; height: 100%; border: 4px solid var(--town-border); box-sizing: border-box; }
         .cell { aspect-ratio: 1; background: rgba(255,255,255,0.3); border-radius: 2px; display: flex; align-items: center; justify-content: center; font-size: 20px; cursor: pointer; z-index: 1; }
         .cell.road { background: #444 !important; }
+        .cell.denied { background: rgba(220,38,38,0.6) !important; }
 
         .car { position: absolute; font-size: 14px; transition: all 0.5s linear; z-index: 2; pointer-events: none; }
 
@@ -231,13 +232,28 @@ const game = {
             c.innerText = d === 'ROAD' ? '' : (d || '');
             c.onclick = () => {
                 const b = this.buildings[this.activeTool];
-                if(!this.districts[distIdx][i] && this.money >= b.cost) {
+                if(this.districts[distIdx][i]) return;
+                // 道路以外の建物は、道路に隣接していないと設置できない
+                if(b.emoji !== 'ROAD' && !this.hasAdjacentRoad(distIdx, i)) {
+                    c.classList.add('denied');
+                    setTimeout(() => c.classList.remove('denied'), 400);
+                    return;
+                }
+                if(this.money >= b.cost) {
                     this.money -= b.cost; this.districts[distIdx][i] = b.emoji;
                     this.renderGrid(distIdx); this.save();
                 }
             };
             g.appendChild(c);
         });
+    },
+
+    // 上下左右(同じ地区内)のいずれかに道路があるか。左右端で行をまたがないよう列も判定する
+    hasAdjacentRoad(distIdx, i) {
+        const d = this.districts[distIdx];
+        const col = i % 10;
+        return (col > 0 && d[i-1] === 'ROAD') || (col < 9 && d[i+1] === 'ROAD') ||
+               (i - 10 >= 0 && d[i-10] === 'ROAD') || (i + 10 < 100 && d[i+10] === 'ROAD');
     },
 
     renderShop(distIdx) {
