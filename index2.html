@@ -28,9 +28,9 @@
         .build-layout { display: flex; width: 100%; gap: 15px; }
         .map-card { background: white; padding: 10px; border-radius: 15px; flex: 1.5; position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; }
         
-        .town-grid-container { position: relative; width: 100%; max-width: 500px; aspect-ratio: 1; }
-        .town-grid { display: grid; grid-template-columns: repeat(10, 1fr); gap: 2px; background: var(--town-bg); padding: 5px; border-radius: 8px; width: 100%; height: 100%; border: 4px solid var(--town-border); box-sizing: border-box; }
-        .cell { aspect-ratio: 1; background: rgba(255,255,255,0.3); border-radius: 2px; display: flex; align-items: center; justify-content: center; font-size: 20px; cursor: pointer; z-index: 1; }
+        .town-grid-container { position: relative; width: 100%; max-width: 560px; aspect-ratio: 1; }
+        .town-grid { display: grid; grid-template-columns: repeat(var(--grid, 15), 1fr); gap: 1px; background: var(--town-bg); padding: 5px; border-radius: 8px; width: 100%; height: 100%; border: 4px solid var(--town-border); box-sizing: border-box; }
+        .cell { aspect-ratio: 1; background: rgba(255,255,255,0.3); border-radius: 2px; display: flex; align-items: center; justify-content: center; font-size: 15px; cursor: pointer; z-index: 1; overflow: hidden; }
         .cell.road { background: #444 !important; }
         .cell.denied { background: rgba(220,38,38,0.6) !important; }
 
@@ -79,18 +79,10 @@
 </div>
 
 <div class="nav-tabs">
-    <button class="tab-button active" data-page="dist1" onclick="game.changePage('dist1')">📍 北街</button>
-    <button class="tab-button" data-page="dist2" onclick="game.changePage('dist2')">📍 南街</button>
-    <button class="tab-button" data-page="dist3" onclick="game.changePage('dist3')">📍 東街</button>
-    <button class="tab-button" data-page="dist4" onclick="game.changePage('dist4')">📍 西街</button>
     <button class="tab-button" data-page="challenge" id="tab-challenge" style="background:#fbbf24; color:#000;" onclick="game.changePage('challenge')">🏃 資金調達</button>
 </div>
 
 <div class="main-container">
-    <div id="page-dist1" class="page active"><div class="build-layout" id="layout1"></div></div>
-    <div id="page-dist2" class="page"><div class="build-layout" id="layout2"></div></div>
-    <div id="page-dist3" class="page"><div class="build-layout" id="layout3"></div></div>
-    <div id="page-dist4" class="page"><div class="build-layout" id="layout4"></div></div>
     <div id="page-challenge" class="page"><canvas id="actionCanvas"></canvas></div>
 </div>
 
@@ -109,14 +101,27 @@
 </div>
 
 <script>
+// 1辺のマス数と、街(地区)の定義。街を増やすときはここに足す(解放に必要な資金も同時に設定)
+const GRID = 15;
+const DISTRICT_DEFS = [
+    { name: "北街", unlock: 0 },
+    { name: "南街", unlock: 10000 },
+    { name: "東街", unlock: 1000000 },
+    { name: "西街", unlock: 100000000 },
+    { name: "中央街", unlock: 500000000 },
+    { name: "港街", unlock: 2000000000 },
+    { name: "山街", unlock: 5000000000 },
+    { name: "空街", unlock: 10000000000 }
+];
+
 const game = {
     money: 3000, activeTool: 'road', currentDistrict: 0,
-    districts: [Array(100).fill(null), Array(100).fill(null), Array(100).fill(null), Array(100).fill(null)],
+    districts: DISTRICT_DEFS.map(() => Array(GRID * GRID).fill(null)),
     rivalTimer: 600, isRivalBattle: false,
     // 街の解放に必要な資金(到達したら解放。その後お金を使っても再ロックされない)
-    districtNames: ["北街", "南街", "東街", "西街"],
-    unlockCost: [0, 10000, 1000000, 100000000],
-    unlocked: [true, false, false, false],
+    districtNames: DISTRICT_DEFS.map(d => d.name),
+    unlockCost: DISTRICT_DEFS.map(d => d.unlock),
+    unlocked: DISTRICT_DEFS.map((d, n) => n === 0),
     
     buildings: {
         remove: { name: "撤去", cost: 0, emoji: "REMOVE", pop: 0 },
@@ -170,6 +175,7 @@ const game = {
     init() {
         this.runLoading();
         this.load();
+        this.buildDistrictUI();
         this.checkUnlocks();
         this.setupPages();
         this.initRunner();
@@ -218,18 +224,18 @@ const game = {
             }
             container.querySelectorAll('.car').forEach(car => {
                 const currentIdx = parseInt(car.dataset.idx);
-                const neighbors = [currentIdx-1, currentIdx+1, currentIdx-10, currentIdx+10];
-                const validRoads = neighbors.filter(n => n >= 0 && n < 100 && this.districts[distIdx][n] === 'ROAD');
+                const neighbors = [currentIdx-1, currentIdx+1, currentIdx-GRID, currentIdx+GRID];
+                const validRoads = neighbors.filter(n => this.isNeighbor(currentIdx, n) && this.districts[distIdx][n] === 'ROAD');
                 if(validRoads.length > 0) this.setCarPos(car, validRoads[Math.floor(Math.random() * validRoads.length)]);
             });
         });
     },
 
     setCarPos(el, idx) {
-        const x = (idx % 10) * 10;
-        const y = Math.floor(idx / 10) * 10;
-        el.style.left = `calc(${x}% + 5px)`;
-        el.style.top = `calc(${y}% + 5px)`;
+        const x = (idx % GRID) * (100 / GRID);
+        const y = Math.floor(idx / GRID) * (100 / GRID);
+        el.style.left = `calc(${x}% + 3px)`;
+        el.style.top = `calc(${y}% + 3px)`;
         el.dataset.idx = idx;
     },
 
@@ -243,15 +249,36 @@ const game = {
         }, 3000);
     },
 
+    // 街ごとのタブとページを DISTRICT_DEFS から生成する
+    buildDistrictUI() {
+        const tabs = document.querySelector('.nav-tabs');
+        const challengeTab = document.getElementById('tab-challenge');
+        const main = document.querySelector('.main-container');
+        const challengePage = document.getElementById('page-challenge');
+        DISTRICT_DEFS.forEach((d, n) => {
+            const btn = document.createElement('button');
+            btn.className = 'tab-button' + (n === 0 ? ' active' : '');
+            btn.dataset.page = 'dist' + (n + 1);
+            btn.innerText = '📍 ' + d.name;
+            btn.onclick = () => this.changePage('dist' + (n + 1));
+            tabs.insertBefore(btn, challengeTab);
+            const page = document.createElement('div');
+            page.id = 'page-dist' + (n + 1);
+            page.className = 'page' + (n === 0 ? ' active' : '');
+            page.innerHTML = `<div class="build-layout" id="layout${n + 1}"></div>`;
+            main.insertBefore(page, challengePage);
+        });
+    },
+
     setupPages() {
-        const names = ["北街地区", "南街地区", "東街地区", "西街地区"];
-        for(let i=1; i<=4; i++) {
-            const container = document.getElementById('layout'+i);
+        DISTRICT_DEFS.forEach((d, n) => {
+            const container = document.getElementById('layout' + (n + 1));
             container.innerHTML = document.getElementById('build-template').innerHTML;
-            container.querySelector('.district-title').innerText = names[i-1];
-            this.renderGrid(i-1);
-            this.renderShop(i-1);
-        }
+            container.querySelector('.district-title').innerText = d.name + '地区';
+            container.querySelector('.town-grid').style.setProperty('--grid', GRID);
+            this.renderGrid(n);
+            this.renderShop(n);
+        });
     },
 
     changePage(id) {
@@ -325,13 +352,15 @@ const game = {
 
     // 上下左右の隣接マス番号(左右端で行をまたがない)
     neighbors(i) {
-        const col = i % 10, r = [];
+        const col = i % GRID, r = [];
         if(col > 0) r.push(i-1);
-        if(col < 9) r.push(i+1);
-        if(i >= 10) r.push(i-10);
-        if(i < 90) r.push(i+10);
+        if(col < GRID-1) r.push(i+1);
+        if(i >= GRID) r.push(i-GRID);
+        if(i < GRID*(GRID-1)) r.push(i+GRID);
         return r;
     },
+
+    isNeighbor(i, n) { return this.neighbors(i).includes(n); },
 
     hasAdjacentRoad(distIdx, i) {
         return this.neighbors(i).some(n => this.districts[distIdx][n] === 'ROAD');
@@ -488,10 +517,25 @@ const game = {
     },
 
     confirmReset() { if(confirm("全リセット？")) { localStorage.clear(); location.reload(); } },
-    save() { localStorage.setItem('megaTownUlt', JSON.stringify({ m: this.money, d: this.districts, u: this.unlocked })); },
-    load() { 
-        const s = localStorage.getItem('megaTownUlt'); 
-        if(s) { const data = JSON.parse(s); this.money = data.m; this.districts = data.d; if(data.u) this.unlocked = data.u; } 
+    save() { localStorage.setItem('megaTownUlt', JSON.stringify({ m: this.money, d: this.districts, u: this.unlocked, g: GRID })); },
+    load() {
+        const s = localStorage.getItem('megaTownUlt');
+        if(!s) return;
+        const data = JSON.parse(s);
+        this.money = data.m;
+        // 旧セーブ(10×10・4街)は、左上を基準に15×15・8街へ移し替える
+        const oldG = data.g || 10;
+        this.districts = DISTRICT_DEFS.map((def, n) => {
+            const grid = Array(GRID * GRID).fill(null);
+            const old = (data.d && data.d[n]) || [];
+            old.forEach((v, i) => {
+                if(!v) return;
+                const r = Math.floor(i / oldG), c = i % oldG;
+                if(r < GRID && c < GRID) grid[r * GRID + c] = v;
+            });
+            return grid;
+        });
+        this.unlocked = DISTRICT_DEFS.map((d, n) => n === 0 || !!(data.u && data.u[n]));
     }
 };
 window.onload = () => game.init();
