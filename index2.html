@@ -95,6 +95,7 @@ const game = {
     rivalTimer: 600, isRivalBattle: false,
     
     buildings: {
+        remove: { name: "道路を撤去", cost: 0, emoji: "REMOVE", pop: 0 },
         road: { name: "道路", cost: 2, emoji: "ROAD", pop: 2 },
         vending: { name: "自販機", cost: 20, emoji: "🧃", pop: 0 },
         house: { name: "木造住宅", cost: 50, emoji: "🏠", pop: 10 },
@@ -231,14 +232,30 @@ const game = {
             c.className = 'cell' + (d === 'ROAD' ? ' road' : '');
             c.innerText = d === 'ROAD' ? '' : (d || '');
             c.onclick = () => {
-                const b = this.buildings[this.activeTool];
-                if(this.districts[distIdx][i]) return;
-                // 道路以外の建物は、道路に隣接していないと設置できない
-                if(b.emoji !== 'ROAD' && !this.hasAdjacentRoad(distIdx, i)) {
+                const deny = () => {
                     c.classList.add('denied');
                     setTimeout(() => c.classList.remove('denied'), 400);
+                };
+                const cur = this.districts[distIdx][i];
+                // 撤去モード: 道路のみ撤去できる(建物が唯一の道路を失う場合は不可)
+                if(this.activeTool === 'remove') {
+                    if(cur !== 'ROAD') return deny();
+                    this.districts[distIdx][i] = null;
+                    const orphan = this.neighbors(i).some(n => {
+                        const v = this.districts[distIdx][n];
+                        return v && v !== 'ROAD' && !this.hasAdjacentRoad(distIdx, n);
+                    });
+                    if(orphan) { this.districts[distIdx][i] = 'ROAD'; return deny(); }
+                    this.money += Math.floor(this.buildings.road.cost / 2);
+                    this.renderGrid(distIdx); this.save();
                     return;
                 }
+                const b = this.buildings[this.activeTool];
+                if(cur) return;
+                // 建物・道路とも、既存の道路に隣接していないと設置できない
+                // (その地区に道路が1本もないときだけ、最初の道路を自由に置ける)
+                const hasRoad = this.districts[distIdx].includes('ROAD');
+                if((b.emoji !== 'ROAD' || hasRoad) && !this.hasAdjacentRoad(distIdx, i)) return deny();
                 if(this.money >= b.cost) {
                     this.money -= b.cost; this.districts[distIdx][i] = b.emoji;
                     this.renderGrid(distIdx); this.save();
@@ -248,12 +265,18 @@ const game = {
         });
     },
 
-    // 上下左右(同じ地区内)のいずれかに道路があるか。左右端で行をまたがないよう列も判定する
+    // 上下左右の隣接マス番号(左右端で行をまたがない)
+    neighbors(i) {
+        const col = i % 10, r = [];
+        if(col > 0) r.push(i-1);
+        if(col < 9) r.push(i+1);
+        if(i >= 10) r.push(i-10);
+        if(i < 90) r.push(i+10);
+        return r;
+    },
+
     hasAdjacentRoad(distIdx, i) {
-        const d = this.districts[distIdx];
-        const col = i % 10;
-        return (col > 0 && d[i-1] === 'ROAD') || (col < 9 && d[i+1] === 'ROAD') ||
-               (i - 10 >= 0 && d[i-10] === 'ROAD') || (i + 10 < 100 && d[i+10] === 'ROAD');
+        return this.neighbors(i).some(n => this.districts[distIdx][n] === 'ROAD');
     },
 
     renderShop(distIdx) {
@@ -271,7 +294,7 @@ const game = {
                     if(items[idx]) items[idx].classList.add('active');
                 });
             };
-            div.innerHTML = `<span>${b.emoji==='ROAD'?'🛣️':b.emoji}</span><br>${b.name}<br><b>${b.cost}</b>`;
+            div.innerHTML = `<span>${b.emoji==='ROAD'?'🛣️':b.emoji==='REMOVE'?'🧹':b.emoji}</span><br>${b.name}<br><b>${b.emoji==='REMOVE'?'半額返金':b.cost}</b>`;
             sG.appendChild(div);
         });
     },
