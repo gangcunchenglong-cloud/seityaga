@@ -11,6 +11,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{C7175B25
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UrlInsight.Core.Tests", "tests\UrlInsight.Core.Tests\UrlInsight.Core.Tests.csproj", "{C5C58FD8-7015-4FE2-A45B-9B0B564E62C2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UrlInsight.App", "src\UrlInsight.App\UrlInsight.App.csproj", "{F0D148C6-F527-4204-A07A-39302BD25930}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UrlInsight.NativeHost", "src\UrlInsight.NativeHost\UrlInsight.NativeHost.csproj", "{330280E1-AFE3-4EDF-AEF2-1B693BDA7F84}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -28,9 +32,19 @@ Global
 		{C5C58FD8-7015-4FE2-A45B-9B0B564E62C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C5C58FD8-7015-4FE2-A45B-9B0B564E62C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C5C58FD8-7015-4FE2-A45B-9B0B564E62C2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F0D148C6-F527-4204-A07A-39302BD25930}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F0D148C6-F527-4204-A07A-39302BD25930}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F0D148C6-F527-4204-A07A-39302BD25930}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F0D148C6-F527-4204-A07A-39302BD25930}.Release|Any CPU.Build.0 = Release|Any CPU
+		{330280E1-AFE3-4EDF-AEF2-1B693BDA7F84}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{330280E1-AFE3-4EDF-AEF2-1B693BDA7F84}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{330280E1-AFE3-4EDF-AEF2-1B693BDA7F84}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{330280E1-AFE3-4EDF-AEF2-1B693BDA7F84}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{4EA5D49D-1183-4CAC-8DDC-4CBEECD057A0} = {3FA75910-583F-4DAA-B00B-2594B1CED358}
 		{C5C58FD8-7015-4FE2-A45B-9B0B564E62C2} = {C7175B25-E9EC-47F3-8FFB-560634C23B41}
+		{F0D148C6-F527-4204-A07A-39302BD25930} = {3FA75910-583F-4DAA-B00B-2594B1CED358}
+		{330280E1-AFE3-4EDF-AEF2-1B693BDA7F84} = {3FA75910-583F-4DAA-B00B-2594B1CED358}
 	EndGlobalSection
 EndGlobal

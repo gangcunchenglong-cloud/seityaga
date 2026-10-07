@@ -1,0 +1,311 @@
+<Window x:Class="UrlInsight.App.UI.SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="URL Insight の設定" Width="860" Height="660" MinWidth="720" MinHeight="520"
+        WindowStartupLocation="CenterScreen"
+        Background="{DynamicResource WindowBgBrush}" Foreground="{DynamicResource FgBrush}"
+        FontFamily="{DynamicResource UiFont}" FontSize="14"
+        Icon="pack://application:,,,/Assets/app.ico"
+        UseLayoutRounding="True" TextOptions.TextFormattingMode="Display">
+    <Window.Resources>
+        <Style TargetType="TextBlock" x:Key="FieldLabel">
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="Foreground" Value="{DynamicResource MutedBrush}" />
+            <Setter Property="Margin" Value="0,14,0,5" />
+        </Style>
+        <Style TargetType="TextBlock" x:Key="PageTitle">
+            <Setter Property="FontSize" Value="20" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="Margin" Value="0,0,0,2" />
+        </Style>
+        <Style TargetType="ComboBox">
+            <Setter Property="Padding" Value="8,6" />
+            <Setter Property="MinWidth" Value="260" />
+            <Setter Property="HorizontalAlignment" Value="Left" />
+        </Style>
+        <Style TargetType="PasswordBox">
+            <Setter Property="Padding" Value="10,8" />
+            <Setter Property="BorderBrush" Value="{DynamicResource LineBrush}" />
+        </Style>
+        <Style TargetType="CheckBox">
+            <Setter Property="Margin" Value="0,6,0,0" />
+        </Style>
+        <Style TargetType="TabItem">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TabItem">
+                        <Border x:Name="Bd" CornerRadius="10" Padding="14,9" Margin="0,0,0,4" Background="Transparent">
+                            <ContentPresenter ContentSource="Header" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="Bd" Property="Background" Value="{DynamicResource NavSelectedBrush}" />
+                                <Setter Property="Foreground" Value="{DynamicResource AccentSolidBrush}" />
+                                <Setter Property="FontWeight" Value="Bold" />
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Bd" Property="Background" Value="{DynamicResource SubtleBrush}" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <Border Margin="14" Style="{StaticResource Card}" CornerRadius="22" Padding="18">
+        <DockPanel>
+            <DockPanel DockPanel.Dock="Bottom" Margin="0,12,0,0">
+                <Button DockPanel.Dock="Right" Style="{StaticResource PrimaryButton}" Content="保存して閉じる" Click="SaveClose_Click" />
+                <Button DockPanel.Dock="Right" Style="{StaticResource SecondaryButton}" Margin="0,0,8,0" Content="閉じる" Click="Close_Click" IsCancel="True" />
+                <TextBlock x:Name="SaveStatus" VerticalAlignment="Center" Style="{StaticResource MutedText}" />
+            </DockPanel>
+
+            <TabControl x:Name="Tabs" TabStripPlacement="Left" BorderThickness="0" Background="Transparent">
+                <TabControl.Template>
+                    <ControlTemplate TargetType="TabControl">
+                        <DockPanel>
+                            <Border DockPanel.Dock="Left" Width="180" Background="{DynamicResource SubtleBrush}" CornerRadius="15" Padding="8" Margin="0,0,18,0">
+                                <StackPanel>
+                                    <TextBlock Text="設定" FontSize="20" FontWeight="Bold" Margin="8,4,0,2" />
+                                    <TextBlock Text="動作とAI接続の管理" FontSize="12" Foreground="{DynamicResource MutedBrush}" Margin="8,0,0,12" />
+                                    <TabPanel IsItemsHost="True" />
+                                </StackPanel>
+                            </Border>
+                            <ContentPresenter ContentSource="SelectedContent" />
+                        </DockPanel>
+                    </ControlTemplate>
+                </TabControl.Template>
+
+                <!-- 一般 -->
+                <TabItem Header="一般" x:Name="GeneralTab">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <StackPanel Margin="0,0,10,0">
+                            <TextBlock Style="{StaticResource PageTitle}" Text="一般" />
+                            <CheckBox x:Name="StartWithWindowsCheck" Content="Windows起動時に URL Insight を開始する" />
+                            <TextBlock Style="{StaticResource FieldLabel}" Text="ホバー待ち時間" />
+                            <StackPanel Orientation="Horizontal">
+                                <Slider x:Name="DelaySlider" Width="260" Minimum="300" Maximum="1500" TickFrequency="100" IsSnapToTickEnabled="True"
+                                        AutomationProperties.Name="ホバー待ち時間（ミリ秒）" />
+                                <TextBlock x:Name="DelayText" Margin="12,0,0,0" VerticalAlignment="Center" />
+                            </StackPanel>
+                            <TextBlock Style="{StaticResource MutedText}" FontSize="12" Text="リンクの上で止まってから要約を始めるまでの時間です。短い通過では通信しません。" />
+                            <TextBlock Style="{StaticResource FieldLabel}" Text="表示モード" />
+                            <ComboBox x:Name="DisplayModeCombo" AutomationProperties.Name="表示モード">
+                                <ComboBoxItem Content="ホバー時のみ（リンクから離れると閉じる）" />
+                                <ComboBoxItem Content="カードを固定（閉じるまで表示）" />
+                            </ComboBox>
+                            <TextBlock Style="{StaticResource MutedText}" FontSize="12" Margin="0,4,0,0" Text="一時停止はメイン画面またはトレイメニューから切り替えます。" />
+                            <TextBlock Style="{StaticResource FieldLabel}" Text="表示位置" />
+                            <ComboBox x:Name="SideCombo" AutomationProperties.Name="カードの表示位置">
+                                <ComboBoxItem Content="画面の右側" />
+                                <ComboBoxItem Content="画面の左側" />
+                            </ComboBox>
+                            <TextBlock Style="{StaticResource FieldLabel}" Text="テーマ / 言語" />
+                            <TextBlock Style="{StaticResource MutedText}" Text="ライトテーマ（Windowsのハイコントラスト設定時は自動でシステム配色）／日本語" />
+                        </StackPanel>
+                    </ScrollViewer>
+                </TabItem>
+
+                <!-- ブラウザ拡張 -->
+                <TabItem Header="ブラウザ拡張" x:Name="BrowserTab">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <StackPanel Margin="0,0,10,0">
+                            <TextBlock Style="{StaticResource PageTitle}" Text="ブラウザ拡張" />
+                            <TextBlock x:Name="BridgeStatusText" Margin="0,6,0,0" TextWrapping="Wrap" FontWeight="Bold" />
+                            <TextBlock x:Name="HostStatusText" Margin="0,4,0,0" TextWrapping="Wrap" Style="{StaticResource MutedText}" />
+
+                            <TextBlock Style="{StaticResource FieldLabel}" Text="導入手順（Chrome）" />
+                            <TextBlock TextWrapping="Wrap" FontSize="13" LineHeight="21">
+                                1. 下の「ホストを登録」を押します（ユーザー単位の登録で、管理者権限は不要です）。<LineBreak />
+                                2. Chromeで chrome://extensions を開き、右上の「デベロッパーモード」をオンにします。<LineBreak />
+                                3. 「パッケージ化されていない拡張機能を読み込む」で、下の「拡張フォルダを開く」で開くフォルダを選びます。<LineBreak />
+                                4. ツールバーの URL Insight アイコンから、使いたいサイトで「このサイトで有効にする」を押します。
+                            </TextBlock>
+                            <WrapPanel Margin="0,10,0,0">
+                                <Button Style="{StaticResource PrimaryButton}" Padding="14,7" Margin="0,0,8,6" Content="ホストを登録" Click="RegisterHost_Click" />
+                                <Button Style="{StaticResource SecondaryButton}" Content="登録を解除" Click="UnregisterHost_Click" />
+                                <Button Style="{StaticResource SecondaryButton}" Content="拡張フォルダを開く" Click="OpenExtensionFolder_Click" />
+                            </WrapPanel>
+
+                            <TextBlock Style="{StaticResource FieldLabel}" Text="拡張機能ID" />
+                            <TextBox x:Name="ExtensionIdBox" Style="{StaticResource InputBox}" Width="360" HorizontalAlignment="Left"
+                                     AutomationProperties.Name="拡張機能ID" />
+                            <TextBlock Style="{StaticResource MutedText}" FontSize="12" Margin="0,4,0,0"
+                                       Text="同梱の拡張をそのまま読み込む場合は変更不要です。IDを変えた場合は保存後に「ホストを登録」を押し直してください。" />
+                            <CheckBox x:Name="EdgeCheck" Content="Microsoft Edge にも登録する（未検証・試験的）" />
+                            <TextBlock Style="{StaticResource MutedText}" FontSize="12" Margin="0,8,0,0"
+                                       Text="接続が切れた場合は、拡張のポップアップの「再接続」を押すか、Chromeを再起動してください。拡張がなくても、メイン画面でURLを貼り付けて要約できます。" />
+                        </StackPanel>
+                    </ScrollViewer>
+                </TabItem>
+
+                <!-- AI -->
+                <TabItem Header="AIプロバイダ" x:Name="AiTab">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <StackPanel Margin="0,0,10,0">
+                            <TextBlock Style="{StaticResource PageTitle}" Text="AIプロバイダ" />
+                            <TextBlock Style="{StaticResource MutedText}" FontSize="12.5"
+                                       Text="初期状態ではAIへ送信しません。ページ本文は、ここで選んだ提供元へだけ、確認のうえで送信されます。" />
+                            <Grid Margin="0,4,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="20" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="0">
+                                    <TextBlock Style="{StaticResource FieldLabel}" Text="プロバイダ" />
+                                    <ComboBox x:Name="ProviderCombo" DisplayMemberPath="DisplayName" SelectionChanged="Provider_Changed"
+                                              AutomationProperties.Name="AIプロバイダ" />
+                                </StackPanel>
+                                <StackPanel Grid.Column="2">
+                                    <TextBlock Style="{StaticResource FieldLabel}" Text="モデル" />
+                                    <TextBox x:Name="ModelBox" Style="{StaticResource InputBox}" AutomationProperties.Name="モデル名" />
+                                    <TextBlock x:Name="ModelHint" FontSize="11.5" Style="{StaticResource MutedText}" Margin="0,3,0,0" />
+                                </StackPanel>
+                            </Grid>
+
+                            <TextBlock Style="{StaticResource FieldLabel}" Text="エンドポイント" />
+                            <TextBox x:Name="EndpointBox" Style="{StaticResource InputBox}" AutomationProperties.Name="エンドポイントURL" />
+                            <TextBlock x:Name="EndpointWarning" FontSize="12" Foreground="{DynamicResource NgBrush}" TextWrapping="Wrap" Margin="0,3,0,0"
+                                       Text="高度な設定: 入力したURLへページ本文とAPIキーが送信されます。信頼できるHTTPSのエンドポイントだけを指定してください。" />
+
+                            <TextBlock Style="{StaticResource FieldLabel}" Text="APIキー" />
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <PasswordBox x:Name="KeyBox" AutomationProperties.Name="APIキー" />
+                                <TextBox x:Name="KeyPlainBox" Style="{StaticResource InputBox}" Visibility="Collapsed" AutomationProperties.Name="APIキー（表示中）" />
+                                <CheckBox x:Name="ShowKeyCheck" Grid.Column="1" Margin="10,0,0,0" VerticalAlignment="Center" Content="表示"
+                                          Checked="ShowKey_Changed" Unchecked="ShowKey_Changed" />
+                            </Grid>
+                            <TextBlock x:Name="KeyStateText" FontSize="12" Style="{StaticResource MutedText}" Margin="0,4,0,0" />
+                            <WrapPanel Margin="0,8,0,0">
+                                <Button Style="{StaticResource PrimaryButton}" Padding="14,7" Margin="0,0,8,6" Content="キーを保存" Click="SaveKey_Click" />
+                                <Button Style="{StaticResource SecondaryButton}" Content="キーを削除" Click="DeleteKey_Click" />
+                                <Button x:Name="TestButton" Style="{StaticResource SecondaryButton}" Content="接続テスト" Click="Test_Click" />
+                                <Button x:Name="PricingButton" Style="{StaticResource SecondaryButton}" Content="提供元の料金ページ" Click="Pricing_Click" />
+                            </WrapPanel>
+                            <TextBlock x:Name="TestResultText" TextWrapping="Wrap" Margin="0,4,0,0" />
+                            <Border Margin="0,10,0,0" Background="{DynamicResource SubtleBrush}" CornerRadius="12" Padding="12,10">
+                                <TextBlock TextWrapping="Wrap" FontSize="12.5" Foreground="{DynamicResource MutedBrush}">
+                                    ● キーは Windows DPAPI（現在のユーザー）で暗号化して保存します。平文では保存しません。<LineBreak />
+                                    ● 暗号化はPCへの不正アクセスやマルウェアを防ぐものではありません。<LineBreak />
+                                    ● 費用・無料枠・利用上限は各提供元の条件に従います（変動するため本アプリでは保証しません）。
+                                </TextBlock>
+                            </Border>
+
+                            <TextBlock Style="{StaticResource FieldLabel}" Text="送信前の確認" />
+                            <CheckBox x:Name="ConfirmEachCheck" Content="AIへ送信する前に毎回確認する（オフでも各プロバイダの初回は必ず確認）" />
+                            <TextBlock Style="{StaticResource FieldLabel}" Text="1回に送信する本文の上限（文字）" />
+                            <TextBox x:Name="MaxCharsBox" Style="{StaticResource InputBox}" Width="140" HorizontalAlignment="Left"
+                                     AutomationProperties.Name="送信本文の上限文字数" />
+
+                            <TextBlock Style="{StaticResource FieldLabel}" Text="YouTube Data API キー（任意）" />
+                            <TextBlock Style="{StaticResource MutedText}" FontSize="12"
+                                       Text="設定すると、公式API(videos.list)で動画の説明欄を取得して要約できます。字幕本文は公式APIの制約により取得しません。" />
+                            <Grid Margin="0,6,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <PasswordBox x:Name="YouTubeKeyBox" AutomationProperties.Name="YouTube Data API キー" />
+                                <Button Grid.Column="1" Style="{StaticResource SecondaryButton}" Margin="8,0,0,0" Content="保存" Click="SaveYouTubeKey_Click" />
+                                <Button Grid.Column="2" Style="{StaticResource SecondaryButton}" Margin="0" Content="削除" Click="DeleteYouTubeKey_Click" />
+                            </Grid>
+                            <TextBlock x:Name="YouTubeKeyState" FontSize="12" Style="{StaticResource MutedText}" Margin="0,4,0,0" />
+                        </StackPanel>
+                    </ScrollViewer>
+                </TabItem>
+
+                <!-- プライバシー -->
+                <TabItem Header="プライバシー" x:Name="PrivacyTab">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <StackPanel Margin="0,0,10,0">
+                            <TextBlock Style="{StaticResource PageTitle}" Text="プライバシー" />
+                            <TextBlock TextWrapping="Wrap" FontSize="13" LineHeight="21" Margin="0,8,0,0">
+                                <Run FontWeight="Bold">データの流れ</Run><LineBreak />
+                                ① Chrome拡張 → 本アプリ: 有効にしたサイトでホバーしたリンクのURL・リンク文字列・ページタイトル（PC内の通信のみ）。<LineBreak />
+                                ② 本アプリ → リンク先サイト: ページを匿名で取得（Cookie・ログイン情報は送りません）。<LineBreak />
+                                ③ 本アプリ → AI提供元: あなたが設定・確認した場合のみ、URL・タイトル・本文（上限文字数まで）。<LineBreak />
+                                ④ 保存: 要約結果と最小限のメタ情報をこのPCにキャッシュ（本文は保存しません）。<LineBreak />
+                                テレメトリ（利用状況の送信）は行いません。ログにURLの詳細・本文・キーは記録しません。
+                            </TextBlock>
+                            <TextBlock x:Name="DataPathText" Margin="0,10,0,0" FontSize="12" Style="{StaticResource MutedText}" />
+                            <WrapPanel Margin="0,10,0,0">
+                                <Button Style="{StaticResource SecondaryButton}" Content="AIへの送信を無効化（プロバイダを未設定に）" Click="DisableAi_Click" />
+                                <Button Style="{StaticResource SecondaryButton}" Content="確認済みプロバイダをリセット" Click="ResetConsent_Click" />
+                            </WrapPanel>
+                            <TextBlock Style="{StaticResource FieldLabel}" Text="無視するURL" />
+                            <ListBox x:Name="IgnoredList" Height="140" AutomationProperties.Name="無視するURLの一覧" />
+                            <Button Style="{StaticResource SecondaryButton}" HorizontalAlignment="Left" Margin="0,6,0,0" Content="選択したURLを一覧から外す" Click="RemoveIgnored_Click" />
+                        </StackPanel>
+                    </ScrollViewer>
+                </TabItem>
+
+                <!-- キャッシュ -->
+                <TabItem Header="キャッシュ・履歴" x:Name="CacheTab">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <StackPanel Margin="0,0,10,0">
+                            <TextBlock Style="{StaticResource PageTitle}" Text="キャッシュ・履歴" />
+                            <CheckBox x:Name="CacheEnabledCheck" Content="要約をキャッシュする（同じリンクの再表示が速くなり、AI利用量を抑えます）" />
+                            <WrapPanel Margin="0,4,0,0">
+                                <StackPanel Margin="0,0,20,0">
+                                    <TextBlock Style="{StaticResource FieldLabel}" Text="有効期限（日）" />
+                                    <TextBox x:Name="TtlBox" Style="{StaticResource InputBox}" Width="100" AutomationProperties.Name="有効期限（日）" />
+                                </StackPanel>
+                                <StackPanel Margin="0,0,20,0">
+                                    <TextBlock Style="{StaticResource FieldLabel}" Text="最大件数" />
+                                    <TextBox x:Name="MaxEntriesBox" Style="{StaticResource InputBox}" Width="100" AutomationProperties.Name="最大件数" />
+                                </StackPanel>
+                                <StackPanel>
+                                    <TextBlock Style="{StaticResource FieldLabel}" Text="最大容量（MB）" />
+                                    <TextBox x:Name="MaxMbBox" Style="{StaticResource InputBox}" Width="100" AutomationProperties.Name="最大容量（MB）" />
+                                </StackPanel>
+                            </WrapPanel>
+                            <TextBlock x:Name="CacheStatsText" Margin="0,12,0,0" />
+                            <TextBlock Style="{StaticResource FieldLabel}" Text="履歴" />
+                            <ListBox x:Name="HistoryList" Height="200" DisplayMemberPath="Display" AutomationProperties.Name="要約の履歴" />
+                            <WrapPanel Margin="0,6,0,0">
+                                <Button Style="{StaticResource SecondaryButton}" Content="選択した履歴を削除" Click="DeleteHistory_Click" />
+                                <Button Style="{StaticResource SecondaryButton}" Content="すべて消去" Click="ClearCache_Click" />
+                            </WrapPanel>
+                        </StackPanel>
+                    </ScrollViewer>
+                </TabItem>
+
+                <!-- 詳細 -->
+                <TabItem Header="詳細" x:Name="AdvancedTab">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <StackPanel Margin="0,0,10,0">
+                            <TextBlock Style="{StaticResource PageTitle}" Text="詳細" />
+                            <TextBlock Style="{StaticResource FieldLabel}" Text="ログレベル" />
+                            <ComboBox x:Name="LogLevelCombo" AutomationProperties.Name="ログレベル">
+                                <ComboBoxItem Content="Error" />
+                                <ComboBoxItem Content="Warning" />
+                                <ComboBoxItem Content="Info" />
+                                <ComboBoxItem Content="Debug" />
+                            </ComboBox>
+                            <TextBlock Style="{StaticResource MutedText}" FontSize="12" Margin="0,4,0,0"
+                                       Text="ログは7日間・最大10MBで自動削除されます。URLのパス・本文・APIキーは記録しません。" />
+                            <WrapPanel Margin="0,12,0,0">
+                                <Button Style="{StaticResource SecondaryButton}" Content="ログの保存先を開く" Click="OpenLogs_Click" />
+                                <Button Style="{StaticResource SecondaryButton}" Content="診断情報を書き出す" Click="ExportDiagnostics_Click" />
+                            </WrapPanel>
+                            <TextBlock Style="{StaticResource FieldLabel}" Text="データの削除" />
+                            <TextBlock Style="{StaticResource MutedText}" FontSize="12"
+                                       Text="設定・キャッシュ・保存したAPIキー・ログをすべて削除します（アプリ自体は削除されません）。" />
+                            <Button Style="{StaticResource SecondaryButton}" HorizontalAlignment="Left" Margin="0,8,0,0"
+                                    Content="すべてのユーザーデータを削除して終了" Click="PurgeAll_Click" />
+                            <TextBlock x:Name="VersionText" Margin="0,18,0,0" FontSize="12" Style="{StaticResource MutedText}" />
+                        </StackPanel>
+                    </ScrollViewer>
+                </TabItem>
+            </TabControl>
+        </DockPanel>
+    </Border>
+</Window>

@@ -1,0 +1,30 @@
+:root {
+  --bg: #ffffff;
+  --fg: #1c2940;
+  --muted: #6b778c;
+  --line: #e5eaf2;
+  --accent: #3478f6;
+  --ok: #2dbb82;
+  --ng: #d9534f;
+  --warn-bg: #fff4d6;
+}
+@media (prefers-color-scheme: dark) {
+  :root { --bg: #1d2330; --fg: #e8edf6; --muted: #a3adbf; --line: #33405a; --warn-bg: #4a3d1a; }
+}
+body { margin: 0; padding: 14px 16px; width: 320px; font: 13px/1.5 "Yu Gothic UI", "Meiryo UI", system-ui, sans-serif; background: var(--bg); color: var(--fg); }
+header { display: flex; gap: 10px; align-items: center; margin-bottom: 10px; }
+h1 { font-size: 15px; margin: 0; }
+h2 { font-size: 11px; letter-spacing: .04em; color: var(--muted); margin: 12px 0 6px; }
+section { border-top: 1px solid var(--line); }
+.muted { color: var(--muted); margin: 0; }
+.row { display: flex; align-items: center; gap: 8px; margin: 3px 0; }
+.dot { width: 9px; height: 9px; border-radius: 50%; background: var(--muted); flex: none; }
+.dot.ok { background: var(--ok); }
+.dot.ng { background: var(--ng); }
+.site { font-weight: 700; margin: 0 0 2px; word-break: break-all; }
+.hint { color: var(--muted); font-size: 11.5px; }
+.warn { background: var(--warn-bg); padding: 6px 8px; border-radius: 8px; }
+button { display: block; width: 100%; margin: 6px 0; padding: 8px; border-radius: 10px; border: 0; background: var(--accent); color: #fff; font: inherit; font-weight: 700; cursor: pointer; }
+button.secondary { background: transparent; color: var(--accent); border: 1px solid var(--line); font-weight: 400; }
+button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+button:disabled { opacity: .5; cursor: default; }

@@ -1,0 +1,29 @@
+{
+  "manifest_version": 3,
+  "name": "URL Insight / LinkLens",
+  "version": "1.0.0",
+  "description": "リンクにカーソルを合わせると、Windowsアプリ「URL Insight」がリンク先の要約カードを表示します。",
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEArJ41lY8QrLvEdO+H2dagvg9CmajiMn8DFAeFsZI5CpdB0Pz0NSylykhUjCR1zqoAn5pRkQ/6+F90VhLuztCso6UjSO8Ohi/O41SEvBUZRxoY8sks+UEZ/pmhnSQE3+qAsqMOPMdSU8PNq75/kbEx9CNkf+tCkOKCXlGB/RT9TSLY7oc6REDAlAZCa6YPAKQSgqSdi28GzKxxW4o1NcrvcIrzv5e1tnFJxf1IN3SIjAn41lw+8LVl3W5T3kNpSprshUOBWMcyX0SeLAZ/qNEd8z9/8arRBe5Y4rFrbou6zHJ13qqNeP/4ktLSP6FbvJA9ZWUjrIZFrwZnPZgiapTAUQIDAQAB",
+  "minimum_chrome_version": "116",
+  "permissions": ["nativeMessaging", "storage", "scripting", "activeTab"],
+  "optional_host_permissions": ["https://*/*", "http://*/*"],
+  "background": {
+    "service_worker": "src/background/service-worker.js"
+  },
+  "action": {
+    "default_title": "URL Insight",
+    "default_popup": "src/popup/popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  }
+}

@@ -196,6 +196,18 @@ public class RedactorTests
     }
 
     [Fact]
+    public void DiagnosticsReportContainsNoUrlsOrKeys()
+    {
+        var settings = new AppSettings { ProviderId = "openai", Model = "secret-model", IgnoredUrls = { "https://example.com/private/page" } };
+        var report = DiagnosticsReport.Build("1.0.0", settings, new CacheStats(3, 2048), true, true,
+            new[] { "2026 [Info] fetched https://example.com/private?x=1", "key sk-abcdefghijklmnopqrstuv" });
+        Assert.False(Redactor.ContainsSensitive(report));
+        Assert.DoesNotContain("private", report);
+        Assert.DoesNotContain("secret-model", report);
+        Assert.Contains("openai", report);
+    }
+
+    [Fact]
     public void LogFileNeverContainsSecrets()
     {
         using var dir = new TempDir();
@@ -278,6 +290,8 @@ public class BridgeTests
         appAvailable = true;
         var second = Encoding.UTF8.GetString((await MessageFraming.ReadAsync(hostToBrowser, 1 << 20, default))!);
         Assert.Contains("\"appRunning\":true", second);
+        var hello = Encoding.UTF8.GetString((await MessageFraming.ReadAsync(appSide.AppEnd, 1 << 20, default))!);
+        Assert.Contains("\"type\":\"hello\"", hello);
 
         // 3) ブラウザ → アプリ
         await MessageFraming.WriteAsync(browserToHost, J("""{"schemaVersion":1,"type":"hoverLink","requestId":"abcd1234","url":"https://e.com/"}"""), default);

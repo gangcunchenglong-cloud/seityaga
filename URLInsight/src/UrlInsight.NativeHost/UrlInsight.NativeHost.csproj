@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Chrome から起動されるネイティブメッセージングホスト(コンソールアプリ)。
+    標準入出力 ⇔ 常駐アプリの名前付きパイプ を中継するだけで、UI・AI・取得処理は持たない。
+  -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AssemblyName>URLInsight.NativeHost</AssemblyName>
+    <RootNamespace>UrlInsight.NativeHost</RootNamespace>
+    <!-- 配布設定: win-x64 向け自己完結型・単一ファイル(.NET ランタイムのインストール不要) -->
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <SelfContained>true</SelfContained>
+    <PublishSingleFile>true</PublishSingleFile>
+    <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+    <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
+    <ApplicationIcon>..\UrlInsight.App\Assets\app.ico</ApplicationIcon>
+    <InvariantGlobalization>true</InvariantGlobalization>
+    <!-- 中継処理しか使わないため、トリミングして配布サイズを抑える -->
+    <PublishTrimmed>true</PublishTrimmed>
+    <TrimMode>partial</TrimMode>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\UrlInsight.Core\UrlInsight.Core.csproj" />
+  </ItemGroup>
+
+</Project>

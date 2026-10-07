@@ -1,0 +1,126 @@
+<Window x:Class="UrlInsight.App.UI.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="URL Insight" Width="440" Height="780" MinWidth="380" MinHeight="560"
+        WindowStartupLocation="CenterScreen"
+        Background="{DynamicResource WindowBgBrush}" Foreground="{DynamicResource FgBrush}"
+        FontFamily="{DynamicResource UiFont}" FontSize="14"
+        Icon="pack://application:,,,/Assets/app.ico"
+        UseLayoutRounding="True" TextOptions.TextFormattingMode="Display">
+    <Border Margin="14" Style="{StaticResource Card}" Padding="0" CornerRadius="22">
+        <DockPanel>
+            <!-- ヘッダー -->
+            <Border DockPanel.Dock="Top" Background="{DynamicResource SubtleBrush}" CornerRadius="22,22,0,0"
+                    BorderBrush="{DynamicResource LineBrush}" BorderThickness="0,0,0,1" Padding="20,16">
+                <DockPanel>
+                    <Button DockPanel.Dock="Right" Style="{StaticResource IconButton}" Content="設定"
+                            ToolTip="設定" AutomationProperties.Name="設定を開く" Click="Settings_Click" />
+                    <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,8,0">
+                        <Ellipse x:Name="RunDot" Width="10" Height="10" Fill="{DynamicResource OkBrush}" />
+                        <TextBlock x:Name="RunText" Margin="6,0,0,0" FontSize="13" Foreground="{DynamicResource OkFgBrush}" Text="稼働中" />
+                    </StackPanel>
+                    <Image Source="pack://application:,,,/Assets/app256.png" Width="38" Height="38" />
+                    <StackPanel Margin="12,0,0,0" VerticalAlignment="Center">
+                        <TextBlock FontSize="17" FontWeight="Bold" Text="URL Insight" />
+                        <TextBlock FontSize="12.5" Style="{StaticResource MutedText}" Text="リンク要約アシスタント" />
+                    </StackPanel>
+                </DockPanel>
+            </Border>
+
+            <!-- 下部: URL手動入力 -->
+            <StackPanel DockPanel.Dock="Bottom" Margin="20,8,20,18">
+                <TextBlock Style="{StaticResource SectionLabel}" Text="URLを貼り付けて要約" />
+                <TextBox x:Name="UrlInput" Style="{StaticResource InputBox}" AutomationProperties.Name="要約するURL"
+                         KeyDown="UrlInput_KeyDown" />
+                <TextBlock x:Name="UrlError" Margin="2,4,0,0" FontSize="12" Foreground="{DynamicResource NgBrush}" Visibility="Collapsed" TextWrapping="Wrap" />
+                <Button Style="{StaticResource PrimaryButton}" Margin="0,10,0,0" Padding="16,12" Content="このURLを要約" Click="Summarize_Click" />
+                <DockPanel Margin="0,10,0,0">
+                    <Button x:Name="PauseButton" DockPanel.Dock="Right" Style="{StaticResource SecondaryButton}" Margin="0"
+                            Content="一時停止" Click="Pause_Click" />
+                    <TextBlock VerticalAlignment="Center" FontSize="12" Style="{StaticResource MutedText}"
+                               Text="AI送信前に内容と送信先を確認できます" />
+                </DockPanel>
+            </StackPanel>
+
+            <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="20,0">
+                <StackPanel Margin="0,4,0,8">
+                    <!-- セットアップ案内 -->
+                    <Border x:Name="SetupBox" Margin="0,14,0,0" Background="{DynamicResource WarnBgBrush}" CornerRadius="14" Padding="14,12">
+                        <StackPanel>
+                            <TextBlock FontWeight="Bold" Text="はじめに（セットアップ）" />
+                            <TextBlock x:Name="SetupText" Margin="0,6,0,8" TextWrapping="Wrap" FontSize="13" />
+                            <Button Style="{StaticResource SecondaryButton}" HorizontalAlignment="Left" Content="設定を開く" Click="Settings_Click" />
+                        </StackPanel>
+                    </Border>
+
+                    <TextBlock Style="{StaticResource SectionLabel}" Text="接続状況" />
+                    <Border Background="{DynamicResource SubtleBrush}" BorderBrush="{DynamicResource LineBrush}" BorderThickness="1"
+                            CornerRadius="15" Padding="14,12">
+                        <StackPanel>
+                            <DockPanel>
+                                <Border x:Name="ExtBadge" DockPanel.Dock="Right" Style="{StaticResource Badge}" Background="{DynamicResource OkBgBrush}">
+                                    <TextBlock x:Name="ExtBadgeText" FontSize="12" Foreground="{DynamicResource OkFgBrush}" Text="接続済み" />
+                                </Border>
+                                <Ellipse x:Name="ExtDot" Width="12" Height="12" Fill="{DynamicResource OkBrush}" VerticalAlignment="Top" Margin="0,5,10,0" />
+                                <StackPanel>
+                                    <TextBlock FontWeight="Bold" Text="Chrome拡張" />
+                                    <TextBlock x:Name="ExtText" FontSize="12.5" Style="{StaticResource MutedText}" />
+                                </StackPanel>
+                            </DockPanel>
+                            <Rectangle Height="1" Margin="0,10" Fill="{DynamicResource LineBrush}" />
+                            <DockPanel>
+                                <Ellipse x:Name="AiDot" Width="12" Height="12" Fill="{DynamicResource OkBrush}" VerticalAlignment="Top" Margin="0,5,10,0" />
+                                <StackPanel>
+                                    <TextBlock FontWeight="Bold" Text="AIプロバイダ" />
+                                    <TextBlock x:Name="AiText" FontSize="12.5" Style="{StaticResource MutedText}" />
+                                </StackPanel>
+                            </DockPanel>
+                        </StackPanel>
+                    </Border>
+
+                    <DockPanel>
+                        <Button DockPanel.Dock="Right" Style="{StaticResource IconButton}" VerticalAlignment="Bottom" FontSize="12"
+                                Content="更新" Click="Refresh_Click" AutomationProperties.Name="最近の要約を更新" />
+                        <TextBlock Style="{StaticResource SectionLabel}" Text="最近の要約" />
+                    </DockPanel>
+                    <TextBlock x:Name="RecentEmpty" FontSize="12.5" Style="{StaticResource MutedText}" Margin="2,0,0,0"
+                               Text="まだ要約はありません。リンクにホバーするか、下の欄にURLを貼り付けてください。" />
+                    <ItemsControl x:Name="RecentList">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Button Tag="{Binding Id}" Click="Recent_Click" Margin="0,0,0,10" Cursor="Hand"
+                                        AutomationProperties.Name="{Binding Title}" FocusVisualStyle="{StaticResource FocusVisual}">
+                                    <Button.Template>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border x:Name="Bd" Background="{DynamicResource CardBrush}" BorderBrush="{DynamicResource LineBrush}"
+                                                    BorderThickness="1" CornerRadius="16" Padding="14,12">
+                                                <ContentPresenter />
+                                            </Border>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter TargetName="Bd" Property="BorderBrush" Value="{DynamicResource AccentSolidBrush}" />
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                    <StackPanel>
+                                        <DockPanel>
+                                            <Border Style="{StaticResource Badge}" Background="{Binding BadgeBg}">
+                                                <TextBlock FontSize="11.5" Foreground="{Binding BadgeFg}" Text="{Binding KindLabel}" />
+                                            </Border>
+                                            <TextBlock Margin="10,0,0,0" FontWeight="Bold" Text="{Binding Title}" TextTrimming="CharacterEllipsis"
+                                                       VerticalAlignment="Center" />
+                                        </DockPanel>
+                                        <TextBlock Margin="0,8,0,0" FontSize="12.5" Text="{Binding FirstLine}" TextWrapping="Wrap"
+                                                   MaxHeight="40" TextTrimming="CharacterEllipsis" Foreground="{DynamicResource MutedBrush}" />
+                                        <TextBlock Margin="0,4,0,0" FontSize="11" Text="{Binding Meta}" Foreground="{DynamicResource MutedBrush}" />
+                                    </StackPanel>
+                                </Button>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </ScrollViewer>
+        </DockPanel>
+    </Border>
+</Window>

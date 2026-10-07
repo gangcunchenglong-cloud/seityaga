@@ -1,0 +1,134 @@
+<Window x:Class="UrlInsight.App.UI.CardWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="URL Insight 要約カード"
+        AutomationProperties.Name="リンクの要約カード"
+        Width="404" SizeToContent="Height" MinHeight="120"
+        WindowStyle="None" AllowsTransparency="True" Background="Transparent"
+        ResizeMode="NoResize" ShowInTaskbar="False" Topmost="True" ShowActivated="False"
+        FontFamily="{DynamicResource UiFont}" FontSize="14" Foreground="{DynamicResource FgBrush}"
+        UseLayoutRounding="True" TextOptions.TextFormattingMode="Display">
+    <Border Margin="12" CornerRadius="20" Background="{DynamicResource CardBrush}"
+            BorderBrush="{DynamicResource LineBrush}" BorderThickness="1" Padding="20,16,20,14">
+        <Border.Effect>
+            <DropShadowEffect BlurRadius="22" ShadowDepth="6" Direction="270" Opacity="0.16" Color="#1C3150" />
+        </Border.Effect>
+        <DockPanel LastChildFill="True">
+
+            <!-- ヘッダー: 種別バッジ・ドメイン・固定・閉じる -->
+            <DockPanel DockPanel.Dock="Top" LastChildFill="True">
+                <Button x:Name="CloseButton" DockPanel.Dock="Right" Style="{StaticResource IconButton}" Content="×" FontSize="16"
+                        ToolTip="閉じる (Esc)" AutomationProperties.Name="カードを閉じる" Click="Close_Click" />
+                <ToggleButton x:Name="PinToggle" DockPanel.Dock="Right" Style="{StaticResource IconToggle}" Content="固定" FontSize="12.5"
+                              ToolTip="カードを固定" AutomationProperties.Name="カードを固定" Click="Pin_Click" />
+                <Border x:Name="KindBadge" Style="{StaticResource Badge}">
+                    <TextBlock x:Name="KindText" FontSize="12" Foreground="{DynamicResource BadgeFgBrush}" Text="WEB" />
+                </Border>
+                <TextBlock x:Name="DomainText" Margin="10,0,0,0" VerticalAlignment="Center" FontSize="12.5"
+                           Foreground="{DynamicResource MutedBrush}" TextTrimming="CharacterEllipsis" />
+            </DockPanel>
+
+            <TextBlock x:Name="TitleText" DockPanel.Dock="Top" Margin="0,12,0,2" FontSize="16.5" FontWeight="Bold"
+                       TextWrapping="Wrap" AutomationProperties.HeadingLevel="Level1" />
+            <TextBlock x:Name="StatusText" DockPanel.Dock="Top" FontSize="12.5" Style="{StaticResource MutedText}" />
+            <Rectangle DockPanel.Dock="Top" Height="1" Margin="0,10,0,4" Fill="{DynamicResource LineBrush}" />
+
+            <!-- フッター操作 -->
+            <StackPanel DockPanel.Dock="Bottom">
+                <TextBlock x:Name="FooterText" FontSize="11.5" Margin="0,8,0,6" Style="{StaticResource MutedText}" />
+                <WrapPanel x:Name="ActionsPanel">
+                    <Button x:Name="OpenButton" Style="{StaticResource SecondaryButton}" Content="ページを開く" Click="Open_Click" />
+                    <Button x:Name="ResummarizeButton" Style="{StaticResource SecondaryButton}" Content="再要約" Click="Resummarize_Click" />
+                    <Button x:Name="CopyButton" Style="{StaticResource SecondaryButton}" Content="コピー" Click="Copy_Click" />
+                    <Button x:Name="IgnoreButton" Style="{StaticResource SecondaryButton}" Content="このURLを無視" Click="Ignore_Click" />
+                </WrapPanel>
+            </StackPanel>
+
+            <ScrollViewer x:Name="BodyScroll" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Focusable="False">
+                <StackPanel Margin="0,6,0,0">
+
+                    <!-- 確認中 / 要約中 -->
+                    <StackPanel x:Name="LoadingPanel">
+                        <ProgressBar IsIndeterminate="True" Height="4" Margin="0,4,0,12" AutomationProperties.Name="処理中" />
+                        <Rectangle Height="11" RadiusX="5" RadiusY="5" Fill="{DynamicResource LineBrush}" Margin="0,0,40,8" />
+                        <Rectangle Height="11" RadiusX="5" RadiusY="5" Fill="{DynamicResource LineBrush}" Margin="0,0,0,8" />
+                        <Rectangle Height="11" RadiusX="5" RadiusY="5" Fill="{DynamicResource LineBrush}" Margin="0,0,90,8" />
+                        <Button x:Name="CancelButton" Style="{StaticResource SecondaryButton}" HorizontalAlignment="Left" Margin="0,6,0,0"
+                                Content="キャンセル" Click="Cancel_Click" />
+                    </StackPanel>
+
+                    <!-- AI送信前の確認 -->
+                    <Border x:Name="ConsentPanel" Background="{DynamicResource WarnBgBrush}" CornerRadius="14" Padding="14,12">
+                        <StackPanel>
+                            <TextBlock FontWeight="Bold" Text="外部のAIサービスへ送信します" />
+                            <TextBlock x:Name="ConsentText" Margin="0,6,0,8" TextWrapping="Wrap" FontSize="13" />
+                            <CheckBox x:Name="RememberCheck" Margin="0,0,0,8" Content="このプロバイダでは今後確認しない" />
+                            <WrapPanel>
+                                <Button x:Name="ConsentSendButton" Style="{StaticResource PrimaryButton}" Margin="0,0,8,0" Padding="14,7"
+                                        Content="送信して要約" Click="ConsentSend_Click" />
+                                <Button Style="{StaticResource SecondaryButton}" Content="送信しない" Click="ConsentDecline_Click" />
+                            </WrapPanel>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- 結果 -->
+                    <StackPanel x:Name="ResultPanel">
+                        <TextBlock x:Name="SummaryLabel" Style="{StaticResource SectionLabel}" Margin="0,2,0,4" Text="要約" />
+                        <ItemsControl x:Name="SummaryList" Focusable="False">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding}" TextWrapping="Wrap" Margin="0,0,0,4" LineHeight="22" />
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                        <TextBlock x:Name="PointsLabel" Style="{StaticResource SectionLabel}" Margin="0,10,0,4" Text="重要ポイント" />
+                        <ItemsControl x:Name="PointsList" Focusable="False">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <DockPanel Margin="0,0,0,4">
+                                        <Ellipse DockPanel.Dock="Left" Width="6" Height="6" Margin="2,8,10,0" VerticalAlignment="Top"
+                                                 Fill="{DynamicResource AccentSolidBrush}" />
+                                        <TextBlock Text="{Binding}" TextWrapping="Wrap" FontSize="13.5" />
+                                    </DockPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                        <TextBlock x:Name="DescriptionLabel" Style="{StaticResource SectionLabel}" Margin="0,10,0,4" Text="ページの説明（メタ情報）" />
+                        <TextBlock x:Name="DescriptionText" TextWrapping="Wrap" FontSize="13.5" />
+
+                        <Border x:Name="NoticeBox" Margin="0,10,0,0" Background="{DynamicResource SubtleBrush}" CornerRadius="12" Padding="12,10">
+                            <StackPanel>
+                                <TextBlock x:Name="NoticeTitle" FontWeight="Bold" TextWrapping="Wrap" />
+                                <TextBlock x:Name="NoticeHint" Margin="0,4,0,0" FontSize="12.5" Style="{StaticResource MutedText}" />
+                                <Button x:Name="NoticeSettingsButton" Style="{StaticResource SecondaryButton}" HorizontalAlignment="Left"
+                                        Margin="0,8,0,0" Content="設定を開く" Click="Settings_Click" />
+                            </StackPanel>
+                        </Border>
+
+                        <ItemsControl x:Name="NotesList" Margin="0,10,0,0" Focusable="False">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding StringFormat='※ {0}'}" FontSize="11.5" TextWrapping="Wrap"
+                                               Foreground="{DynamicResource MutedBrush}" Margin="0,0,0,2" />
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+
+                    <!-- エラー -->
+                    <Border x:Name="ErrorPanel" Background="{DynamicResource NgBgBrush}" CornerRadius="14" Padding="14,12">
+                        <StackPanel>
+                            <TextBlock x:Name="ErrorTitle" FontWeight="Bold" TextWrapping="Wrap" />
+                            <TextBlock x:Name="ErrorHint" Margin="0,4,0,0" TextWrapping="Wrap" FontSize="13" />
+                            <TextBlock x:Name="ErrorCorrelation" Margin="0,6,0,8" FontSize="11" Style="{StaticResource MutedText}" />
+                            <WrapPanel>
+                                <Button x:Name="RetryButton" Style="{StaticResource SecondaryButton}" Content="再試行" Click="Resummarize_Click" />
+                                <Button x:Name="ErrorSettingsButton" Style="{StaticResource SecondaryButton}" Content="設定を開く" Click="Settings_Click" />
+                            </WrapPanel>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </ScrollViewer>
+        </DockPanel>
+    </Border>
+</Window>

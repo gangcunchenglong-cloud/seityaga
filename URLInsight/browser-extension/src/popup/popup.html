@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <title>URL Insight</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <header>
+    <img src="../../icons/icon32.png" alt="" width="28" height="28">
+    <div>
+      <h1>URL Insight</h1>
+      <p class="muted">リンク要約アシスタント</p>
+    </div>
+  </header>
+
+  <section aria-labelledby="conn-h">
+    <h2 id="conn-h">接続状況</h2>
+    <div class="row"><span id="dot-host" class="dot"></span><span id="host-text">確認中…</span></div>
+    <div class="row"><span id="dot-app" class="dot"></span><span id="app-text">確認中…</span></div>
+    <p id="error-text" class="hint" hidden></p>
+    <button id="reconnect" type="button" class="secondary">再接続</button>
+  </section>
+
+  <section aria-labelledby="site-h">
+    <h2 id="site-h">このサイト</h2>
+    <p id="site-name" class="site">-</p>
+    <p id="site-state" class="muted">-</p>
+    <button id="enable-site" type="button">このサイトで有効にする</button>
+    <button id="disable-site" type="button" class="secondary" hidden>このサイトで無効にする</button>
+    <button id="enable-once" type="button" class="secondary">このタブだけ一時的に有効にする</button>
+    <p class="hint">有効にしたサイトでのみ、ホバーしたリンクのURL・リンク文字列・ページタイトルをPC上のURL Insightアプリへ渡します。外部への送信はアプリの設定と確認に従います。</p>
+  </section>
+
+  <p id="paused" class="warn" hidden>アプリ側で一時停止中です</p>
+  <script src="popup.js"></script>
+</body>
+</html>

@@ -21,12 +21,16 @@ public static class AppLog
 
     public static string? Directory => _dir;
 
-    public static void Initialize(string directory, LogLevel level)
+    private static string _fileStem = "urlinsight";
+
+    /// <param name="fileStem">ファイル名の接頭辞(別プロセスと同じファイルへ同時に書かないため)。</param>
+    public static void Initialize(string directory, LogLevel level, string fileStem = "urlinsight")
     {
         lock (Gate)
         {
             _dir = directory;
             _level = level;
+            _fileStem = fileStem;
             System.IO.Directory.CreateDirectory(directory);
             Cleanup();
         }
@@ -57,7 +61,7 @@ public static class AppLog
         {
             try
             {
-                var file = Path.Combine(_dir, $"urlinsight-{DateTime.Now:yyyyMMdd}.log");
+                var file = Path.Combine(_dir, $"{_fileStem}-{DateTime.Now:yyyyMMdd}.log");
                 var info = new FileInfo(file);
                 if (info.Exists && info.Length > MaxTotalBytes / 2) return; // 1日分の上限
                 File.AppendAllText(file, line, Encoding.UTF8);
@@ -96,7 +100,7 @@ public static class AppLog
         lock (Gate)
         {
             var lines = new List<string>();
-            foreach (var f in new DirectoryInfo(_dir).GetFiles("urlinsight-*.log").OrderByDescending(f => f.Name).Take(2).Reverse())
+            foreach (var f in new DirectoryInfo(_dir).GetFiles("urlinsight-*.log").OrderByDescending(f => f.LastWriteTimeUtc).Take(3).Reverse())
             {
                 try { lines.AddRange(File.ReadAllLines(f.FullName)); } catch (IOException) { }
             }

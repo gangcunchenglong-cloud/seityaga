@@ -204,6 +204,15 @@ public static class HostMessages
             ["code"] = code,
         });
 
+    /// <summary>ネイティブホストがアプリのパイプへ接続した直後に送る。</summary>
+    public static byte[] HostHello()
+        => Serialize(new JsonObject
+        {
+            ["schemaVersion"] = BrowserMessage.SchemaVersion,
+            ["type"] = "hello",
+            ["browser"] = "native-host",
+        });
+
     public static byte[] Simple(string type)
         => Serialize(new JsonObject { ["schemaVersion"] = BrowserMessage.SchemaVersion, ["type"] = type });
 

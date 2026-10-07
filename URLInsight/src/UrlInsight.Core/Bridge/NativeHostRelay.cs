@@ -129,6 +129,18 @@ public sealed class NativeHostRelay
             }
 
             lock (_appLock) _app = app;
+            try
+            {
+                // アプリへ「ブラウザ側ホストが接続した」ことを知らせる
+                await _appWriteLock.WaitAsync(ct).ConfigureAwait(false);
+                try { await MessageFraming.WriteAsync(app, HostMessages.HostHello(), ct).ConfigureAwait(false); }
+                finally { _appWriteLock.Release(); }
+            }
+            catch (IOException)
+            {
+                DropApp(app);
+                continue;
+            }
             await WriteStdoutAsync(stdout, HostMessages.Status(true), ct).ConfigureAwait(false);
             lastReported = true;
             AppLog.Info("native host: connected to app");
