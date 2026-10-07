@@ -1,0 +1,16 @@
+<Project>
+  <PropertyGroup>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <Version>1.0.0</Version>
+    <Company>URL Insight</Company>
+    <Product>URL Insight / LinkLens</Product>
+    <Copyright>Copyright (c) 2026</Copyright>
+    <!-- Windows 向け WPF を Linux / macOS 上でもビルドできるようにする -->
+    <EnableWindowsTargeting>true</EnableWindowsTargeting>
+    <!-- 依存関係をロックファイルで固定する -->
+    <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+    <InvariantGlobalization>false</InvariantGlobalization>
+  </PropertyGroup>
+</Project>
