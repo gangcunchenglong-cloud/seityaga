@@ -11,9 +11,7 @@ public enum CardSide { Right, Left }
 /// </summary>
 public sealed class AppSettings
 {
-    /// <summary>2: 既定の要約方式を「APIなし（この PC 内で要約）」にした版。</summary>
-    public int SchemaVersion { get; set; } = CurrentSchemaVersion;
-    public const int CurrentSchemaVersion = 2;
+    public int SchemaVersion { get; set; } = 1;
     public bool FirstRunCompleted { get; set; }
     public bool StartWithWindows { get; set; }
     public int HoverDelayMs { get; set; } = 600;
@@ -23,7 +21,7 @@ public sealed class AppSettings
     /// <summary>拡張機能なしでも、Windows の UI オートメーションでカーソル下のリンク/URL文字列を検出する。</summary>
     public bool UseUiAutomationHover { get; set; } = true;
 
-    public string ProviderId { get; set; } = "local";
+    public string ProviderId { get; set; } = "none";
     public string Model { get; set; } = string.Empty;
     public string CustomEndpoint { get; set; } = string.Empty;
     /// <summary>true: 毎回送信前に確認。false: プロバイダごとの初回のみ確認。</summary>
@@ -51,7 +49,7 @@ public sealed class AppSettings
         CacheMaxEntries = Math.Clamp(CacheMaxEntries, 10, 100_000);
         CacheMaxMegabytes = Math.Clamp(CacheMaxMegabytes, 1, 4096);
         if (LogLevel is not ("Error" or "Warning" or "Info" or "Debug")) LogLevel = "Info";
-        ProviderId ??= "local";
+        ProviderId ??= "none";
         Model ??= string.Empty;
         CustomEndpoint ??= string.Empty;
         ExtensionId ??= string.Empty;
@@ -83,7 +81,6 @@ public sealed class SettingsStore
             try
             {
                 var settings = JsonSerializer.Deserialize<AppSettings>(File.ReadAllText(_path), JsonOptions) ?? new AppSettings();
-                Migrate(settings);
                 settings.Clamp();
                 return settings;
             }
@@ -94,18 +91,6 @@ public sealed class SettingsStore
                 return new AppSettings();
             }
         }
-    }
-
-    /// <summary>
-    /// 旧版(AI未設定が既定)の設定で「未設定」のままの人は、APIなしの要約に切り替える。
-    /// API を設定済みの人の選択は変えない。
-    /// </summary>
-    internal static void Migrate(AppSettings settings)
-    {
-        if (settings.SchemaVersion >= AppSettings.CurrentSchemaVersion) return;
-        if (string.IsNullOrEmpty(settings.ProviderId) || settings.ProviderId == "none")
-            settings.ProviderId = AI.LocalSummaryProvider.ProviderId;
-        settings.SchemaVersion = AppSettings.CurrentSchemaVersion;
     }
 
     public void Save(AppSettings settings)

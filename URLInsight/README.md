@@ -6,8 +6,7 @@
 - 構成: **Windows 常駐アプリ（WPF / .NET 8）＋ Chrome 拡張（Manifest V3）＋ Native Messaging**
 - **アプリを起動しておくだけで動きます**: リンクやURLの文字列にカーソルを重ねて少し止めると要約カードが出ます（Windows の UI オートメーションで検出。Chrome拡張は任意）
 - URL を貼り付けて要約することもできます（手動モード）
-- 初期状態では **API を使わず、この PC 内だけで要約します**（本文から重要そうな文を抜き出す方式。外部の AI へは送信しません）
-- より自然な文章で要約したい場合は、AI プロバイダと API キーを設定できます。送信前の確認を経たときだけ送信します
+- 初期状態では AI へ送信しません。プロバイダと API キーを設定し、送信前の確認を経たときだけ送信します
 
 > 仕様書: `URL_Insight_LinkLens_Claude向け実装仕様書` v1.0 に基づく実装です。UI は同梱の UI サンプル SVG を参考にしています。
 
@@ -30,7 +29,7 @@
 
 ### 1-1. インストール
 
-1. `URLInsight-Setup-1.3.0.exe` を実行します（管理者権限は不要。`%LOCALAPPDATA%\Programs\URLInsight` に入ります）。
+1. `URLInsight-Setup-1.2.0.exe` を実行します（管理者権限は不要。`%LOCALAPPDATA%\Programs\URLInsight` に入ります）。
    - コード署名をしていないため、SmartScreen の警告が出た場合は「詳細情報」→「実行」を選んでください。
 2. インストーラーが Chrome 用のネイティブメッセージングホストを自動で登録します。
 3. 完了画面で「URL Insight を起動する」にチェックを入れて完了します。
@@ -68,8 +67,7 @@
 
 | プロバイダ | エンドポイント | 備考 |
 | --- | --- | --- |
-| 未設定 | — | 要約しない。タイトル・説明などページ情報のみ表示 |
-| **APIなし（この PC 内で要約）（既定）** | — | API キー不要・外部送信なし。本文から重要そうな文（よく出てくる語・タイトルの語を含む文、冒頭に近い文）を抜き出して3〜5文の要約にし、よく出てくる語と本文の長さ（読む時間の目安）を添えます。AI ではないため、文章を言い換えたり、まとめ直したりはしません |
+| 未設定（既定） | — | AI へ送信しない。タイトル・説明などページ情報のみ表示 |
 | OpenAI | `https://api.openai.com/v1` | Chat Completions 互換 |
 | Anthropic (Claude) | `https://api.anthropic.com/v1` | Messages API。モデル例: `claude-opus-5-5`, `claude-haiku-4-5` |
 | Google Gemini | `https://generativelanguage.googleapis.com/v1beta/openai` | OpenAI 互換エンドポイント |
@@ -145,7 +143,7 @@ powershell -ExecutionPolicy Bypass -File .\build.ps1   # Windows
 ./build.sh                                             # Linux / WSL（Microsoft 版 .NET 8 SDK + NSIS）
 ```
 
-出力（`dist/`）: `URLInsight-Setup-1.3.0.exe`（インストーラー）、`URLInsight-1.3.0-win-x64-portable.zip`、`URLInsight/URLInsight.exe`（自己完結型・単一ファイル）、`URLInsight/URLInsight.NativeHost.exe`、`URLInsight/browser-extension/`。詳細は [docs/RELEASE.md](docs/RELEASE.md)。署名はしていません（同ドキュメント参照）。
+出力（`dist/`）: `URLInsight-Setup-1.2.0.exe`（インストーラー）、`URLInsight-1.2.0-win-x64-portable.zip`、`URLInsight/URLInsight.exe`（自己完結型・単一ファイル）、`URLInsight/URLInsight.NativeHost.exe`、`URLInsight/browser-extension/`。詳細は [docs/RELEASE.md](docs/RELEASE.md)。署名はしていません（同ドキュメント参照）。
 
 ### 4-6. プロジェクト構成
 
@@ -191,14 +189,14 @@ URLInsight/
 4. キャッシュ（URL + プロンプト版 + プロバイダ/モデル + 言語 + 処理版）を検索。ヒットすれば即表示（AI 通信なし）。
 5. ミスなら取得: localhost / プライベート / リンクローカル / 予約 IP を DNS 解決後に拒否し、その IP へ直接接続（DNS rebinding 対策）。リダイレクトは最大5回で毎回再検査。20MB・20秒の上限。Cookie / 認証情報は送らない。
 6. HTML（SmartReader + 簡易抽出、5万字まで）/ PDF（PdfPig、50ページまで、画像のみ・暗号化は対象外）/ YouTube（公式 oEmbed・任意で Data API）を抽出し、根拠量を評価。本文が無ければ AI に送らず、メタ情報のみ表示。
-7. 「未設定」ならページ情報のみ表示。「APIなし」なら確認なしにこの PC 内で抽出型要約。AI プロバイダ設定済みなら送信前確認 → 要約。出力は厳格な JSON 検証（要約1〜5文、重要ポイント最大4、長さ制限）。不正なら1回再試行。429 は Retry-After を尊重、5xx は指数バックオフ＋ジッターで最大2回、401/403 は再試行しない。
+7. AI 未設定ならページ情報のみ表示。設定済みなら送信前確認 → 要約。出力は厳格な JSON 検証（要約1〜5文、重要ポイント最大4、長さ制限）。不正なら1回再試行。429 は Retry-After を尊重、5xx は指数バックオフ＋ジッターで最大2回、401/403 は再試行しない。
 8. 別リンクへ移ったら古い処理をキャンセルし、古い結果は画面に出さない（requestId で判定）。
 
 ## 6. セキュリティとプライバシー
 
 詳細は [docs/PRIVACY.md](docs/PRIVACY.md)。要点:
 
-- テレメトリなし。初期状態で AI 送信なし（APIなしの要約はこの PC 内で完結）。送信前に送信先・内容・文字数を確認。
+- テレメトリなし。初期状態で AI 送信なし。送信前に送信先・内容・文字数を確認。
 - 拡張なしのホバー検出は、カーソルが止まったとき、および1秒ごとに、カーソル位置の要素と前後約1000文字だけを UI オートメーションで読み取ります（画面全体は読み取らない、自分のウィンドウ・パスワード欄は対象外、内容はログに残さない）。設定でオフにできます。
 - API キーは DPAPI で暗号化保存。平文フォールバックなし。ログ・診断情報は伏せ字処理し、さらに自動検査。
 - ページ本文は AI への入力時に「引用データであり命令ではない」と明示（プロンプトインジェクション対策）。区切りタグの偽装も無害化。
@@ -212,7 +210,7 @@ URLInsight/
 
 | 対象 | 件数 | 結果 | 内容 |
 | --- | --- | --- | --- |
-| `UrlInsight.Core.Tests`（xUnit, Linux 上で実行） | 175 | 175 成功 / 0 失敗 | URL スキーム/資格情報/Unicode ドメイン/IPv4・IPv6・ローカル IP の拒否、接続時 IP 検査（DNS rebinding 想定）、リダイレクト上限・スキーム変更、サイズ上限、タイムアウト、HTTP ステータス分類、Cookie/認証ヘッダー非送信、HTML 抽出（メタ/JSON-LD/Shift_JIS/EUC-JP/巨大本文/悪意ある深い DOM）、PDF（抽出/画像のみ/破損）、YouTube ID、AI 出力 JSON 検証、プロンプトの区切り無害化、再試行（不正出力1回/Retry-After/5xx バックオフ/401・400 非再試行）、OpenAI 互換・Anthropic アダプター（ヘッダー/本文/エラー分類/エラー文からのキー除去/refusal）、キャッシュ TTL・LRU・キー分離・モデル変更での無効化、設定の破損時復旧、DPAPI の平文フォールバック禁止、ログ・診断情報の伏せ字、Native Messaging フレーミング/サイズ上限/不正メッセージ拒否、ホスト中継（アプリ未起動→起動→双方向中継→終了）、パイプライン通し（AI 未設定/同意拒否/要約→キャッシュヒット→再要約→モデル変更/確認省略/空ページ/403/テスト用プロバイダ/APIなし要約/キャンセル）、APIなし要約（定型文の除外・本文順・説明文の利用・英語・旧設定からの移行）、カーソル下の URL 全体取得 |
+| `UrlInsight.Core.Tests`（xUnit, Linux 上で実行） | 150 | 150 成功 / 0 失敗 | URL スキーム/資格情報/Unicode ドメイン/IPv4・IPv6・ローカル IP の拒否、接続時 IP 検査（DNS rebinding 想定）、リダイレクト上限・スキーム変更、サイズ上限、タイムアウト、HTTP ステータス分類、Cookie/認証ヘッダー非送信、HTML 抽出（メタ/JSON-LD/Shift_JIS/EUC-JP/巨大本文/悪意ある深い DOM）、PDF（抽出/画像のみ/破損）、YouTube ID、AI 出力 JSON 検証、プロンプトの区切り無害化、再試行（不正出力1回/Retry-After/5xx バックオフ/401・400 非再試行）、OpenAI 互換・Anthropic アダプター（ヘッダー/本文/エラー分類/エラー文からのキー除去/refusal）、キャッシュ TTL・LRU・キー分離・モデル変更での無効化、設定の破損時復旧、DPAPI の平文フォールバック禁止、ログ・診断情報の伏せ字、Native Messaging フレーミング/サイズ上限/不正メッセージ拒否、ホスト中継（アプリ未起動→起動→双方向中継→終了）、パイプライン通し（AI 未設定/同意拒否/要約→キャッシュヒット→再要約→モデル変更/確認省略/空ページ/403/テスト用プロバイダ/キャンセル） |
 | 拡張 `linkfilter.test.js`（node:test） | 6 | 6 成功 / 0 失敗 | 許可スキーム、危険スキーム拒否、資格情報付き URL、長さ上限、同一ページ内アンカー除外、リンク文字列整形 |
 
 ### Windows 用 exe の動作確認（Linux 上の Wine 9.0 で実施）

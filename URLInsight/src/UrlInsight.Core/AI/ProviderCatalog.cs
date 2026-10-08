@@ -1,6 +1,6 @@
 namespace UrlInsight.Core.AI;
 
-public enum ProviderKind { None, OpenAiCompatible, Anthropic, Fixture, Local }
+public enum ProviderKind { None, OpenAiCompatible, Anthropic, Fixture }
 
 public sealed record ProviderPreset(
     string Id,
@@ -21,7 +21,6 @@ public static class ProviderCatalog
     public static readonly IReadOnlyList<ProviderPreset> All = new[]
     {
         new ProviderPreset("none", "未設定（AI送信なし）", ProviderKind.None, null, false, false, "", null),
-        new ProviderPreset(LocalSummaryProvider.ProviderId, "APIなし（この PC 内で要約）", ProviderKind.Local, null, false, false, "", null),
         new ProviderPreset("openai", "OpenAI", ProviderKind.OpenAiCompatible, "https://api.openai.com/v1", false, true,
             "提供元のモデル名を入力", "https://openai.com/api/pricing/"),
         new ProviderPreset("anthropic", "Anthropic (Claude)", ProviderKind.Anthropic, "https://api.anthropic.com/v1", false, true,
@@ -73,8 +72,6 @@ public static class ProviderCatalog
                 return null;
             case ProviderKind.Fixture:
                 return new FixtureProvider();
-            case ProviderKind.Local:
-                return new LocalSummaryProvider();
         }
         if (string.IsNullOrWhiteSpace(apiKey) || string.IsNullOrWhiteSpace(model)) return null;
         if (preset.Kind == ProviderKind.Anthropic)

@@ -97,7 +97,6 @@ internal sealed class AppServices : IDisposable
         var preset = ProviderCatalog.Get(s.ProviderId);
         if (preset.Kind == ProviderKind.None) return (false, "AI未設定（ページ情報のみ表示）");
         if (preset.Kind == ProviderKind.Fixture) return (true, "テスト用プロバイダ（AI送信なし）");
-        if (preset.Kind == ProviderKind.Local) return (true, "APIなし（この PC 内で要約・外部送信なし）");
         if (string.IsNullOrWhiteSpace(s.Model)) return (false, $"{preset.DisplayName}: モデル未入力");
         if (!Secrets.Exists(LayeredSecretStore.ProviderKeyName(preset.Id))) return (false, $"{preset.DisplayName}: APIキー未設定");
         return (true, $"{preset.DisplayName} ・ {s.Model}");

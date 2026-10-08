@@ -116,8 +116,7 @@ internal sealed class App : Application
         ShowMain();
         var answer = MessageBox.Show(_main!,
             "URL Insight へようこそ。\n\nこのアプリを起動している間、リンクやURLにカーソルを重ねて少し止めると、リンク先の要約カードを画面右側に表示します（Chrome拡張は不要です）。" +
-            "\n初期状態では API を使わず、この PC 内で本文から重要そうな文を抜き出して要約します（外部のAIへは送信しません）。" +
-            "\nより自然な文章の要約にしたい場合は、設定の「AIプロバイダ」でプロバイダとキーを登録できます（送信前に確認します）。" +
+            "\n初期状態ではAIへの送信は行いません（設定でプロバイダとキーを登録したときだけ、確認のうえで送信します）。" +
             "\n\nWindows の起動時に URL Insight を自動で開始しますか？\n（あとから設定で変更できます）",
             "URL Insight のセットアップ", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No);
         bool startup = answer == MessageBoxResult.Yes;
@@ -128,8 +127,8 @@ internal sealed class App : Application
             s.FirstRunCompleted = true;
             s.StartWithWindows = startup;
         });
-        // APIなしで要約できるので、AI の設定画面は「未設定」のときだけ開く
-        if (_services.Settings.ProviderId == "none") OpenSettings("ai");
+        // 要約文を出すには AI の設定が必要なので、AI の設定画面を開く
+        OpenSettings("ai");
     }
 
     public void ShowMain()
