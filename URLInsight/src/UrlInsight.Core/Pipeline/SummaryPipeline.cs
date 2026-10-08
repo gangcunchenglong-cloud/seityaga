@@ -160,7 +160,9 @@ public sealed class SummaryPipeline
             return;
         }
 
-        int sendChars = Math.Min(content.Text.Length, settings.MaxCharsToSend);
+        // メニュー・定型文などを除いた本文を AI に渡す(要約の精度を上げ、送信量も減らす)
+        var bodyForAi = BodyCleaner.Clean(content.Text);
+        int sendChars = Math.Min(bodyForAi.Length, settings.MaxCharsToSend + SummaryPromptBuilder.OmissionMarker.Length);
         bool consentNeeded = !provider.IsTestProvider &&
                              (settings.ConfirmBeforeSend || !settings.ConsentedProviders.Contains(ConsentKey(provider)));
         bool warningNeedsConfirm = content.Warning != ErrorCode.None;
@@ -200,7 +202,7 @@ public sealed class SummaryPipeline
         SummaryOutput output;
         try
         {
-            var input = new SummaryInput(url, content.Kind, content.Title ?? request.LinkText, content.Description, content.Text, content.Quality);
+            var input = new SummaryInput(url, content.Kind, content.Title ?? request.LinkText, content.Description, bodyForAi, content.Quality);
             output = await _engine.SummarizeAsync(provider, input, settings.MaxCharsToSend, ct).ConfigureAwait(false);
         }
         catch (OperationCanceledException) when (ct.IsCancellationRequested)
@@ -232,6 +234,8 @@ public sealed class SummaryPipeline
             card.Notes.Insert(0, "本文の一部のみから作成しています（根拠が限定的）");
         if (output.Confidence == "low")
             card.Notes.Insert(0, "AIの確信度が低い要約です。必要に応じてページを開いて確認してください");
+        if (output.UnsupportedNumbers.Count > 0)
+            card.Notes.Insert(0, $"要約内の数値（{string.Join("、", output.UnsupportedNumbers.Take(5))}）を本文で確認できませんでした。ページで確認してください");
 
         if (_cache != null && settings.CacheEnabled)
         {

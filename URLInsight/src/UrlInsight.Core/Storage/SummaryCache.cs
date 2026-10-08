@@ -17,7 +17,7 @@ public sealed record CacheStats(int Count, long Bytes);
 /// </summary>
 public sealed class SummaryCache
 {
-    public const string ProcessingVersion = "1";
+    public const string ProcessingVersion = "2";
     private static readonly JsonSerializerOptions Json = new() { Converters = { new JsonStringEnumConverter() } };
     private readonly string _connectionString;
     private readonly Func<DateTimeOffset> _now;

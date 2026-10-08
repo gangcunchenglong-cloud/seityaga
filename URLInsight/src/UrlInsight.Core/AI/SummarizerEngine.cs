@@ -6,6 +6,7 @@ namespace UrlInsight.Core.AI;
 /// - 429: Retry-After を尊重(最大 <see cref="MaxRetryAfter"/> まで待つ。それ以上なら即エラー)
 /// - 5xx / ネットワーク / タイムアウト: 指数バックオフ+ジッターで最大2回
 /// - 401/403 等: 再試行しない
+/// - 本文に無い数値を含む要約: どの数値かを伝えて1回だけ作り直す
 /// </summary>
 public sealed class SummarizerEngine
 {
@@ -20,6 +21,34 @@ public sealed class SummarizerEngine
     public async Task<SummaryOutput> SummarizeAsync(ISummarizerProvider provider, SummaryInput input, int maxChars, CancellationToken ct)
     {
         var prompt = SummaryPromptBuilder.Build(input, maxChars);
+        var output = await CompleteAsync(provider, prompt, ct).ConfigureAwait(false);
+
+        // 本文に無い数値が含まれていたら、どの数値かを伝えて1回だけ作り直してもらう
+        var unsupported = SummaryGrounding.FindUnsupportedNumbers(output, input);
+        if (unsupported.Count == 0) return output;
+
+        var retry = prompt with { User = prompt.User + "\n\n" + SummaryPromptBuilder.GroundingFeedback(unsupported) };
+        try
+        {
+            var second = await CompleteAsync(provider, retry, ct).ConfigureAwait(false);
+            var stillUnsupported = SummaryGrounding.FindUnsupportedNumbers(second, input);
+            // 作り直しても残る場合は、少ない方を採用して確信度を下げる(カードに注意書きを出す)
+            if (stillUnsupported.Count < unsupported.Count) (output, unsupported) = (second, stillUnsupported);
+        }
+        catch (InsightException)
+        {
+            // 作り直しに失敗しても、最初の要約に注意書きを付けて表示する
+        }
+        if (unsupported.Count > 0)
+        {
+            output.UnsupportedNumbers = unsupported;
+            output.Confidence = "low";
+        }
+        return output;
+    }
+
+    private async Task<SummaryOutput> CompleteAsync(ISummarizerProvider provider, SummaryPrompt prompt, CancellationToken ct)
+    {
         int invalidOutputRetries = 0, transientRetries = 0, rateLimitRetries = 0;
 
         while (true)

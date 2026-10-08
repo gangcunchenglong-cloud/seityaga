@@ -29,7 +29,7 @@
 
 ### 1-1. インストール
 
-1. `URLInsight-Setup-1.2.0.exe` を実行します（管理者権限は不要。`%LOCALAPPDATA%\Programs\URLInsight` に入ります）。
+1. `URLInsight-Setup-1.2.22.exe` を実行します（管理者権限は不要。`%LOCALAPPDATA%\Programs\URLInsight` に入ります）。
    - コード署名をしていないため、SmartScreen の警告が出た場合は「詳細情報」→「実行」を選んでください。
 2. インストーラーが Chrome 用のネイティブメッセージングホストを自動で登録します。
 3. 完了画面で「URL Insight を起動する」にチェックを入れて完了します。
@@ -143,7 +143,7 @@ powershell -ExecutionPolicy Bypass -File .\build.ps1   # Windows
 ./build.sh                                             # Linux / WSL（Microsoft 版 .NET 8 SDK + NSIS）
 ```
 
-出力（`dist/`）: `URLInsight-Setup-1.2.0.exe`（インストーラー）、`URLInsight-1.2.0-win-x64-portable.zip`、`URLInsight/URLInsight.exe`（自己完結型・単一ファイル）、`URLInsight/URLInsight.NativeHost.exe`、`URLInsight/browser-extension/`。詳細は [docs/RELEASE.md](docs/RELEASE.md)。署名はしていません（同ドキュメント参照）。
+出力（`dist/`）: `URLInsight-Setup-1.2.22.exe`（インストーラー）、`URLInsight-1.2.22-win-x64-portable.zip`、`URLInsight/URLInsight.exe`（自己完結型・単一ファイル）、`URLInsight/URLInsight.NativeHost.exe`、`URLInsight/browser-extension/`。詳細は [docs/RELEASE.md](docs/RELEASE.md)。署名はしていません（同ドキュメント参照）。
 
 ### 4-6. プロジェクト構成
 
@@ -189,7 +189,7 @@ URLInsight/
 4. キャッシュ（URL + プロンプト版 + プロバイダ/モデル + 言語 + 処理版）を検索。ヒットすれば即表示（AI 通信なし）。
 5. ミスなら取得: localhost / プライベート / リンクローカル / 予約 IP を DNS 解決後に拒否し、その IP へ直接接続（DNS rebinding 対策）。リダイレクトは最大5回で毎回再検査。20MB・20秒の上限。Cookie / 認証情報は送らない。
 6. HTML（SmartReader + 簡易抽出、5万字まで）/ PDF（PdfPig、50ページまで、画像のみ・暗号化は対象外）/ YouTube（公式 oEmbed・任意で Data API）を抽出し、根拠量を評価。本文が無ければ AI に送らず、メタ情報のみ表示。
-7. AI 未設定ならページ情報のみ表示。設定済みなら送信前確認 → 要約。出力は厳格な JSON 検証（要約1〜5文、重要ポイント最大4、長さ制限）。不正なら1回再試行。429 は Retry-After を尊重、5xx は指数バックオフ＋ジッターで最大2回、401/403 は再試行しない。
+7. AI 未設定ならページ情報のみ表示。設定済みなら送信前確認 → 要約。要約の精度を上げるため、(a) メニュー・Cookie 表示・著作権表示・共有ボタン・関連記事などの行を除いた本文を渡す、(b) 上限を超える本文は冒頭（約3/4）と末尾（約1/4）を渡して結論を取りこぼさない、(c)「結論を1文目に」「数値・固有名詞は本文の表記どおり」などページの種類に応じた指示を与える、(d) 要約に本文に無い数値（2桁以上）があれば、その数値を伝えて1回だけ作り直させ、それでも残ればカードに注意書きを出す。出力は厳格な JSON 検証（要約1〜5文、重要ポイント最大4、長さ制限）。不正なら1回再試行。429 は Retry-After を尊重、5xx は指数バックオフ＋ジッターで最大2回、401/403 は再試行しない。
 8. 別リンクへ移ったら古い処理をキャンセルし、古い結果は画面に出さない（requestId で判定）。
 
 ## 6. セキュリティとプライバシー
@@ -210,7 +210,7 @@ URLInsight/
 
 | 対象 | 件数 | 結果 | 内容 |
 | --- | --- | --- | --- |
-| `UrlInsight.Core.Tests`（xUnit, Linux 上で実行） | 150 | 150 成功 / 0 失敗 | URL スキーム/資格情報/Unicode ドメイン/IPv4・IPv6・ローカル IP の拒否、接続時 IP 検査（DNS rebinding 想定）、リダイレクト上限・スキーム変更、サイズ上限、タイムアウト、HTTP ステータス分類、Cookie/認証ヘッダー非送信、HTML 抽出（メタ/JSON-LD/Shift_JIS/EUC-JP/巨大本文/悪意ある深い DOM）、PDF（抽出/画像のみ/破損）、YouTube ID、AI 出力 JSON 検証、プロンプトの区切り無害化、再試行（不正出力1回/Retry-After/5xx バックオフ/401・400 非再試行）、OpenAI 互換・Anthropic アダプター（ヘッダー/本文/エラー分類/エラー文からのキー除去/refusal）、キャッシュ TTL・LRU・キー分離・モデル変更での無効化、設定の破損時復旧、DPAPI の平文フォールバック禁止、ログ・診断情報の伏せ字、Native Messaging フレーミング/サイズ上限/不正メッセージ拒否、ホスト中継（アプリ未起動→起動→双方向中継→終了）、パイプライン通し（AI 未設定/同意拒否/要約→キャッシュヒット→再要約→モデル変更/確認省略/空ページ/403/テスト用プロバイダ/キャンセル） |
+| `UrlInsight.Core.Tests`（xUnit, Linux 上で実行） | 176 | 176 成功 / 0 失敗 | URL スキーム/資格情報/Unicode ドメイン/IPv4・IPv6・ローカル IP の拒否、接続時 IP 検査（DNS rebinding 想定）、リダイレクト上限・スキーム変更、サイズ上限、タイムアウト、HTTP ステータス分類、Cookie/認証ヘッダー非送信、HTML 抽出（メタ/JSON-LD/Shift_JIS/EUC-JP/巨大本文/悪意ある深い DOM）、PDF（抽出/画像のみ/破損）、YouTube ID、AI 出力 JSON 検証、プロンプトの区切り無害化、再試行（不正出力1回/Retry-After/5xx バックオフ/401・400 非再試行）、OpenAI 互換・Anthropic アダプター（ヘッダー/本文/エラー分類/エラー文からのキー除去/refusal）、キャッシュ TTL・LRU・キー分離・モデル変更での無効化、設定の破損時復旧、DPAPI の平文フォールバック禁止、ログ・診断情報の伏せ字、Native Messaging フレーミング/サイズ上限/不正メッセージ拒否、ホスト中継（アプリ未起動→起動→双方向中継→終了）、パイプライン通し（AI 未設定/同意拒否/要約→キャッシュヒット→再要約→モデル変更/確認省略/空ページ/403/テスト用プロバイダ/キャンセル）、要約の精度向上（本文のノイズ除去・冒頭と末尾の送信・数値の裏付け確認と作り直し）、カーソル下の URL 全体取得 |
 | 拡張 `linkfilter.test.js`（node:test） | 6 | 6 成功 / 0 失敗 | 許可スキーム、危険スキーム拒否、資格情報付き URL、長さ上限、同一ページ内アンカー除外、リンク文字列整形 |
 
 ### Windows 用 exe の動作確認（Linux 上の Wine 9.0 で実施）
