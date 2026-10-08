@@ -61,23 +61,26 @@ public partial class MainWindow : Window
 
         bool connected = _services.Bridge.BrowserConnected;
         bool registered = _services.NativeHostRegistered;
-        ExtDot.SetResourceReference(Shape.FillProperty, connected ? "OkBrush" : "NgBrush");
-        ExtBadge.SetResourceReference(Border.BackgroundProperty, connected ? "OkBgBrush" : "NgBgBrush");
-        ExtBadgeText.SetResourceReference(TextBlock.ForegroundProperty, connected ? "OkFgBrush" : "NgBrush");
-        ExtBadgeText.Text = connected ? "接続済み" : "未接続";
+        bool uia = s.UseUiAutomationHover;
+        bool working = connected || uia;
+        ExtDot.SetResourceReference(Shape.FillProperty, working ? "OkBrush" : "NgBrush");
+        ExtBadge.SetResourceReference(Border.BackgroundProperty, working ? "OkBgBrush" : "NgBgBrush");
+        ExtBadgeText.SetResourceReference(TextBlock.ForegroundProperty, working ? "OkFgBrush" : "NgBrush");
+        ExtBadgeText.Text = connected ? "拡張と接続済み" : uia ? "動作中" : "未接続";
         ExtText.Text = connected
-            ? "ブラウザと接続しています" + (_services.Bridge.ExtensionVersion is string v ? $"（拡張 v{v}）" : "")
+            ? "Chrome拡張と接続しています" + (_services.Bridge.ExtensionVersion is string v ? $"（拡張 v{v}）" : "")
+            : uia ? "リンクやURLにカーソルを重ねると要約します（Chrome拡張なしで動作中）"
             : registered ? ErrorMessages.Title(ErrorCode.ExtensionNotConnected) + "。Chromeで拡張を有効にしてください"
-                         : "ネイティブホストが未登録です（設定 → ブラウザ拡張）";
+                         : "ホバー検出がオフです（設定 → 一般）";
 
         var (ok, text) = _services.DescribeProvider();
         AiDot.SetResourceReference(Shape.FillProperty, ok ? "OkBrush" : "MutedBrush");
         AiText.Text = text;
 
         var steps = new System.Collections.Generic.List<string>();
-        if (!registered) steps.Add("① 設定 → ブラウザ拡張 で「ホストを登録」を押す");
-        if (!connected) steps.Add("② Chromeで拡張機能を読み込み、使うサイトで有効にする（READMEの手順）");
-        if (!ok) steps.Add("③ 設定 → AI でプロバイダとAPIキーを設定（未設定でもページ情報は表示できます）");
+        if (!working && !registered) steps.Add("・設定 → ブラウザ拡張 で「ホストを登録」を押す");
+        if (!working) steps.Add("・Chromeで拡張機能を読み込むか、設定 → 一般 で「拡張機能なしでもホバーを検出する」をオンにする");
+        if (!ok) steps.Add("・設定 → AI でプロバイダとAPIキーを設定すると要約が出ます（未設定でもページのタイトル・説明は表示します）");
         SetupBox.Visibility = steps.Count > 0 ? Visibility.Visible : Visibility.Collapsed;
         SetupText.Text = string.Join("\n", steps);
     }

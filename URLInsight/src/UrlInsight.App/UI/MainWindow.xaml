@@ -63,7 +63,7 @@
                                 </Border>
                                 <Ellipse x:Name="ExtDot" Width="12" Height="12" Fill="{DynamicResource OkBrush}" VerticalAlignment="Top" Margin="0,5,10,0" />
                                 <StackPanel>
-                                    <TextBlock FontWeight="Bold" Text="Chrome拡張" />
+                                    <TextBlock FontWeight="Bold" Text="ホバー検出" />
                                     <TextBlock x:Name="ExtText" FontSize="12.5" Style="{StaticResource MutedText}" />
                                 </StackPanel>
                             </DockPanel>

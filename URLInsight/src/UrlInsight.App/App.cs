@@ -21,6 +21,7 @@ internal sealed class App : Application
     private MainWindow? _main;
     private SettingsWindow? _settingsWindow;
     private TrayIcon? _tray;
+    private UiaHoverWatcher? _hoverWatcher;
 
     public App(AppPaths paths, bool startMinimized)
     {
@@ -65,6 +66,12 @@ internal sealed class App : Application
         });
         _services.Bridge.Start();
 
+        // 拡張機能なしでも、アプリを起動しておくだけでホバー検出できるようにする
+        _hoverWatcher = new UiaHoverWatcher(() => _services.Settings);
+        _hoverWatcher.LinkHovered += (url, text) => _coordinator.OnLocalHover(url, text);
+        _hoverWatcher.HoverEnded += () => _coordinator.OnLocalHoverEnd();
+        _hoverWatcher.Start();
+
         _main = new MainWindow(_services, _coordinator);
         _main.SettingsRequested += () => OpenSettings(null);
 
@@ -107,7 +114,7 @@ internal sealed class App : Application
     {
         ShowMain();
         var answer = MessageBox.Show(_main!,
-            "URL Insight へようこそ。\n\nリンクにカーソルを合わせると、リンク先の要約カードを画面右側に表示します。" +
+            "URL Insight へようこそ。\n\nこのアプリを起動している間、リンクやURLにカーソルを重ねて少し止めると、リンク先の要約カードを画面右側に表示します（Chrome拡張は不要です）。" +
             "\n初期状態ではAIへの送信は行いません（設定でプロバイダとキーを登録したときだけ、確認のうえで送信します）。" +
             "\n\nWindows の起動時に URL Insight を自動で開始しますか？\n（あとから設定で変更できます）",
             "URL Insight のセットアップ", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No);
@@ -119,7 +126,8 @@ internal sealed class App : Application
             s.FirstRunCompleted = true;
             s.StartWithWindows = startup;
         });
-        OpenSettings("browser");
+        // 要約文を出すには AI の設定が必要なので、AI の設定画面を開く
+        OpenSettings("ai");
     }
 
     public void ShowMain()
@@ -149,6 +157,7 @@ internal sealed class App : Application
     private void ExitApp()
     {
         AppLog.Info("app exiting");
+        _hoverWatcher?.Dispose();
         _coordinator?.Hide();
         _tray?.Dispose();
         _services?.Dispose();

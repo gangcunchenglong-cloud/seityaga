@@ -62,6 +62,20 @@ internal sealed class HoverCoordinator
     /// <summary>ブリッジからのメッセージ(どのスレッドからでも可)。</summary>
     public void OnBridgeMessage(BrowserMessage message) => _dispatcher.BeginInvoke(() => Handle(message));
 
+    private string? _localRequestId;
+
+    /// <summary>拡張なしのホバー検出(UI オートメーション)からの通知。どのスレッドからでも可。</summary>
+    public void OnLocalHover(string url, string? linkText) => _dispatcher.BeginInvoke(() =>
+    {
+        _localRequestId = Guid.NewGuid().ToString("N");
+        Handle(new BrowserMessage { Type = "hoverLink", RequestId = _localRequestId, Url = url, LinkText = linkText });
+    });
+
+    public void OnLocalHoverEnd() => _dispatcher.BeginInvoke(() =>
+    {
+        if (_localRequestId != null) Handle(new BrowserMessage { Type = "hoverEnd", RequestId = _localRequestId });
+    });
+
     private void Handle(BrowserMessage m)
     {
         switch (m.Type)

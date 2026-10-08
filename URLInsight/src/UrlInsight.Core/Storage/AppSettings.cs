@@ -18,6 +18,8 @@ public sealed class AppSettings
     public DisplayMode DisplayMode { get; set; } = DisplayMode.HoverOnly;
     public CardSide CardSide { get; set; } = CardSide.Right;
     public bool Paused { get; set; }
+    /// <summary>拡張機能なしでも、Windows の UI オートメーションでカーソル下のリンク/URL文字列を検出する。</summary>
+    public bool UseUiAutomationHover { get; set; } = true;
 
     public string ProviderId { get; set; } = "none";
     public string Model { get; set; } = string.Empty;
