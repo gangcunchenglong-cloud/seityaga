@@ -208,6 +208,23 @@ public class PipelineTests
     }
 
     [Fact]
+    public async Task LocalProviderSummarizesWithoutConsentOrNetworkSend()
+    {
+        using var h = new Harness();
+        h.Settings.ConfirmBeforeSend = true;
+        h.Provider = new LocalSummaryProvider();
+        var ui = new RecordingUi();
+        await h.Pipeline.RunAsync(new SummaryRequest(h.Url("/article"), "abcd1234"), ui, default);
+        Assert.Empty(ui.ConsentRequests);
+        Assert.Equal(CardPhase.Result, ui.Last.Phase);
+        var card = ui.Last.Card!;
+        Assert.NotEmpty(card.SummaryLines);
+        Assert.False(card.IsTestProvider);
+        Assert.Equal("APIなし（この PC 内で要約）", card.ProviderName);
+        Assert.Contains(card.Notes, n => n.Contains("AIを使わず", StringComparison.Ordinal));
+    }
+
+    [Fact]
     public async Task CancellationStopsWithoutShowingError()
     {
         using var h = new Harness();

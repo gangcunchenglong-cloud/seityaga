@@ -161,9 +161,10 @@ public sealed class SummaryPipeline
         }
 
         int sendChars = Math.Min(content.Text.Length, settings.MaxCharsToSend);
-        bool consentNeeded = !provider.IsTestProvider &&
+        // APIなし(この PC 内で要約)は外部へ送らないので、送信前の確認は出さない
+        bool consentNeeded = !provider.IsTestProvider && !provider.IsLocal &&
                              (settings.ConfirmBeforeSend || !settings.ConsentedProviders.Contains(ConsentKey(provider)));
-        bool warningNeedsConfirm = content.Warning != ErrorCode.None;
+        bool warningNeedsConfirm = content.Warning != ErrorCode.None && !provider.IsLocal;
         if (consentNeeded || warningNeedsConfirm)
         {
             var info = new ConsentInfo(provider.DisplayName, provider.EndpointHost, url.ToString(), content.Kind, sendChars,
@@ -194,7 +195,7 @@ public sealed class SummaryPipeline
         ui.Show(new CardState
         {
             Phase = CardPhase.Summarizing, Url = url.ToString(), Domain = domain, Kind = content.Kind,
-            Title = baseCard.Title, StatusText = $"{provider.DisplayName} で要約中…", Card = baseCard, CorrelationId = corr,
+            Title = baseCard.Title, StatusText = provider.IsLocal ? "本文から要約を作成中…" : $"{provider.DisplayName} で要約中…", Card = baseCard, CorrelationId = corr,
         });
 
         SummaryOutput output;
@@ -232,6 +233,8 @@ public sealed class SummaryPipeline
             card.Notes.Insert(0, "本文の一部のみから作成しています（根拠が限定的）");
         if (output.Confidence == "low")
             card.Notes.Insert(0, "AIの確信度が低い要約です。必要に応じてページを開いて確認してください");
+        if (provider.IsLocal)
+            card.Notes.Insert(0, "AIを使わず、本文から重要そうな文を抜き出した要約です（外部への送信なし）");
 
         if (_cache != null && settings.CacheEnabled)
         {

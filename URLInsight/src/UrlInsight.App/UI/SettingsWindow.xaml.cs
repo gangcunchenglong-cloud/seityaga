@@ -246,7 +246,12 @@ public partial class SettingsWindow : Window
         PricingButton.Visibility = p.PricingUrl != null ? Visibility.Visible : Visibility.Collapsed;
         TestButton.IsEnabled = p.Kind != ProviderKind.None;
         KeyStateText.Text = !p.RequiresKey
-            ? (p.Kind == ProviderKind.Fixture ? "テスト用プロバイダはキー不要で、外部送信しません。" : "AIへは送信しません。")
+            ? p.Kind switch
+            {
+                ProviderKind.Fixture => "テスト用プロバイダはキー不要で、外部送信しません。",
+                ProviderKind.Local => "APIキーは不要です。本文から重要そうな文をこの PC 内で抜き出して要約します（外部へは送信しません）。",
+                _ => "AIへは送信しません。",
+            }
             : _services.Secrets.Persistent.Exists(LayeredSecretStore.ProviderKeyName(p.Id)) ? "キー: 暗号化して保存済み"
             : _services.Secrets.Session.Exists(LayeredSecretStore.ProviderKeyName(p.Id)) ? "キー: このセッションのみ（終了時に破棄）"
             : "キー: 未設定";
