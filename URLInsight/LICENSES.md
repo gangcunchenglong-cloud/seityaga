@@ -12,6 +12,7 @@ URL Insight / LinkLens 本体のソースコードの著作権は作成者に帰
 | Microsoft.Data.Sqlite / .Core | 8.0.31 | MIT | キャッシュ・履歴の保存 |
 | SQLitePCLRaw (bundle_e_sqlite3 ほか) | 2.1.12 | Apache-2.0 | SQLite ネイティブ連携 |
 | SQLite | (SQLitePCLRaw 同梱) | Public Domain | データベースエンジン |
+| Interop.UIAutomationClient | 10.19041.0 | MIT | Windows UI オートメーション COM 版(UIA3)の .NET 用定義（拡張なしのホバー検出） |
 | System.Security.Cryptography.ProtectedData | 8.0.0 | MIT | Windows DPAPI による API キーの暗号化 |
 | System.Text.Json / Encodings.Web / Encoding.CodePages / IO.Pipelines / Memory | 10.0.x / 4.5.x | MIT | JSON・文字コード（Shift_JIS 等） |
 

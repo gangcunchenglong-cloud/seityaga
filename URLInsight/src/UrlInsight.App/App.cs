@@ -70,9 +70,10 @@ internal sealed class App : Application
         _hoverWatcher = new UiaHoverWatcher(() => _services.Settings);
         _hoverWatcher.LinkHovered += (url, text) => _coordinator.OnLocalHover(url, text);
         _hoverWatcher.HoverEnded += () => _coordinator.OnLocalHoverEnd();
-        _hoverWatcher.Start();
+        _hoverWatcher.StatusChanged += text => Dispatcher.BeginInvoke(() => _main?.SetHoverStatus(text));
 
         _main = new MainWindow(_services, _coordinator);
+        _hoverWatcher.Start();
         _main.SettingsRequested += () => OpenSettings(null);
 
         _tray = new TrayIcon();

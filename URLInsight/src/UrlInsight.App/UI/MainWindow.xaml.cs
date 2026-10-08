@@ -85,6 +85,10 @@ public partial class MainWindow : Window
         SetupText.Text = string.Join("\n", steps);
     }
 
+    /// <summary>拡張なしのホバー検出の状況(うまく動かないときの原因確認用)。</summary>
+    public void SetHoverStatus(string text)
+        => HoverDiagText.Text = $"最後の検出（{DateTime.Now:HH:mm:ss}）: {text}";
+
     public void RefreshRecent()
     {
         var cache = _services.Cache;

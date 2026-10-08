@@ -29,7 +29,7 @@
 
 ### 1-1. インストール
 
-1. `URLInsight-Setup-1.1.0.exe` を実行します（管理者権限は不要。`%LOCALAPPDATA%\Programs\URLInsight` に入ります）。
+1. `URLInsight-Setup-1.1.1.exe` を実行します（管理者権限は不要。`%LOCALAPPDATA%\Programs\URLInsight` に入ります）。
    - コード署名をしていないため、SmartScreen の警告が出た場合は「詳細情報」→「実行」を選んでください。
 2. インストーラーが Chrome 用のネイティブメッセージングホストを自動で登録します。
 3. 完了画面で「URL Insight を起動する」にチェックを入れて完了します。
@@ -143,7 +143,7 @@ powershell -ExecutionPolicy Bypass -File .\build.ps1   # Windows
 ./build.sh                                             # Linux / WSL（Microsoft 版 .NET 8 SDK + NSIS）
 ```
 
-出力（`dist/`）: `URLInsight-Setup-1.1.0.exe`（インストーラー）、`URLInsight-1.1.0-win-x64-portable.zip`、`URLInsight/URLInsight.exe`（自己完結型・単一ファイル）、`URLInsight/URLInsight.NativeHost.exe`、`URLInsight/browser-extension/`。詳細は [docs/RELEASE.md](docs/RELEASE.md)。署名はしていません（同ドキュメント参照）。
+出力（`dist/`）: `URLInsight-Setup-1.1.1.exe`（インストーラー）、`URLInsight-1.1.1-win-x64-portable.zip`、`URLInsight/URLInsight.exe`（自己完結型・単一ファイル）、`URLInsight/URLInsight.NativeHost.exe`、`URLInsight/browser-extension/`。詳細は [docs/RELEASE.md](docs/RELEASE.md)。署名はしていません（同ドキュメント参照）。
 
 ### 4-6. プロジェクト構成
 
@@ -243,4 +243,4 @@ URLInsight/
 - テーマはライトのみ（ハイコントラスト時はシステム配色）。Windows の「テキストを大きくする」設定には自動追従しない。
 - JavaScript で描画される SPA ページは、サーバーが返す HTML に本文が無い場合、メタ情報のみになる（スクリプトは実行しないため）。
 - 拡張なしのホバー検出は、アプリが UI オートメーションに情報を公開している場合だけ動きます（画像内の URL、独自描画のアプリ、一部のゲーム等では反応しない）。初めて読み取るときに Chrome のアクセシビリティ機能が有効になり、Chrome の動作がわずかに重くなる場合があります。
-- 拡張なしのホバー検出は Windows 実機で未確認です（Wine では UI オートメーションを確認できないため）。
+- 拡張なしのホバー検出は Windows 実機で未確認です（Wine では UI オートメーションの「カーソル位置の要素の取得」が未実装のため）。うまく動かない場合は、メイン画面の「最後の検出」欄に表示される内容（例: 「chrome: リンクではない場所（ペイン）」）を確認してください。ログにも `uia hover:` で記録されます（URL は記録しません）。

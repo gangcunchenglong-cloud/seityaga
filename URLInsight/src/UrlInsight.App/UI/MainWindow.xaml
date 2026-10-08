@@ -65,6 +65,9 @@
                                 <StackPanel>
                                     <TextBlock FontWeight="Bold" Text="ホバー検出" />
                                     <TextBlock x:Name="ExtText" FontSize="12.5" Style="{StaticResource MutedText}" />
+                                    <TextBlock x:Name="HoverDiagText" Margin="0,4,0,0" FontSize="12" TextWrapping="Wrap"
+                                               Foreground="{DynamicResource AccentSolidBrush}"
+                                               AutomationProperties.Name="ホバー検出の状況" Text="最後の検出: 起動中…" />
                                 </StackPanel>
                             </DockPanel>
                             <Rectangle Height="1" Margin="0,10" Fill="{DynamicResource LineBrush}" />
