@@ -72,6 +72,10 @@ public sealed class SummaryPipeline
             return;
         }
 
+        // Google の転送用リンクは、転送先の実際のページを要約する
+        if (SearchExtractor.TryUnwrapGoogleRedirect(url!, out var target) && TryNormalize(target.ToString(), out var unwrapped, out _))
+            url = unwrapped;
+
         var domain = UrlPolicy.DisplayDomain(url!);
         var settings = _settings();
         ui.Show(new CardState
@@ -143,11 +147,17 @@ public sealed class SummaryPipeline
             Description = content.Description,
             Quality = content.Quality,
             Notes = content.Notes.ToList(),
+            SearchResults = content.SearchResults.ToList(),
         };
 
         // 根拠となる本文が無い場合は AI に推測させない
         if (content.Quality == SourceQuality.MetadataOnly)
         {
+            if (content.Kind == PageKind.Search)
+            {
+                ShowResult(ui, baseCard, corr);
+                return;
+            }
             baseCard.Notice = content.Kind == PageKind.YouTube && content.Warning != ErrorCode.None ? content.Warning : ErrorCode.ContentTooShort;
             ShowResult(ui, baseCard, corr);
             return;
@@ -161,7 +171,8 @@ public sealed class SummaryPipeline
         }
 
         // メニュー・定型文などを除いた本文を AI に渡す(要約の精度を上げ、送信量も減らす)
-        var bodyForAi = BodyCleaner.Clean(content.Text);
+        // (検索結果の一覧は見出しに「ログイン」などを含むことがあるため、そのまま渡す)
+        var bodyForAi = content.Kind == PageKind.Search ? content.Text : BodyCleaner.Clean(content.Text);
         int sendChars = Math.Min(bodyForAi.Length, settings.MaxCharsToSend + SummaryPromptBuilder.OmissionMarker.Length);
         bool consentNeeded = !provider.IsTestProvider &&
                              (settings.ConfirmBeforeSend || !settings.ConsentedProviders.Contains(ConsentKey(provider)));
@@ -237,7 +248,8 @@ public sealed class SummaryPipeline
         if (output.UnsupportedNumbers.Count > 0)
             card.Notes.Insert(0, $"要約内の数値（{string.Join("、", output.UnsupportedNumbers.Take(5))}）を本文で確認できませんでした。ページで確認してください");
 
-        if (_cache != null && settings.CacheEnabled)
+        // 検索結果は時間とともに変わるため保存しない
+        if (_cache != null && settings.CacheEnabled && content.Kind != PageKind.Search)
         {
             try
             {

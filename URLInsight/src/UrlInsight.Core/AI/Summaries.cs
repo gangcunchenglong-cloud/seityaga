@@ -30,7 +30,7 @@ public sealed class SummaryOutput
 public static class SummaryPromptBuilder
 {
     /// <summary>プロンプトの版。変更するとキャッシュが自動的に無効になる。</summary>
-    public const string PromptVersion = "p2";
+    public const string PromptVersion = "p3";
 
     public const string SystemPrompt =
         """
@@ -55,6 +55,7 @@ public static class SummaryPromptBuilder
         7. keyPoints には summary と重複しない具体的な事実(数値・日付・名称・条件など)を優先して入れる。
         8. title は本文の主題を表すものにし、誇張した見出しにはしない。
         9. 本文が「（…中略…）」で区切られている場合、前半はページの冒頭、後半はページの末尾。末尾に結論やまとめがあれば要約に反映する。
+        10. 種別が「検索」の場合、本文は検索キーワードと上位の検索結果(見出し・サイト名・抜粋)の一覧。キーワードについて検索結果から分かること(答え・主な情報・どんなサイトが出ているか)をまとめ、title は「〇〇の検索結果」の形にする。抜粋に書かれていないことは補わない。
         """;
 
     public static SummaryPrompt Build(SummaryInput input, int maxChars)

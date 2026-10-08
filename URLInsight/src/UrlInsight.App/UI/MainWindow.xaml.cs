@@ -146,7 +146,7 @@ public partial class MainWindow : Window
             Id = e.Id;
             Title = string.IsNullOrWhiteSpace(e.Title) ? e.Domain : e.Title;
             FirstLine = e.FirstLine;
-            KindLabel = e.Kind switch { PageKind.Pdf => "PDF", PageKind.YouTube => "YouTube", _ => "WEB" };
+            KindLabel = e.Kind switch { PageKind.Pdf => "PDF", PageKind.YouTube => "YouTube", PageKind.Search => "検索", _ => "WEB" };
             var app = Application.Current;
             (BadgeBg, BadgeFg) = e.Kind switch
             {

@@ -18,6 +18,10 @@ public sealed class ContentService
 
     public async Task<ExtractedContent> ExtractAsync(Uri url, CancellationToken ct)
     {
+        if (SearchExtractor.TryGetGoogleQuery(url, out var query))
+            return await SearchExtractor.ExtractAsync(_fetcher, url, query,
+                (SearchSourcesForTesting ?? SearchExtractor.DefaultSources)(query), ct).ConfigureAwait(false);
+
         if (YouTubeExtractor.TryGetVideoId(url, out var videoId))
             return await YouTubeExtractor.ExtractAsync(_fetcher, url, videoId, _youTubeApiKey(), ct).ConfigureAwait(false);
 
@@ -39,6 +43,9 @@ public sealed class ContentService
             throw new InsightException(ErrorCode.Timeout, "content parsing took too long");
         }
     }
+
+    /// <summary>テスト用: 検索結果の取得先をローカルのテストサーバーに差し替える。</summary>
+    internal Func<string, IReadOnlyList<SearchSource>>? SearchSourcesForTesting { get; init; }
 
     public static readonly TimeSpan ParseTimeout = TimeSpan.FromSeconds(15);
 

@@ -138,7 +138,7 @@ public partial class CardWindow : Window
         var site = string.IsNullOrWhiteSpace(card.SiteName) ? card.Domain : card.SiteName;
         StatusText.Text = card.HasSummary
             ? (card.IsTestProvider ? "テスト用プロバイダの出力です（AIではありません）" : "要約を作成しました")
-            : "ページ情報のみ表示しています";
+            : card.SearchResults.Count > 0 ? "検索結果を表示しています" : "ページ情報のみ表示しています";
         DomainText.Text = site;
         ShowCardBody(card, showNotice: true);
 
@@ -159,6 +159,11 @@ public partial class CardWindow : Window
         SummaryList.Visibility = Vis(card.SummaryLines.Count > 0);
         PointsLabel.Visibility = Vis(card.KeyPoints.Count > 0);
         PointsList.Visibility = Vis(card.KeyPoints.Count > 0);
+        // 検索ページは、AI の要約の有無にかかわらず上位の検索結果を一覧で見せる(AI 要約ありなら上位5件)
+        var results = card.SearchResults.Take(card.HasSummary ? 5 : SearchExtractor.MaxResults).ToList();
+        ResultsList.ItemsSource = results;
+        ResultsLabel.Visibility = Vis(results.Count > 0);
+        ResultsList.Visibility = Vis(results.Count > 0);
         bool showDescription = !card.HasSummary && !string.IsNullOrWhiteSpace(card.Description);
         DescriptionLabel.Visibility = Vis(showDescription);
         DescriptionText.Visibility = Vis(showDescription);

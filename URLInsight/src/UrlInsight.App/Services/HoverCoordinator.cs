@@ -248,6 +248,8 @@ internal sealed class HoverCoordinator
         var text = card.Title + Environment.NewLine + string.Join(Environment.NewLine, card.SummaryLines);
         if (card.KeyPoints.Count > 0)
             text += Environment.NewLine + string.Join(Environment.NewLine, card.KeyPoints.Select(p => "・" + p));
+        if (card.SearchResults.Count > 0)
+            text += Environment.NewLine + string.Join(Environment.NewLine, card.SearchResults.Select((r, i) => $"{i + 1}. {r.Title} {r.Url}"));
         text += Environment.NewLine + card.Url;
         try { Clipboard.SetText(text); }
         catch (Exception ex) { AppLog.Warn($"clipboard failed {ex.GetType().Name}"); }

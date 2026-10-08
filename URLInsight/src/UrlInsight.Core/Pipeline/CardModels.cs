@@ -18,6 +18,8 @@ public sealed class SummaryCard
     public string Confidence { get; set; } = "medium";
     public SourceQuality Quality { get; set; }
     public List<string> Notes { get; set; } = new();
+    /// <summary>検索ページのときの上位の検索結果(カードに一覧表示)。</summary>
+    public List<SearchResultItem> SearchResults { get; set; } = new();
     public string ProviderName { get; set; } = string.Empty;
     public string Model { get; set; } = string.Empty;
     public bool IsTestProvider { get; set; }

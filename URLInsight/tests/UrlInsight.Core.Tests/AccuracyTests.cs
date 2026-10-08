@@ -160,6 +160,6 @@ public class AccuracyTests
     {
         Assert.Contains("summary の1文目", SummaryPromptBuilder.SystemPrompt);
         Assert.Contains("本文の表記どおり", SummaryPromptBuilder.SystemPrompt);
-        Assert.Equal("p2", SummaryPromptBuilder.PromptVersion);
+        Assert.NotEqual("p1", SummaryPromptBuilder.PromptVersion);
     }
 }

@@ -3,7 +3,7 @@ using System.Text;
 
 namespace UrlInsight.Core.Content;
 
-public enum PageKind { Web, Pdf, YouTube, Text, Unknown }
+public enum PageKind { Web, Pdf, YouTube, Text, Unknown, Search }
 
 /// <summary>要約の根拠となる本文の取得状況。</summary>
 public enum SourceQuality
@@ -27,6 +27,8 @@ public sealed class ExtractedContent
     public SourceQuality Quality { get; set; }
     public bool Truncated { get; set; }
     public List<string> Notes { get; } = new();
+    /// <summary>検索ページ(<see cref="PageKind.Search"/>)のときの上位の検索結果。</summary>
+    public List<SearchResultItem> SearchResults { get; } = new();
 
     /// <summary>続行前にユーザー確認が必要な注意(例: YouTube 字幕なし)。</summary>
     public ErrorCode Warning { get; set; } = ErrorCode.None;
@@ -48,6 +50,7 @@ public static class Labels
         PageKind.Pdf => "PDF",
         PageKind.YouTube => "YouTube",
         PageKind.Text => "テキスト",
+        PageKind.Search => "検索",
         _ => "取得不能",
     };
 
