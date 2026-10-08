@@ -16,11 +16,13 @@
         <DockPanel LastChildFill="True">
 
             <!-- ヘッダー: 種別バッジ・ドメイン・固定・閉じる -->
-            <DockPanel DockPanel.Dock="Top" LastChildFill="True">
+            <DockPanel x:Name="HeaderPanel" DockPanel.Dock="Top" LastChildFill="True" Background="Transparent"
+                       MouseLeftButtonDown="Header_MouseLeftButtonDown">
                 <Button x:Name="CloseButton" DockPanel.Dock="Right" Style="{StaticResource IconButton}" Content="×" FontSize="16"
                         ToolTip="閉じる (Esc)" AutomationProperties.Name="カードを閉じる" Click="Close_Click" />
                 <ToggleButton x:Name="PinToggle" DockPanel.Dock="Right" Style="{StaticResource IconToggle}" Content="固定" FontSize="12.5"
-                              ToolTip="カードを固定" AutomationProperties.Name="カードを固定" Click="Pin_Click" />
+                              ToolTip="このカードを固定（別のリンクにカーソルを重ねても消えません。固定中は上部をドラッグして移動できます。固定を外すと閉じます）"
+                              AutomationProperties.Name="カードを固定" Click="Pin_Click" />
                 <Border x:Name="KindBadge" Style="{StaticResource Badge}">
                     <TextBlock x:Name="KindText" FontSize="12" Foreground="{DynamicResource BadgeFgBrush}" Text="WEB" />
                 </Border>

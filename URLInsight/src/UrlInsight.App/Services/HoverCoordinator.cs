@@ -1,10 +1,12 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
+using UrlInsight.App.Platform;
 using UrlInsight.App.UI;
 using UrlInsight.Core;
 using UrlInsight.Core.Bridge;
@@ -19,19 +21,31 @@ namespace UrlInsight.App.Services;
 /// ホバーイベントとカード表示の制御(UIスレッド上で動く)。
 /// - 新しいリンクに移ったら古い処理をキャンセルし、古い結果は画面に反映しない(requestId で判定)
 /// - リンクから離れても短い猶予の間はカードを残し、カード上へカーソルを移せるようにする
-/// - 固定モード・送信確認中・カード操作中は自動で閉じない
+/// - 送信確認中・カード操作中は自動で閉じない
+/// - 「固定」を押したカードは独立したカードになり、別のリンクにカーソルを重ねても消えない
+///   (以後のホバーは新しいカードに表示する。固定したカードは自分の × か固定解除で閉じる)
 /// </summary>
 internal sealed class HoverCoordinator
 {
     private static readonly TimeSpan HideGrace = TimeSpan.FromMilliseconds(700);
 
+    /// <summary>カード1枚分の状態(ウィンドウ・表示中の URL・実行中の要約処理)。</summary>
+    private sealed class CardSession
+    {
+        public CardSession(CardWindow window) => Window = window;
+        public CardWindow Window { get; }
+        public string? RequestId { get; set; }
+        public string? Url { get; set; }
+        public CancellationTokenSource? Cts { get; set; }
+    }
+
     private readonly AppServices _services;
     private readonly Dispatcher _dispatcher;
-    private readonly CardWindow _card;
     private readonly DispatcherTimer _hideTimer;
-    private CancellationTokenSource? _cts;
-    private string? _currentId;
-    private string? _currentUrl;
+    /// <summary>ホバーに合わせて内容が切り替わるカード。</summary>
+    private CardSession _active;
+    /// <summary>固定されて独立したカード。</summary>
+    private readonly List<CardSession> _pinned = new();
     private bool _hoverEnded;
     private bool _manual;
 
@@ -39,25 +53,36 @@ internal sealed class HoverCoordinator
     {
         _services = services;
         _dispatcher = dispatcher;
-        _card = new CardWindow { Left = -10000, Top = -10000 };
         _hideTimer = new DispatcherTimer(DispatcherPriority.Normal, dispatcher) { Interval = HideGrace };
         _hideTimer.Tick += (_, _) => { _hideTimer.Stop(); TryAutoHide(); };
-
-        _card.MouseEnter += (_, _) => _hideTimer.Stop();
-        _card.MouseLeave += (_, _) => { if (_hoverEnded) ScheduleHide(); };
-        _card.CloseRequested += Hide;
-        _card.CancelRequested += Hide;
-        _card.ResummarizeRequested += () => { if (_currentUrl != null) StartManual(_currentUrl, force: true); };
-        _card.OpenRequested += () => OpenInBrowser(_currentUrl);
-        _card.CopyRequested += CopyToClipboard;
-        _card.IgnoreRequested += IgnoreCurrent;
-        _card.SettingsRequested += () => SettingsRequested?.Invoke();
-        _card.PinChanged += pinned => { if (!pinned && _hoverEnded) ScheduleHide(); };
+        _active = CreateSession();
     }
 
     public event Action? SettingsRequested;
     /// <summary>新しい要約結果ができた(最近の要約一覧の更新用)。</summary>
     public event Action? ResultProduced;
+
+    private CardSession CreateSession()
+    {
+        var s = new CardSession(new CardWindow { Left = -10000, Top = -10000 });
+        var w = s.Window;
+        w.MouseEnter += (_, _) => { if (s == _active) _hideTimer.Stop(); };
+        w.MouseLeave += (_, _) => { if (s == _active && _hoverEnded) ScheduleHide(); };
+        w.CloseRequested += () => Close(s);
+        w.CancelRequested += () => Close(s);
+        w.ResummarizeRequested += () =>
+        {
+            if (s.Url != null) Start(s, new SummaryRequest(s.Url, NewId(), ForceRefresh: true), manual: true);
+        };
+        w.OpenRequested += () => OpenInBrowser(s.Url);
+        w.CopyRequested += () => CopyToClipboard(s);
+        w.IgnoreRequested += () => Ignore(s);
+        w.SettingsRequested += () => SettingsRequested?.Invoke();
+        w.PinChanged += pinned => OnPinChanged(s, pinned);
+        return s;
+    }
+
+    private static string NewId() => Guid.NewGuid().ToString("N");
 
     /// <summary>ブリッジからのメッセージ(どのスレッドからでも可)。</summary>
     public void OnBridgeMessage(BrowserMessage message) => _dispatcher.BeginInvoke(() => Handle(message));
@@ -67,7 +92,7 @@ internal sealed class HoverCoordinator
     /// <summary>拡張なしのホバー検出(UI オートメーション)からの通知。どのスレッドからでも可。</summary>
     public void OnLocalHover(string url, string? linkText) => _dispatcher.BeginInvoke(() =>
     {
-        _localRequestId = Guid.NewGuid().ToString("N");
+        _localRequestId = NewId();
         Handle(new BrowserMessage { Type = "hoverLink", RequestId = _localRequestId, Url = url, LinkText = linkText });
     });
 
@@ -84,14 +109,15 @@ internal sealed class HoverCoordinator
                 OnHoverLink(m);
                 break;
             case "hoverEnd":
-                if (m.RequestId == _currentId && !_manual)
+                if (m.RequestId == _active.RequestId && !_manual)
                 {
                     _hoverEnded = true;
                     ScheduleHide();
                 }
                 break;
             case "dismiss":
-                if (_card.Phase != CardPhase.Consent) Hide();
+                // 固定したカードは閉じない
+                if (_active.Window.Phase != CardPhase.Consent) Hide();
                 break;
         }
     }
@@ -102,59 +128,69 @@ internal sealed class HoverCoordinator
         if (settings.Paused || m.Url == null) return;
         if (UrlPolicy.TryNormalize(m.Url, out var normalized, out _) && _services.IsIgnored(normalized!)) return;
 
+        var card = _active.Window;
         // 送信確認中のカードは、別のリンクを通過しただけでは消さない
-        if (_card.IsVisible && _card.Phase == CardPhase.Consent && _card.IsMouseOver) return;
+        if (card.IsVisible && card.Phase == CardPhase.Consent && card.IsMouseOver) return;
 
         // 同じリンクに戻ってきた場合は再取得しない
-        if (_card.IsVisible && normalized != null && normalized.ToString() == _currentUrl && _card.Phase != CardPhase.Error)
+        if (card.IsVisible && normalized != null && normalized.ToString() == _active.Url && card.Phase != CardPhase.Error)
         {
-            _currentId = m.RequestId;
+            _active.RequestId = m.RequestId;
             _hoverEnded = false;
             _hideTimer.Stop();
             return;
         }
-        Start(new SummaryRequest(m.Url, m.RequestId!, LinkText: m.LinkText), manual: false);
+        // 固定したカードに表示中のリンクなら、新しいカードは出さない(同じ内容が2枚並ばないように)
+        if (normalized != null && _pinned.Any(p => p.Url == normalized.ToString())) return;
+
+        Start(_active, new SummaryRequest(m.Url, m.RequestId!, LinkText: m.LinkText), manual: false);
     }
 
-    /// <summary>手動入力・再要約・履歴から。</summary>
+    /// <summary>手動入力・履歴から。</summary>
     public void StartManual(string url, bool force = false)
-        => Start(new SummaryRequest(url, Guid.NewGuid().ToString("N"), ForceRefresh: force), manual: true);
+        => Start(_active, new SummaryRequest(url, NewId(), ForceRefresh: force), manual: true);
 
     /// <summary>キャッシュ済みの要約(最近の要約一覧から)を表示する。</summary>
     public void ShowCached(SummaryCard card)
     {
-        CancelCurrent();
-        _currentId = Guid.NewGuid().ToString("N");
-        _currentUrl = card.Url;
+        Cancel(_active);
+        _active.RequestId = NewId();
+        _active.Url = card.Url;
         _manual = true;
         _hoverEnded = false;
-        _card.SetPinned(false);
-        _card.ApplyState(new CardState
+        _active.Window.SetPinned(false);
+        _active.Window.ApplyState(new CardState
         {
             Phase = CardPhase.Result, Url = card.Url, Domain = card.Domain, Kind = card.Kind, Title = card.Title, Card = card, FromCache = true,
         });
-        _card.ShowNearCursor(_services.Settings.CardSide);
+        ShowActive();
     }
 
-    private void Start(SummaryRequest request, bool manual)
+    private void Start(CardSession s, SummaryRequest request, bool manual)
     {
-        CancelCurrent();
-        _hideTimer.Stop();
+        Cancel(s);
         var cts = new CancellationTokenSource();
-        _cts = cts;
-        _currentId = request.RequestId;
-        _manual = manual;
-        _hoverEnded = false;
-        _currentUrl = UrlPolicy.TryNormalize(request.Url, out var n, out _) ? n!.ToString() : request.Url;
-        _card.SetPinned(_services.Settings.DisplayMode == DisplayMode.Pinned);
+        s.Cts = cts;
+        s.RequestId = request.RequestId;
+        s.Url = UrlPolicy.TryNormalize(request.Url, out var n, out _) ? n!.ToString() : request.Url;
 
-        var ui = new UiAdapter(this, request.RequestId);
-        _card.ApplyState(new CardState
+        bool active = s == _active;
+        if (active)
         {
-            Phase = CardPhase.Loading, Url = _currentUrl, Domain = n != null ? UrlPolicy.DisplayDomain(n) : string.Empty,
+            _hideTimer.Stop();
+            _manual = manual;
+            _hoverEnded = false;
+            s.Window.SetPinned(false);
+        }
+
+        var ui = new UiAdapter(this, s, request.RequestId);
+        s.Window.ApplyState(new CardState
+        {
+            Phase = CardPhase.Loading, Url = s.Url, Domain = n != null ? UrlPolicy.DisplayDomain(n) : string.Empty,
             Title = request.LinkText, StatusText = "ページ情報を確認中…",
         });
-        _card.ShowNearCursor(_services.Settings.CardSide);
+        // 固定したカードの再要約は、その場で内容だけを更新する
+        if (active) ShowActive();
 
         _ = Task.Run(async () =>
         {
@@ -173,11 +209,43 @@ internal sealed class HoverCoordinator
         });
     }
 
-    private void CancelCurrent()
+    /// <summary>ホバー用のカードを、固定したカードと重ならない位置に表示する。</summary>
+    private void ShowActive()
     {
-        _card.CancelConsent();
-        var old = _cts;
-        _cts = null;
+        var avoid = _pinned.Where(p => p.Window.IsVisible).Select(p => p.Window.ScreenRect).ToList();
+        _active.Window.ShowNearCursor(_services.Settings.CardSide, avoid);
+    }
+
+    private void OnPinChanged(CardSession s, bool pinned)
+    {
+        if (s != _active)
+        {
+            // 固定を外したカードは閉じる
+            if (!pinned) Close(s);
+            return;
+        }
+        if (!pinned)
+        {
+            if (_hoverEnded) ScheduleHide();
+            return;
+        }
+        if (!s.Window.IsVisible) return;
+
+        // 固定したカードを独立させ、以後のホバーは新しいカードに表示する。
+        // 要約の途中で固定した場合も、処理はそのまま固定したカードに結果を出す
+        _hideTimer.Stop();
+        _pinned.Add(s);
+        _active = CreateSession();
+        _hoverEnded = false;
+        _manual = false;
+        AppLog.Info($"card pinned (pinned cards: {_pinned.Count})");
+    }
+
+    private static void Cancel(CardSession s)
+    {
+        s.Window.CancelConsent();
+        var old = s.Cts;
+        s.Cts = null;
         if (old != null)
         {
             old.Cancel();
@@ -192,37 +260,57 @@ internal sealed class HoverCoordinator
     }
 
     private bool CanAutoHide()
-        => _card.IsVisible && !_manual && !_card.IsPinned && _services.Settings.DisplayMode != DisplayMode.Pinned
-           && _card.Phase != CardPhase.Consent && !_card.IsMouseOver && !_card.IsKeyboardFocusWithin;
+    {
+        var card = _active.Window;
+        return card.IsVisible && !_manual && !card.IsPinned && _services.Settings.DisplayMode != DisplayMode.Pinned
+               && card.Phase != CardPhase.Consent && !card.IsMouseOver && !card.IsKeyboardFocusWithin;
+    }
 
     private void TryAutoHide()
     {
         if (CanAutoHide()) Hide();
     }
 
-    public void Hide()
+    /// <summary>ホバー用のカードを隠す(固定したカードはそのまま)。</summary>
+    public void Hide() => Close(_active);
+
+    /// <summary>アプリ終了時: 固定したカードも含めてすべて閉じ、実行中の処理を止める。</summary>
+    public void CloseAll()
     {
-        _hideTimer.Stop();
-        CancelCurrent();
-        _currentId = null;
-        _currentUrl = null;
-        _card.HideCard();
+        foreach (var s in _pinned.ToList()) Close(s);
+        Close(_active);
     }
 
-    private void Apply(string requestId, CardState state)
+    private void Close(CardSession s)
+    {
+        Cancel(s);
+        s.RequestId = null;
+        s.Url = null;
+        if (s == _active)
+        {
+            _hideTimer.Stop();
+            s.Window.HideCard();
+            return;
+        }
+        _pinned.Remove(s);
+        s.Window.HideCard();
+        s.Window.Close();
+    }
+
+    private void Apply(CardSession s, string requestId, CardState state)
     {
         // 古い要求の結果は反映しない(stale response rejection)
-        if (requestId != _currentId) return;
-        _card.ApplyState(state);
+        if (requestId != s.RequestId) return;
+        s.Window.ApplyState(state);
         if (state.Phase == CardPhase.Result && state.Card?.HasSummary == true && !state.FromCache) ResultProduced?.Invoke();
-        if (_hoverEnded && state.Phase != CardPhase.Consent) ScheduleHide();
+        if (s == _active && _hoverEnded && state.Phase != CardPhase.Consent) ScheduleHide();
     }
 
-    private Task<ConsentDecision> AskConsent(string requestId, ConsentInfo info, CancellationToken ct)
+    private Task<ConsentDecision> AskConsent(CardSession s, string requestId, ConsentInfo info, CancellationToken ct)
     {
-        if (requestId != _currentId) return Task.FromResult(ConsentDecision.Decline);
-        _hideTimer.Stop();
-        return _card.AskConsentAsync(info, ct);
+        if (requestId != s.RequestId) return Task.FromResult(ConsentDecision.Decline);
+        if (s == _active) _hideTimer.Stop();
+        return s.Window.AskConsentAsync(info, ct);
     }
 
     // ---------- カードの操作 ----------
@@ -241,9 +329,9 @@ internal sealed class HoverCoordinator
         }
     }
 
-    private void CopyToClipboard()
+    private static void CopyToClipboard(CardSession s)
     {
-        var card = _card.State?.Card;
+        var card = s.Window.State?.Card;
         if (card == null) return;
         var text = card.Title + Environment.NewLine + string.Join(Environment.NewLine, card.SummaryLines);
         if (card.KeyPoints.Count > 0)
@@ -255,32 +343,34 @@ internal sealed class HoverCoordinator
         catch (Exception ex) { AppLog.Warn($"clipboard failed {ex.GetType().Name}"); }
     }
 
-    private void IgnoreCurrent()
+    private void Ignore(CardSession s)
     {
-        if (_currentUrl == null) return;
-        var url = _currentUrl;
-        _services.UpdateSettings(s =>
+        if (s.Url == null) return;
+        var url = s.Url;
+        _services.UpdateSettings(settings =>
         {
-            if (!s.IgnoredUrls.Contains(url)) s.IgnoredUrls = s.IgnoredUrls.Append(url).ToList();
+            if (!settings.IgnoredUrls.Contains(url)) settings.IgnoredUrls = settings.IgnoredUrls.Append(url).ToList();
         });
-        Hide();
+        Close(s);
     }
 
-    /// <summary>パイプライン(バックグラウンド)から UI への橋渡し。</summary>
+    /// <summary>パイプライン(バックグラウンド)から UI への橋渡し。結果は要求を出したカードにだけ反映する。</summary>
     private sealed class UiAdapter : IPipelineUi
     {
         private readonly HoverCoordinator _owner;
+        private readonly CardSession _session;
         private readonly string _requestId;
 
-        public UiAdapter(HoverCoordinator owner, string requestId)
+        public UiAdapter(HoverCoordinator owner, CardSession session, string requestId)
         {
             _owner = owner;
+            _session = session;
             _requestId = requestId;
         }
 
-        public void Show(CardState state) => _owner._dispatcher.BeginInvoke(() => _owner.Apply(_requestId, state));
+        public void Show(CardState state) => _owner._dispatcher.BeginInvoke(() => _owner.Apply(_session, _requestId, state));
 
         public Task<ConsentDecision> RequestConsentAsync(ConsentInfo info, CancellationToken ct)
-            => _owner._dispatcher.InvokeAsync(() => _owner.AskConsent(_requestId, info, ct)).Task.Unwrap();
+            => _owner._dispatcher.InvokeAsync(() => _owner.AskConsent(_session, _requestId, info, ct)).Task.Unwrap();
     }
 }

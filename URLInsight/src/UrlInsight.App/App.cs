@@ -159,7 +159,7 @@ internal sealed class App : Application
     {
         AppLog.Info("app exiting");
         _hoverWatcher?.Dispose();
-        _coordinator?.Hide();
+        _coordinator?.CloseAll();
         _tray?.Dispose();
         _services?.Dispose();
         if (_main != null)

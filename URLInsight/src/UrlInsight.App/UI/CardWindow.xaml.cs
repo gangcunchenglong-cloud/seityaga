@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -25,6 +26,7 @@ public partial class CardWindow : Window
     private TaskCompletionSource<ConsentDecision>? _consent;
     private NativeMethods.POINT _anchor;
     private CardSide _side = CardSide.Right;
+    private IReadOnlyList<NativeMethods.RECT> _avoid = Array.Empty<NativeMethods.RECT>();
 
     public CardWindow()
     {
@@ -273,12 +275,32 @@ public partial class CardWindow : Window
     private void Settings_Click(object sender, RoutedEventArgs e) => SettingsRequested?.Invoke();
     private void Pin_Click(object sender, RoutedEventArgs e) => PinChanged?.Invoke(IsPinned);
 
+    /// <summary>固定したカードは、上部(種別・ドメインの行)をドラッグして好きな位置へ動かせる。</summary>
+    private void Header_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+    {
+        if (!IsPinned || e.ButtonState != MouseButtonState.Pressed) return;
+        try { DragMove(); }
+        catch (InvalidOperationException) { }
+    }
+
+    /// <summary>画面上の位置(物理ピクセル)。新しいカードを固定済みのカードと重ならないように置くために使う。</summary>
+    internal NativeMethods.RECT ScreenRect
+    {
+        get
+        {
+            NativeMethods.RECT rect = default;
+            if (_hwnd != IntPtr.Zero) NativeMethods.GetWindowRect(_hwnd, out rect);
+            return rect;
+        }
+    }
+
     // ---------- 配置(物理ピクセル) ----------
 
     /// <summary>カーソルのあるモニターの右側(設定により左側)に表示する。</summary>
-    public void ShowNearCursor(CardSide side)
+    internal void ShowNearCursor(CardSide side, IReadOnlyList<NativeMethods.RECT>? avoid = null)
     {
         _side = side;
+        _avoid = avoid ?? Array.Empty<NativeMethods.RECT>();
         NativeMethods.GetCursorPos(out _anchor);
         var (work, scale) = NativeMethods.MonitorAt(_anchor);
         MaxHeight = Math.Max(260, work.Height * 0.8 / scale);
@@ -314,6 +336,16 @@ public partial class CardWindow : Window
         int y = _anchor.Y - h / 4;
         y = Math.Max(work.Top + margin, Math.Min(y, work.Bottom - h - margin));
         if (h > work.Height - 2 * margin) y = work.Top + margin;
+
+        // 固定済みのカードと重なる場合は、その内側(画面の中央寄り)へずらす。収まらなければ重ねて表示する
+        for (int i = 0; i < _avoid.Count + 1; i++)
+        {
+            var hit = _avoid.FirstOrDefault(r => x < r.Right && r.Left < x + w && y < r.Bottom && r.Top < y + h && r.Width > 0);
+            if (hit.Width == 0) break;
+            int nx = _side == CardSide.Right ? hit.Left - w - margin : hit.Right + margin;
+            if (nx < work.Left + margin || nx + w > work.Right - margin) break;
+            x = nx;
+        }
 
         NativeMethods.SetWindowPos(_hwnd, NativeMethods.HWND_TOPMOST, x, y, 0, 0, NativeMethods.SWP_NOSIZE | NativeMethods.SWP_NOACTIVATE);
     }
