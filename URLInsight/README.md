@@ -29,7 +29,7 @@
 
 ### 1-1. インストール
 
-1. `URLInsight-Setup-1.1.1.exe` を実行します（管理者権限は不要。`%LOCALAPPDATA%\Programs\URLInsight` に入ります）。
+1. `URLInsight-Setup-1.2.0.exe` を実行します（管理者権限は不要。`%LOCALAPPDATA%\Programs\URLInsight` に入ります）。
    - コード署名をしていないため、SmartScreen の警告が出た場合は「詳細情報」→「実行」を選んでください。
 2. インストーラーが Chrome 用のネイティブメッセージングホストを自動で登録します。
 3. 完了画面で「URL Insight を起動する」にチェックを入れて完了します。
@@ -55,7 +55,7 @@
 
 ### 1-4. 使う
 
-- アプリを起動した状態で、ブラウザのリンク・メモ帳などに書かれたURLにカーソルを重ねて約0.6秒止めると、画面右側にカードが出ます（待ち時間は 300〜1500ms で変更可）。拡張を入れた場合は、拡張を有効にしたサイトでも同様に動きます。
+- アプリを起動した状態で、ブラウザのリンク・メモ帳などに書かれたURLにカーソルを重ねると、画面右側にカードが出ます（止めると約0.6秒で反応、それ以外も1秒ごとに検出。折り返された長いURLも全体を取得）（待ち時間は 300〜1500ms で変更可）。拡張を入れた場合は、拡張を有効にしたサイトでも同様に動きます。
 - リンクから離れると少し後に閉じます。カードの上にカーソルを移せば残ります。「固定」で固定、Esc / × で閉じます。
 - カードの操作: **ページを開く / 再要約 / コピー / このURLを無視 / 閉じる**。自動でページへ移動することはありません。
 - メイン画面の「URLを貼り付けて要約」から手動でも要約できます。トレイアイコンのメニューからも呼び出せます。
@@ -143,7 +143,7 @@ powershell -ExecutionPolicy Bypass -File .\build.ps1   # Windows
 ./build.sh                                             # Linux / WSL（Microsoft 版 .NET 8 SDK + NSIS）
 ```
 
-出力（`dist/`）: `URLInsight-Setup-1.1.1.exe`（インストーラー）、`URLInsight-1.1.1-win-x64-portable.zip`、`URLInsight/URLInsight.exe`（自己完結型・単一ファイル）、`URLInsight/URLInsight.NativeHost.exe`、`URLInsight/browser-extension/`。詳細は [docs/RELEASE.md](docs/RELEASE.md)。署名はしていません（同ドキュメント参照）。
+出力（`dist/`）: `URLInsight-Setup-1.2.0.exe`（インストーラー）、`URLInsight-1.2.0-win-x64-portable.zip`、`URLInsight/URLInsight.exe`（自己完結型・単一ファイル）、`URLInsight/URLInsight.NativeHost.exe`、`URLInsight/browser-extension/`。詳細は [docs/RELEASE.md](docs/RELEASE.md)。署名はしていません（同ドキュメント参照）。
 
 ### 4-6. プロジェクト構成
 
@@ -197,7 +197,7 @@ URLInsight/
 詳細は [docs/PRIVACY.md](docs/PRIVACY.md)。要点:
 
 - テレメトリなし。初期状態で AI 送信なし。送信前に送信先・内容・文字数を確認。
-- 拡張なしのホバー検出は、カーソルが止まったときにカーソル下の要素だけを UI オートメーションで読み取ります（常時の画面読み取りはしない、自分のウィンドウ・パスワード欄は対象外、内容はログに残さない）。設定でオフにできます。
+- 拡張なしのホバー検出は、カーソルが止まったとき、および1秒ごとに、カーソル位置の要素と前後約1000文字だけを UI オートメーションで読み取ります（画面全体は読み取らない、自分のウィンドウ・パスワード欄は対象外、内容はログに残さない）。設定でオフにできます。
 - API キーは DPAPI で暗号化保存。平文フォールバックなし。ログ・診断情報は伏せ字処理し、さらに自動検査。
 - ページ本文は AI への入力時に「引用データであり命令ではない」と明示（プロンプトインジェクション対策）。区切りタグの偽装も無害化。
 - 要約・タイトル・URL は WPF のテキストとして表示（HTML として描画しない）。「ページを開く」は http/https として検証できた URL のみ。

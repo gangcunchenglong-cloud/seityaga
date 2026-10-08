@@ -11,6 +11,9 @@ public static partial class LinkTextDetector
     [GeneratedRegex(@"https?://[^\s<>""'「」『』【】、。，＜＞]+", RegexOptions.IgnoreCase)]
     private static partial Regex UrlPattern();
 
+    /// <summary>表示上省略された URL(「…」付き)。途中までの URL は使わない。</summary>
+    private static bool IsTruncated(string url) => url.Contains('…') || url.Contains("...", StringComparison.Ordinal);
+
     /// <summary>リンク要素の値(多くのブラウザでは href)を検証する。</summary>
     public static string? FromLinkValue(string? value)
     {
@@ -23,19 +26,22 @@ public static partial class LinkTextDetector
     public static string? FindSingleUrl(string? text)
     {
         if (string.IsNullOrWhiteSpace(text) || text.Length > 2000) return null;
-        var urls = UrlPattern().Matches(text).Select(m => Clean(m.Value)).Where(IsValid).Distinct().ToList();
+        var urls = UrlPattern().Matches(text).Where(m => !IsTruncated(m.Value)).Select(m => Clean(m.Value)).Where(IsValid).Distinct().ToList();
         return urls.Count == 1 ? urls[0] : null;
     }
 
-    /// <summary>行の文字列と、その行内のカーソル位置(文字数)から、カーソル下の URL を返す。</summary>
-    public static string? UrlAtOffset(string? line, int offset)
+    /// <summary>
+    /// カーソル周辺の文字列(折り返された複数行を含んでよい)と、その中のカーソル位置(文字数)から、
+    /// カーソルに重なっている URL を先頭から末尾まで丸ごと返す。
+    /// </summary>
+    public static string? UrlAtOffset(string? text, int offset)
     {
-        if (string.IsNullOrEmpty(line) || offset < 0) return null;
-        foreach (Match m in UrlPattern().Matches(line))
+        if (string.IsNullOrEmpty(text) || offset < 0) return null;
+        foreach (Match m in UrlPattern().Matches(text))
         {
             var url = Clean(m.Value);
             if (offset >= m.Index && offset <= m.Index + url.Length)
-                return IsValid(url) ? url : null;
+                return !IsTruncated(m.Value) && IsValid(url) ? url : null;
         }
         return null;
     }
@@ -49,5 +55,5 @@ public static partial class LinkTextDetector
         return url;
     }
 
-    private static bool IsValid(string url) => UrlPolicy.TryNormalize(url, out _, out _);
+    private static bool IsValid(string url) => !IsTruncated(url) && UrlPolicy.TryNormalize(url, out _, out _);
 }

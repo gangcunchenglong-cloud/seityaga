@@ -22,6 +22,26 @@ public class LinkTextDetectorTests
     [InlineData("URLはありません", null)]
     public void SingleUrl(string text, string? expected) => Assert.Equal(expected, LinkTextDetector.FindSingleUrl(text));
 
+    [Theory]
+    [InlineData("https://example.com/very/long/pa…")]
+    [InlineData("https://example.com/very/long/pa...")]
+    public void TruncatedDisplayUrlsAreNotUsed(string text)
+    {
+        Assert.Null(LinkTextDetector.FindSingleUrl(text));
+        Assert.Null(LinkTextDetector.FromLinkValue(text));
+    }
+
+    [Fact]
+    public void ReturnsWholeUrlWhenCursorIsInTheMiddle()
+    {
+        // 前後の文章ごと取得した文字列の中で、カーソルが URL の途中にあっても URL 全体を返す
+        const string text = "前の段落です。\n参考: https://example.com/articles/2026/10/very-long-article-name?id=12345 をご覧ください。\n次の段落";
+        int middle = text.IndexOf("very-long", StringComparison.Ordinal);
+        Assert.Equal("https://example.com/articles/2026/10/very-long-article-name?id=12345", LinkTextDetector.UrlAtOffset(text, middle));
+        int end = text.IndexOf("12345", StringComparison.Ordinal) + 4;
+        Assert.Equal("https://example.com/articles/2026/10/very-long-article-name?id=12345", LinkTextDetector.UrlAtOffset(text, end));
+    }
+
     [Fact]
     public void UrlAtCursorOffset()
     {

@@ -86,7 +86,7 @@
                             <CheckBox x:Name="StartWithWindowsCheck" Content="Windows起動時に URL Insight を開始する" />
                             <CheckBox x:Name="UiaHoverCheck" Content="拡張機能なしでもホバーを検出する（おすすめ）" />
                             <TextBlock Style="{StaticResource MutedText}" FontSize="12" Margin="22,2,0,0"
-                                       Text="アプリを起動している間、カーソルを止めた位置のリンクやURL文字列を Windows の UI オートメーション（読み上げソフト等が使う仕組み）で読み取ります。読み取るのはカーソル下の要素だけで、内容はログに残しません。Chrome・Edge・Firefox のリンクや、メモ帳などに書かれたURLに反応します。" />
+                                       Text="アプリを起動している間、カーソル位置のリンクやURL文字列を Windows の UI オートメーション（読み上げソフト等が使う仕組み）で読み取ります（カーソルが止まったとき、および1秒ごと）。URLは折り返されていても全体を取得します。読み取るのはカーソル周辺だけで、内容はログに残しません。Chrome・Edge・Firefox のリンクや、メモ帳などに書かれたURLに反応します。" />
                             <TextBlock Style="{StaticResource FieldLabel}" Text="ホバー待ち時間" />
                             <StackPanel Orientation="Horizontal">
                                 <Slider x:Name="DelaySlider" Width="260" Minimum="300" Maximum="1500" TickFrequency="100" IsSnapToTickEnabled="True"

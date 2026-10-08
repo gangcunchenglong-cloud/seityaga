@@ -25,8 +25,11 @@ internal sealed class UiaHoverWatcher : IDisposable
     private const int PollMs = 100;
     private const int StillTolerancePx = 3;
     private const int LeaveDistancePx = 14;
-    private const int RetryDelayMs = 350;
-    private const int MaxAttempts = 2;
+    /// <summary>カーソル位置の文字列を調べ直す間隔。</summary>
+    private const int ScanIntervalMs = 1000;
+    /// <summary>カーソル位置の前後から取り出す文字数(折り返された長い URL を丸ごと取るため)。</summary>
+    private const int ContextChars = 1000;
+    private const int EditControlTypeId = 50004;
 
     // UI Automation の ID(UIAutomationClient.h)
     private const int HyperlinkControlTypeId = 50005;
@@ -95,9 +98,9 @@ internal sealed class UiaHoverWatcher : IDisposable
         var last = new NativeMethods.POINT();
         var firedAt = new NativeMethods.POINT();
         long stillSince = Environment.TickCount64;
-        long nextAttemptAt = 0;
-        int attempts = 0;
-        bool active = false, wasEnabled = true;
+        long lastScan = 0;
+        bool scannedHere = false, wasEnabled = true;
+        string? activeUrl = null;
 
         while (!_stop)
         {
@@ -108,12 +111,12 @@ internal sealed class UiaHoverWatcher : IDisposable
                 bool enabled = s.UseUiAutomationHover && !s.Paused;
                 if (!enabled)
                 {
-                    if (active) { active = false; HoverEnded?.Invoke(); }
+                    if (activeUrl != null) { activeUrl = null; HoverEnded?.Invoke(); }
                     if (wasEnabled) StatusChanged?.Invoke(s.Paused ? "一時停止中" : "オフ（設定 → 一般）");
                     wasEnabled = false;
                     continue;
                 }
-                if (!wasEnabled) StatusChanged?.Invoke("待機中: リンクやURLにカーソルを重ねて少し止めてください");
+                if (!wasEnabled) StatusChanged?.Invoke("待機中: リンクやURLにカーソルを重ねてください");
                 wasEnabled = true;
 
                 if (!NativeMethods.GetCursorPos(out var pt)) continue;
@@ -123,36 +126,45 @@ internal sealed class UiaHoverWatcher : IDisposable
                 {
                     last = pt;
                     stillSince = now;
-                    attempts = 0;
-                    nextAttemptAt = now + s.HoverDelayMs;
-                    if (active && (Math.Abs(pt.X - firedAt.X) > LeaveDistancePx || Math.Abs(pt.Y - firedAt.Y) > LeaveDistancePx))
+                    scannedHere = false;
+                    if (activeUrl != null && (Math.Abs(pt.X - firedAt.X) > LeaveDistancePx || Math.Abs(pt.Y - firedAt.Y) > LeaveDistancePx))
                     {
-                        active = false;
+                        activeUrl = null;
                         HoverEnded?.Invoke();
                     }
-                    continue;
                 }
 
-                // 止まってから待ち時間が経ったら調べる。見つからなければ少し待って1回だけ再試行
-                // (Chrome は最初の問い合わせで読み上げ用の情報を作り始めるため、1回目は空のことがある)
-                if (attempts >= MaxAttempts || now < nextAttemptAt || now - stillSince < s.HoverDelayMs) continue;
-                attempts++;
+                // 調べるタイミング:
+                //  ・カーソルが止まってから待ち時間(初期600ms)が経ったとき(すぐ反応するため)
+                //  ・それとは別に、1秒ごとに現在のカーソル位置の文字列を調べ直す
+                //    (1回目で読めなかった場合や、カーソルを動かさずにスクロールして内容が変わった場合にも拾うため)
+                bool stillReady = !scannedHere && now - stillSince >= s.HoverDelayMs;
+                bool periodic = now - lastScan >= ScanIntervalMs;
+                if (!stillReady && !periodic) continue;
+                lastScan = now;
+                scannedHere = true;
 
                 var result = FindUrlAt(pt);
                 if (result.Url != null)
                 {
-                    attempts = MaxAttempts;
-                    active = true;
                     firedAt = pt;
-                    Report($"{result.Process}: {result.What}を検出しました", $"found proc={result.Process} kind={result.What}");
-                    LinkHovered?.Invoke(result.Url, result.LinkText);
+                    Report($"{result.Process}: {result.What}を検出 → {Shorten(result.Url)}", $"found proc={result.Process} kind={result.What}");
+                    if (result.Url != activeUrl)
+                    {
+                        activeUrl = result.Url;
+                        LinkHovered?.Invoke(result.Url, result.LinkText);
+                    }
                 }
                 else
                 {
-                    nextAttemptAt = now + RetryDelayMs;
-                    if (attempts >= MaxAttempts)
-                        Report(result.Process == null ? result.What : $"{result.Process}: {result.What}",
-                               $"none proc={result.Process} reason={result.What}");
+                    Report(result.Process == null ? result.What : $"{result.Process}: {result.What}",
+                           $"none proc={result.Process} reason={result.What}");
+                    // カーソル下に URL が無くなった(スクロール等で内容が変わった)。自分のカード上は除く
+                    if (activeUrl != null && !result.OwnWindow)
+                    {
+                        activeUrl = null;
+                        HoverEnded?.Invoke();
+                    }
                 }
             }
             catch (Exception ex)
@@ -162,6 +174,9 @@ internal sealed class UiaHoverWatcher : IDisposable
             }
         }
     }
+
+    /// <summary>画面表示用に URL を短くする(ログには出さない)。</summary>
+    private static string Shorten(string url) => url.Length <= 90 ? url : url[..87] + "...";
 
     /// <summary>画面表示とログ(内容が変わったときだけ)。</summary>
     private void Report(string display, string log)
@@ -174,7 +189,7 @@ internal sealed class UiaHoverWatcher : IDisposable
         }
     }
 
-    private readonly record struct Hit(string? Url, string? LinkText, string? Process, string What);
+    private readonly record struct Hit(string? Url, string? LinkText, string? Process, string What, bool OwnWindow = false);
 
     private Hit FindUrlAt(NativeMethods.POINT pt)
     {
@@ -191,7 +206,7 @@ internal sealed class UiaHoverWatcher : IDisposable
         if (element == null) return new Hit(null, null, null, "要素がありません");
 
         int pid = element.CurrentProcessId;
-        if (pid == _ownPid) return new Hit(null, null, "URL Insight", "自分のウィンドウ（対象外）");
+        if (pid == _ownPid) return new Hit(null, null, "URL Insight", "自分のウィンドウ（対象外）", OwnWindow: true);
         var proc = ProcessName(pid);
         if (element.CurrentIsPassword != 0) return new Hit(null, null, proc, "パスワード欄（対象外）");
 
@@ -215,6 +230,18 @@ internal sealed class UiaHoverWatcher : IDisposable
                 return url != null
                     ? new Hit(url, string.IsNullOrWhiteSpace(name) ? null : name, proc, "リンク")
                     : new Hit(null, null, proc, "リンクですが、要約できるURLではありません");
+            }
+            if (depth == 0 && type == EditControlTypeId)
+            {
+                // 入力欄(アドレスバー等)は表示幅で切れていても、値には全文が入っている
+                string? value = null;
+                try
+                {
+                    if (current.GetCurrentPattern(ValuePatternId) is UIA.IUIAutomationValuePattern evp) value = evp.CurrentValue;
+                }
+                catch (COMException) { }
+                var url = LinkTextDetector.FromLinkValue(value) ?? LinkTextDetector.FindSingleUrl(value);
+                if (url != null) return new Hit(url, null, proc, "入力欄のURL");
             }
             if (depth == 0 && type is TextControlTypeId or ListItemControlTypeId or DataItemControlTypeId or TreeItemControlTypeId)
             {
@@ -244,14 +271,17 @@ internal sealed class UiaHoverWatcher : IDisposable
                 {
                     var at = tp.RangeFromPoint(new UIA.tagPOINT { x = pt.X, y = pt.Y });
                     if (at == null) return null;
-                    var line = at.Clone();
-                    line.ExpandToEnclosingUnit(UIA.TextUnit.TextUnit_Line);
-                    var lineText = line.GetText(2000);
-                    var before = line.Clone();
+                    // 1行だけだと、折り返された長い URL の一部しか取れないため、
+                    // カーソル位置の前後 ContextChars 文字をまとめて取り、カーソルに重なる URL を丸ごと切り出す
+                    var context = at.Clone();
+                    context.MoveEndpointByUnit(UIA.TextPatternRangeEndpoint.TextPatternRangeEndpoint_Start, UIA.TextUnit.TextUnit_Character, -ContextChars);
+                    context.MoveEndpointByUnit(UIA.TextPatternRangeEndpoint.TextPatternRangeEndpoint_End, UIA.TextUnit.TextUnit_Character, ContextChars);
+                    var text = context.GetText(ContextChars * 2 + 16);
+                    var before = context.Clone();
                     before.MoveEndpointByRange(UIA.TextPatternRangeEndpoint.TextPatternRangeEndpoint_End, at,
                         UIA.TextPatternRangeEndpoint.TextPatternRangeEndpoint_Start);
-                    int offset = before.GetText(2000)?.Length ?? 0;
-                    return LinkTextDetector.UrlAtOffset(lineText, offset);
+                    int offset = before.GetText(ContextChars + 16)?.Length ?? 0;
+                    return LinkTextDetector.UrlAtOffset(text, offset);
                 }
                 current = walker.GetParentElement(current);
             }
