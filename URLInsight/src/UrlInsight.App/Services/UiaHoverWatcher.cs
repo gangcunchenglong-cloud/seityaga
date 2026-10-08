@@ -231,15 +231,21 @@ internal sealed class UiaHoverWatcher : IDisposable
                     ? new Hit(url, string.IsNullOrWhiteSpace(name) ? null : name, proc, "リンク")
                     : new Hit(null, null, proc, "リンクですが、要約できるURLではありません");
             }
-            if (depth == 0 && type == EditControlTypeId)
+            // 入力欄(アドレスバー等)は表示幅で切れていても、値には全文が入っている。
+            // ブラウザのアドレスバーは、カーソル下の要素がその内側の部品のこともあるため少し上までたどる
+            bool browser = Browsers.Contains(proc ?? "");
+            if (type == EditControlTypeId && (depth == 0 || (browser && depth <= 2)))
             {
-                // 入力欄(アドレスバー等)は表示幅で切れていても、値には全文が入っている
                 string? value = null;
                 try
                 {
                     if (current.GetCurrentPattern(ValuePatternId) is UIA.IUIAutomationValuePattern evp) value = evp.CurrentValue;
                 }
                 catch (COMException) { }
+                // ブラウザの入力欄では「https://」が省かれた表示(example.com/path)も URL として扱う
+                var bar = browser ? LinkTextDetector.FromAddressBar(value) : null;
+                if (bar != null) return new Hit(bar, null, proc, "アドレスバーのURL");
+                // (Web ページ上の入力欄で、文中に URL が1つだけ書かれている場合)
                 var url = LinkTextDetector.FromLinkValue(value) ?? LinkTextDetector.FindSingleUrl(value);
                 if (url != null) return new Hit(url, null, proc, "入力欄のURL");
             }

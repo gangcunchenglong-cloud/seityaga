@@ -22,6 +22,26 @@ public static partial class LinkTextDetector
         return IsValid(v) ? v : null;
     }
 
+    [GeneratedRegex(@"^(?:[\p{L}\p{N}](?:[\p{L}\p{N}-]*[\p{L}\p{N}])?\.)+\p{L}{2,63}(?::\d{1,5})?(?:[/?#][^\s]*)?$")]
+    private static partial Regex SchemelessUrl();
+
+    /// <summary>
+    /// ブラウザのアドレスバーの値から URL を返す。
+    /// Chrome や Edge は「https://」を省いて「example.com/path」のように表示するため、
+    /// 先頭が省かれていても「ドメイン名/パス」の形なら https:// を補う。
+    /// 入力途中の検索語(空白を含む・ドメインの形でない)は URL とみなさない。
+    /// </summary>
+    public static string? FromAddressBar(string? value)
+    {
+        if (string.IsNullOrWhiteSpace(value)) return null;
+        var v = value.Trim();
+        var direct = FromLinkValue(v);
+        if (direct != null) return direct;
+        if (v.Length > 2000 || v.Contains("://", StringComparison.Ordinal) || !SchemelessUrl().IsMatch(v)) return null;
+        var url = "https://" + v;
+        return IsValid(url) ? url : null;
+    }
+
     /// <summary>文字列中に URL がちょうど1つだけあればそれを返す(複数あると、どれか判断できないため null)。</summary>
     public static string? FindSingleUrl(string? text)
     {

@@ -29,7 +29,7 @@
 
 ### 1-1. インストール
 
-1. `URLInsight-Setup-1.2.24.exe` を実行します（管理者権限は不要。`%LOCALAPPDATA%\Programs\URLInsight` に入ります）。
+1. `URLInsight-Setup-1.2.25.exe` を実行します（管理者権限は不要。`%LOCALAPPDATA%\Programs\URLInsight` に入ります）。
    - コード署名をしていないため、SmartScreen の警告が出た場合は「詳細情報」→「実行」を選んでください。
 2. インストーラーが Chrome 用のネイティブメッセージングホストを自動で登録します。
 3. 完了画面で「URL Insight を起動する」にチェックを入れて完了します。
@@ -144,7 +144,7 @@ powershell -ExecutionPolicy Bypass -File .\build.ps1   # Windows
 ./build.sh                                             # Linux / WSL（Microsoft 版 .NET 8 SDK + NSIS）
 ```
 
-出力（`dist/`）: `URLInsight-Setup-1.2.24.exe`（インストーラー）、`URLInsight-1.2.24-win-x64-portable.zip`、`URLInsight/URLInsight.exe`（自己完結型・単一ファイル）、`URLInsight/URLInsight.NativeHost.exe`、`URLInsight/browser-extension/`。詳細は [docs/RELEASE.md](docs/RELEASE.md)。署名はしていません（同ドキュメント参照）。
+出力（`dist/`）: `URLInsight-Setup-1.2.25.exe`（インストーラー）、`URLInsight-1.2.25-win-x64-portable.zip`、`URLInsight/URLInsight.exe`（自己完結型・単一ファイル）、`URLInsight/URLInsight.NativeHost.exe`、`URLInsight/browser-extension/`。詳細は [docs/RELEASE.md](docs/RELEASE.md)。署名はしていません（同ドキュメント参照）。
 
 ### 4-6. プロジェクト構成
 
@@ -199,6 +199,7 @@ URLInsight/
 
 - テレメトリなし。初期状態で AI 送信なし。送信前に送信先・内容・文字数を確認。
 - 拡張なしのホバー検出は、カーソルが止まったとき、および1秒ごとに、カーソル位置の要素と前後約1000文字だけを UI オートメーションで読み取ります（画面全体は読み取らない、自分のウィンドウ・パスワード欄は対象外、内容はログに残さない）。設定でオフにできます。
+- ブラウザ（Chrome・Edge・Firefox など）のアドレスバーにカーソルを重ねると、表示中のページの URL を読み取って要約します。Chrome や Edge は「https://」を省いて表示するため、「example.com/path」の形でも https:// を補って扱います（入力途中の検索語は対象外。ブラウザ以外の入力欄では、ファイル名などとの取り違えを防ぐため補いません）。
 - API キーは DPAPI で暗号化保存。平文フォールバックなし。ログ・診断情報は伏せ字処理し、さらに自動検査。
 - ページ本文は AI への入力時に「引用データであり命令ではない」と明示（プロンプトインジェクション対策）。区切りタグの偽装も無害化。
 - 要約・タイトル・URL は WPF のテキストとして表示（HTML として描画しない）。「ページを開く」は http/https として検証できた URL のみ。
@@ -211,7 +212,7 @@ URLInsight/
 
 | 対象 | 件数 | 結果 | 内容 |
 | --- | --- | --- | --- |
-| `UrlInsight.Core.Tests`（xUnit, Linux 上で実行） | 192 | 192 成功 / 0 失敗 | URL スキーム/資格情報/Unicode ドメイン/IPv4・IPv6・ローカル IP の拒否、接続時 IP 検査（DNS rebinding 想定）、リダイレクト上限・スキーム変更、サイズ上限、タイムアウト、HTTP ステータス分類、Cookie/認証ヘッダー非送信、HTML 抽出（メタ/JSON-LD/Shift_JIS/EUC-JP/巨大本文/悪意ある深い DOM）、PDF（抽出/画像のみ/破損）、YouTube ID、AI 出力 JSON 検証、プロンプトの区切り無害化、再試行（不正出力1回/Retry-After/5xx バックオフ/401・400 非再試行）、OpenAI 互換・Anthropic アダプター（ヘッダー/本文/エラー分類/エラー文からのキー除去/refusal）、キャッシュ TTL・LRU・キー分離・モデル変更での無効化、設定の破損時復旧、DPAPI の平文フォールバック禁止、ログ・診断情報の伏せ字、Native Messaging フレーミング/サイズ上限/不正メッセージ拒否、ホスト中継（アプリ未起動→起動→双方向中継→終了）、パイプライン通し（AI 未設定/同意拒否/要約→キャッシュヒット→再要約→モデル変更/確認省略/空ページ/403/テスト用プロバイダ/キャンセル）、要約の精度向上（本文のノイズ除去・冒頭と末尾の送信・数値の裏付け確認と作り直し）、カーソル下の URL 全体取得、Google 検索（キーワード抽出・転送リンクの解除・DuckDuckGo/Bing の結果の読み取り・Bing への切り替え・AI 要約・保存しないこと） |
+| `UrlInsight.Core.Tests`（xUnit, Linux 上で実行） | 205 | 205 成功 / 0 失敗 | URL スキーム/資格情報/Unicode ドメイン/IPv4・IPv6・ローカル IP の拒否、接続時 IP 検査（DNS rebinding 想定）、リダイレクト上限・スキーム変更、サイズ上限、タイムアウト、HTTP ステータス分類、Cookie/認証ヘッダー非送信、HTML 抽出（メタ/JSON-LD/Shift_JIS/EUC-JP/巨大本文/悪意ある深い DOM）、PDF（抽出/画像のみ/破損）、YouTube ID、AI 出力 JSON 検証、プロンプトの区切り無害化、再試行（不正出力1回/Retry-After/5xx バックオフ/401・400 非再試行）、OpenAI 互換・Anthropic アダプター（ヘッダー/本文/エラー分類/エラー文からのキー除去/refusal）、キャッシュ TTL・LRU・キー分離・モデル変更での無効化、設定の破損時復旧、DPAPI の平文フォールバック禁止、ログ・診断情報の伏せ字、Native Messaging フレーミング/サイズ上限/不正メッセージ拒否、ホスト中継（アプリ未起動→起動→双方向中継→終了）、パイプライン通し（AI 未設定/同意拒否/要約→キャッシュヒット→再要約→モデル変更/確認省略/空ページ/403/テスト用プロバイダ/キャンセル）、要約の精度向上（本文のノイズ除去・冒頭と末尾の送信・数値の裏付け確認と作り直し）、カーソル下の URL 全体取得、アドレスバーの「https://」省略表示の URL 化、Google 検索（キーワード抽出・転送リンクの解除・DuckDuckGo/Bing の結果の読み取り・Bing への切り替え・AI 要約・保存しないこと） |
 | 拡張 `linkfilter.test.js`（node:test） | 6 | 6 成功 / 0 失敗 | 許可スキーム、危険スキーム拒否、資格情報付き URL、長さ上限、同一ページ内アンカー除外、リンク文字列整形 |
 
 ### Windows 用 exe の動作確認（Linux 上の Wine 9.0 で実施）

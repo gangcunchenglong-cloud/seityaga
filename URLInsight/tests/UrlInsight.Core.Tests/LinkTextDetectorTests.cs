@@ -42,6 +42,27 @@ public class LinkTextDetectorTests
         Assert.Equal("https://example.com/articles/2026/10/very-long-article-name?id=12345", LinkTextDetector.UrlAtOffset(text, end));
     }
 
+    [Theory]
+    [InlineData("https://example.com/a", "https://example.com/a")]
+    [InlineData("example.com/news/123?id=4", "https://example.com/news/123?id=4")]
+    [InlineData("  www.example.co.jp  ", "https://www.example.co.jp")]
+    [InlineData("google.com/search?q=東京+天気", "https://google.com/search?q=東京+天気")]
+    [InlineData("例え.jp/ページ", "https://例え.jp/ページ")]
+    [InlineData("example.com:8443/x", "https://example.com:8443/x")]
+    [InlineData("東京 天気", null)]
+    [InlineData("exam", null)]
+    [InlineData("chrome://settings", null)]
+    [InlineData("file:///C:/a.txt", null)]
+    [InlineData("localhost:3000", null)]
+    [InlineData("192.168.0.1/admin", null)]
+    [InlineData("", null)]
+    public void AddressBarValue(string value, string? expected)
+    {
+        var actual = LinkTextDetector.FromAddressBar(value);
+        if (expected == null) Assert.Null(actual);
+        else Assert.Equal(new Uri(expected), new Uri(actual!));
+    }
+
     [Fact]
     public void UrlAtCursorOffset()
     {
