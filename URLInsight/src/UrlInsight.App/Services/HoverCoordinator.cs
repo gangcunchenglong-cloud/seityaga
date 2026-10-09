@@ -40,6 +40,8 @@ internal sealed class HoverCoordinator
         public CancellationTokenSource? Cts { get; set; }
         /// <summary>最後に表示できた要約(固定カードの保存に使う。再要約の途中でも前の内容を保存できるように)。</summary>
         public SummaryCard? LastCard { get; set; }
+        /// <summary>カーソルを重ねた時点で自動で固定し、まだ結果が出ていないカード(エラーになったら自動で閉じる)。</summary>
+        public bool AutoPinnedPending { get; set; }
     }
 
     private readonly AppServices _services;
@@ -270,6 +272,15 @@ internal sealed class HoverCoordinator
         // 固定したカードの再要約は、その場で内容だけを更新する
         if (active) ShowActive();
 
+        // カーソルを重ねたカードは、その時点で自動で固定する(設定でオフにできる)。
+        // 要約ができる前にカーソルが離れても消えず、要約はこのカードの中で最後まで作られて表示される
+        if (active && !manual && _services.Settings.AutoPinSummaries)
+        {
+            s.AutoPinnedPending = true;
+            s.Window.SetPinned(true);
+            Detach(s);
+        }
+
         _ = Task.Run(async () =>
         {
             try
@@ -404,10 +415,14 @@ internal sealed class HoverCoordinator
         if (state.Phase == CardPhase.Result && state.Card != null)
         {
             s.LastCard = state.Card;
+            s.AutoPinnedPending = false;
             // 固定カードの再要約や、固定後に届いた結果も保存する
             if (s != _active && _pinned.Contains(s)) ScheduleSave();
         }
         if (state.Phase == CardPhase.Result && state.Card?.HasSummary == true && !state.FromCache) ResultProduced?.Invoke();
+
+        // 自動で固定したカードがエラーになった場合は、画面に残り続けないよう少し後に閉じる
+        if (state.Phase == CardPhase.Error && s.AutoPinnedPending && s != _active) CloseLater(s);
 
         // 要約(または検索結果)ができたカードは自動で固定する(設定でオフにできる)。
         // ページ情報だけ・エラーのカードは、これまでどおりカーソルが離れると閉じる
@@ -419,6 +434,26 @@ internal sealed class HoverCoordinator
             return;
         }
         if (s == _active && _hoverEnded && state.Phase != CardPhase.Consent) ScheduleHide();
+    }
+
+    private static readonly TimeSpan ErrorCardLifetime = TimeSpan.FromSeconds(5);
+
+    /// <summary>エラーのカードを数秒後に閉じる(カードの上にカーソルがあるあいだは待つ)。</summary>
+    private void CloseLater(CardSession s)
+    {
+        var timer = new DispatcherTimer(DispatcherPriority.Normal, _dispatcher) { Interval = ErrorCardLifetime };
+        timer.Tick += (_, _) =>
+        {
+            if (!_pinned.Contains(s) || !s.AutoPinnedPending)
+            {
+                timer.Stop();
+                return;
+            }
+            if (s.Window.IsMouseOver || s.Window.IsKeyboardFocusWithin) return;
+            timer.Stop();
+            Close(s);
+        };
+        timer.Start();
     }
 
     private Task<ConsentDecision> AskConsent(CardSession s, string requestId, ConsentInfo info, CancellationToken ct)

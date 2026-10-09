@@ -87,9 +87,9 @@
                             <CheckBox x:Name="UiaHoverCheck" Content="拡張機能なしでもホバーを検出する（おすすめ）" />
                             <TextBlock Style="{StaticResource MutedText}" FontSize="12" Margin="22,2,0,0"
                                        Text="アプリを起動している間、カーソル位置のリンクやURL文字列を Windows の UI オートメーション（読み上げソフト等が使う仕組み）で読み取ります（カーソルが止まったとき、および1秒ごと）。URLは折り返されていても全体を取得します。読み取るのはカーソル周辺だけで、内容はログに残しません。Chrome・Edge・Firefox のリンクや、メモ帳などに書かれたURLに反応します。" />
-                            <CheckBox x:Name="AutoPinCheck" Content="要約ができたカードを自動で固定する" Margin="0,10,0,0" />
+                            <CheckBox x:Name="AutoPinCheck" Content="URLにカーソルを重ねたカードを自動で固定する" Margin="0,10,0,0" />
                             <TextBlock Style="{StaticResource MutedText}" FontSize="12" Margin="22,2,0,0" TextWrapping="Wrap"
-                                       Text="要約（または検索結果）ができたカードは、別のリンクにカーソルを重ねても消えずに残ります。カードは × で閉じるか、トレイアイコンの「固定したカードをすべて閉じる」でまとめて閉じられます。" />
+                                       Text="URLにカーソルを重ねた時点でカードを固定し、要約はそのカードの中で最後まで作って表示します。要約ができる前にカーソルが離れても、別のリンクにカーソルを重ねても消えずに残ります（エラーになったカードは5秒後に自動で閉じます）。カードは × で閉じるか、トレイアイコンの「固定したカードをすべて閉じる」でまとめて閉じられます。" />
                             <TextBlock Style="{StaticResource FieldLabel}" Text="ホバー待ち時間" />
                             <StackPanel Orientation="Horizontal">
                                 <Slider x:Name="DelaySlider" Width="260" Minimum="300" Maximum="1500" TickFrequency="100" IsSnapToTickEnabled="True"
