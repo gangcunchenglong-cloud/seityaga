@@ -3,7 +3,7 @@
     <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
-    <Version>1.2.26</Version>
+    <Version>1.2.27</Version>
     <Company>URL Insight</Company>
     <Product>URL Insight / LinkLens</Product>
     <Copyright>Copyright (c) 2026</Copyright>

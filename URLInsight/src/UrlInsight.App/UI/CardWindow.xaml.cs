@@ -317,6 +317,27 @@ public partial class CardWindow : Window
         PlaceAtAnchor();
     }
 
+    /// <summary>
+    /// 保存した位置(物理ピクセル)に表示する(固定カードの復元用)。
+    /// モニター構成が変わってその位置が画面外になった場合は、いちばん近い画面の中に収める。
+    /// </summary>
+    internal void ShowAt(int left, int top)
+    {
+        var point = new NativeMethods.POINT { X = left + 10, Y = top + 10 };
+        var (work, scale) = NativeMethods.MonitorAt(point);
+        MaxHeight = Math.Max(260, work.Height * 0.8 / scale);
+        if (!IsVisible) Show();
+        NativeMethods.SetWindowPos(_hwnd, NativeMethods.HWND_TOPMOST, left, top, 0, 0,
+            NativeMethods.SWP_NOSIZE | NativeMethods.SWP_NOACTIVATE);
+        UpdateLayout();
+        NativeMethods.GetWindowRect(_hwnd, out var rect);
+        int margin = (int)(8 * scale);
+        int x = Math.Max(work.Left + margin, Math.Min(left, work.Right - rect.Width - margin));
+        int y = Math.Max(work.Top + margin, Math.Min(top, work.Bottom - rect.Height - margin));
+        if (x != left || y != top)
+            NativeMethods.SetWindowPos(_hwnd, NativeMethods.HWND_TOPMOST, x, y, 0, 0, NativeMethods.SWP_NOSIZE | NativeMethods.SWP_NOACTIVATE);
+    }
+
     private void PlaceAtAnchor()
     {
         if (_hwnd == IntPtr.Zero) return;

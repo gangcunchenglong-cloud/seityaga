@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -37,6 +38,8 @@ internal sealed class HoverCoordinator
         public string? RequestId { get; set; }
         public string? Url { get; set; }
         public CancellationTokenSource? Cts { get; set; }
+        /// <summary>最後に表示できた要約(固定カードの保存に使う。再要約の途中でも前の内容を保存できるように)。</summary>
+        public SummaryCard? LastCard { get; set; }
     }
 
     private readonly AppServices _services;
@@ -48,6 +51,12 @@ internal sealed class HoverCoordinator
     private readonly List<CardSession> _pinned = new();
     private bool _hoverEnded;
     private bool _manual;
+    /// <summary>固定カードの保存先(再起動後に復元する)。</summary>
+    private readonly PinnedCardStore _store;
+    /// <summary>移動中など短時間に何度も変わるため、少し待ってからまとめて保存する。</summary>
+    private readonly DispatcherTimer _saveTimer;
+    /// <summary>終了処理中は保存しない(終了時にカードを閉じても、保存した固定カードを消さないため)。</summary>
+    private bool _savingSuspended;
 
     public HoverCoordinator(AppServices services, Dispatcher dispatcher)
     {
@@ -55,7 +64,73 @@ internal sealed class HoverCoordinator
         _dispatcher = dispatcher;
         _hideTimer = new DispatcherTimer(DispatcherPriority.Normal, dispatcher) { Interval = HideGrace };
         _hideTimer.Tick += (_, _) => { _hideTimer.Stop(); TryAutoHide(); };
+        _store = new PinnedCardStore(Path.Combine(services.Paths.Root, "pinned-cards.json"));
+        _saveTimer = new DispatcherTimer(DispatcherPriority.Background, dispatcher) { Interval = TimeSpan.FromMilliseconds(500) };
+        _saveTimer.Tick += (_, _) => { _saveTimer.Stop(); SavePinnedNow(); };
         _active = CreateSession();
+    }
+
+    /// <summary>前回保存した固定カードを、保存した位置に表示し直す(起動時に1回呼ぶ)。</summary>
+    public void RestorePinned()
+    {
+        List<PinnedCardEntry> entries;
+        try
+        {
+            entries = _store.Load();
+        }
+        catch (Exception ex)
+        {
+            AppLog.Error("pinned cards load failed", ex);
+            return;
+        }
+        foreach (var e in entries)
+        {
+            try
+            {
+                var card = e.Card;
+                var s = CreateSession();
+                s.LastCard = card;
+                s.Url = card.Url;
+                s.RequestId = NewId();
+                s.Window.SetPinned(true);
+                s.Window.ApplyState(new CardState
+                {
+                    Phase = CardPhase.Result, Url = card.Url, Domain = card.Domain, Kind = card.Kind, Title = card.Title, Card = card,
+                    FromCache = true,
+                });
+                _pinned.Add(s);
+                s.Window.ShowAt(e.Left, e.Top);
+            }
+            catch (Exception ex)
+            {
+                AppLog.Error("pinned card restore failed", ex);
+            }
+        }
+        if (entries.Count > 0) AppLog.Info($"pinned cards restored: {entries.Count}");
+    }
+
+    private void ScheduleSave()
+    {
+        if (_savingSuspended) return;
+        _saveTimer.Stop();
+        _saveTimer.Start();
+    }
+
+    private void SavePinnedNow()
+    {
+        if (_savingSuspended) return;
+        try
+        {
+            _store.Save(_pinned.Where(p => p.LastCard != null && p.Window.IsVisible).Select(p =>
+            {
+                var rect = p.Window.ScreenRect;
+                return new PinnedCardEntry { Card = p.LastCard!, Left = rect.Left, Top = rect.Top };
+            }));
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        {
+            AppLog.Error("pinned cards save failed", ex);
+        }
     }
 
     public event Action? SettingsRequested;
@@ -79,6 +154,8 @@ internal sealed class HoverCoordinator
         w.IgnoreRequested += () => Ignore(s);
         w.SettingsRequested += () => SettingsRequested?.Invoke();
         w.PinChanged += pinned => OnPinChanged(s, pinned);
+        // 固定カードを動かしたら、新しい位置を保存する
+        w.LocationChanged += (_, _) => { if (s != _active && _pinned.Contains(s)) ScheduleSave(); };
         return s;
     }
 
@@ -156,6 +233,7 @@ internal sealed class HoverCoordinator
         Cancel(_active);
         _active.RequestId = NewId();
         _active.Url = card.Url;
+        _active.LastCard = card;
         _manual = true;
         _hoverEnded = false;
         _active.Window.SetPinned(false);
@@ -245,6 +323,7 @@ internal sealed class HoverCoordinator
         _hoverEnded = false;
         _manual = false;
         AppLog.Info($"card pinned (pinned cards: {_pinned.Count})");
+        ScheduleSave();
     }
 
     private static void Cancel(CardSession s)
@@ -289,6 +368,13 @@ internal sealed class HoverCoordinator
     /// <summary>アプリ終了時: 固定したカードも含めてすべて閉じ、実行中の処理を止める。</summary>
     public void CloseAll()
     {
+        // 直前の移動などで保存待ちのものを書き込んでから、保存を止めてカードを閉じる
+        if (_saveTimer.IsEnabled)
+        {
+            _saveTimer.Stop();
+            SavePinnedNow();
+        }
+        _savingSuspended = true;
         foreach (var s in _pinned.ToList()) Close(s);
         Close(_active);
     }
@@ -307,6 +393,7 @@ internal sealed class HoverCoordinator
         _pinned.Remove(s);
         s.Window.HideCard();
         s.Window.Close();
+        ScheduleSave();
     }
 
     private void Apply(CardSession s, string requestId, CardState state)
@@ -314,6 +401,12 @@ internal sealed class HoverCoordinator
         // 古い要求の結果は反映しない(stale response rejection)
         if (requestId != s.RequestId) return;
         s.Window.ApplyState(state);
+        if (state.Phase == CardPhase.Result && state.Card != null)
+        {
+            s.LastCard = state.Card;
+            // 固定カードの再要約や、固定後に届いた結果も保存する
+            if (s != _active && _pinned.Contains(s)) ScheduleSave();
+        }
         if (state.Phase == CardPhase.Result && state.Card?.HasSummary == true && !state.FromCache) ResultProduced?.Invoke();
 
         // 要約(または検索結果)ができたカードは自動で固定する(設定でオフにできる)。

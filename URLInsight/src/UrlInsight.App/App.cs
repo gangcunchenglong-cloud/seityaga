@@ -54,6 +54,8 @@ internal sealed class App : Application
         NativeHostRegistrar.RepairIfMoved(_paths, _services.Settings);
 
         _coordinator = new HoverCoordinator(_services, Dispatcher);
+        // 前回固定していたカードを、同じ位置に表示し直す
+        _coordinator.RestorePinned();
         _coordinator.SettingsRequested += () => OpenSettings("ai");
         _coordinator.ResultProduced += () => _main?.RefreshRecent();
 
