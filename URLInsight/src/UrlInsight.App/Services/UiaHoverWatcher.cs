@@ -56,8 +56,7 @@ internal sealed class UiaHoverWatcher : IDisposable
     public UiaHoverWatcher(Func<AppSettings> settings) => _settings = settings;
 
     /// <summary>URL を検出した(url, リンク文字列)。専用スレッドから呼ばれる。</summary>
-    /// <summary>(URL, リンク文字列, アプリ名(例: chrome), 見つけたときのカーソル位置)</summary>
-    public event Action<string, string?, string?, NativeMethods.POINT>? LinkHovered;
+    public event Action<string, string?>? LinkHovered;
     /// <summary>検出した位置からカーソルが離れた。</summary>
     public event Action? HoverEnded;
     /// <summary>動作状況(画面表示用の日本語。URL は含まない)。</summary>
@@ -153,7 +152,7 @@ internal sealed class UiaHoverWatcher : IDisposable
                     if (result.Url != activeUrl)
                     {
                         activeUrl = result.Url;
-                        LinkHovered?.Invoke(result.Url, result.LinkText, result.Process, pt);
+                        LinkHovered?.Invoke(result.Url, result.LinkText);
                     }
                 }
                 else

@@ -29,7 +29,7 @@
 
 ### 1-1. インストール
 
-1. `URLInsight-Setup-1.4.0.exe` を実行します（管理者権限は不要。`%LOCALAPPDATA%\Programs\URLInsight` に入ります）。
+1. `URLInsight-Setup-1.2.27.exe` を実行します（管理者権限は不要。`%LOCALAPPDATA%\Programs\URLInsight` に入ります）。
    - コード署名をしていないため、SmartScreen の警告が出た場合は「詳細情報」→「実行」を選んでください。
 2. インストーラーが Chrome 用のネイティブメッセージングホストを自動で登録します。
 3. 完了画面で「URL Insight を起動する」にチェックを入れて完了します。
@@ -57,7 +57,6 @@
 
 - アプリを起動した状態で、ブラウザのリンク・メモ帳などに書かれたURLにカーソルを重ねると、画面右側にカードが出ます（止めると約0.6秒で反応、それ以外も1秒ごとに検出。折り返された長いURLも全体を取得）（待ち時間は 300〜1500ms で変更可）。拡張を入れた場合は、拡張を有効にしたサイトでも同様に動きます。
 - リンクから離れると少し後に閉じます。カードの上にカーソルを移せば残ります。Esc / × で閉じます。
-- **Chrome のリンクは、Chrome のサイドバーの Gemini で要約します（既定でオン）。** Chrome のリンクにカーソルを重ねると、Gemini のサイドバーを開き（閉じていれば Alt+G を送ります。すでに開いていれば送りません）、「次のリンク先のページの内容を、日本語で3〜5文に要約してください: URL」と入力して送信します。このとき、このアプリのカードは出しません。Chrome の「Gemini in Chrome」と Alt+G のショートカットが有効である必要があります（Chrome の設定 → AI → Gemini in Chrome）。キーボードの入力先が Gemini の入力欄だと確かめられたときだけ入力し、Chrome が前面にないときは何もしません。クリップボードは使いません。同じリンクは2分間、送信どうしは4秒あけ、Gemini の回答の中のリンクには反応しません。設定 → 一般 →「Chrome のリンクは、Chrome のサイドバーの Gemini で要約する」でオフにすると、これまでどおりこのアプリのカードで要約します。
 - **要約（または検索結果）ができたカードは、自動で固定されます。** 別のリンクにカーソルを重ねても消えず、× で閉じるまで残ります（設定 → 一般 →「要約ができたカードを自動で固定する」でオフにできます。トレイアイコンの「固定したカードをすべて閉じる」でまとめて閉じられます）。ページ情報だけ・エラーのカードは、これまでどおりカーソルが離れると閉じます。
 - **固定したカードは、アプリやパソコンを再起動しても残ります。** 内容と画面上の位置を `%LOCALAPPDATA%\URLInsight\pinned-cards.json` に保存し、次に起動したときに同じ位置へ表示し直します（最大50枚。モニター構成が変わって画面外になる場合は、いちばん近い画面の中に収めます）。カードを閉じると保存からも消えます。
 - **「固定」を押したカードも、別のリンクにカーソルを重ねても消えません。** 以後のホバーは新しいカードに表示し、固定したカードと重ならない位置に出します。固定したカードは何枚でも残せ、上部（種別・ドメインの行）をドラッグして移動できます。そのカードの「開く」「コピー」「再要約」はそのカードの内容に対して動き、× または固定を外すと閉じます。要約の途中で固定した場合も、結果は固定したカードに表示されます。
@@ -147,7 +146,7 @@ powershell -ExecutionPolicy Bypass -File .\build.ps1   # Windows
 ./build.sh                                             # Linux / WSL（Microsoft 版 .NET 8 SDK + NSIS）
 ```
 
-出力（`dist/`）: `URLInsight-Setup-1.4.0.exe`（インストーラー）、`URLInsight-1.4.0-win-x64-portable.zip`、`URLInsight/URLInsight.exe`（自己完結型・単一ファイル）、`URLInsight/URLInsight.NativeHost.exe`、`URLInsight/browser-extension/`。詳細は [docs/RELEASE.md](docs/RELEASE.md)。署名はしていません（同ドキュメント参照）。
+出力（`dist/`）: `URLInsight-Setup-1.2.27.exe`（インストーラー）、`URLInsight-1.2.27-win-x64-portable.zip`、`URLInsight/URLInsight.exe`（自己完結型・単一ファイル）、`URLInsight/URLInsight.NativeHost.exe`、`URLInsight/browser-extension/`。詳細は [docs/RELEASE.md](docs/RELEASE.md)。署名はしていません（同ドキュメント参照）。
 
 ### 4-6. プロジェクト構成
 
