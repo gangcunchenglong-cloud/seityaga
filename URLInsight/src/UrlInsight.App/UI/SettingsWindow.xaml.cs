@@ -54,7 +54,6 @@ public partial class SettingsWindow : Window
         UiaHoverCheck.IsChecked = s.UseUiAutomationHover;
         AutoPinCheck.IsChecked = s.AutoPinSummaries;
         ChromeGeminiCheck.IsChecked = s.UseChromeGemini;
-        EdgeCopilotCheck.IsChecked = s.UseEdgeCopilot;
         DelaySlider.Value = s.HoverDelayMs;
         DelayText.Text = $"{s.HoverDelayMs} ms";
         DisplayModeCombo.SelectedIndex = s.DisplayMode == DisplayMode.Pinned ? 1 : 0;
@@ -123,7 +122,6 @@ public partial class SettingsWindow : Window
         var uiaHover = UiaHoverCheck.IsChecked == true;
         var autoPin = AutoPinCheck.IsChecked == true;
         var chromeGemini = ChromeGeminiCheck.IsChecked == true;
-        var edgeCopilot = EdgeCopilotCheck.IsChecked == true;
 
         apply = s =>
         {
@@ -146,7 +144,6 @@ public partial class SettingsWindow : Window
             s.UseUiAutomationHover = uiaHover;
             s.AutoPinSummaries = autoPin;
             s.UseChromeGemini = chromeGemini;
-            s.UseEdgeCopilot = edgeCopilot;
         };
         return true;
     }

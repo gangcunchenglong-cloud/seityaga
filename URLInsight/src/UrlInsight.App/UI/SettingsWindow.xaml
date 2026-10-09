@@ -89,10 +89,7 @@
                                        Text="アプリを起動している間、カーソル位置のリンクやURL文字列を Windows の UI オートメーション（読み上げソフト等が使う仕組み）で読み取ります（カーソルが止まったとき、および1秒ごと）。URLは折り返されていても全体を取得します。読み取るのはカーソル周辺だけで、内容はログに残しません。Chrome・Edge・Firefox のリンクや、メモ帳などに書かれたURLに反応します。" />
                             <CheckBox x:Name="ChromeGeminiCheck" Content="Chrome のリンクは、Chrome のサイドバーの Gemini で要約する" Margin="0,10,0,0" />
                             <TextBlock Style="{StaticResource MutedText}" FontSize="12" Margin="22,2,0,0" TextWrapping="Wrap"
-                                       Text="Chrome のリンクにカーソルを重ねると、Gemini のサイドバーを開いて（閉じていれば Alt+G を送ります）、要約の依頼文を入力して送ります。このアプリのカードは出しません。Chrome の「Gemini in Chrome」と Alt+G のショートカットが有効である必要があります。入力先が Gemini の入力欄だと確かめられたときだけ入力します。続けて複数のリンクに重ねた場合は、最大5件までまとめて1回で頼みます。同じリンクは2分間送りません。" />
-                            <CheckBox x:Name="EdgeCopilotCheck" Content="Edge のリンクは、Edge のサイドバーの Copilot で要約する" Margin="0,10,0,0" />
-                            <TextBlock Style="{StaticResource MutedText}" FontSize="12" Margin="22,2,0,0" TextWrapping="Wrap"
-                                       Text="Edge のリンクにカーソルを重ねると、Copilot のサイドバーを開いて（閉じていれば Ctrl+Shift+. を送り、開かなければツールバーの Copilot ボタンを押します）、要約の依頼文を入力して送ります。このアプリのカードは出しません。続けて複数のリンクに重ねた場合は、最大5件までまとめて1回で頼みます。" />
+                                       Text="Chrome のリンクにカーソルを重ねると、Gemini のサイドバーを開いて（閉じていれば Alt+G を送ります）、要約の依頼文を入力して送ります。このアプリのカードは出しません。Chrome の「Gemini in Chrome」と Alt+G のショートカットが有効である必要があります。入力先が Gemini の入力欄だと確かめられたときだけ入力します。同じリンクは2分間、送信どうしは4秒あけます。" />
                             <CheckBox x:Name="AutoPinCheck" Content="要約ができたカードを自動で固定する" Margin="0,10,0,0" />
                             <TextBlock Style="{StaticResource MutedText}" FontSize="12" Margin="22,2,0,0" TextWrapping="Wrap"
                                        Text="要約（または検索結果）ができたカードは、別のリンクにカーソルを重ねても消えずに残ります。カードは × で閉じるか、トレイアイコンの「固定したカードをすべて閉じる」でまとめて閉じられます。" />

@@ -24,8 +24,6 @@ public sealed class AppSettings
     public bool AutoPinSummaries { get; set; } = true;
     /// <summary>Chrome のリンクにカーソルを重ねたら、Chrome のサイドバーの Gemini を開いて要約を頼む(アプリのカードは出さない)。</summary>
     public bool UseChromeGemini { get; set; } = true;
-    /// <summary>Edge のリンクにカーソルを重ねたら、Edge のサイドバーの Copilot を開いて要約を頼む(アプリのカードは出さない)。</summary>
-    public bool UseEdgeCopilot { get; set; } = true;
 
     public string ProviderId { get; set; } = "none";
     public string Model { get; set; } = string.Empty;
