@@ -46,6 +46,7 @@ public partial class CardWindow : Window
     public event Action? CancelRequested;
     public event Action? ResummarizeRequested;
     public event Action? OpenRequested;
+    public event Action? ClaudeRequested;
     public event Action? GeminiRequested;
     public event Action? CopyRequested;
     public event Action? IgnoreRequested;
@@ -92,8 +93,8 @@ public partial class CardWindow : Window
 
     public void ApplyState(CardState state)
     {
-        // 別の URL を表示するときは、前の「Gemini で要約」の結果表示を消す
-        if (State?.Url != state.Url) SetGeminiStatus(string.Empty);
+        // 別の URL を表示するときは、前の「Claude in Chrome / Gemini で要約」の結果表示を消す
+        if (State?.Url != state.Url) SetAiStatus(string.Empty);
         State = state;
         Phase = state.Phase;
         DomainText.Text = state.Domain;
@@ -193,6 +194,7 @@ public partial class CardWindow : Window
         bool hasUrl = !string.IsNullOrEmpty(state.Url) && state.Url.StartsWith("http", StringComparison.OrdinalIgnoreCase);
         bool busy = state.Phase is CardPhase.Loading or CardPhase.Summarizing or CardPhase.Consent;
         OpenButton.IsEnabled = hasUrl;
+        ClaudeButton.IsEnabled = hasUrl;
         GeminiButton.IsEnabled = hasUrl;
         IgnoreButton.IsEnabled = hasUrl;
         ResummarizeButton.Visibility = Vis(state.Phase == CardPhase.Result);
@@ -274,13 +276,14 @@ public partial class CardWindow : Window
     private void Cancel_Click(object sender, RoutedEventArgs e) => CancelRequested?.Invoke();
     private void Resummarize_Click(object sender, RoutedEventArgs e) => ResummarizeRequested?.Invoke();
     private void Open_Click(object sender, RoutedEventArgs e) => OpenRequested?.Invoke();
+    private void Claude_Click(object sender, RoutedEventArgs e) => ClaudeRequested?.Invoke();
     private void Gemini_Click(object sender, RoutedEventArgs e) => GeminiRequested?.Invoke();
 
-    /// <summary>「Chrome の Gemini で要約」の結果をボタンの下に表示する。</summary>
-    public void SetGeminiStatus(string text)
+    /// <summary>「Claude in Chrome で要約」「Chrome の Gemini で要約」の結果をボタンの下に表示する。</summary>
+    public void SetAiStatus(string text)
     {
-        GeminiStatusText.Text = text;
-        GeminiStatusText.Visibility = string.IsNullOrEmpty(text) ? Visibility.Collapsed : Visibility.Visible;
+        AiStatusText.Text = text;
+        AiStatusText.Visibility = string.IsNullOrEmpty(text) ? Visibility.Collapsed : Visibility.Visible;
     }
     private void Copy_Click(object sender, RoutedEventArgs e) => CopyRequested?.Invoke();
     private void Ignore_Click(object sender, RoutedEventArgs e) => IgnoreRequested?.Invoke();

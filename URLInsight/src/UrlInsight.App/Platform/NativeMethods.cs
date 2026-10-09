@@ -90,12 +90,13 @@ internal static class NativeMethods
     [return: MarshalAs(UnmanagedType.Bool)]
     public static extern bool ShowWindow(IntPtr hwnd, int cmd);
 
-    // ---------- キー入力の送信(Chrome の Gemini 連携用) ----------
+    // ---------- キー入力の送信(Chrome のサイドバーの AI 連携用) ----------
 
     public const uint INPUT_KEYBOARD = 1;
     public const uint KEYEVENTF_KEYUP = 0x0002;
     public const uint KEYEVENTF_UNICODE = 0x0004;
     public const ushort VK_RETURN = 0x0D;
+    public const ushort VK_CONTROL = 0x11;
     public const ushort VK_MENU = 0x12;
 
     [StructLayout(LayoutKind.Sequential)]

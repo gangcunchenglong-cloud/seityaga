@@ -47,8 +47,8 @@ internal sealed class HoverCoordinator
     private readonly AppServices _services;
     private readonly Dispatcher _dispatcher;
     private readonly DispatcherTimer _hideTimer;
-    /// <summary>カードの「Chrome の Gemini で要約」ボタンの処理。</summary>
-    private readonly ChromeGemini _chromeGemini = new();
+    /// <summary>カードの「Claude in Chrome で要約」「Chrome の Gemini で要約」ボタンの処理。</summary>
+    private readonly ChromeSidePanelAi _chromeAi = new();
     /// <summary>ホバーに合わせて内容が切り替わるカード。</summary>
     private CardSession _active;
     /// <summary>固定されて独立したカード。</summary>
@@ -154,11 +154,8 @@ internal sealed class HoverCoordinator
             if (s.Url != null) Start(s, new SummaryRequest(s.Url, NewId(), ForceRefresh: true), manual: true);
         };
         w.OpenRequested += () => OpenInBrowser(s.Url);
-        w.GeminiRequested += () =>
-        {
-            if (s.Url == null) return;
-            _chromeGemini.Request(s.Url, text => _dispatcher.BeginInvoke(() => w.SetGeminiStatus(text)));
-        };
+        w.ClaudeRequested += () => AskChromeAi(s, SidePanelAi.Claude);
+        w.GeminiRequested += () => AskChromeAi(s, SidePanelAi.Gemini);
         w.CopyRequested += () => CopyToClipboard(s);
         w.IgnoreRequested += () => Ignore(s);
         w.SettingsRequested += () => SettingsRequested?.Invoke();
@@ -477,6 +474,13 @@ internal sealed class HoverCoordinator
     }
 
     // ---------- カードの操作 ----------
+
+    private void AskChromeAi(CardSession s, SidePanelAi ai)
+    {
+        if (s.Url == null) return;
+        var w = s.Window;
+        _chromeAi.Request(ai, s.Url, text => _dispatcher.BeginInvoke(() => w.SetAiStatus(text)));
+    }
 
     public static void OpenInBrowser(string? url)
     {

@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "URL Insight / LinkLens",
-  "version": "1.3.0",
+  "version": "1.3.1",
   "description": "リンクにカーソルを合わせると、Windowsアプリ「URL Insight」がリンク先の要約カードを表示します。",
   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEArJ41lY8QrLvEdO+H2dagvg9CmajiMn8DFAeFsZI5CpdB0Pz0NSylykhUjCR1zqoAn5pRkQ/6+F90VhLuztCso6UjSO8Ohi/O41SEvBUZRxoY8sks+UEZ/pmhnSQE3+qAsqMOPMdSU8PNq75/kbEx9CNkf+tCkOKCXlGB/RT9TSLY7oc6REDAlAZCa6YPAKQSgqSdi28GzKxxW4o1NcrvcIrzv5e1tnFJxf1IN3SIjAn41lw+8LVl3W5T3kNpSprshUOBWMcyX0SeLAZ/qNEd8z9/8arRBe5Y4rFrbou6zHJ13qqNeP/4ktLSP6FbvJA9ZWUjrIZFrwZnPZgiapTAUQIDAQAB",
   "minimum_chrome_version": "116",
