@@ -22,6 +22,8 @@ public sealed class AppSettings
     public bool UseUiAutomationHover { get; set; } = true;
     /// <summary>要約(または検索結果)ができたカードを自動で固定し、別のリンクにカーソルを重ねても消さない。</summary>
     public bool AutoPinSummaries { get; set; } = true;
+    /// <summary>Chrome のリンクにカーソルを重ねたら、Chrome のサイドバーの Gemini を開いて要約を頼む(アプリのカードは出さない)。</summary>
+    public bool UseChromeGemini { get; set; } = true;
 
     public string ProviderId { get; set; } = "none";
     public string Model { get; set; } = string.Empty;

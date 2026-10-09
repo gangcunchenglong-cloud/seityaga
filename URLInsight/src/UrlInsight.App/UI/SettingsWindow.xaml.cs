@@ -53,6 +53,7 @@ public partial class SettingsWindow : Window
         StartWithWindowsCheck.IsChecked = SafeStartupState(s.StartWithWindows);
         UiaHoverCheck.IsChecked = s.UseUiAutomationHover;
         AutoPinCheck.IsChecked = s.AutoPinSummaries;
+        ChromeGeminiCheck.IsChecked = s.UseChromeGemini;
         DelaySlider.Value = s.HoverDelayMs;
         DelayText.Text = $"{s.HoverDelayMs} ms";
         DisplayModeCombo.SelectedIndex = s.DisplayMode == DisplayMode.Pinned ? 1 : 0;
@@ -120,6 +121,7 @@ public partial class SettingsWindow : Window
         var startup = StartWithWindowsCheck.IsChecked == true;
         var uiaHover = UiaHoverCheck.IsChecked == true;
         var autoPin = AutoPinCheck.IsChecked == true;
+        var chromeGemini = ChromeGeminiCheck.IsChecked == true;
 
         apply = s =>
         {
@@ -141,6 +143,7 @@ public partial class SettingsWindow : Window
             s.StartWithWindows = startup;
             s.UseUiAutomationHover = uiaHover;
             s.AutoPinSummaries = autoPin;
+            s.UseChromeGemini = chromeGemini;
         };
         return true;
     }
