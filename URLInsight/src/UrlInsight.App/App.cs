@@ -21,7 +21,8 @@ internal sealed class App : Application
     private MainWindow? _main;
     private SettingsWindow? _settingsWindow;
     private TrayIcon? _tray;
-    private GeminiSidebar? _gemini;
+    private SidebarAi? _gemini;
+    private SidebarAi? _copilot;
     private UiaHoverWatcher? _hoverWatcher;
 
     public App(AppPaths paths, bool startMinimized)
@@ -71,13 +72,18 @@ internal sealed class App : Application
 
         // 拡張機能なしでも、アプリを起動しておくだけでホバー検出できるようにする
         _hoverWatcher = new UiaHoverWatcher(() => _services.Settings);
-        _gemini = new GeminiSidebar();
+        _gemini = new SidebarAi(SidebarProfile.ChromeGemini);
+        _copilot = new SidebarAi(SidebarProfile.EdgeCopilot);
         _gemini.StatusChanged += text => Dispatcher.BeginInvoke(() => _main?.SetHoverStatus(text));
+        _copilot.StatusChanged += text => Dispatcher.BeginInvoke(() => _main?.SetHoverStatus(text));
         _hoverWatcher.LinkHovered += (url, text, process, cursor) =>
         {
-            // Chrome のリンクは、設定に応じて Chrome のサイドバーの Gemini に要約を頼む
-            if (_services.Settings.UseChromeGemini && string.Equals(process, "chrome", StringComparison.OrdinalIgnoreCase))
+            // Chrome / Edge のリンクは、設定に応じてブラウザのサイドバーの AI(Gemini / Copilot)に要約を頼む
+            var s = _services.Settings;
+            if (s.UseChromeGemini && string.Equals(process, SidebarProfile.ChromeGemini.Process, StringComparison.OrdinalIgnoreCase))
                 _gemini.Request(url, cursor);
+            else if (s.UseEdgeCopilot && string.Equals(process, SidebarProfile.EdgeCopilot.Process, StringComparison.OrdinalIgnoreCase))
+                _copilot.Request(url, cursor);
             else
                 _coordinator.OnLocalHover(url, text);
         };
