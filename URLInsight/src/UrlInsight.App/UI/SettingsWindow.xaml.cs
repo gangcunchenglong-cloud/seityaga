@@ -52,6 +52,7 @@ public partial class SettingsWindow : Window
         var s = _services.Settings;
         StartWithWindowsCheck.IsChecked = SafeStartupState(s.StartWithWindows);
         UiaHoverCheck.IsChecked = s.UseUiAutomationHover;
+        AutoPinCheck.IsChecked = s.AutoPinSummaries;
         DelaySlider.Value = s.HoverDelayMs;
         DelayText.Text = $"{s.HoverDelayMs} ms";
         DisplayModeCombo.SelectedIndex = s.DisplayMode == DisplayMode.Pinned ? 1 : 0;
@@ -118,6 +119,7 @@ public partial class SettingsWindow : Window
         var edge = EdgeCheck.IsChecked == true;
         var startup = StartWithWindowsCheck.IsChecked == true;
         var uiaHover = UiaHoverCheck.IsChecked == true;
+        var autoPin = AutoPinCheck.IsChecked == true;
 
         apply = s =>
         {
@@ -138,6 +140,7 @@ public partial class SettingsWindow : Window
             s.RegisterForEdge = edge;
             s.StartWithWindows = startup;
             s.UseUiAutomationHover = uiaHover;
+            s.AutoPinSummaries = autoPin;
         };
         return true;
     }

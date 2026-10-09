@@ -19,6 +19,7 @@ internal sealed class TrayIcon : IDisposable
         menu.Items.Add("URLを貼り付けて要約…", null, (_, _) => ManualRequested?.Invoke());
         _pauseItem = new WinForms.ToolStripMenuItem("一時停止", null, (_, _) => PauseToggleRequested?.Invoke());
         menu.Items.Add(_pauseItem);
+        menu.Items.Add("固定したカードをすべて閉じる", null, (_, _) => ClosePinnedRequested?.Invoke());
         menu.Items.Add("設定", null, (_, _) => SettingsRequested?.Invoke());
         menu.Items.Add(new WinForms.ToolStripSeparator());
         menu.Items.Add("終了", null, (_, _) => ExitRequested?.Invoke());
@@ -37,6 +38,7 @@ internal sealed class TrayIcon : IDisposable
     public event Action? ManualRequested;
     public event Action? PauseToggleRequested;
     public event Action? SettingsRequested;
+    public event Action? ClosePinnedRequested;
     public event Action? ExitRequested;
 
     public void SetPaused(bool paused)

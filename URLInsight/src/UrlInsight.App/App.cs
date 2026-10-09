@@ -81,6 +81,7 @@ internal sealed class App : Application
         _tray.ManualRequested += () => { ShowMain(); _main.FocusUrlInput(); };
         _tray.PauseToggleRequested += () => _services.UpdateSettings(s => s.Paused = !s.Paused);
         _tray.SettingsRequested += () => OpenSettings(null);
+        _tray.ClosePinnedRequested += () => _coordinator?.ClosePinned();
         _tray.ExitRequested += ExitApp;
         _tray.SetPaused(_services.Settings.Paused);
 

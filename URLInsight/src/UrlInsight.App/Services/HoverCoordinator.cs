@@ -22,7 +22,7 @@ namespace UrlInsight.App.Services;
 /// - 新しいリンクに移ったら古い処理をキャンセルし、古い結果は画面に反映しない(requestId で判定)
 /// - リンクから離れても短い猶予の間はカードを残し、カード上へカーソルを移せるようにする
 /// - 送信確認中・カード操作中は自動で閉じない
-/// - 「固定」を押したカードは独立したカードになり、別のリンクにカーソルを重ねても消えない
+/// - 要約ができたカード(設定 AutoPinSummaries)と「固定」を押したカードは独立したカードになり、別のリンクにカーソルを重ねても消えない
 ///   (以後のホバーは新しいカードに表示する。固定したカードは自分の × か固定解除で閉じる)
 /// </summary>
 internal sealed class HoverCoordinator
@@ -230,9 +230,15 @@ internal sealed class HoverCoordinator
             return;
         }
         if (!s.Window.IsVisible) return;
+        Detach(s);
+    }
 
-        // 固定したカードを独立させ、以後のホバーは新しいカードに表示する。
-        // 要約の途中で固定した場合も、処理はそのまま固定したカードに結果を出す
+    /// <summary>
+    /// ホバー用のカードを固定カードとして独立させ、以後のホバーは新しいカードに表示する。
+    /// 要約の途中で固定した場合も、処理はそのまま固定したカードに結果を出す。
+    /// </summary>
+    private void Detach(CardSession s)
+    {
         _hideTimer.Stop();
         _pinned.Add(s);
         _active = CreateSession();
@@ -274,6 +280,12 @@ internal sealed class HoverCoordinator
     /// <summary>ホバー用のカードを隠す(固定したカードはそのまま)。</summary>
     public void Hide() => Close(_active);
 
+    /// <summary>固定したカードをすべて閉じる(トレイメニューから)。どのスレッドからでも可。</summary>
+    public void ClosePinned() => _dispatcher.BeginInvoke(() =>
+    {
+        foreach (var s in _pinned.ToList()) Close(s);
+    });
+
     /// <summary>アプリ終了時: 固定したカードも含めてすべて閉じ、実行中の処理を止める。</summary>
     public void CloseAll()
     {
@@ -303,6 +315,16 @@ internal sealed class HoverCoordinator
         if (requestId != s.RequestId) return;
         s.Window.ApplyState(state);
         if (state.Phase == CardPhase.Result && state.Card?.HasSummary == true && !state.FromCache) ResultProduced?.Invoke();
+
+        // 要約(または検索結果)ができたカードは自動で固定する(設定でオフにできる)。
+        // ページ情報だけ・エラーのカードは、これまでどおりカーソルが離れると閉じる
+        if (s == _active && s.Window.IsVisible && _services.Settings.AutoPinSummaries && state.Phase == CardPhase.Result
+            && state.Card is { } card && (card.HasSummary || card.SearchResults.Count > 0))
+        {
+            s.Window.SetPinned(true);
+            Detach(s);
+            return;
+        }
         if (s == _active && _hoverEnded && state.Phase != CardPhase.Consent) ScheduleHide();
     }
 

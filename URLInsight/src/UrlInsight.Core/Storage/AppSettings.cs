@@ -20,6 +20,8 @@ public sealed class AppSettings
     public bool Paused { get; set; }
     /// <summary>拡張機能なしでも、Windows の UI オートメーションでカーソル下のリンク/URL文字列を検出する。</summary>
     public bool UseUiAutomationHover { get; set; } = true;
+    /// <summary>要約(または検索結果)ができたカードを自動で固定し、別のリンクにカーソルを重ねても消さない。</summary>
+    public bool AutoPinSummaries { get; set; } = true;
 
     public string ProviderId { get; set; } = "none";
     public string Model { get; set; } = string.Empty;
