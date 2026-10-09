@@ -40,10 +40,15 @@
                 <TextBlock x:Name="FooterText" FontSize="11.5" Margin="0,8,0,6" Style="{StaticResource MutedText}" />
                 <WrapPanel x:Name="ActionsPanel">
                     <Button x:Name="OpenButton" Style="{StaticResource SecondaryButton}" Content="ページを開く" Click="Open_Click" />
+                    <Button x:Name="GeminiButton" Style="{StaticResource SecondaryButton}" Content="Chrome の Gemini で要約" Click="Gemini_Click"
+                            ToolTip="Chrome を前面に出してサイドバーの Gemini（Gemini in Chrome）を開き、このリンク先の要約を頼みます"
+                            AutomationProperties.Name="Chrome の Gemini で要約" />
                     <Button x:Name="ResummarizeButton" Style="{StaticResource SecondaryButton}" Content="再要約" Click="Resummarize_Click" />
                     <Button x:Name="CopyButton" Style="{StaticResource SecondaryButton}" Content="コピー" Click="Copy_Click" />
                     <Button x:Name="IgnoreButton" Style="{StaticResource SecondaryButton}" Content="このURLを無視" Click="Ignore_Click" />
                 </WrapPanel>
+                <TextBlock x:Name="GeminiStatusText" Margin="2,4,0,0" FontSize="12" TextWrapping="Wrap"
+                           Style="{StaticResource MutedText}" Visibility="Collapsed" />
             </StackPanel>
 
             <ScrollViewer x:Name="BodyScroll" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Focusable="False">

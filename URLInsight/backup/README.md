@@ -6,6 +6,7 @@
 |---|---|
 | `URLInsight-1.2.0-source.zip` | v1.2.0 のソースコード一式（コミット `69e983d` の `URLInsight/` フォルダ。インストーラーは含まない） |
 | `../release/URLInsight-Setup-1.2.0.exe` | v1.2.0 のインストーラー（そのまま残しています） |
+| `URLInsight-Setup-1.3.0-no-api.exe` | 取り消した「APIなし版」（旧 1.3.0）のインストーラー。1.3.0 の番号を新しい版（全要約の自動固定・Chrome の Gemini ボタン）で使うことになったため、`release/` から移して名前を変えました |
 
 ## 元に戻す方法
 

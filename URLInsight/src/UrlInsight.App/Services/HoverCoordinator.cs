@@ -47,6 +47,8 @@ internal sealed class HoverCoordinator
     private readonly AppServices _services;
     private readonly Dispatcher _dispatcher;
     private readonly DispatcherTimer _hideTimer;
+    /// <summary>カードの「Chrome の Gemini で要約」ボタンの処理。</summary>
+    private readonly ChromeGemini _chromeGemini = new();
     /// <summary>ホバーに合わせて内容が切り替わるカード。</summary>
     private CardSession _active;
     /// <summary>固定されて独立したカード。</summary>
@@ -152,6 +154,11 @@ internal sealed class HoverCoordinator
             if (s.Url != null) Start(s, new SummaryRequest(s.Url, NewId(), ForceRefresh: true), manual: true);
         };
         w.OpenRequested += () => OpenInBrowser(s.Url);
+        w.GeminiRequested += () =>
+        {
+            if (s.Url == null) return;
+            _chromeGemini.Request(s.Url, text => _dispatcher.BeginInvoke(() => w.SetGeminiStatus(text)));
+        };
         w.CopyRequested += () => CopyToClipboard(s);
         w.IgnoreRequested += () => Ignore(s);
         w.SettingsRequested += () => SettingsRequested?.Invoke();
@@ -244,6 +251,12 @@ internal sealed class HoverCoordinator
             Phase = CardPhase.Result, Url = card.Url, Domain = card.Domain, Kind = card.Kind, Title = card.Title, Card = card, FromCache = true,
         });
         ShowActive();
+        // 「最近の要約」から開いた要約も、すぐに固定する
+        if (_services.Settings.AutoPinSummaries)
+        {
+            _active.Window.SetPinned(true);
+            Detach(_active);
+        }
     }
 
     private void Start(CardSession s, SummaryRequest request, bool manual)
@@ -272,9 +285,9 @@ internal sealed class HoverCoordinator
         // 固定したカードの再要約は、その場で内容だけを更新する
         if (active) ShowActive();
 
-        // カーソルを重ねたカードは、その時点で自動で固定する(設定でオフにできる)。
+        // 要約のカードは、表示した時点で自動で固定する(カーソルを重ねたとき・URL を貼り付けたとき・再要約。設定でオフにできる)。
         // 要約ができる前にカーソルが離れても消えず、要約はこのカードの中で最後まで作られて表示される
-        if (active && !manual && _services.Settings.AutoPinSummaries)
+        if (active && _services.Settings.AutoPinSummaries)
         {
             s.AutoPinnedPending = true;
             s.Window.SetPinned(true);
