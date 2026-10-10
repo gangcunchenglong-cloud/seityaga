@@ -1,0 +1,221 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="UrlInsight.Mac.UI.SettingsWindow"
+        Title="URL Insight の設定" Width="860" Height="660" MinWidth="720" MinHeight="520"
+        WindowStartupLocation="CenterScreen"
+        Background="{StaticResource WindowBgBrush}" Foreground="{StaticResource FgBrush}" FontSize="14"
+        Icon="avares://URLInsight/Assets/app256.png">
+    <Window.Styles>
+        <Style Selector="TextBlock.field">
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="Foreground" Value="{StaticResource MutedBrush}" />
+            <Setter Property="Margin" Value="0,14,0,5" />
+        </Style>
+        <Style Selector="TextBlock.page">
+            <Setter Property="FontSize" Value="20" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="Margin" Value="0,0,0,2" />
+        </Style>
+        <Style Selector="TextBlock.note">
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="Foreground" Value="{StaticResource MutedBrush}" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+        </Style>
+        <Style Selector="CheckBox">
+            <Setter Property="Margin" Value="0,6,0,0" />
+        </Style>
+        <Style Selector="ComboBox">
+            <Setter Property="MinWidth" Value="260" />
+        </Style>
+        <Style Selector="TabItem">
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="MinHeight" Value="36" />
+        </Style>
+    </Window.Styles>
+    <Border Margin="14" CornerRadius="22" Padding="18" Background="{StaticResource CardBrush}"
+            BorderBrush="{StaticResource LineBrush}" BorderThickness="1">
+        <DockPanel>
+            <DockPanel DockPanel.Dock="Bottom" Margin="0,12,0,0">
+                <Button x:Name="SaveCloseButton" DockPanel.Dock="Right" Classes="primary" Content="保存して閉じる" />
+                <Button x:Name="CloseButton" DockPanel.Dock="Right" Classes="secondary" Margin="0,0,8,0" Content="閉じる" IsCancel="True" />
+                <TextBlock x:Name="SaveStatus" VerticalAlignment="Center" Classes="muted" />
+            </DockPanel>
+            <TabControl x:Name="Tabs" TabStripPlacement="Left">
+
+                <!-- 一般 -->
+                <TabItem Header="一般" x:Name="GeneralTab">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <StackPanel Margin="10,0,10,0">
+                            <TextBlock Classes="page" Text="一般" />
+                            <CheckBox x:Name="StartAtLoginCheck" Content="Mac にログインしたときに URL Insight を開始する" />
+                            <CheckBox x:Name="HoverCheck" Content="カーソルを重ねたリンクを検出する（おすすめ）" />
+                            <TextBlock Classes="note" Margin="28,2,0,0"
+                                       Text="アプリを起動している間、カーソル位置のリンクやURL文字列を macOS のアクセシビリティ機能（VoiceOver などが使う仕組み）で読み取ります（カーソルが止まったとき、および1秒ごと）。読み取るのはカーソル周辺だけで、内容はログに残しません。Safari・Chrome・Edge のリンクや、テキストエディット・メモなどに書かれたURLに反応します。使うには、システム設定 → プライバシーとセキュリティ → アクセシビリティ で URL Insight をオンにしてください。" />
+                            <Button x:Name="AccessibilityButton" Classes="secondary" HorizontalAlignment="Left" Margin="28,8,0,0" Content="アクセシビリティの設定を開く" />
+                            <CheckBox x:Name="AutoPinCheck" Content="要約のカードを自動で固定する" Margin="0,10,0,0" />
+                            <TextBlock Classes="note" Margin="28,2,0,0"
+                                       Text="URL にカーソルを重ねたとき・URL を貼り付けたとき・「最近の要約」から開いたときなど、すべての要約カードを表示した時点で固定し、要約はそのカードの中で最後まで作って表示します。カードは × で閉じるか、メニューバーの「固定したカードをすべて閉じる」でまとめて閉じられます。" />
+                            <TextBlock Classes="field" Text="ホバー待ち時間" />
+                            <StackPanel Orientation="Horizontal">
+                                <Slider x:Name="DelaySlider" Width="260" Minimum="300" Maximum="1500" TickFrequency="100" IsSnapToTickEnabled="True" />
+                                <TextBlock x:Name="DelayText" Margin="12,0,0,0" VerticalAlignment="Center" />
+                            </StackPanel>
+                            <TextBlock Classes="note" Text="リンクの上で止まってから要約を始めるまでの時間です。短い通過では通信しません。" />
+                            <TextBlock Classes="field" Text="表示モード" />
+                            <ComboBox x:Name="DisplayModeCombo">
+                                <ComboBoxItem Content="ホバー時のみ（リンクから離れると閉じる）" />
+                                <ComboBoxItem Content="カードを固定（閉じるまで表示）" />
+                            </ComboBox>
+                            <TextBlock Classes="field" Text="表示位置" />
+                            <ComboBox x:Name="SideCombo">
+                                <ComboBoxItem Content="画面の右側" />
+                                <ComboBoxItem Content="画面の左側" />
+                            </ComboBox>
+                        </StackPanel>
+                    </ScrollViewer>
+                </TabItem>
+
+                <!-- AI -->
+                <TabItem Header="AIプロバイダ" x:Name="AiTab">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <StackPanel Margin="10,0,10,0">
+                            <TextBlock Classes="page" Text="AIプロバイダ" />
+                            <TextBlock Classes="note" FontSize="12.5"
+                                       Text="初期状態ではAIへ送信しません。ページ本文は、ここで選んだ提供元へだけ、確認のうえで送信されます。" />
+                            <TextBlock Classes="field" Text="プロバイダ" />
+                            <ComboBox x:Name="ProviderCombo">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding DisplayName}" />
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                            <TextBlock Classes="field" Text="モデル" />
+                            <TextBox x:Name="ModelBox" Classes="input" />
+                            <TextBlock x:Name="ModelHint" Classes="note" FontSize="11.5" Margin="0,3,0,0" />
+                            <TextBlock Classes="field" Text="エンドポイント" />
+                            <TextBox x:Name="EndpointBox" Classes="input" />
+                            <TextBlock x:Name="EndpointWarning" FontSize="12" Foreground="{StaticResource NgBrush}" TextWrapping="Wrap" Margin="0,3,0,0"
+                                       Text="高度な設定: 入力したURLへページ本文とAPIキーが送信されます。信頼できるHTTPSのエンドポイントだけを指定してください。" />
+                            <TextBlock Classes="field" Text="APIキー" />
+                            <DockPanel>
+                                <CheckBox x:Name="ShowKeyCheck" DockPanel.Dock="Right" Margin="10,0,0,0" VerticalAlignment="Center" Content="表示" />
+                                <TextBox x:Name="KeyBox" Classes="input" PasswordChar="●" />
+                            </DockPanel>
+                            <TextBlock x:Name="KeyStateText" Classes="note" Margin="0,4,0,0" />
+                            <WrapPanel Margin="0,8,0,0">
+                                <Button x:Name="SaveKeyButton" Classes="primary" Padding="14,7" Margin="0,0,8,6" Content="キーを保存" />
+                                <Button x:Name="DeleteKeyButton" Classes="secondary" Content="キーを削除" />
+                                <Button x:Name="TestButton" Classes="secondary" Content="接続テスト" />
+                                <Button x:Name="PricingButton" Classes="secondary" Content="提供元の料金ページ" />
+                            </WrapPanel>
+                            <TextBlock x:Name="TestResultText" TextWrapping="Wrap" Margin="0,4,0,0" />
+                            <Border Margin="0,10,0,0" Background="{StaticResource SubtleBrush}" CornerRadius="12" Padding="12,10">
+                                <TextBlock TextWrapping="Wrap" FontSize="12.5" Foreground="{StaticResource MutedBrush}"
+                                           Text="● キーは macOS のキーチェーン（ログインキーチェーン）に保存します。平文のファイルには保存しません。&#10;● アプリを更新すると、キーチェーンの使用の許可を聞かれることがあります（「常に許可」を選んでください）。&#10;● 費用・無料枠・利用上限は各提供元の条件に従います（変動するため本アプリでは保証しません）。" />
+                            </Border>
+                            <TextBlock Classes="field" Text="送信前の確認" />
+                            <CheckBox x:Name="ConfirmEachCheck" Content="AIへ送信する前に毎回確認する（オフでも各プロバイダの初回は必ず確認）" />
+                            <TextBlock Classes="field" Text="1回に送信する本文の上限（文字）" />
+                            <TextBox x:Name="MaxCharsBox" Classes="input" Width="140" HorizontalAlignment="Left" />
+                            <TextBlock Classes="field" Text="YouTube Data API キー（任意）" />
+                            <TextBlock Classes="note"
+                                       Text="設定すると、公式API(videos.list)で動画の説明欄を取得して要約できます。字幕本文は公式APIの制約により取得しません。" />
+                            <DockPanel Margin="0,6,0,0">
+                                <Button x:Name="DeleteYouTubeKeyButton" DockPanel.Dock="Right" Classes="secondary" Margin="0" Content="削除" />
+                                <Button x:Name="SaveYouTubeKeyButton" DockPanel.Dock="Right" Classes="secondary" Margin="8,0,6,0" Content="保存" />
+                                <TextBox x:Name="YouTubeKeyBox" Classes="input" PasswordChar="●" />
+                            </DockPanel>
+                            <TextBlock x:Name="YouTubeKeyState" Classes="note" Margin="0,4,0,0" />
+                        </StackPanel>
+                    </ScrollViewer>
+                </TabItem>
+
+                <!-- プライバシー -->
+                <TabItem Header="プライバシー" x:Name="PrivacyTab">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <StackPanel Margin="10,0,10,0">
+                            <TextBlock Classes="page" Text="プライバシー" />
+                            <TextBlock TextWrapping="Wrap" FontSize="13" LineHeight="21" Margin="0,8,0,0"
+                                       Text="データの流れ&#10;① 画面のリンク → 本アプリ: カーソル下のリンクのURL・リンク文字列（Mac の中だけで読み取り、保存しません）。&#10;② 本アプリ → リンク先サイト: ページを匿名で取得（Cookie・ログイン情報は送りません）。&#10;③ 本アプリ → AI提供元: あなたが設定・確認した場合のみ、URL・タイトル・本文（上限文字数まで）。&#10;④ 保存: 要約結果と最小限のメタ情報をこの Mac にキャッシュ（本文は保存しません）。&#10;テレメトリ（利用状況の送信）は行いません。ログにURLの詳細・本文・キーは記録しません。" />
+                            <TextBlock x:Name="DataPathText" Margin="0,10,0,0" Classes="note" />
+                            <WrapPanel Margin="0,10,0,0">
+                                <Button x:Name="DisableAiButton" Classes="secondary" Content="AIへの送信を無効化（プロバイダを未設定に）" />
+                                <Button x:Name="ResetConsentButton" Classes="secondary" Content="確認済みプロバイダをリセット" />
+                            </WrapPanel>
+                            <TextBlock Classes="field" Text="無視するURL" />
+                            <ListBox x:Name="IgnoredList" Height="140" />
+                            <Button x:Name="RemoveIgnoredButton" Classes="secondary" HorizontalAlignment="Left" Margin="0,6,0,0" Content="選択したURLを一覧から外す" />
+                        </StackPanel>
+                    </ScrollViewer>
+                </TabItem>
+
+                <!-- キャッシュ -->
+                <TabItem Header="キャッシュ・履歴" x:Name="CacheTab">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <StackPanel Margin="10,0,10,0">
+                            <TextBlock Classes="page" Text="キャッシュ・履歴" />
+                            <CheckBox x:Name="CacheEnabledCheck" Content="要約をキャッシュする（同じリンクの再表示が速くなり、AI利用量を抑えます）" />
+                            <WrapPanel Margin="0,4,0,0">
+                                <StackPanel Margin="0,0,20,0">
+                                    <TextBlock Classes="field" Text="有効期限（日）" />
+                                    <TextBox x:Name="TtlBox" Classes="input" Width="100" />
+                                </StackPanel>
+                                <StackPanel Margin="0,0,20,0">
+                                    <TextBlock Classes="field" Text="最大件数" />
+                                    <TextBox x:Name="MaxEntriesBox" Classes="input" Width="100" />
+                                </StackPanel>
+                                <StackPanel>
+                                    <TextBlock Classes="field" Text="最大容量（MB）" />
+                                    <TextBox x:Name="MaxMbBox" Classes="input" Width="100" />
+                                </StackPanel>
+                            </WrapPanel>
+                            <TextBlock x:Name="CacheStatsText" Margin="0,12,0,0" />
+                            <TextBlock Classes="field" Text="履歴" />
+                            <ListBox x:Name="HistoryList" Height="200">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Display}" />
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                            <WrapPanel Margin="0,6,0,0">
+                                <Button x:Name="DeleteHistoryButton" Classes="secondary" Content="選択した履歴を削除" />
+                                <Button x:Name="ClearCacheButton" Classes="secondary" Content="すべて消去" />
+                            </WrapPanel>
+                        </StackPanel>
+                    </ScrollViewer>
+                </TabItem>
+
+                <!-- 詳細 -->
+                <TabItem Header="詳細" x:Name="AdvancedTab">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <StackPanel Margin="10,0,10,0">
+                            <TextBlock Classes="page" Text="詳細" />
+                            <TextBlock Classes="field" Text="ログレベル" />
+                            <ComboBox x:Name="LogLevelCombo">
+                                <ComboBoxItem Content="Error" />
+                                <ComboBoxItem Content="Warning" />
+                                <ComboBoxItem Content="Info" />
+                                <ComboBoxItem Content="Debug" />
+                            </ComboBox>
+                            <TextBlock Classes="note" Margin="0,4,0,0"
+                                       Text="ログは7日間・最大10MBで自動削除されます。URLのパス・本文・APIキーは記録しません。" />
+                            <WrapPanel Margin="0,12,0,0">
+                                <Button x:Name="OpenLogsButton" Classes="secondary" Content="ログの保存先を開く" />
+                                <Button x:Name="ExportDiagnosticsButton" Classes="secondary" Content="診断情報を書き出す" />
+                            </WrapPanel>
+                            <TextBlock Classes="field" Text="データの削除" />
+                            <TextBlock Classes="note"
+                                       Text="設定・キャッシュ・保存したAPIキー・ログをすべて削除します（アプリ自体は削除されません）。" />
+                            <Button x:Name="PurgeButton" Classes="secondary" HorizontalAlignment="Left" Margin="0,8,0,0"
+                                    Content="すべてのユーザーデータを削除して終了" />
+                            <TextBlock x:Name="VersionText" Margin="0,18,0,0" Classes="note" />
+                        </StackPanel>
+                    </ScrollViewer>
+                </TabItem>
+            </TabControl>
+        </DockPanel>
+    </Border>
+</Window>

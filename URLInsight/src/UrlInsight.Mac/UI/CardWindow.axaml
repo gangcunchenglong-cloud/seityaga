@@ -1,0 +1,138 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="UrlInsight.Mac.UI.CardWindow"
+        Title="URL Insight 要約カード"
+        Width="404" SizeToContent="Height" MinHeight="120"
+        SystemDecorations="None" CanResize="False" ShowInTaskbar="False" Topmost="True" ShowActivated="False"
+        Background="Transparent" TransparencyLevelHint="Transparent"
+        FontSize="14" Foreground="{StaticResource FgBrush}">
+    <Border Margin="12" CornerRadius="20" Background="{StaticResource CardBrush}"
+            BorderBrush="{StaticResource LineBrush}" BorderThickness="1" Padding="20,16,20,14"
+            BoxShadow="0 6 22 0 #291C3150">
+        <DockPanel LastChildFill="True">
+
+            <!-- ヘッダー: 種別バッジ・ドメイン・固定・閉じる(固定中はここをドラッグして移動) -->
+            <DockPanel x:Name="HeaderPanel" DockPanel.Dock="Top" LastChildFill="True" Background="Transparent">
+                <Button x:Name="CloseButton" DockPanel.Dock="Right" Classes="icon" Content="×" FontSize="16"
+                        ToolTip.Tip="閉じる (esc)" />
+                <ToggleButton x:Name="PinToggle" DockPanel.Dock="Right" Classes="icon" Content="固定" FontSize="12.5"
+                              ToolTip.Tip="このカードを固定（別のリンクにカーソルを重ねても消えません。固定中は上部をドラッグして移動できます。固定を外すと閉じます）" />
+                <Border x:Name="KindBadge" Classes="badge">
+                    <TextBlock x:Name="KindText" FontSize="12" Foreground="{StaticResource BadgeFgBrush}" Text="WEB" />
+                </Border>
+                <TextBlock x:Name="DomainText" Margin="10,0,0,0" VerticalAlignment="Center" FontSize="12.5"
+                           Foreground="{StaticResource MutedBrush}" TextTrimming="CharacterEllipsis" />
+            </DockPanel>
+
+            <TextBlock x:Name="TitleText" DockPanel.Dock="Top" Margin="0,12,0,2" FontSize="16.5" FontWeight="Bold" TextWrapping="Wrap" />
+            <TextBlock x:Name="StatusText" DockPanel.Dock="Top" FontSize="12.5" Classes="muted" />
+            <Rectangle DockPanel.Dock="Top" Height="1" Margin="0,10,0,4" Fill="{StaticResource LineBrush}" />
+
+            <!-- フッター操作 -->
+            <StackPanel DockPanel.Dock="Bottom">
+                <TextBlock x:Name="FooterText" FontSize="11.5" Margin="0,8,0,6" Classes="muted" />
+                <WrapPanel x:Name="ActionsPanel">
+                    <Button x:Name="OpenButton" Classes="secondary" Content="ページを開く" />
+                    <Button x:Name="ResummarizeButton" Classes="secondary" Content="再要約" />
+                    <Button x:Name="CopyButton" Classes="secondary" Content="コピー" />
+                    <Button x:Name="IgnoreButton" Classes="secondary" Content="このURLを無視" />
+                </WrapPanel>
+            </StackPanel>
+
+            <ScrollViewer x:Name="BodyScroll" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                <StackPanel Margin="0,6,0,0">
+
+                    <!-- 確認中 / 要約中 -->
+                    <StackPanel x:Name="LoadingPanel">
+                        <ProgressBar IsIndeterminate="True" Height="4" MinHeight="4" Margin="0,4,0,12" />
+                        <Rectangle Height="11" RadiusX="5" RadiusY="5" Fill="{StaticResource LineBrush}" Margin="0,0,40,8" />
+                        <Rectangle Height="11" RadiusX="5" RadiusY="5" Fill="{StaticResource LineBrush}" Margin="0,0,0,8" />
+                        <Rectangle Height="11" RadiusX="5" RadiusY="5" Fill="{StaticResource LineBrush}" Margin="0,0,90,8" />
+                        <Button x:Name="CancelButton" Classes="secondary" HorizontalAlignment="Left" Margin="0,6,0,0" Content="キャンセル" />
+                    </StackPanel>
+
+                    <!-- AI送信前の確認 -->
+                    <Border x:Name="ConsentPanel" Background="{StaticResource WarnBgBrush}" CornerRadius="14" Padding="14,12">
+                        <StackPanel>
+                            <TextBlock FontWeight="Bold" Text="外部のAIサービスへ送信します" />
+                            <TextBlock x:Name="ConsentText" Margin="0,6,0,8" TextWrapping="Wrap" FontSize="13" />
+                            <CheckBox x:Name="RememberCheck" Margin="0,0,0,8" Content="このプロバイダでは今後確認しない" />
+                            <WrapPanel>
+                                <Button x:Name="ConsentSendButton" Classes="primary" Margin="0,0,8,0" Padding="14,7" Content="送信して要約" />
+                                <Button x:Name="ConsentDeclineButton" Classes="secondary" Content="送信しない" />
+                            </WrapPanel>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- 結果 -->
+                    <StackPanel x:Name="ResultPanel">
+                        <TextBlock x:Name="SummaryLabel" Classes="section" Margin="0,2,0,4" Text="要約" />
+                        <ItemsControl x:Name="SummaryList">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding}" TextWrapping="Wrap" Margin="0,0,0,4" LineHeight="22" />
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                        <TextBlock x:Name="PointsLabel" Classes="section" Margin="0,10,0,4" Text="重要ポイント" />
+                        <ItemsControl x:Name="PointsList">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <DockPanel Margin="0,0,0,4">
+                                        <Ellipse DockPanel.Dock="Left" Width="6" Height="6" Margin="2,8,10,0" VerticalAlignment="Top"
+                                                 Fill="{StaticResource AccentSolidBrush}" />
+                                        <TextBlock Text="{Binding}" TextWrapping="Wrap" FontSize="13.5" />
+                                    </DockPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                        <TextBlock x:Name="ResultsLabel" Classes="section" Margin="0,10,0,4" Text="検索結果（上位）" />
+                        <ItemsControl x:Name="ResultsList">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Margin="0,0,0,8">
+                                        <TextBlock Text="{Binding Title}" TextWrapping="Wrap" FontSize="13.5" FontWeight="Bold" />
+                                        <TextBlock Text="{Binding Domain}" FontSize="12" Classes="muted" />
+                                        <TextBlock Text="{Binding Snippet}" TextWrapping="Wrap" FontSize="12.5" Margin="0,2,0,0" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                        <TextBlock x:Name="DescriptionLabel" Classes="section" Margin="0,10,0,4" Text="ページの説明（メタ情報）" />
+                        <TextBlock x:Name="DescriptionText" TextWrapping="Wrap" FontSize="13.5" />
+
+                        <Border x:Name="NoticeBox" Margin="0,10,0,0" Background="{StaticResource SubtleBrush}" CornerRadius="12" Padding="12,10">
+                            <StackPanel>
+                                <TextBlock x:Name="NoticeTitle" FontWeight="Bold" TextWrapping="Wrap" />
+                                <TextBlock x:Name="NoticeHint" Margin="0,4,0,0" FontSize="12.5" Classes="muted" />
+                                <Button x:Name="NoticeSettingsButton" Classes="secondary" HorizontalAlignment="Left" Margin="0,8,0,0" Content="設定を開く" />
+                            </StackPanel>
+                        </Border>
+
+                        <ItemsControl x:Name="NotesList" Margin="0,10,0,0">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding StringFormat='※ {0}'}" FontSize="11.5" TextWrapping="Wrap"
+                                               Foreground="{StaticResource MutedBrush}" Margin="0,0,0,2" />
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+
+                    <!-- エラー -->
+                    <Border x:Name="ErrorPanel" Background="{StaticResource NgBgBrush}" CornerRadius="14" Padding="14,12">
+                        <StackPanel>
+                            <TextBlock x:Name="ErrorTitle" FontWeight="Bold" TextWrapping="Wrap" />
+                            <TextBlock x:Name="ErrorHint" Margin="0,4,0,0" TextWrapping="Wrap" FontSize="13" />
+                            <TextBlock x:Name="ErrorCorrelation" Margin="0,6,0,8" FontSize="11" Classes="muted" />
+                            <WrapPanel>
+                                <Button x:Name="RetryButton" Classes="secondary" Content="再試行" />
+                                <Button x:Name="ErrorSettingsButton" Classes="secondary" Content="設定を開く" />
+                            </WrapPanel>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </ScrollViewer>
+        </DockPanel>
+    </Border>
+</Window>

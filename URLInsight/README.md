@@ -7,6 +7,7 @@
 - **アプリを起動しておくだけで動きます**: リンクやURLの文字列にカーソルを重ねて少し止めると要約カードが出ます（Windows の UI オートメーションで検出。Chrome拡張は任意）
 - URL を貼り付けて要約することもできます（手動モード）
 - 初期状態では AI へ送信しません。プロバイダと API キーを設定し、送信前の確認を経たときだけ送信します
+- **Mac 版（MacBook 用）もあります（1.6.0〜）**: 要約の中身は Windows 版と共通で、画面は Avalonia、カーソル下のリンクは macOS のアクセシビリティ機能で検出します。使い方は [docs/MAC.md](docs/MAC.md)（本物の Mac では未確認です）
 
 > 仕様書: `URL_Insight_LinkLens_Claude向け実装仕様書` v1.0 に基づく実装です。UI は同梱の UI サンプル SVG を参考にしています。
 
@@ -22,6 +23,7 @@
 6. [セキュリティとプライバシー](#6-セキュリティとプライバシー)
 7. [テスト](#7-テスト)
 8. [既知の制限・未確認事項](#8-既知の制限未確認事項)
+- Mac 版: [docs/MAC.md](docs/MAC.md)
 
 ---
 
@@ -146,9 +148,10 @@ URLInsight.exe --unregister-native-host   # 登録と自動起動を解除
 ```powershell
 powershell -ExecutionPolicy Bypass -File .\build.ps1   # Windows
 ./build.sh                                             # Linux / WSL（Microsoft 版 .NET 8 SDK + NSIS）
+./build-mac.sh                                         # Mac 版（URLInsight.app の zip。docs/MAC.md）
 ```
 
-出力（`dist/`）: `URLInsight-Setup-1.3.1.exe`（インストーラー）、`URLInsight-1.3.1-win-x64-portable.zip`、`URLInsight/URLInsight.exe`（自己完結型・単一ファイル）、`URLInsight/URLInsight.NativeHost.exe`、`URLInsight/browser-extension/`。詳細は [docs/RELEASE.md](docs/RELEASE.md)。署名はしていません（同ドキュメント参照）。
+出力（`dist/`）: `URLInsight-Setup-<バージョン>.exe`（インストーラー）、`URLInsight-<バージョン>-win-x64-portable.zip`、`URLInsight/URLInsight.exe`（自己完結型・単一ファイル）、`URLInsight/URLInsight.NativeHost.exe`、`URLInsight/browser-extension/`。詳細は [docs/RELEASE.md](docs/RELEASE.md)。署名はしていません（同ドキュメント参照）。
 
 ### 4-6. プロジェクト構成
 
@@ -165,8 +168,10 @@ URLInsight/
       Diagnostics/            #   ログ（伏せ字処理）、診断情報
     UrlInsight.App/           # WPF 常駐アプリ（トレイ、メイン画面、カード、設定、パイプサーバー）
     UrlInsight.NativeHost/    # Chrome が起動するホスト（標準入出力 ⇔ 名前付きパイプ）
+    UrlInsight.Mac/           # Mac 版（Avalonia。アクセシビリティでのホバー検出、キーチェーン、メニューバー）
   browser-extension/          # Chrome 拡張（MV3）
   tests/UrlInsight.Core.Tests # xUnit
+  tests/UrlInsight.Mac.Tests  # Mac 版の配置計算と画面の描画（画面なしモード）
   installer/URLInsight.nsi    # NSIS スクリプト
   docs/                       # PRIVACY / TROUBLESHOOTING / RELEASE
   tools/make_icons.py

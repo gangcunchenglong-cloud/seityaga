@@ -1,0 +1,107 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="UrlInsight.Mac.App"
+             Name="URL Insight"
+             RequestedThemeVariant="Light">
+    <Application.Resources>
+        <!-- 配色は Windows 版(Styles.xaml)と同じ -->
+        <SolidColorBrush x:Key="WindowBgBrush" Color="#EEF3FB" />
+        <SolidColorBrush x:Key="CardBrush" Color="#FFFFFF" />
+        <SolidColorBrush x:Key="SubtleBrush" Color="#F7F9FC" />
+        <SolidColorBrush x:Key="FgBrush" Color="#1C2940" />
+        <SolidColorBrush x:Key="MutedBrush" Color="#66738A" />
+        <SolidColorBrush x:Key="LineBrush" Color="#E2E7F0" />
+        <SolidColorBrush x:Key="AccentSolidBrush" Color="#3478F6" />
+        <SolidColorBrush x:Key="AccentFgBrush" Color="#FFFFFF" />
+        <SolidColorBrush x:Key="OkBrush" Color="#2DBB82" />
+        <SolidColorBrush x:Key="OkBgBrush" Color="#E6F7EF" />
+        <SolidColorBrush x:Key="OkFgBrush" Color="#1E7552" />
+        <SolidColorBrush x:Key="NgBrush" Color="#D9534F" />
+        <SolidColorBrush x:Key="NgBgBrush" Color="#FDECEC" />
+        <SolidColorBrush x:Key="WarnBgBrush" Color="#FFF6DD" />
+        <SolidColorBrush x:Key="BadgeBgBrush" Color="#EDF3FF" />
+        <SolidColorBrush x:Key="BadgeFgBrush" Color="#2F5FC4" />
+        <SolidColorBrush x:Key="PdfBgBrush" Color="#FFF2E4" />
+        <SolidColorBrush x:Key="PdfFgBrush" Color="#93591A" />
+        <SolidColorBrush x:Key="YtBgBrush" Color="#FDEBEB" />
+        <SolidColorBrush x:Key="YtFgBrush" Color="#B3261E" />
+        <LinearGradientBrush x:Key="AccentBrush" StartPoint="0%,0%" EndPoint="100%,100%">
+            <GradientStop Color="#3478F6" Offset="0" />
+            <GradientStop Color="#6558E8" Offset="1" />
+        </LinearGradientBrush>
+        <!-- Mac の日本語フォント(ヒラギノ)。Linux での画面確認用に Noto も並べる -->
+        <FontFamily x:Key="UiFont">Hiragino Sans, Hiragino Kaku Gothic ProN, Noto Sans CJK JP, $Default</FontFamily>
+    </Application.Resources>
+
+    <Application.Styles>
+        <FluentTheme />
+
+        <Style Selector="Window">
+            <Setter Property="FontFamily" Value="{StaticResource UiFont}" />
+        </Style>
+        <Style Selector="TextBlock.muted">
+            <Setter Property="Foreground" Value="{StaticResource MutedBrush}" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+        </Style>
+        <Style Selector="TextBlock.section">
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="Foreground" Value="{StaticResource MutedBrush}" />
+            <Setter Property="Margin" Value="2,14,0,6" />
+        </Style>
+        <Style Selector="Border.badge">
+            <Setter Property="Background" Value="{StaticResource BadgeBgBrush}" />
+            <Setter Property="CornerRadius" Value="9" />
+            <Setter Property="Padding" Value="8,2" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+
+        <!-- ボタン -->
+        <Style Selector="Button.secondary">
+            <Setter Property="Background" Value="{StaticResource SubtleBrush}" />
+            <Setter Property="Foreground" Value="{StaticResource FgBrush}" />
+            <Setter Property="BorderBrush" Value="{StaticResource LineBrush}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="11" />
+            <Setter Property="Padding" Value="12,6" />
+            <Setter Property="Margin" Value="0,0,6,6" />
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="Cursor" Value="Hand" />
+        </Style>
+        <Style Selector="Button.secondary:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="{StaticResource BadgeBgBrush}" />
+            <Setter Property="BorderBrush" Value="{StaticResource AccentSolidBrush}" />
+        </Style>
+        <Style Selector="Button.primary">
+            <Setter Property="Background" Value="{StaticResource AccentBrush}" />
+            <Setter Property="Foreground" Value="{StaticResource AccentFgBrush}" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="CornerRadius" Value="12" />
+            <Setter Property="Padding" Value="16,9" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="Cursor" Value="Hand" />
+        </Style>
+        <Style Selector="Button.primary:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="{StaticResource AccentBrush}" />
+            <Setter Property="Foreground" Value="{StaticResource AccentFgBrush}" />
+            <Setter Property="Opacity" Value="0.9" />
+        </Style>
+        <Style Selector="Button.icon, ToggleButton.icon">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Foreground" Value="{StaticResource MutedBrush}" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="CornerRadius" Value="9" />
+            <Setter Property="Padding" Value="8,3" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Cursor" Value="Hand" />
+        </Style>
+        <Style Selector="ToggleButton.icon:checked /template/ ContentPresenter">
+            <Setter Property="Background" Value="{StaticResource BadgeBgBrush}" />
+            <Setter Property="Foreground" Value="{StaticResource BadgeFgBrush}" />
+        </Style>
+        <Style Selector="TextBox.input">
+            <Setter Property="CornerRadius" Value="11" />
+            <Setter Property="Padding" Value="10,8" />
+        </Style>
+    </Application.Styles>
+</Application>

@@ -15,6 +15,7 @@ URL Insight は、あなたが理解・制御できる範囲でだけ情報を�
 | 4' | アプリ → Chrome の Gemini（Google） | カードの URL と、要約の依頼文（Chrome の Gemini の入力欄に入力して送信。以後の扱いは Google の Gemini in Chrome の規約に従う） | カードの「Chrome の Gemini で要約」ボタンを押したときだけ |
 | 5 | アプリ → DuckDuckGo（取得できない場合は Bing） | Google 検索の URL に含まれる検索キーワード（Cookie・ログイン情報は送らない） | Google 検索の URL（`google.*/search?q=…`）を要約するとき。Google は JavaScript なしでは検索結果を返さないため、同じキーワードの結果をこれらから取得します |
 
+- Mac 版: 1' はカーソル下の要素を macOS のアクセシビリティ機能で読み取ります（同じ条件・同じ範囲。保存しません）。Chrome などには、ページ内の要素を読めるようにする合図（`AXManualAccessibility`）を最初に1回送ります。API キーはキーチェーン、データは `~/Library/Application Support/URLInsight` に保存します。4' / 4''（Chrome のサイドバーの AI）と 1（Chrome 拡張）は Mac 版にはありません。
 - 1 は Windows の名前付きパイプ（同じ Windows ユーザーのプロセスのみ接続可）で行い、ネットワークポートは開きません。
 - 2 では localhost・社内ネットワーク（プライベートIP）・リンクローカル等への接続を拒否します（SSRF 対策）。
 

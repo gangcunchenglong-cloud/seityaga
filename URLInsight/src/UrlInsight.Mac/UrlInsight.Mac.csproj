@@ -1,0 +1,35 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    macOS 版(MacBook 用)。要約・取得・キャッシュなどの中身は Windows 版と同じ UrlInsight.Core を使い、
+    画面は Mac でも動く Avalonia で作る。カーソル下のリンクの検出は macOS のアクセシビリティ機能(AX)で行う。
+    Linux 上でもビルドできる(build-mac.sh が .app にまとめる)。
+  -->
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AssemblyName>URLInsight</AssemblyName>
+    <RootNamespace>UrlInsight.Mac</RootNamespace>
+    <AvaloniaUseCompiledBindingsByDefault>false</AvaloniaUseCompiledBindingsByDefault>
+    <!-- Apple シリコン(M1 以降)と Intel の Mac 向け。どちらも .NET ランタイム同梱(インストール不要) -->
+    <RuntimeIdentifiers>osx-arm64;osx-x64</RuntimeIdentifiers>
+    <SatelliteResourceLanguages>ja</SatelliteResourceLanguages>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <AvaloniaResource Include="Assets\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\UrlInsight.Core\UrlInsight.Core.csproj" />
+    <PackageReference Include="Avalonia" Version="11.3.12" />
+    <PackageReference Include="Avalonia.Desktop" Version="11.3.12" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.12" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="UrlInsight.Mac.Tests" />
+  </ItemGroup>
+
+</Project>
