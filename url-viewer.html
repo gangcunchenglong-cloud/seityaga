@@ -80,6 +80,7 @@
   }
   .notice.show { display: block; }
   .notice a { color: var(--accent); }
+  .toggle { display: flex; align-items: center; gap: 4px; font-size: 13px; white-space: nowrap; cursor: pointer; }
   main { position: relative; flex: 1; min-height: 0; }
   iframe {
     width: 100%;
@@ -117,11 +118,14 @@
     <input id="url" type="text" placeholder="URLを入力(例: example.com)" autocomplete="off" autofocus>
     <button class="primary" type="submit">開く</button>
   </form>
+  <label class="toggle" id="proxyToggle" title="プロキシ経由で表示(埋め込み禁止のサイトも表示できます)">
+    <input type="checkbox" id="useProxy"> プロキシ
+  </label>
   <button id="newtab" title="新しいタブで開く" disabled>↗</button>
 </header>
 
 <div class="notice" id="notice">
-  表示されない場合は、そのサイトが他サイト内への埋め込みを禁止しています(X-Frame-Options / CSP)。
+  <span id="noticeText"></span>
   <a href="#" id="noticeLink" target="_blank" rel="noopener">新しいタブで開く</a>
 </div>
 
@@ -129,6 +133,7 @@
   <div class="empty" id="empty">
     <h1>URLビューア</h1>
     <p>上の欄にURLを入力して「開く」を押すと、このページの中にそのサイトが表示されます。</p>
+    <p id="modeHint"></p>
   </div>
   <iframe id="frame" title="表示中のサイト" hidden
     referrerpolicy="no-referrer-when-downgrade"
@@ -139,11 +144,26 @@
   const $ = (id) => document.getElementById(id);
   const frame = $('frame'), input = $('url'), empty = $('empty');
   const notice = $('notice'), noticeLink = $('noticeLink');
+  const useProxy = $('useProxy'), noticeText = $('noticeText');
   const btnBack = $('back'), btnForward = $('forward'), btnReload = $('reload'), btnNewtab = $('newtab');
+
+  // server.js 経由(http://localhost:3000/ など)で開いたときだけプロキシが使える
+  const proxyAvailable = location.protocol === 'http:' || location.protocol === 'https:';
+  if (proxyAvailable) {
+    useProxy.checked = true;
+    $('modeHint').textContent = 'プロキシ経由で表示するため、埋め込みを禁止しているサイトも表示できます。';
+  } else {
+    $('proxyToggle').hidden = true;
+    $('modeHint').textContent = 'ファイルを直接開いているため、埋め込みを禁止しているサイトは表示できません。すべてのサイトを表示するには「node server.js」で起動し、http://localhost:3000/ を開いてください。';
+  }
+  const proxied = () => proxyAvailable && useProxy.checked;
+  const frameSrc = (url) => proxied() ? '/proxy/' + url : url;
 
   // 自前の履歴(iframe内の遷移は別オリジンのため取得できないので、入力したURLのみ管理)
   const history = [];
   let index = -1;
+  // ビューアから読み込んだ直後の最初の報告は、リダイレクト後のURLとして現在の履歴を置き換える
+  let pending = false;
 
   function normalize(raw) {
     let s = raw.trim();
@@ -166,8 +186,12 @@
     input.value = url;
     empty.hidden = true;
     frame.hidden = false;
-    frame.src = url;
+    pending = proxied();
+    frame.src = frameSrc(url);
     noticeLink.href = url;
+    noticeText.textContent = proxied()
+      ? 'プロキシ経由で表示中です。ログインや動画など、一部の機能は正しく動かないことがあります。'
+      : '表示されない場合は、そのサイトが他サイト内への埋め込みを禁止しています(X-Frame-Options / CSP)。';
     notice.classList.add('show');
     updateButtons();
   }
@@ -193,7 +217,27 @@
   });
   btnBack.onclick = () => { if (index > 0) show(history[--index]); };
   btnForward.onclick = () => { if (index < history.length - 1) show(history[++index]); };
-  btnReload.onclick = () => { if (index >= 0) { frame.src = 'about:blank'; setTimeout(() => frame.src = history[index], 0); } };
+  btnReload.onclick = () => { if (index >= 0) { frame.src = 'about:blank'; setTimeout(() => frame.src = frameSrc(history[index]), 0); } };
+  useProxy.onchange = () => { if (index >= 0) show(history[index]); };
+
+  // プロキシ経由のページ内でリンクをたどったら、アドレス欄と履歴を実際のURLに合わせる
+  window.addEventListener('message', (e) => {
+    if (e.origin !== location.origin || !e.data || e.data.type !== 'proxy-location') return;
+    const url = e.data.url;
+    if (e.source !== frame.contentWindow || !url) return;
+    if (pending) {
+      pending = false;
+      history[index] = url;
+    } else if (url !== history[index]) {
+      history.splice(index + 1);
+      history.push(url);
+      index = history.length - 1;
+    }
+    input.value = url;
+    noticeLink.href = url;
+    if (e.data.title) document.title = e.data.title + ' - URLビューア';
+    updateButtons();
+  });
   btnNewtab.onclick = () => { if (index >= 0) window.open(history[index], '_blank', 'noopener'); };
 
   // ?url=... 付きで開いた場合はそのURLを表示

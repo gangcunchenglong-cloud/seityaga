@@ -1,0 +1,12 @@
+{
+  "name": "url-viewer",
+  "version": "1.0.0",
+  "private": true,
+  "description": "URLを入力するとページ内にそのサイトを表示するビューア(プロキシ付き)",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
