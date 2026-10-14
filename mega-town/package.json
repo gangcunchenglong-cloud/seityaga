@@ -1,0 +1,36 @@
+{
+  "name": "mega-town-drive",
+  "productName": "MegaTown",
+  "version": "1.20.2",
+  "description": "メガタウン・ドライブエディション",
+  "author": "gangcunchenglong",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder --win --x64"
+  },
+  "devDependencies": {
+    "electron": "44.7.2",
+    "electron-builder": "26.15.3"
+  },
+  "build": {
+    "appId": "com.gangcunchenglong.megatown",
+    "productName": "MegaTown",
+    "files": [
+      "main.js",
+      "index2.html"
+    ],
+    "directories": {
+      "output": "dist"
+    },
+    "win": {
+      "target": [
+        "portable"
+      ],
+      "signAndEditExecutable": false
+    },
+    "portable": {
+      "artifactName": "MegaTown-${version}-portable.exe"
+    }
+  }
+}

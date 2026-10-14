@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>メガタウン・ドライブエディション- ver1.20.2</title>
+    <style>
+        :root {
+            --primary: #1a73e8; --town-bg: #a2d149; --town-border: #86b03c; --header-bg: #0f172a;
+        }
+        body { font-family: sans-serif; margin: 0; background: #f1f5f9; display: flex; flex-direction: column; height: 100vh; width: 100vw; overflow: hidden; user-select: none; }
+
+        .header { background: var(--header-bg); color: white; padding: 0 30px; display: flex; justify-content: space-between; align-items: center; height: 60px; flex-shrink: 0; }
+        .stats-group { display: flex; gap: 20px; }
+        .stat-val { font-size: 20px; font-weight: bold; color: #fbbf24; }
+        #event-timer { font-size: 12px; color: #f87171; font-weight: bold; }
+
+        .nav-tabs { display: flex; background: #e2e8f0; padding: 5px 15px 0; gap: 5px; overflow-x: auto; }
+        .tab-button { padding: 10px 14px; border: none; border-radius: 10px 10px 0 0; background: #cbd5e1; cursor: pointer; font-weight: bold; color: #475569; white-space: nowrap; }
+        .tab-button.active { background: white; color: var(--primary); }
+        .tab-button.locked { background: #e2e8f0; color: #94a3b8; cursor: not-allowed; }
+        #current-place { background: #fbbf24; color: #0f172a; font-weight: bold; padding: 4px 14px; border-radius: 999px; font-size: 16px; }
+        #toast { position: fixed; top: 80px; left: 50%; transform: translateX(-50%); background: #16a34a; color: white; padding: 12px 24px; border-radius: 10px; font-weight: bold; z-index: 200; display: none; }
+
+        .main-container { flex: 1; position: relative; overflow: hidden; }
+        .page { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: none; padding: 15px; box-sizing: border-box; }
+        .page.active { display: flex; gap: 15px; }
+
+        .build-layout { display: flex; width: 100%; gap: 15px; }
+        .map-card { background: white; padding: 10px; border-radius: 15px; flex: 1.5; position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        
+        .town-grid-container { position: relative; width: 100%; max-width: 560px; aspect-ratio: 1; }
+        .town-grid { display: grid; grid-template-columns: repeat(var(--grid, 15), 1fr); gap: 1px; background: var(--town-bg); padding: 5px; border-radius: 8px; width: 100%; height: 100%; border: 4px solid var(--town-border); box-sizing: border-box; }
+        .cell { aspect-ratio: 1; background: rgba(255,255,255,0.3); border-radius: 2px; display: flex; align-items: center; justify-content: center; font-size: 15px; cursor: pointer; z-index: 1; overflow: hidden; }
+        .cell.road { background: #444 !important; }
+        .cell.denied { background: rgba(220,38,38,0.6) !important; }
+
+        .car { position: absolute; font-size: 14px; line-height: 1; transition: left var(--step, 0.5s) linear, top var(--step, 0.5s) linear, transform 0.25s, opacity 0.4s; z-index: 2; pointer-events: none; }
+
+        .shop-card { background: white; padding: 15px; border-radius: 15px; width: 350px; display: flex; flex-direction: column; overflow: hidden; }
+        .shop-scroll-area { flex: 1; overflow-y: scroll; padding-right: 10px; border: 1px solid #eee; border-radius: 8px; background: #fafafa; }
+        .shop-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 10px; }
+        .shop-item { background: white; border: 2px solid #e2e8f0; padding: 10px 5px; border-radius: 10px; text-align: center; cursor: pointer; font-size: 12px; }
+        .shop-item.active { border-color: var(--primary); background: #eff6ff; }
+        
+        #loading-screen { position: fixed; inset: 0; background: linear-gradient(160deg, #0f172a, #1e3a5f); color: white; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 18px; z-index: 1000; transition: opacity 0.6s; }
+        #loading-screen.hide { opacity: 0; pointer-events: none; }
+        #loading-screen h1 { margin: 0; font-size: 40px; }
+        #loading-screen .ver { color: #94a3b8; font-size: 14px; }
+        #loading-bar { width: 320px; max-width: 80vw; height: 14px; background: rgba(255,255,255,0.15); border-radius: 999px; overflow: hidden; }
+        #loading-fill { width: 0%; height: 100%; background: #fbbf24; border-radius: 999px; }
+        #loading-text { font-size: 14px; color: #cbd5e1; }
+        .btn-remove { width: 100%; padding: 12px; border: 2px solid #f59e0b; border-radius: 8px; background: #fffbeb; color: #b45309; margin-top: 10px; cursor: pointer; font-weight: bold; font-size: 14px; }
+        .btn-remove.active { background: #f59e0b; color: white; }
+        .btn-reset { width: 100%; padding: 10px; border: none; border-radius: 8px; background: #fee2e2; color: #dc2626; margin-top: 10px; cursor: pointer; font-weight: bold; }
+
+        #actionCanvas { width: 100%; height: 100%; border-radius: 15px; background: #1e293b; }
+        #warning-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(220, 38, 38, 0.4); display: none; justify-content: center; align-items: center; z-index: 100; pointer-events: none; animation: flash 0.5s infinite; }
+        @keyframes flash { 0% { opacity: 0; } 50% { opacity: 1; } 100% { opacity: 0; } }
+    </style>
+</head>
+<body>
+
+<div id="loading-screen">
+    <h1>🏙️ メガタウン</h1>
+    <div class="ver">ドライブエディション ver1.20.2</div>
+    <div id="loading-bar"><div id="loading-fill"></div></div>
+    <div id="loading-text">読み込み中... 0%</div>
+</div>
+<div id="toast"></div>
+<div id="warning-overlay"><h1 style="color:white; font-size:60px;">⚠️ RIVAL!</h1></div>
+
+<div class="header">
+    <div style="display:flex; align-items:center; gap:15px;"><div id="cityName">🏙️ メガタウン ver1.20.2</div><div id="current-place">📍 現在地: 北街</div></div>
+    <div class="stats-group">
+        <div id="event-timer">NEXT: 10:00</div>
+        <div>予算: <span id="money" class="stat-val">0</span> <span id="income-rate" title="税収(満足度による倍率込み)で毎秒増える金額" style="font-size:13px; color:#4ade80; font-weight:bold;">+¥0/秒</span></div>
+        <div>総人口: <span id="pop" class="stat-val">0</span></div>
+        <div>満足度: <span id="satisfaction" class="stat-val">-</span></div>
+        <div title="1人あたり1時間で10円の税収">税収: <span id="tax" class="stat-val">¥0</span>/時</div>
+    </div>
+</div>
+
+<div class="nav-tabs">
+    <button class="tab-button" data-page="challenge" id="tab-challenge" style="background:#fbbf24; color:#000;" onclick="game.changePage('challenge')">🏃 資金調達</button>
+</div>
+
+<div class="main-container">
+    <div id="page-challenge" class="page"><canvas id="actionCanvas"></canvas></div>
+</div>
+
+<div id="build-template" style="display:none;">
+    <div class="map-card">
+        <div class="district-title" style="font-weight:bold; color:#64748b; margin-bottom:5px;"></div>
+        <div class="town-grid-container">
+            <div class="town-grid"></div>
+        </div>
+    </div>
+    <div class="shop-card">
+        <div class="shop-scroll-area"><div class="shop-grid"></div></div>
+        <button class="btn-remove" onclick="game.toggleRemove()">🧹 撤去モード(建物・道路 / 7割返金)</button>
+        <button class="btn-reset" onclick="game.confirmReset()">🔄 全リセット</button>
+    </div>
+</div>
+
+<script>
+// 1辺のマス数と、街(地区)の定義。街を増やすときはここに足す(解放に必要な資金も同時に設定)
+const TAX_PER_PERSON_HOUR = 10; // 人口1人あたり、1時間で徴収する税金(円)
+const GRID = 15;
+const DISTRICT_DEFS = [
+    { name: "北街", unlock: 0 },
+    { name: "南街", unlock: 10000 },
+    { name: "東街", unlock: 1000000 },
+    { name: "西街", unlock: 100000000 },
+    { name: "中央街", unlock: 500000000 },
+    { name: "港街", unlock: 2000000000 },
+    { name: "山街", unlock: 5000000000 },
+    { name: "空街", unlock: 10000000000 }
+];
+
+const game = {
+    money: 3000, activeTool: 'road', currentDistrict: 0,
+    districts: DISTRICT_DEFS.map(() => Array(GRID * GRID).fill(null)),
+    rivalTimer: 600, isRivalBattle: false,
+    taxCarry: 0, stats: null, byEmoji: {},
+    // 街の解放に必要な資金(到達したら解放。その後お金を使っても再ロックされない)
+    districtNames: DISTRICT_DEFS.map(d => d.name),
+    unlockCost: DISTRICT_DEFS.map(d => d.unlock),
+    unlocked: DISTRICT_DEFS.map((d, n) => n === 0),
+    
+    // pop: 人口, sat: 満足度への寄与(福祉・娯楽・公共施設ほど高い)
+    buildings: {
+        remove: { name: "撤去", cost: 0, emoji: "REMOVE", pop: 0, sat: 0 },
+        road: { name: "道路", cost: 2, emoji: "ROAD", pop: 2, sat: 0 },
+        vending: { name: "自販機", cost: 20, emoji: "🧃", pop: 1, sat: 0 },
+        house: { name: "木造住宅", cost: 50, emoji: "🏠", pop: 10, sat: 0 },
+        garden: { name: "花壇", cost: 80, emoji: "🌷", pop: 2, sat: 1 },
+        tent: { name: "テント", cost: 120, emoji: "⛺", pop: 5, sat: 0 },
+        bakery: { name: "パン屋", cost: 200, emoji: "🥖", pop: 5, sat: 1 },
+        conveni: { name: "コンビニ", cost: 350, emoji: "🏪", pop: 5, sat: 1 },
+        cafe: { name: "カフェ", cost: 450, emoji: "☕", pop: 8, sat: 2 },
+        park: { name: "小公園", cost: 600, emoji: "🌳", pop: 50, sat: 3 },
+        police: { name: "交番", cost: 1000, emoji: "👮", pop: 10, sat: 5 },
+        clinic: { name: "診療所", cost: 1500, emoji: "💊", pop: 20, sat: 4 },
+        apt: { name: "アパート", cost: 2500, emoji: "🏢", pop: 180, sat: 0 },
+        library: { name: "図書館", cost: 3500, emoji: "📚", pop: 60, sat: 6 },
+        fire: { name: "消防署", cost: 4000, emoji: "🚒", pop: 30, sat: 8 },
+        factory: { name: "町工場", cost: 5000, emoji: "🏭", pop: 30, sat: -3 },
+        supermarket: { name: "スーパー", cost: 6000, emoji: "🛒", pop: 40, sat: 3 },
+        gym: { name: "ジム", cost: 8000, emoji: "💪", pop: 40, sat: 4 },
+        solar: { name: "ソーラー", cost: 12000, emoji: "☀️", pop: 5, sat: 1 },
+        cinema: { name: "映画館", cost: 15000, emoji: "🎬", pop: 100, sat: 5 },
+        museum: { name: "博物館", cost: 20000, emoji: "🏛️", pop: 300, sat: 8 },
+        station: { name: "駅", cost: 25000, emoji: "🚉", pop: 150, sat: 4 },
+        bank: { name: "銀行", cost: 35000, emoji: "🏦", pop: 80, sat: 2 },
+        office: { name: "ビル", cost: 45000, emoji: "🏬", pop: 100, sat: 0 },
+        temple: { name: "神社", cost: 60000, emoji: "⛩️", pop: 120, sat: 6 },
+        school: { name: "学校", cost: 80000, emoji: "🏫", pop: 500, sat: 20 },
+        university: { name: "大学", cost: 120000, emoji: "🎓", pop: 700, sat: 15 },
+        hospital: { name: "病院", cost: 150000, emoji: "🏥", pop: 800, sat: 25 },
+        zoo: { name: "動物園", cost: 300000, emoji: "🦁", pop: 1200, sat: 15 },
+        stadium: { name: "球場", cost: 600000, emoji: "🏟️", pop: 4000, sat: 20 },
+        aquarium: { name: "水族館", cost: 700000, emoji: "🐠", pop: 1500, sat: 12 },
+        mall: { name: "巨大モール", cost: 1000000, emoji: "🛍️", pop: 500, sat: 6 },
+        theater: { name: "劇場", cost: 1500000, emoji: "🎭", pop: 900, sat: 15 },
+        hotel: { name: "高級ホテル", cost: 2500000, emoji: "🏨", pop: 600, sat: 3 },
+        skyscraper: { name: "超高層ビル", cost: 3500000, emoji: "🌆", pop: 1800, sat: 0 },
+        observatory: { name: "天文台", cost: 4000000, emoji: "🔭", pop: 700, sat: 10 },
+        amusement: { name: "遊園地", cost: 5000000, emoji: "🎡", pop: 6000, sat: 25 },
+        tower: { name: "タワー", cost: 10000000, emoji: "🗼", pop: 2000, sat: 10 },
+        airport: { name: "空港", cost: 20000000, emoji: "✈️", pop: 3500, sat: 5 },
+        shinkansen: { name: "新幹線駅", cost: 30000000, emoji: "🚄", pop: 3000, sat: 8 },
+        harbor: { name: "大型港", cost: 50000000, emoji: "⚓", pop: 4000, sat: 3 },
+        castle: { name: "歴史城", cost: 80000000, emoji: "🏯", pop: 9000, sat: 15 },
+        pyramid: { name: "ピラミッド", cost: 200000000, emoji: "📐", pop: 10000, sat: 10 },
+        sea_base: { name: "海底都市", cost: 500000000, emoji: "🌊", pop: 12000, sat: 12 },
+        rocket: { name: "宇宙センター", cost: 1000000000, emoji: "🚀", pop: 8000, sat: 10 },
+        timemachine: { name: "タイムマシン", cost: 9999999999, emoji: "⏳", pop: 1, sat: 0 }
+    },
+
+    // 読み込み画面: 進捗バーを進めてからフェードアウトして消す
+    runLoading(duration = 2000) {
+        const screen = document.getElementById('loading-screen');
+        const fill = document.getElementById('loading-fill');
+        const text = document.getElementById('loading-text');
+        const start = Date.now();
+        const timer = setInterval(() => {
+            const pct = Math.min(100, Math.floor((Date.now() - start) / duration * 100));
+            fill.style.width = pct + '%';
+            text.innerText = `読み込み中... ${pct}%`;
+            if(pct >= 100) {
+                clearInterval(timer);
+                screen.classList.add('hide');
+                setTimeout(() => screen.remove(), 700);
+            }
+        }, 50);
+    },
+
+    init() {
+        this.runLoading();
+        Object.values(this.buildings).forEach(b => { this.byEmoji[b.emoji] = b; });
+        this.load();
+        this.buildDistrictUI();
+        this.checkUnlocks();
+        this.setupPages();
+        this.initRunner();
+        setInterval(() => this.tick(), 1000);
+        setInterval(() => this.updateCars(), 500);
+        
+        // ウィンドウサイズが変わったら、資金調達の描画領域も合わせる(ずれると当たり判定が見た目と合わなくなる)
+        window.addEventListener('resize', () => {
+            const cvs = document.getElementById('actionCanvas');
+            if(cvs.offsetWidth > 0) { cvs.width = cvs.offsetWidth; cvs.height = cvs.offsetHeight; }
+        });
+        window.addEventListener('keydown', (e) => {
+            if(e.key.toLowerCase()==='a') this.run.playerX = Math.max(0, this.run.playerX - 40);
+            if(e.key.toLowerCase()==='d') this.run.playerX = Math.min(this.run.ctx.canvas.width - 50, this.run.playerX + 40);
+        });
+        document.getElementById('actionCanvas').onclick = () => { if(this.run.isGameOver) this.resetRunner(); };
+    },
+
+    // 人口・満足度の集計。人口は建物ごとの pop の合計
+    calcStats() {
+        let pop = 0, sat = 0;
+        this.districts.forEach(d => d.forEach(cell => {
+            const b = this.byEmoji[cell];
+            if(b) { pop += b.pop; sat += b.sat || 0; }
+        }));
+        // 人口200人あたり満足度ポイント1が必要。足りるほど満足度が上がる(基礎30%〜最大100%)
+        const need = pop / 200;
+        const ratio = need > 0 ? sat / need : 1;
+        const satisfaction = pop === 0 ? 50 : Math.max(0, Math.min(100, Math.round(30 + 70 * Math.min(1, ratio))));
+        // 満足度が税収に影響する: 0%で×0.5、30%で×0.8、100%で×1.5
+        const taxMultiplier = 0.5 + satisfaction / 100;
+        const taxPerHour = pop * TAX_PER_PERSON_HOUR * taxMultiplier;
+        return { pop, sat, need, satisfaction, taxMultiplier, taxPerHour };
+    },
+
+    tick() {
+        const st = this.calcStats(); const pop = st.pop;
+        // 税金: 1人あたり1時間で10円(×満足度による倍率)。毎秒 taxPerHour/3600 円を端数ごと蓄積して加算する
+        this.taxCarry += st.taxPerHour / 3600;
+        const whole = Math.floor(this.taxCarry);
+        if(whole > 0) { this.money += whole; this.taxCarry -= whole; }
+        this.stats = st;
+        this.checkUnlocks();
+        this.updateUI(pop);
+
+        if (!this.isRivalBattle) {
+            this.rivalTimer--;
+            if (this.rivalTimer <= 0) this.triggerRival();
+            const min = Math.floor(this.rivalTimer/60);
+            const sec = this.rivalTimer % 60;
+            document.getElementById('event-timer').innerText = `NEXT: ${min}:${sec < 10 ? '0'+sec : sec}`;
+        }
+    },
+
+    // 車の生成(500msごと)。生成後の動きは runCar が車ごとに自走させる
+    updateCars() {
+        const containers = document.querySelectorAll('.town-grid-container');
+        containers.forEach((container, distIdx) => {
+            if(!this.districts[distIdx]) return; // 非表示テンプレート内のコンテナは対象外
+            const roadIndices = [];
+            this.districts[distIdx].forEach((d, i) => { if(d === 'ROAD') roadIndices.push(i); });
+            const count = container.querySelectorAll('.car').length;
+            if(roadIndices.length > 0 && count < Math.min(20, roadIndices.length / 3)) {
+                const startIdx = roadIndices[Math.floor(Math.random() * roadIndices.length)];
+                const dirs = [0,1,2,3].filter(d => this.carNext(startIdx, d, distIdx) >= 0);
+                if(dirs.length === 0) return; // 孤立した道路には出さない
+                const car = document.createElement('div');
+                car.className = 'car';
+                car.innerText = ["🚗","🚕","🚙","🏎️"][Math.floor(Math.random()*4)];
+                const stepMs = 250 + Math.floor(Math.random() * 450);   // 車ごとに速さが違う
+                car._s = { idx: startIdx, dir: dirs[Math.floor(Math.random() * dirs.length)], stepMs, pause: 0,
+                           dieAt: Date.now() + 6000 + Math.random() * 9000 };
+                car.style.setProperty('--step', stepMs + 'ms');
+                this.setCarPos(car, startIdx);
+                this.setCarDir(car);
+                container.appendChild(car);
+                car._timer = setTimeout(() => this.runCar(car, distIdx), stepMs);
+            }
+        });
+    },
+
+    // 方向: 0=上 1=右 2=下 3=左。進めるマス番号を返す(範囲外は -1)
+    carNext(idx, dir, distIdx) {
+        const col = idx % GRID;
+        let n = -1;
+        if(dir === 0 && idx >= GRID) n = idx - GRID;
+        if(dir === 2 && idx < GRID * (GRID - 1)) n = idx + GRID;
+        if(dir === 1 && col < GRID - 1) n = idx + 1;
+        if(dir === 3 && col > 0) n = idx - 1;
+        return (n >= 0 && this.districts[distIdx][n] === 'ROAD') ? n : -1;
+    },
+
+    // 進行方向に合わせて絵文字(左向き)を反転・回転する
+    setCarDir(car) {
+        const t = ['rotate(90deg)', 'scaleX(-1)', 'rotate(-90deg)', 'none'][car._s.dir];
+        car.style.transform = t;
+    },
+
+    removeCar(car) {
+        clearTimeout(car._timer);
+        car.style.opacity = '0';
+        setTimeout(() => car.remove(), 400);
+    },
+
+    // 1歩ぶんの判断: 停車 / 直進 / 右左折 / 行き止まりでUターン
+    runCar(car, distIdx) {
+        const s = car._s;
+        if(!car.isConnected) return;
+        if(this.districts[distIdx][s.idx] !== 'ROAD' || Date.now() > s.dieAt) return this.removeCar(car);
+        let wait = s.stepMs;
+        if(s.pause > 0) {
+            s.pause--;
+        } else if(Math.random() < 0.08) {
+            s.pause = Math.floor(Math.random() * 2); // 今回+0〜1回、止まる
+        } else {
+            const back = (s.dir + 2) % 4;
+            let opts = [0,1,2,3].filter(d => d !== back && this.carNext(s.idx, d, distIdx) >= 0);
+            if(opts.length === 0 && this.carNext(s.idx, back, distIdx) >= 0) opts = [back]; // 行き止まりだけUターン
+            if(opts.length > 0) {
+                const turns = opts.filter(d => d !== s.dir);
+                let dir;
+                if(opts.includes(s.dir) && (turns.length === 0 || Math.random() < 0.65)) dir = s.dir;
+                else dir = turns[Math.floor(Math.random() * turns.length)];
+                s.dir = dir;
+                s.idx = this.carNext(s.idx, dir, distIdx);
+                this.setCarDir(car);
+                this.setCarPos(car, s.idx);
+            }
+        }
+        car._timer = setTimeout(() => this.runCar(car, distIdx), wait);
+    },
+
+    setCarPos(el, idx) {
+        const x = (idx % GRID) * (100 / GRID);
+        const y = Math.floor(idx / GRID) * (100 / GRID);
+        el.style.left = `calc(${x}% + 3px)`;
+        el.style.top = `calc(${y}% + 3px)`;
+        el.dataset.idx = idx;
+    },
+
+    triggerRival() {
+        this.isRivalBattle = true;
+        document.getElementById('warning-overlay').style.display = 'flex';
+        setTimeout(() => {
+            document.getElementById('warning-overlay').style.display = 'none';
+            this.changePage('challenge');
+            this.resetRunner();
+        }, 3000);
+    },
+
+    // 街ごとのタブとページを DISTRICT_DEFS から生成する
+    buildDistrictUI() {
+        const tabs = document.querySelector('.nav-tabs');
+        const challengeTab = document.getElementById('tab-challenge');
+        const main = document.querySelector('.main-container');
+        const challengePage = document.getElementById('page-challenge');
+        DISTRICT_DEFS.forEach((d, n) => {
+            const btn = document.createElement('button');
+            btn.className = 'tab-button' + (n === 0 ? ' active' : '');
+            btn.dataset.page = 'dist' + (n + 1);
+            btn.innerText = '📍 ' + d.name;
+            btn.onclick = () => this.changePage('dist' + (n + 1));
+            tabs.insertBefore(btn, challengeTab);
+            const page = document.createElement('div');
+            page.id = 'page-dist' + (n + 1);
+            page.className = 'page' + (n === 0 ? ' active' : '');
+            page.innerHTML = `<div class="build-layout" id="layout${n + 1}"></div>`;
+            main.insertBefore(page, challengePage);
+        });
+    },
+
+    setupPages() {
+        DISTRICT_DEFS.forEach((d, n) => {
+            const container = document.getElementById('layout' + (n + 1));
+            container.innerHTML = document.getElementById('build-template').innerHTML;
+            container.querySelector('.district-title').innerText = d.name + '地区';
+            container.querySelector('.town-grid').style.setProperty('--grid', GRID);
+            this.renderGrid(n);
+            this.renderShop(n);
+        });
+    },
+
+    changePage(id) {
+        if(id.startsWith('dist')) {
+            const n = parseInt(id.replace('dist','')) - 1;
+            if(!this.unlocked[n]) {
+                this.showToast(`🔒 ${this.districtNames[n]}は資金が ${this.unlockCost[n].toLocaleString()} に達すると解放されます`, '#dc2626');
+                return;
+            }
+        }
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
+        const target = document.getElementById('page-' + id);
+        if(target) target.classList.add('active');
+        const btn = document.querySelector(`.tab-button[data-page="${id}"]`);
+        if(btn) btn.classList.add('active');
+        if(id.startsWith('dist')) this.currentDistrict = parseInt(id.replace('dist','')) - 1;
+        document.getElementById('current-place').innerText = '📍 現在地: ' + (id === 'challenge' ? '資金調達' : this.districtNames[this.currentDistrict]);
+        
+        if(id === 'challenge') {
+            const cvs = document.getElementById('actionCanvas');
+            cvs.width = cvs.offsetWidth;
+            cvs.height = cvs.offsetHeight;
+            this.resetRunner();
+        }
+    },
+
+    renderGrid(distIdx) {
+        const g = document.querySelectorAll('.town-grid')[distIdx]; g.innerHTML = '';
+        this.districts[distIdx].forEach((d, i) => {
+            const c = document.createElement('div');
+            c.className = 'cell' + (d === 'ROAD' ? ' road' : '');
+            c.innerText = d === 'ROAD' ? '' : (d || '');
+            c.onclick = () => {
+                const deny = () => {
+                    c.classList.add('denied');
+                    setTimeout(() => c.classList.remove('denied'), 400);
+                };
+                const cur = this.districts[distIdx][i];
+                // 撤去モード: 道路・建物を撤去し、建設費の7割を返金する
+                // (建物が唯一の道路を失う場合、その道路は撤去できない)
+                if(this.activeTool === 'remove') {
+                    if(!cur) return;
+                    this.districts[distIdx][i] = null;
+                    if(cur === 'ROAD') {
+                        const orphan = this.neighbors(i).some(n => {
+                            const v = this.districts[distIdx][n];
+                            return v && v !== 'ROAD' && !this.hasAdjacentRoad(distIdx, n);
+                        });
+                        if(orphan) { this.districts[distIdx][i] = 'ROAD'; return deny(); }
+                    }
+                    const old = Object.values(this.buildings).find(v => v.emoji === cur);
+                    if(old) this.money += Math.floor(old.cost * 0.7);
+                    this.renderGrid(distIdx); this.save();
+                    return;
+                }
+                const b = this.buildings[this.activeTool];
+                if(cur) return;
+                // 建物・道路とも、既存の道路に隣接していないと設置できない
+                // (その地区に道路が1本もないときだけ、最初の道路を自由に置ける)
+                const hasRoad = this.districts[distIdx].includes('ROAD');
+                if((b.emoji !== 'ROAD' || hasRoad) && !this.hasAdjacentRoad(distIdx, i)) return deny();
+                if(this.money >= b.cost) {
+                    this.money -= b.cost; this.districts[distIdx][i] = b.emoji;
+                    this.renderGrid(distIdx); this.save();
+                }
+            };
+            g.appendChild(c);
+        });
+    },
+
+    // 上下左右の隣接マス番号(左右端で行をまたがない)
+    neighbors(i) {
+        const col = i % GRID, r = [];
+        if(col > 0) r.push(i-1);
+        if(col < GRID-1) r.push(i+1);
+        if(i >= GRID) r.push(i-GRID);
+        if(i < GRID*(GRID-1)) r.push(i+GRID);
+        return r;
+    },
+
+    isNeighbor(i, n) { return this.neighbors(i).includes(n); },
+
+    hasAdjacentRoad(distIdx, i) {
+        return this.neighbors(i).some(n => this.districts[distIdx][n] === 'ROAD');
+    },
+
+    renderShop(distIdx) {
+        const sG = document.querySelectorAll('.shop-grid')[distIdx]; sG.innerHTML = '';
+        Object.keys(this.buildings).forEach(key => {
+            const b = this.buildings[key];
+            const div = document.createElement('div');
+            div.className = `shop-item ${this.activeTool === key ? 'active' : ''}`;
+            div.onclick = () => { 
+                this.activeTool = key; this.syncRemoveButtons();
+                document.querySelectorAll('.shop-item').forEach(el => el.classList.remove('active'));
+                document.querySelectorAll('.shop-grid').forEach(grid => {
+                    const items = grid.querySelectorAll('.shop-item');
+                    const idx = Object.keys(this.buildings).indexOf(key);
+                    if(items[idx]) items[idx].classList.add('active');
+                });
+            };
+            div.innerHTML = `<span>${b.emoji==='ROAD'?'🛣️':b.emoji==='REMOVE'?'🧹':b.emoji}</span><br>${b.name}<br><b>${b.emoji==='REMOVE'?'7割返金':b.cost.toLocaleString()}</b>${b.emoji==='REMOVE'?'':`<br><small style="color:#64748b">👥+${b.pop}</small>`}`;
+            sG.appendChild(div);
+        });
+    },
+
+    updateUI(pop) {
+        const st = this.stats || this.calcStats();
+        const sv = st.satisfaction;
+        const face = sv >= 80 ? '😄' : sv >= 60 ? '🙂' : sv >= 40 ? '😐' : sv >= 20 ? '😟' : '😡';
+        const color = sv >= 60 ? '#4ade80' : sv >= 40 ? '#fbbf24' : '#f87171';
+        const el = document.getElementById('satisfaction');
+        el.innerText = `${face} ${sv}%`; el.style.color = color;
+        el.parentElement.title = `満足度ポイント ${st.sat.toFixed(0)} / 必要 ${st.need.toFixed(1)}(公園・病院・学校などの施設が多いほど上がります)\n税収倍率 ×${st.taxMultiplier.toFixed(2)}`;
+        document.getElementById('tax').innerText = '¥' + Math.floor(st.taxPerHour).toLocaleString() + ` (×${st.taxMultiplier.toFixed(2)})`;
+        document.getElementById('money').innerText = Math.floor(this.money).toLocaleString();
+        // 予算の横に、税収による毎秒の増加額を表示
+        const rate = st.taxPerHour / 3600;
+        const rateText = rate >= 1000 ? Math.round(rate).toLocaleString() : rate >= 1 ? rate.toFixed(1) : rate.toFixed(2);
+        document.getElementById('income-rate').innerText = `+¥${rateText}/秒`;
+        document.getElementById('pop').innerText = pop.toLocaleString();
+    },
+
+    // 難易度: 解放した街(北街を除く)の数。0〜7
+    difficultyLevel() { return Math.max(0, this.unlocked.filter(Boolean).length - 1); },
+
+    // 当たり判定: 絵文字は描画サイズより一回り小さい矩形(内側に余白)で判定する。
+    // 岩が1フレームで動いた範囲(prevY〜現在)も含めて判定し、高速時のすり抜けを防ぐ。
+    hitsPlayer(o, prevY, h) {
+        const P = { size: 50, inset: 10 }, R = { size: 40, inset: 8 };
+        const pL = this.run.playerX + P.inset, pR = this.run.playerX + P.size - P.inset;
+        const pT = (h - 80) + P.inset, pB = (h - 80) + P.size - P.inset;
+        const rL = o.x + R.inset, rR = o.x + R.size - R.inset;
+        const rTop = prevY + R.inset, rBottom = o.y + R.size - R.inset;
+        return rL < pR && rR > pL && rTop < pB && rBottom > pT;
+    },
+
+    run: { ctx: null, playerX: 200, obstacles: [], distance: 0, isGameOver: false },
+    initRunner() {
+        const cvs = document.getElementById('actionCanvas');
+        this.run.ctx = cvs.getContext('2d');
+        this.resetRunner();
+        this.animateRunner();
+    },
+    resetRunner() { 
+        this.run.obstacles = []; this.run.distance = 0; this.run.isGameOver = false; 
+        const w = this.run.ctx ? this.run.ctx.canvas.width : 400;
+        this.run.playerX = w / 2; 
+    },
+    animateRunner() {
+        const r = this.run; const ctx = r.ctx; if(!ctx) return;
+        // 資金調達タブを開いていない間はゲームを進めない(裏で岩に当たって報酬が入るのを防ぐ)
+        if(!document.getElementById('page-challenge').classList.contains('active')) {
+            requestAnimationFrame(() => this.animateRunner());
+            return;
+        }
+        const w = ctx.canvas.width; const h = ctx.canvas.height;
+        
+        // 背景クリア
+        ctx.fillStyle = "#1e293b"; 
+        ctx.fillRect(0, 0, w, h);
+        
+        if(!r.isGameOver) {
+            r.distance += 0.5;
+            const lv = this.difficultyLevel();
+            // 街を解放するほど岩が増え、速くなる
+            let spawnRate = this.isRivalBattle ? 0.15 + 0.015 * lv : 0.07 + 0.02 * lv;
+            if(Math.random() < spawnRate) r.obstacles.push({ x: Math.random()*(w-40), y: -60 });
+            
+            r.obstacles.forEach(o => {
+                const prevY = o.y;
+                o.y += (this.isRivalBattle ? 9 : 6) + 0.4 * lv + (r.distance/100);
+                if(this.hitsPlayer(o, prevY, h)) r.isGameOver = "LOSE";
+            });
+            r.obstacles = r.obstacles.filter(o => o.y < h + 100);
+            if(this.isRivalBattle && r.distance > 500) r.isGameOver = "WIN";
+        }
+        
+        // 重要：描画設定の初期化
+        ctx.textAlign = "left";
+        ctx.textBaseline = "top";
+        
+        // 岩の描画（色を白に強制）
+        ctx.fillStyle = "white"; 
+        ctx.font = "40px serif"; 
+        r.obstacles.forEach(o => {
+            ctx.fillText(this.isRivalBattle ? "🔥" : "🪨", o.x, o.y);
+        });
+        
+        // 難易度表示
+        ctx.font = "bold 16px sans-serif";
+        ctx.fillStyle = "#fbbf24";
+        ctx.fillText(`難易度 Lv.${this.difficultyLevel()}(岩の量 ×${((0.07 + 0.02 * this.difficultyLevel()) / 0.07).toFixed(1)} / 報酬 ×${(1 + 0.25 * this.difficultyLevel()).toFixed(2)})`, 12, 12);
+        ctx.fillStyle = "white";
+
+        // プレイヤーの描画
+        ctx.font = "50px serif"; 
+        ctx.fillText(this.isRivalBattle ? "🏎️" : "🏃", r.playerX, h - 80);
+        
+        if(r.isGameOver) {
+            ctx.fillStyle = "rgba(0,0,0,0.8)"; ctx.fillRect(0,0,w,h);
+            ctx.fillStyle = "#fbbf24"; ctx.textAlign = "center"; ctx.textBaseline = "middle";
+            ctx.font = "bold 40px sans-serif";
+            if(r.isGameOver === "WIN") {
+                ctx.fillText("🏆 VICTORY!", w/2, h/2);
+                if(r.isGameOver !== "DONE") { 
+                    this.money += Math.floor(this.money * 0.5) + 100000; 
+                    r.isGameOver = "DONE"; this.isRivalBattle = false; this.rivalTimer = 600; this.save(); 
+                }
+            } else {
+                ctx.fillText("GAME OVER", w/2, h/2);
+                if(r.isGameOver !== "DONE") { 
+                    let reward = Math.floor(r.distance * 10 * (1 + 0.25 * this.difficultyLevel())); // 難しいほど報酬も増える
+                    this.money += reward;
+                    ctx.font = "20px sans-serif";
+                    ctx.fillText(`報酬: +${reward.toLocaleString()}`, w/2, h/2 + 60);
+                    // ボス戦に負けた場合のみタイマーを戻す(通常の岩衝突ではタイマーに触れない)
+                    if(this.isRivalBattle) { this.isRivalBattle = false; this.rivalTimer = 300; }
+                    r.isGameOver = "DONE"; this.save();
+                }
+            }
+            ctx.font = "16px sans-serif";
+            ctx.fillText("クリックでリトライ", w/2, h/2 + 100);
+        }
+        requestAnimationFrame(() => this.animateRunner());
+    },
+
+    // 撤去ボタン: 撤去モードのON/OFF(OFFのときは道路に戻す)
+    toggleRemove() {
+        const key = this.activeTool === 'remove' ? 'road' : 'remove';
+        const idx = Object.keys(this.buildings).indexOf(key);
+        const items = document.querySelectorAll('.shop-grid')[this.currentDistrict].querySelectorAll('.shop-item');
+        if(items[idx]) items[idx].click();
+    },
+
+    syncRemoveButtons() {
+        document.querySelectorAll('.btn-remove').forEach(b => {
+            b.classList.toggle('active', this.activeTool === 'remove');
+            b.innerText = this.activeTool === 'remove' ? '🧹 撤去モード中(もう一度押すと解除)' : '🧹 撤去モード(建物・道路 / 7割返金)';
+        });
+    },
+
+    showToast(msg, color) {
+        const t = document.getElementById('toast');
+        t.innerText = msg; t.style.background = color || '#16a34a'; t.style.display = 'block';
+        clearTimeout(this.toastTimer);
+        this.toastTimer = setTimeout(() => t.style.display = 'none', 3500);
+    },
+
+    checkUnlocks() {
+        let changed = false;
+        this.unlocked.forEach((u, n) => {
+            if(!u && this.money >= this.unlockCost[n]) {
+                this.unlocked[n] = true; changed = true;
+                this.showToast(`🎉 ${this.districtNames[n]}が解放されました！`);
+            }
+        });
+        if(changed) this.save();
+        this.updateTabs();
+    },
+
+    updateTabs() {
+        this.unlocked.forEach((u, n) => {
+            const btn = document.querySelector(`.tab-button[data-page="dist${n+1}"]`);
+            if(!btn) return;
+            btn.classList.toggle('locked', !u);
+            btn.innerText = u ? `📍 ${this.districtNames[n]}` : `🔒 ${this.districtNames[n]} (${this.unlockCost[n].toLocaleString()})`;
+        });
+    },
+
+    confirmReset() { if(confirm("全リセット？")) { localStorage.clear(); location.reload(); } },
+    save() { localStorage.setItem('megaTownUlt', JSON.stringify({ m: this.money, d: this.districts, u: this.unlocked, g: GRID, t: this.taxCarry })); },
+    load() {
+        const s = localStorage.getItem('megaTownUlt');
+        if(!s) return;
+        const data = JSON.parse(s);
+        this.money = data.m;
+        this.taxCarry = data.t || 0;
+        // 旧セーブ(10×10・4街)は、左上を基準に15×15・8街へ移し替える
+        const oldG = data.g || 10;
+        this.districts = DISTRICT_DEFS.map((def, n) => {
+            const grid = Array(GRID * GRID).fill(null);
+            const old = (data.d && data.d[n]) || [];
+            old.forEach((v, i) => {
+                if(!v) return;
+                const r = Math.floor(i / oldG), c = i % oldG;
+                if(r < GRID && c < GRID) grid[r * GRID + c] = v;
+            });
+            return grid;
+        });
+        this.unlocked = DISTRICT_DEFS.map((d, n) => n === 0 || !!(data.u && data.u[n]));
+    }
+};
+window.onload = () => game.init();
+</script>
+</body>
+</html>
