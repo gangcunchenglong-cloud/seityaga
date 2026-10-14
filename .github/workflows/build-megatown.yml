@@ -1,0 +1,62 @@
+# メガタウンの Windows(64bit)インストーラーをビルドし、zip にまとめて Releases に公開する
+name: Build MegaTown (Windows)
+
+on:
+  push:
+    branches: [claude/friendly-brahmagupta-oc35wn]
+    paths:
+      - 'mega-town/**'
+      - '.github/workflows/build-megatown.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write # Releases の作成に必要
+
+jobs:
+  build:
+    runs-on: windows-latest
+    defaults:
+      run:
+        working-directory: mega-town
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: mega-town/package-lock.json
+
+      - name: Install
+        run: npm ci
+
+      - name: Build installer
+        run: npx electron-builder --win --x64 --publish never
+
+      - name: Make zip
+        shell: pwsh
+        run: |
+          $ver = (Get-Content package.json -Raw | ConvertFrom-Json).version
+          New-Item -ItemType Directory -Force pack | Out-Null
+          Copy-Item "dist/MegaTown-$ver-setup.exe" pack/
+          @"
+          メガタウン ver$ver(Windows 64bit)
+
+          1. MegaTown-$ver-setup.exe をダブルクリックしてインストールします。
+             「Windows によって PC が保護されました」と出たら「詳細情報」→「実行」を押してください。
+          2. インストール後、デスクトップの「MegaTown」から起動できます。
+          3. タスクバーに追加するには、スタートメニューの「MegaTown」を右クリック →「タスクバーにピン留めする」。
+          "@ | Out-File -Encoding utf8 "pack/はじめにお読みください.txt"
+          Compress-Archive -Path pack/* -DestinationPath "MegaTown-$ver-win-x64.zip" -Force
+          "VERSION=$ver" | Out-File -Append -Encoding utf8 $env:GITHUB_ENV
+
+      - name: Publish release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ env.VERSION }}
+          name: メガタウン v${{ env.VERSION }}
+          target_commitish: ${{ github.sha }}
+          body: |
+            Windows(64bit)用インストーラーです。
+            下の **MegaTown-${{ env.VERSION }}-win-x64.zip** をダウンロードし、展開して中の setup.exe を実行してください。
+          files: mega-town/MegaTown-${{ env.VERSION }}-win-x64.zip
