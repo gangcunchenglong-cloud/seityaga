@@ -13,6 +13,9 @@ function createWindow() {
   win.loadFile('index2.html'); // あなたのHTMLを読み込む
 }
 
+// タスクバーにピン留めしたアイコンと、起動中のウィンドウを同じアプリとしてまとめる(package.json の appId と同じ値)
+app.setAppUserModelId('com.gangcunchenglong.megatown');
+
 app.whenReady().then(createWindow);
 
 app.on('window-all-closed', () => {

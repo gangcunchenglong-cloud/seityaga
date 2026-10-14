@@ -25,12 +25,19 @@
     },
     "win": {
       "target": [
-        "portable"
+        "nsis"
       ],
       "signAndEditExecutable": false
     },
-    "portable": {
-      "artifactName": "MegaTown-${version}-portable.exe"
+    "nsis": {
+      "artifactName": "MegaTown-${version}-setup.exe",
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "MegaTown",
+      "runAfterFinish": true
     }
   }
 }
