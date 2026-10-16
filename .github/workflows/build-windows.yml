@@ -1,12 +1,16 @@
+# クイズひろばの Windows(64bit)インストーラーをビルドし、Releases に公開する
 name: Build Windows installer
 
 on:
   push:
-    branches: ['**']
+    branches: [claude/serene-pasteur-fld2iq]
     paths:
       - 'quiz-app/**'
       - '.github/workflows/build-windows.yml'
   workflow_dispatch:
+
+permissions:
+  contents: write # Releases の作成に必要
 
 jobs:
   build:
@@ -16,14 +20,40 @@ jobs:
         working-directory: quiz-app
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - run: npm install
-      - run: npm run dist
+          cache: npm
+          cache-dependency-path: quiz-app/package-lock.json
+
+      - name: Install
+        run: npm ci
+
+      - name: Build installer
+        run: npx electron-builder --win nsis --x64 --publish never
         env:
           CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+
+      - name: Read version
+        shell: pwsh
+        run: |
+          $ver = (Get-Content package.json -Raw | ConvertFrom-Json).version
+          "VERSION=$ver" | Out-File -Append -Encoding utf8 $env:GITHUB_ENV
+
       - uses: actions/upload-artifact@v4
         with:
           name: QuizHiroba-Setup
           path: quiz-app/dist/*.exe
+
+      - name: Publish release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: quiz-v${{ env.VERSION }}
+          name: クイズひろば v${{ env.VERSION }}
+          target_commitish: ${{ github.sha }}
+          body: |
+            Windows(64bit)用インストーラーです。
+            下の **QuizHiroba-Setup-${{ env.VERSION }}.exe** をダウンロードしてダブルクリックしてください。
+            「Windows によって PC が保護されました」と出たら「詳細情報」→「実行」を押してください。
+          files: quiz-app/dist/QuizHiroba-Setup-${{ env.VERSION }}.exe

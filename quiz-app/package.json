@@ -16,10 +16,22 @@
   "build": {
     "appId": "com.seityaga.quizhiroba",
     "productName": "クイズひろば",
-    "files": ["main.js", "app/**/*"],
-    "directories": { "output": "dist" },
+    "files": [
+      "main.js",
+      "app/**/*"
+    ],
+    "directories": {
+      "output": "dist"
+    },
     "win": {
-      "target": [{ "target": "nsis", "arch": ["x64"] }],
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
       "artifactName": "QuizHiroba-Setup-${version}.exe"
     },
     "nsis": {
@@ -29,6 +41,7 @@
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
       "shortcutName": "クイズひろば"
-    }
+    },
+    "publish": null
   }
 }
