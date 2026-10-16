@@ -18,6 +18,8 @@ namespace UrlInsight.App.Services;
 /// - カーソルが止まったときだけ調べる(動いている間は何もしない。常時の画面読み取りはしない)
 /// - 自分自身のウィンドウ、パスワード欄は対象外
 /// - URL や読み取った文字列はログに残さない(要素の種類・アプリ名・結果のみ)
+/// - Ctrl を押している間は「まとめて送る」モード: 検出したリンクはカードではなく BatchLinkHovered で知らせ、
+///   Ctrl を離したら BatchEnded で知らせる(ほかのキーやクリックがあったら取り消す。Ctrl+C・Ctrl+クリックなどの普段の操作で送らないため)
 /// UI スレッドを止めないよう専用スレッドで動く。
 /// </summary>
 internal sealed class UiaHoverWatcher : IDisposable
@@ -30,6 +32,8 @@ internal sealed class UiaHoverWatcher : IDisposable
     /// <summary>カーソル位置の前後から取り出す文字数(折り返された長い URL を丸ごと取るため)。</summary>
     private const int ContextChars = 1000;
     private const int EditControlTypeId = 50004;
+    /// <summary>まとめて送るモードでの、カーソルが止まってから調べるまでの時間(次々と重ねられるよう短くする)。</summary>
+    private const int BatchDelayMs = 250;
 
     // UI Automation の ID(UIAutomationClient.h)
     private const int HyperlinkControlTypeId = 50005;
@@ -61,6 +65,38 @@ internal sealed class UiaHoverWatcher : IDisposable
     public event Action? HoverEnded;
     /// <summary>動作状況(画面表示用の日本語。URL は含まない)。</summary>
     public event Action<string>? StatusChanged;
+    /// <summary>Ctrl を押し始めた(まとめて送るモードの開始)。</summary>
+    public event Action? BatchStarted;
+    /// <summary>まとめて送るモードで URL を検出した(url, リンク文字列)。</summary>
+    public event Action<string, string?>? BatchLinkHovered;
+    /// <summary>まとめて送るモードの終わり。true なら Ctrl を離した(送る)、false なら取り消し(ほかのキー・クリック)。</summary>
+    public event Action<bool>? BatchEnded;
+
+    /// <summary>
+    /// Ctrl と一緒に押すと普段の操作になるキー(Ctrl+C・Ctrl+クリックなど)の範囲。
+    /// 日本語キーボードの 半角/全角・変換 などの IME のキーは、押していなくても押されたままと返ることがあるため調べない。
+    /// Shift・Alt も調べない(それだけでは操作にならない。送るときは離されるまで待つ)。
+    /// </summary>
+    private static readonly (int From, int To)[] ShortcutKeys =
+    {
+        (0x01, 0x02), (0x04, 0x06),   // マウスの左・右・中・拡張ボタン
+        (0x08, 0x09), (0x0D, 0x0D),   // Backspace・Tab・Enter
+        (0x1B, 0x1B),                 // Esc
+        (0x20, 0x2E),                 // Space・PageUp/Down・Home/End・矢印・Insert/Delete など
+        (0x30, 0x39), (0x41, 0x5A),   // 数字・英字
+        (0x5B, 0x5D),                 // Windows キー・アプリケーションキー
+        (0x60, 0x87),                 // テンキー・F1〜F24
+        (0xBA, 0xC0), (0xDB, 0xDF), (0xE2, 0xE2), // 記号のキー(日本語キーボードの「ろ」「¥」なども含む)
+    };
+
+    /// <summary>Ctrl 以外のキー・マウスボタンが押されているか(Ctrl+C や Ctrl+クリックなど、普段の操作かどうかの判定)。</summary>
+    private static bool OtherInputPressed()
+    {
+        foreach (var (from, to) in ShortcutKeys)
+            for (int vk = from; vk <= to; vk++)
+                if (NativeMethods.IsDown(vk)) return true;
+        return false;
+    }
 
     public void Start()
     {
@@ -101,6 +137,10 @@ internal sealed class UiaHoverWatcher : IDisposable
         long lastScan = 0;
         bool scannedHere = false, wasEnabled = true;
         string? activeUrl = null;
+        bool batch = false, batchCancelled = false;
+        string? lastBatchUrl = null;
+        // まとめて送ったあとは、カーソルを動かすまでカードを出さない(最後に重ねていたリンクのカードが出ないように)
+        NativeMethods.POINT? quietAt = null;
 
         while (!_stop)
         {
@@ -111,6 +151,7 @@ internal sealed class UiaHoverWatcher : IDisposable
                 bool enabled = s.UseUiAutomationHover && !s.Paused;
                 if (!enabled)
                 {
+                    if (batch) { batch = false; BatchEnded?.Invoke(false); }
                     if (activeUrl != null) { activeUrl = null; HoverEnded?.Invoke(); }
                     if (wasEnabled) StatusChanged?.Invoke(s.Paused ? "一時停止中" : "オフ（設定 → 一般）");
                     wasEnabled = false;
@@ -121,6 +162,37 @@ internal sealed class UiaHoverWatcher : IDisposable
 
                 if (!NativeMethods.GetCursorPos(out var pt)) continue;
                 long now = Environment.TickCount64;
+
+                // Ctrl を押している間は、カードを出さずにリンクを集める(Ctrl を離したらまとめて Chrome の Gemini に送る)
+                bool ctrl = s.CtrlHoverToGemini && NativeMethods.IsDown(NativeMethods.VK_CONTROL);
+                if (ctrl && !batch)
+                {
+                    batch = true;
+                    batchCancelled = OtherInputPressed();
+                    lastBatchUrl = null;
+                    scannedHere = false;
+                    stillSince = now;
+                    if (!batchCancelled) BatchStarted?.Invoke();
+                }
+                else if (batch && !ctrl)
+                {
+                    batch = false;
+                    if (!batchCancelled) BatchEnded?.Invoke(true);
+                    scannedHere = true;
+                    quietAt = pt;
+                    continue;
+                }
+                if (batch && !batchCancelled && OtherInputPressed())
+                {
+                    batchCancelled = true;
+                    BatchEnded?.Invoke(false);
+                }
+                if (batch && batchCancelled) continue;
+                if (quietAt is { } q)
+                {
+                    if (Math.Abs(pt.X - q.X) <= LeaveDistancePx && Math.Abs(pt.Y - q.Y) <= LeaveDistancePx) continue;
+                    quietAt = null;
+                }
 
                 if (Math.Abs(pt.X - last.X) > StillTolerancePx || Math.Abs(pt.Y - last.Y) > StillTolerancePx)
                 {
@@ -138,13 +210,23 @@ internal sealed class UiaHoverWatcher : IDisposable
                 //  ・カーソルが止まってから待ち時間(初期600ms)が経ったとき(すぐ反応するため)
                 //  ・それとは別に、1秒ごとに現在のカーソル位置の文字列を調べ直す
                 //    (1回目で読めなかった場合や、カーソルを動かさずにスクロールして内容が変わった場合にも拾うため)
-                bool stillReady = !scannedHere && now - stillSince >= s.HoverDelayMs;
+                bool stillReady = !scannedHere && now - stillSince >= (batch ? Math.Min(BatchDelayMs, s.HoverDelayMs) : s.HoverDelayMs);
                 bool periodic = now - lastScan >= ScanIntervalMs;
                 if (!stillReady && !periodic) continue;
                 lastScan = now;
                 scannedHere = true;
 
                 var result = FindUrlAt(pt);
+                if (batch)
+                {
+                    if (result.Url != null && result.Url != lastBatchUrl)
+                    {
+                        lastBatchUrl = result.Url;
+                        Report($"{result.Process}: {result.What}を検出（まとめて送る）", $"batch proc={result.Process} kind={result.What}");
+                        BatchLinkHovered?.Invoke(result.Url, result.LinkText);
+                    }
+                    continue;
+                }
                 if (result.Url != null)
                 {
                     firedAt = pt;

@@ -12,7 +12,7 @@ URL Insight は、あなたが理解・制御できる範囲でだけ情報を�
 | 3 | アプリ → AI 提供元（あなたが選んだもののみ） | ページの URL・タイトル・説明・本文（上限文字数まで。初期12,000字） | AI プロバイダとキーを設定し、**送信前の確認で「送信」を選んだとき**（毎回確認／各プロバイダ初回のみ確認 を選択可） |
 | 4 | アプリ → YouTube（公式 oEmbed / Data API） | 動画ID（Data API キーを設定した場合はキーも） | YouTube のリンクを要約するとき |
 | 4'' | アプリ → Claude in Chrome（Anthropic） | カードの URL と、要約の依頼文（Chrome のサイドバーの Claude の入力欄に入力して送信。以後の扱いは Anthropic の Claude in Chrome の規約に従う。Claude in Chrome がリンク先を開いて読む場合があります） | カードの「Claude in Chrome で要約」ボタンを押したときだけ |
-| 4' | アプリ → Chrome の Gemini（Google） | カードの URL と、要約の依頼文（Chrome の Gemini の入力欄に入力して送信。以後の扱いは Google の Gemini in Chrome の規約に従う） | カードの「Chrome の Gemini で要約」ボタンを押したときだけ |
+| 4' | アプリ → Chrome の Gemini（Google） | カードの URL と、要約の依頼文（Chrome の Gemini の入力欄に入力して送信。以後の扱いは Google の Gemini in Chrome の規約に従う） | カードの「Chrome の Gemini で要約」ボタンを押したとき、または Ctrl を押しながらリンクに重ねて Ctrl を離したとき（重ねたリンクの URL を最大10件まとめて送る。Ctrl と一緒にほかのキーやクリックを押した場合は送らない）だけ |
 | 5 | アプリ → DuckDuckGo（取得できない場合は Bing） | Google 検索の URL に含まれる検索キーワード（Cookie・ログイン情報は送らない） | Google 検索の URL（`google.*/search?q=…`）を要約するとき。Google は JavaScript なしでは検索結果を返さないため、同じキーワードの結果をこれらから取得します |
 
 - Mac 版: 1' はカーソル下の要素を macOS のアクセシビリティ機能で読み取ります（同じ条件・同じ範囲。保存しません）。Chrome などには、ページ内の要素を読めるようにする合図（`AXManualAccessibility`）を最初に1回送ります。API キーはキーチェーン、データは `~/Library/Application Support/URLInsight` に保存します。4' / 4''（Chrome のサイドバーの AI）と 1（Chrome 拡張）は Mac 版にはありません。

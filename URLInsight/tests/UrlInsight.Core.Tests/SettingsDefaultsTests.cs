@@ -18,4 +18,18 @@ public class SettingsDefaultsTests
         store.Save(new AppSettings { AutoPinSummaries = false });
         Assert.False(store.Load().AutoPinSummaries);
     }
+
+    [Fact]
+    public void CtrlHoverToGeminiIsOnByDefaultAndIsSaved()
+    {
+        Assert.True(new AppSettings().CtrlHoverToGemini);
+
+        using var dir = new TempDir();
+        var path = Path.Combine(dir.Path, "settings.json");
+        File.WriteAllText(path, """{"SchemaVersion":1}""");
+        var store = new SettingsStore(path);
+        Assert.True(store.Load().CtrlHoverToGemini);
+        store.Save(new AppSettings { CtrlHoverToGemini = false });
+        Assert.False(store.Load().CtrlHoverToGemini);
+    }
 }

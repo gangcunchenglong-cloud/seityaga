@@ -49,6 +49,9 @@ internal sealed class HoverCoordinator
     private readonly DispatcherTimer _hideTimer;
     /// <summary>カードの「Claude in Chrome で要約」「Chrome の Gemini で要約」ボタンの処理。</summary>
     private readonly ChromeSidePanelAi _chromeAi = new();
+    /// <summary>Ctrl を押しながら重ねたリンク(Ctrl を離したらまとめて Chrome の Gemini に送る)。</summary>
+    private readonly LinkBatch _batch = new();
+    private BatchIndicatorWindow? _batchIndicator;
     /// <summary>ホバーに合わせて内容が切り替わるカード。</summary>
     private CardSession _active;
     /// <summary>固定されて独立したカード。</summary>
@@ -178,6 +181,56 @@ internal sealed class HoverCoordinator
         _localRequestId = NewId();
         Handle(new BrowserMessage { Type = "hoverLink", RequestId = _localRequestId, Url = url, LinkText = linkText });
     });
+
+    // ---------- Ctrl を押しながら重ねたリンクを、カードを出さずにまとめて Chrome の Gemini に送る ----------
+
+    /// <summary>Ctrl を押し始めた。どのスレッドからでも可。</summary>
+    public void OnBatchStarted() => _dispatcher.BeginInvoke(() =>
+    {
+        _batch.Clear();
+        // Ctrl を押しただけ(ショートカット操作など)では何も表示しない。リンクを1件集めた時点で表示する
+        _batchIndicator?.HideNow();
+    });
+
+    /// <summary>Ctrl を押しながらリンクに重ねた。どのスレッドからでも可。</summary>
+    public void OnBatchLink(string url, string? linkText) => _dispatcher.BeginInvoke(() =>
+    {
+        if (_services.Settings.Paused) return;
+        bool added = _batch.Add(url, linkText, _services.IsIgnored);
+        if (!added && !_batch.Overflowed) return;
+        if (_batch.Count == 0) return;
+        _batchIndicator ??= new BatchIndicatorWindow();
+        _batchIndicator.ShowCollecting(BatchLabels(), _batch.Overflowed);
+    });
+
+    /// <summary>Ctrl を離した(send=true)か、ほかのキー・クリックで取り消した(false)。どのスレッドからでも可。</summary>
+    public void OnBatchEnded(bool send) => _dispatcher.BeginInvoke(() =>
+    {
+        var urls = _batch.Urls.ToList();
+        _batch.Clear();
+        if (urls.Count == 0)
+        {
+            _batchIndicator?.HideNow();
+            return;
+        }
+        _batchIndicator ??= new BatchIndicatorWindow();
+        if (!send)
+        {
+            _batchIndicator.ShowResult("まとめて送るのを取り消しました（Ctrl と一緒にほかのキーかクリックが押されました）");
+            return;
+        }
+        AppLog.Info($"batch: sending {urls.Count} links to Gemini");
+        var indicator = _batchIndicator;
+        _chromeAi.Request(SidePanelAi.Gemini, urls, text => _dispatcher.BeginInvoke(() => indicator.ShowResult(text)));
+    });
+
+    private List<string> BatchLabels()
+        => _batch.Urls.Select((u, i) =>
+        {
+            var title = _batch.Titles[i];
+            var domain = UrlPolicy.TryNormalize(u, out var n, out _) ? UrlPolicy.DisplayDomain(n!) : u;
+            return title != null ? $"{title}（{domain}）" : u;
+        }).ToList();
 
     public void OnLocalHoverEnd() => _dispatcher.BeginInvoke(() =>
     {
@@ -398,6 +451,8 @@ internal sealed class HoverCoordinator
         _savingSuspended = true;
         foreach (var s in _pinned.ToList()) Close(s);
         Close(_active);
+        _batchIndicator?.Close();
+        _batchIndicator = null;
     }
 
     private void Close(CardSession s)

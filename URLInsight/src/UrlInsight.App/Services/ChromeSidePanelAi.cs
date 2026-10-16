@@ -6,6 +6,7 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using UrlInsight.App.Platform;
+using UrlInsight.Core.AI;
 using UrlInsight.Core.Diagnostics;
 using UIA = Interop.UIAutomationClient;
 
@@ -26,10 +27,9 @@ internal sealed record SidePanelAi(
     bool ButtonFirst,
     // パネルを開けなかったときの案内。
     string SetupHint,
-    Func<string, string> BuildPrompt)
+    // 依頼文(1件でも複数でも1行。SidePanelPrompts)。
+    Func<IReadOnlyList<string>, string> BuildPrompt)
 {
-    private static string OneLine(string url) => url.Replace('\r', ' ').Replace('\n', ' ').Trim();
-
     /// <summary>
     /// Claude in Chrome(Anthropic の Chrome 拡張機能)。ツールバーの「Claude」ボタン(拡張機能のアイコン)を押してサイドパネルを開く。
     /// ボタンがツールバーに固定されていないときは、Claude in Chrome の既定のショートカット Ctrl+E を送る。
@@ -39,14 +39,14 @@ internal sealed record SidePanelAi(
         "claude", "Claude in Chrome", "Claude",
         NativeMethods.VK_CONTROL, 0x45 /* E */, "Ctrl+E", ButtonFirst: true,
         "Claude in Chrome のパネルを開けませんでした（Chrome に拡張機能「Claude」を入れてログインし、拡張機能のボタンをツールバーに固定してください）",
-        url => $"次のリンク先のページを開いて内容を読み、日本語で3〜5文に要約してください: {OneLine(url)}");
+        SidePanelPrompts.Claude);
 
     /// <summary>Gemini in Chrome。Alt+G(Chrome の Gemini 呼び出しキー)で開き、だめならツールバーの Gemini ボタンを押す。</summary>
     public static readonly SidePanelAi Gemini = new(
         "gemini", "Gemini", "Gemini",
         NativeMethods.VK_MENU, 0x47 /* G */, "Alt+G", ButtonFirst: false,
         "Gemini を開けませんでした（Chrome の設定で「Gemini in Chrome」と Alt+G のショートカットが有効か確認してください）",
-        url => $"次のリンク先のページの内容を、日本語で3〜5文に要約してください: {OneLine(url)}");
+        SidePanelPrompts.Gemini);
 }
 
 /// <summary>
@@ -58,7 +58,7 @@ internal sealed record SidePanelAi(
 /// 3. パネル内の入力欄にキーボードの入力先を移し、入力先が本当にパネルの中かを確かめてから
 ///    依頼文を1文字ずつ入力して Enter を送る(確かめられなければ何も入力しない。Web ページのフォームなどへ誤って入力しないため)
 /// クリップボードは使わない(利用者がコピーした内容を上書きしないため)。
-/// ボタンを押したときだけ動く(カーソルを重ねただけでは動かない)。
+/// カードのボタンを押したとき、または Ctrl を押しながらリンクに重ねて Ctrl を離したとき(まとめて送信)だけ動く。
 /// </summary>
 internal sealed class ChromeSidePanelAi
 {
@@ -79,14 +79,18 @@ internal sealed class ChromeSidePanelAi
     /// URL の要約を Chrome のサイドバーの AI に頼む(UI スレッドから呼ぶ。操作は別スレッドで行う)。
     /// 結果の説明は status に渡す(どのスレッドから呼ばれるかは決まっていない)。
     /// </summary>
-    public void Request(SidePanelAi ai, string url, Action<string> status)
+    public void Request(SidePanelAi ai, string url, Action<string> status) => Request(ai, new[] { url }, status);
+
+    /// <summary>複数の URL の要約を、1回の依頼でまとめて頼む。</summary>
+    public void Request(SidePanelAi ai, IReadOnlyList<string> urls, Action<string> status)
     {
+        if (urls.Count == 0) return;
         if (Interlocked.Exchange(ref _busy, 1) == 1)
         {
             status("Chrome の AI に送信中です。少し待ってください");
             return;
         }
-        // 前面に出す操作は、利用者がボタンを押した直後(このアプリが前面にあるうち)に行う
+        // 前面に出す操作は、利用者の操作(ボタン・Ctrl を離す)の直後に行う
         var chrome = FindChromeWindow();
         if (chrome == IntPtr.Zero)
         {
@@ -95,14 +99,14 @@ internal sealed class ChromeSidePanelAi
             return;
         }
         if (NativeMethods.IsIconic(chrome)) NativeMethods.ShowWindow(chrome, NativeMethods.SW_RESTORE);
-        NativeMethods.SetForegroundWindow(chrome);
+        NativeMethods.BringToFront(chrome);
         status($"{ai.DisplayName} を開いています…");
 
         _ = Task.Run(() =>
         {
             try
             {
-                status(Run(ai, url, chrome));
+                status(Run(ai, urls, chrome));
             }
             catch (Exception ex) when (ex is COMException or InvalidCastException or InvalidOperationException)
             {
@@ -116,9 +120,23 @@ internal sealed class ChromeSidePanelAi
         });
     }
 
-    /// <summary>表示中の Chrome のウィンドウ(いちばん手前のもの)。</summary>
+    /// <summary>
+    /// 依頼先の Chrome のウィンドウ。いま前面にあるのが Chrome ならそのウィンドウ(Chrome のリンクに重ねていた場合)、
+    /// そうでなければ起動中の Chrome のウィンドウ。
+    /// </summary>
     private static IntPtr FindChromeWindow()
     {
+        var fg = NativeMethods.GetAncestor(NativeMethods.GetForegroundWindow(), NativeMethods.GA_ROOT);
+        if (fg != IntPtr.Zero)
+        {
+            NativeMethods.GetWindowThreadProcessId(fg, out var pid);
+            try
+            {
+                using var p = Process.GetProcessById((int)pid);
+                if (string.Equals(p.ProcessName, "chrome", StringComparison.OrdinalIgnoreCase)) return fg;
+            }
+            catch (Exception ex) when (ex is ArgumentException or InvalidOperationException) { }
+        }
         var handles = new HashSet<IntPtr>();
         foreach (var p in Process.GetProcessesByName("chrome"))
         {
@@ -144,8 +162,14 @@ internal sealed class ChromeSidePanelAi
         => root != IntPtr.Zero && NativeMethods.GetAncestor(NativeMethods.GetForegroundWindow(), NativeMethods.GA_ROOT) == root;
 
     /// <returns>結果の説明。</returns>
-    private string Run(SidePanelAi ai, string url, IntPtr root)
+    private string Run(SidePanelAi ai, IReadOnlyList<string> urls, IntPtr root)
     {
+        // 利用者がまだ Ctrl などを押していると、送るキーと組み合わさって別の操作になるため、離されるまで待つ
+        for (int i = 0; i < 30 && (NativeMethods.IsDown(NativeMethods.VK_CONTROL) || NativeMethods.IsDown(NativeMethods.VK_SHIFT)
+                                   || NativeMethods.IsDown(NativeMethods.VK_MENU)); i++) Thread.Sleep(100);
+        if (NativeMethods.IsDown(NativeMethods.VK_CONTROL) || NativeMethods.IsDown(NativeMethods.VK_SHIFT) || NativeMethods.IsDown(NativeMethods.VK_MENU))
+            return "Ctrl などのキーが押されたままのため、送信しませんでした";
+
         // 前面に出るまで少し待つ。出なければキー入力を送らない(別のアプリに入力してしまうため)
         for (int i = 0; i < 10 && !IsForeground(root); i++) Thread.Sleep(100);
         if (!IsForeground(root)) return "Chrome を前面に出せませんでした。Chrome を手前に表示してからもう一度押してください";
@@ -181,7 +205,7 @@ internal sealed class ChromeSidePanelAi
         }
 
         var keys = new List<NativeMethods.INPUT>();
-        foreach (var ch in ai.BuildPrompt(url))
+        foreach (var ch in ai.BuildPrompt(urls))
         {
             keys.Add(NativeMethods.Unicode(ch, false));
             keys.Add(NativeMethods.Unicode(ch, true));
@@ -190,7 +214,9 @@ internal sealed class ChromeSidePanelAi
         Thread.Sleep(120);
         NativeMethods.Send(NativeMethods.Key(NativeMethods.VK_RETURN, false), NativeMethods.Key(NativeMethods.VK_RETURN, true));
         AppLog.Info($"{ai.Id}: prompt sent");
-        return $"{ai.DisplayName} に要約を頼みました（Chrome のサイドバーに表示されます）";
+        return urls.Count == 1
+            ? $"{ai.DisplayName} に要約を頼みました（Chrome のサイドバーに表示されます）"
+            : $"{ai.DisplayName} に {urls.Count} 件の要約をまとめて頼みました（Chrome のサイドバーに表示されます）";
     }
 
     /// <summary>ツールバーのボタンかショートカットでパネルを開く(順番は依頼先ごとに決める)。</summary>

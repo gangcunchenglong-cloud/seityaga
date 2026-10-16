@@ -152,6 +152,52 @@ internal static class NativeMethods
     public static bool Send(params INPUT[] inputs)
         => inputs.Length == 0 || SendInput((uint)inputs.Length, inputs, Marshal.SizeOf<INPUT>()) == inputs.Length;
 
+    // ---------- キーの押下状態・前面の切り替え(Ctrl を押しながらのまとめ送信用) ----------
+
+    public const int VK_SHIFT = 0x10;
+
+    [DllImport("user32.dll")]
+    public static extern short GetAsyncKeyState(int vk);
+
+    /// <summary>そのキーが今押されているか。</summary>
+    public static bool IsDown(int vk) => (GetAsyncKeyState(vk) & 0x8000) != 0;
+
+    [DllImport("user32.dll")]
+    public static extern uint GetWindowThreadProcessId(IntPtr hwnd, out uint processId);
+
+    [DllImport("user32.dll")]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    public static extern bool AttachThreadInput(uint idAttach, uint idAttachTo, [MarshalAs(UnmanagedType.Bool)] bool attach);
+
+    [DllImport("kernel32.dll")]
+    public static extern uint GetCurrentThreadId();
+
+    [DllImport("user32.dll")]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    public static extern bool BringWindowToTop(IntPtr hwnd);
+
+    /// <summary>
+    /// ウィンドウを前面に出す。このアプリが前面にないときは Windows が SetForegroundWindow を拒むことがあるため、
+    /// いま前面にあるウィンドウの入力処理と一時的につないでから切り替える(利用者が Ctrl を離した直後の操作として行う)。
+    /// </summary>
+    public static void BringToFront(IntPtr hwnd)
+    {
+        var fg = GetForegroundWindow();
+        if (fg != IntPtr.Zero && GetAncestor(fg, GA_ROOT) == hwnd) return;
+        uint fgThread = fg == IntPtr.Zero ? 0 : GetWindowThreadProcessId(fg, out _);
+        uint me = GetCurrentThreadId();
+        bool attached = fgThread != 0 && fgThread != me && AttachThreadInput(me, fgThread, true);
+        try
+        {
+            BringWindowToTop(hwnd);
+            SetForegroundWindow(hwnd);
+        }
+        finally
+        {
+            if (attached) AttachThreadInput(me, fgThread, false);
+        }
+    }
+
     public static (RECT work, double scale) MonitorAt(POINT pt)
     {
         var monitor = MonitorFromPoint(pt, MONITOR_DEFAULTTONEAREST);

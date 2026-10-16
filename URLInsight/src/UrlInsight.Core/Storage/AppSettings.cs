@@ -22,6 +22,8 @@ public sealed class AppSettings
     public bool UseUiAutomationHover { get; set; } = true;
     /// <summary>URL にカーソルを重ねたカードをその時点で自動で固定し、要約が出るまで(出たあとも)消さない。</summary>
     public bool AutoPinSummaries { get; set; } = true;
+    /// <summary>Ctrl を押しながらリンクにカーソルを重ねると、カードを出さずにリンクを集め、Ctrl を離したときにまとめて Chrome の Gemini に要約を頼む。</summary>
+    public bool CtrlHoverToGemini { get; set; } = true;
 
     public string ProviderId { get; set; } = "none";
     public string Model { get; set; } = string.Empty;
