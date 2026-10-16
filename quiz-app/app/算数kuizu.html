@@ -1,0 +1,2642 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self'; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none';">
+<title>算数クイズ ｜ 小学校 全単元</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@600;700;900&family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --white:#ffffff;
+  --paper:#f7f9fb;
+  --ink:#1c2430;
+  --ink-soft:#5a6472;
+  --navy:#1a4a8c;
+  --navy-deep:#0f3161;
+  --gold:#e08a2b;
+  --gold-soft:#f3c98a;
+  --line:#e0e4e6;
+  --line-soft:#edf0f1;
+  --good:#1e7a4c;
+  --good-bg:#eef8f2;
+  --bad:#c23b3b;
+  --bad-bg:#fdeeee;
+  --radius:14px;
+  --shadow:0 2px 10px rgba(28,36,48,.06), 0 1px 2px rgba(28,36,48,.04);
+  --shadow-lg:0 10px 30px rgba(15,49,97,.10), 0 2px 8px rgba(15,49,97,.06);
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  background:var(--white);color:var(--ink);
+  font-family:"Noto Sans JP","Hiragino Sans","Meiryo",sans-serif;
+  min-height:100vh;display:flex;flex-direction:column;
+  -webkit-text-size-adjust:100%;
+}
+button{font-family:inherit;}
+
+/* ---------- Header ---------- */
+.site-header{background:var(--white);border-bottom:2px solid var(--navy);position:sticky;top:0;z-index:20;}
+.header-inner{max-width:1060px;margin:0 auto;padding:12px 18px;display:flex;align-items:center;justify-content:space-between;gap:14px;}
+.brand{display:flex;align-items:center;gap:11px;cursor:pointer;}
+.brand-mark{
+  width:42px;height:42px;border-radius:10px;flex-shrink:0;
+  background:linear-gradient(155deg,var(--navy),var(--navy-deep));
+  color:var(--gold-soft);font-family:"Noto Serif JP",serif;font-weight:900;font-size:21px;
+  display:flex;align-items:center;justify-content:center;
+}
+.brand-text h1{font-family:"Noto Serif JP",serif;font-size:18px;margin:0;color:var(--navy-deep);line-height:1.2;font-weight:900;}
+.brand-text p{margin:2px 0 0;font-size:10.5px;color:var(--ink-soft);letter-spacing:.04em;}
+
+.tabs{display:flex;gap:4px;}
+.tab{
+  border:none;background:transparent;color:var(--ink-soft);
+  font-size:13px;font-weight:700;padding:8px 14px;border-radius:8px;cursor:pointer;
+  display:flex;align-items:center;gap:6px;
+}
+.tab:hover{background:var(--paper);color:var(--navy-deep);}
+.tab.active{background:var(--navy);color:#fff;}
+.tab-badge{
+  background:var(--bad);color:#fff;font-size:10px;font-weight:800;
+  min-width:18px;height:18px;border-radius:9px;display:inline-flex;
+  align-items:center;justify-content:center;padding:0 5px;
+}
+.tab-badge.zero{background:#c9ccd1;}
+.tab.active .tab-badge{background:var(--gold-soft);color:var(--navy-deep);}
+a.tab{text-decoration:none;}
+@media (max-width:430px){ .tab{padding:8px 10px;font-size:12px;} .brand-text p{display:none;} }
+
+/* ---------- Layout ---------- */
+main#app{flex:1;max-width:1060px;width:100%;margin:0 auto;padding:26px 18px 60px;}
+.site-footer{text-align:center;padding:18px;font-size:11px;color:#9aa0a8;border-top:1px solid var(--line-soft);}
+
+/* ---------- Hero ---------- */
+.hero{text-align:center;padding:14px 6px 26px;}
+.hero h2{font-family:"Noto Serif JP",serif;font-size:clamp(21px,4vw,30px);color:var(--navy-deep);margin:0 0 10px;font-weight:900;}
+.hero p{color:var(--ink-soft);font-size:13.5px;margin:0 auto;max-width:600px;line-height:1.9;}
+.hero-badges{display:flex;justify-content:center;gap:9px;margin-top:16px;flex-wrap:wrap;}
+.badge{background:var(--paper);border:1px solid var(--line);color:var(--navy-deep);font-size:12px;padding:6px 14px;border-radius:999px;font-weight:700;}
+.badge b{color:var(--gold);font-size:14px;}
+
+/* ---------- Quick cards ---------- */
+.quick-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:8px;}
+@media (max-width:600px){ .quick-row{grid-template-columns:1fr;} }
+.quick-card{
+  border:none;border-radius:var(--radius);padding:18px 20px;cursor:pointer;text-align:left;
+  display:flex;align-items:center;justify-content:space-between;gap:14px;
+  box-shadow:var(--shadow-lg);transition:transform .15s ease;
+}
+.quick-card:hover{transform:translateY(-2px);}
+.quick-card h3{margin:0 0 4px;font-family:"Noto Serif JP",serif;font-size:18px;}
+.quick-card p{margin:0;font-size:11.5px;opacity:.85;line-height:1.6;}
+.quick-go{font-size:12px;font-weight:800;padding:9px 16px;border-radius:999px;white-space:nowrap;}
+.quick-all{background:linear-gradient(150deg,var(--navy),var(--navy-deep));color:#fff;}
+.quick-all .quick-go{background:var(--gold-soft);color:var(--navy-deep);}
+.quick-weak{background:var(--white);border:1.5px solid var(--gold);color:var(--navy-deep);box-shadow:var(--shadow);}
+.quick-weak p{color:var(--ink-soft);opacity:1;}
+.quick-weak .quick-go{background:var(--gold);color:#fff;}
+.quick-weak.disabled{border-color:var(--line);opacity:.6;cursor:default;}
+.quick-weak.disabled:hover{transform:none;}
+.quick-weak.disabled .quick-go{background:var(--line);color:#8c9199;}
+
+.section-label{font-size:13px;font-weight:800;color:var(--navy-deep);margin:28px 0 12px;display:flex;align-items:center;gap:10px;}
+.section-label::after{content:"";flex:1;height:1px;background:var(--line);}
+
+/* ---------- Era grid ---------- */
+.era-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(238px,1fr));gap:14px;}
+.era-card{
+  background:var(--white);border:1px solid var(--line);border-radius:var(--radius);
+  padding:16px 16px 14px 20px;cursor:pointer;box-shadow:var(--shadow);text-align:left;
+  transition:transform .15s ease,box-shadow .15s ease,border-color .15s ease;
+  position:relative;overflow:hidden;
+}
+.era-card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--era-color,var(--navy));}
+.era-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg);border-color:var(--era-color,var(--navy));}
+.era-no{font-size:10.5px;color:var(--ink-soft);font-weight:700;letter-spacing:.08em;}
+.era-card h3{font-family:"Noto Serif JP",serif;margin:3px 0 4px;font-size:18px;color:var(--navy-deep);}
+.era-period{font-size:11px;color:var(--ink-soft);}
+.era-themes{font-size:11px;color:#8a9099;margin-top:7px;line-height:1.6;min-height:2.4em;}
+.era-progress{height:5px;background:var(--line-soft);border-radius:5px;overflow:hidden;margin-top:10px;}
+.era-progress>div{height:100%;background:var(--era-color,var(--navy));border-radius:5px;}
+.era-meta{display:flex;justify-content:space-between;align-items:center;font-size:11.5px;color:var(--ink-soft);margin-top:8px;}
+.era-count{font-weight:800;color:var(--era-color,var(--navy));}
+.era-weak{margin-top:6px;font-size:11px;color:var(--bad);font-weight:700;}
+
+/* ---------- Buttons ---------- */
+.btn{border:none;cursor:pointer;font-weight:700;border-radius:10px;padding:11px 20px;font-size:14px;transition:filter .15s ease,transform .1s ease;}
+.btn:active{transform:scale(.98);}
+.btn-primary{background:var(--navy);color:#fff;}
+.btn-primary:hover{filter:brightness(1.15);}
+.btn-gold{background:var(--gold);color:#fff;}
+.btn-gold:hover{filter:brightness(1.08);}
+.btn-ghost{background:var(--paper);color:var(--navy-deep);border:1px solid var(--line);}
+.btn-ghost:hover{border-color:var(--navy);}
+.btn:disabled{opacity:.5;cursor:not-allowed;}
+
+/* ---------- Setup ---------- */
+.setup-box{max-width:620px;margin:0 auto;background:var(--white);border:1px solid var(--line);border-radius:16px;padding:24px 24px 20px;box-shadow:var(--shadow);}
+.back-link{display:inline-block;color:var(--ink-soft);font-size:13px;cursor:pointer;margin-bottom:14px;font-weight:600;}
+.back-link:hover{color:var(--navy);}
+.setup-title{font-family:"Noto Serif JP",serif;font-size:21px;color:var(--navy-deep);margin:0 0 4px;font-weight:900;}
+.setup-sub{color:var(--ink-soft);font-size:12.5px;margin:0 0 22px;line-height:1.7;}
+.setup-group{margin-bottom:20px;}
+.setup-group-label{font-size:12.5px;font-weight:800;color:var(--navy-deep);margin-bottom:9px;}
+.choice-row{display:flex;gap:9px;flex-wrap:wrap;}
+.choice-pill{
+  border:2px solid var(--line);background:var(--paper);padding:10px 16px;border-radius:10px;
+  cursor:pointer;font-size:13px;font-weight:700;color:var(--ink-soft);text-align:center;flex:1;min-width:96px;
+}
+.choice-pill small{display:block;font-weight:500;font-size:10.5px;margin-top:2px;opacity:.85;}
+.choice-pill.active{border-color:var(--navy);background:var(--navy);color:#fff;}
+.setup-actions{display:flex;justify-content:flex-end;margin-top:6px;}
+
+/* ---------- Quiz ---------- */
+.quiz-wrap{max-width:660px;margin:0 auto;}
+.quiz-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:9px;font-size:12px;color:var(--ink-soft);font-weight:700;}
+.quiz-score{color:var(--navy-deep);}
+.progress-bar{height:7px;background:var(--line-soft);border-radius:7px;overflow:hidden;margin-bottom:20px;}
+.progress-bar>div{height:100%;background:var(--gold);border-radius:7px;transition:width .25s ease;}
+.qcard{background:var(--white);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);padding:24px 22px 20px;}
+.qcard-head{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;}
+.era-tag{font-size:10.5px;font-weight:800;color:var(--era-color,var(--navy));background:var(--paper);border:1px solid var(--line);padding:3px 10px;border-radius:999px;}
+.mode-tag{font-size:10.5px;font-weight:800;padding:3px 10px;border-radius:999px;}
+.mode-tag.choice{background:#eaf3f0;color:var(--navy);}
+.mode-tag.write{background:#fdf1e2;color:var(--gold);}
+.qtext{font-size:16.5px;line-height:1.85;color:var(--ink);font-weight:600;margin:0 0 20px;}
+.choices{display:flex;flex-direction:column;gap:9px;}
+.choice-btn{
+  text-align:left;border:1.5px solid var(--line);background:#fff;border-radius:10px;
+  padding:12px 15px;font-size:14.5px;color:var(--ink);cursor:pointer;display:flex;align-items:center;gap:10px;
+  line-height:1.6;
+}
+.choice-letter{
+  width:23px;height:23px;border-radius:50%;background:var(--paper);border:1px solid var(--line);
+  display:flex;align-items:center;justify-content:center;font-size:11.5px;font-weight:800;color:var(--navy);flex-shrink:0;
+}
+.choice-btn:hover:not(.locked){border-color:var(--navy);background:var(--paper);}
+.choice-btn.correct{border-color:var(--good);background:var(--good-bg);color:var(--good);font-weight:800;}
+.choice-btn.correct .choice-letter{background:var(--good);color:#fff;border-color:var(--good);}
+.choice-btn.wrong{border-color:var(--bad);background:var(--bad-bg);color:var(--bad);font-weight:800;}
+.choice-btn.wrong .choice-letter{background:var(--bad);color:#fff;border-color:var(--bad);}
+.choice-btn.dim{opacity:.5;}
+.choice-btn.locked{cursor:default;}
+
+.answer-input-row{display:flex;gap:9px;}
+.answer-input{flex:1;border:1.5px solid var(--line);border-radius:10px;padding:13px 14px;font-size:15px;font-family:inherit;color:var(--ink);min-width:0;}
+.answer-input:focus{outline:none;border-color:var(--navy);}
+.answer-input.correct{border-color:var(--good);background:var(--good-bg);}
+.answer-input.wrong{border-color:var(--bad);background:var(--bad-bg);}
+.write-hint{font-size:11px;color:#9aa0a8;margin-top:8px;}
+
+.feedback{margin-top:18px;border-radius:12px;padding:14px 16px;font-size:13px;line-height:1.85;display:none;}
+.feedback.show{display:block;}
+.feedback.good{background:var(--good-bg);border:1px solid #c9e6d6;}
+.feedback.bad{background:var(--bad-bg);border:1px solid #f2cccc;}
+.fb-head{font-weight:900;font-size:14.5px;margin-bottom:6px;font-family:"Noto Serif JP",serif;}
+.feedback.good .fb-head{color:var(--good);}
+.feedback.bad .fb-head{color:var(--bad);}
+.fb-yours{font-size:12.5px;color:var(--ink-soft);margin-bottom:2px;}
+.fb-answer{font-weight:800;color:var(--navy-deep);margin-bottom:10px;font-size:14px;}
+.fb-block{color:#374151;margin-top:7px;padding-left:0;}
+.fb-label{
+  display:inline-block;font-size:10.5px;font-weight:800;color:#fff;background:var(--navy);
+  padding:1px 8px;border-radius:4px;margin-right:7px;vertical-align:1px;
+}
+.feedback.bad .fb-label{background:var(--bad);}
+.quiz-actions{display:flex;justify-content:space-between;margin-top:18px;gap:10px;}
+
+/* ---------- Result ---------- */
+.result-box{max-width:640px;margin:0 auto;text-align:center;}
+.result-ring{
+  width:150px;height:150px;border-radius:50%;margin:6px auto 18px;
+  display:flex;align-items:center;justify-content:center;
+  background:conic-gradient(var(--gold) calc(var(--pct)*1%), var(--line-soft) 0);position:relative;
+}
+.result-ring::before{content:"";position:absolute;inset:11px;border-radius:50%;background:#fff;}
+.ring-num{position:relative;font-family:"Noto Serif JP",serif;font-weight:900;font-size:32px;color:var(--navy-deep);}
+.ring-num small{display:block;font-size:11px;color:var(--ink-soft);font-weight:500;}
+.result-title{font-family:"Noto Serif JP",serif;font-size:20px;color:var(--navy-deep);font-weight:900;margin:0 0 6px;}
+.result-sub{color:var(--ink-soft);font-size:12.5px;margin:0 0 22px;line-height:1.7;}
+.result-actions{display:flex;justify-content:center;gap:9px;flex-wrap:wrap;margin-bottom:26px;}
+.wrong-list{text-align:left;border:1px solid var(--line);border-radius:14px;overflow:hidden;}
+.wl-head{background:var(--paper);padding:11px 15px;font-size:12.5px;font-weight:800;color:var(--navy-deep);border-bottom:1px solid var(--line);}
+.wrong-item{padding:13px 15px;border-bottom:1px solid var(--line-soft);font-size:13px;}
+.wrong-item:last-child{border-bottom:none;}
+.wq{color:var(--ink);margin-bottom:6px;line-height:1.7;font-weight:600;}
+.wl-era{display:inline-block;font-size:10px;font-weight:800;color:var(--era-color);border:1px solid currentColor;border-radius:4px;padding:0 5px;margin-right:7px;vertical-align:2px;}
+.wa{color:var(--ink-soft);font-size:12.5px;}
+.wa b{color:var(--good);}
+.wa .mine{color:var(--bad);text-decoration:line-through;margin-right:8px;}
+.wex{color:#8a9099;font-size:11.5px;margin-top:5px;line-height:1.7;}
+.all-correct{text-align:center;color:var(--good);font-weight:700;font-size:13px;padding:24px;background:var(--good-bg);border-radius:12px;}
+.empty-note{text-align:center;color:var(--ink-soft);font-size:12.5px;padding:24px 10px;line-height:1.9;background:var(--paper);border-radius:12px;margin-bottom:18px;}
+
+/* ---------- Review ---------- */
+.review-wrap{max-width:720px;margin:0 auto;}
+.review-head{display:flex;justify-content:space-between;align-items:flex-end;gap:14px;margin-bottom:18px;flex-wrap:wrap;}
+.rh-num{font-size:14px;color:var(--bad);margin-left:6px;}
+.weak-group{border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-bottom:14px;}
+.weak-group-head{
+  background:var(--paper);padding:10px 14px;font-size:13px;font-weight:800;color:var(--navy-deep);
+  border-bottom:1px solid var(--line);border-left:4px solid var(--era-color);
+  display:flex;justify-content:space-between;
+}
+.wg-count{color:var(--ink-soft);font-weight:600;font-size:12px;}
+.weak-item{padding:12px 14px;border-bottom:1px solid var(--line-soft);position:relative;}
+.weak-item:last-child{border-bottom:none;}
+.wi-q{font-size:13px;line-height:1.7;color:var(--ink);padding-right:50px;}
+.wi-a{font-size:12px;color:var(--ink-soft);margin-top:5px;}
+.wi-a b{color:var(--good);}
+.wi-miss{color:var(--bad);font-weight:700;margin-left:8px;}
+.wi-streak{color:var(--gold);font-weight:700;margin-left:8px;}
+.wi-del{position:absolute;right:12px;top:11px;background:none;border:1px solid var(--line);color:#9aa0a8;font-size:11px;padding:3px 9px;border-radius:6px;cursor:pointer;}
+.wi-del:hover{border-color:var(--bad);color:var(--bad);}
+
+/* ---------- Record ---------- */
+.record-wrap{max-width:720px;margin:0 auto;}
+.rec-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:16px 0 22px;}
+.rec-card{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:14px;text-align:center;}
+.rec-card span{display:block;font-size:11px;color:var(--ink-soft);margin-bottom:4px;}
+.rec-card b{font-family:"Noto Serif JP",serif;font-size:22px;color:var(--navy-deep);}
+.rec-table{width:100%;border-collapse:collapse;font-size:12.5px;}
+.rec-table th{background:var(--paper);color:var(--navy-deep);font-size:11.5px;padding:9px 10px;text-align:left;border-bottom:1px solid var(--line);}
+.rec-table td{padding:10px;border-bottom:1px solid var(--line-soft);}
+.rec-table .num{text-align:right;}
+.rec-table td.warn{color:var(--bad);font-weight:700;}
+.rec-dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:7px;vertical-align:1px;}
+.danger-zone{margin-top:26px;text-align:center;}
+
+/* ---------- Toast ---------- */
+.toast{
+  position:fixed;bottom:20px;left:50%;transform:translate(-50%,20px);
+  background:var(--navy-deep);color:#fff;padding:10px 20px;border-radius:999px;
+  font-size:13px;font-weight:700;box-shadow:var(--shadow-lg);
+  opacity:0;pointer-events:none;transition:all .25s ease;z-index:50;
+}
+.toast.show{opacity:1;transform:translate(-50%,0);}
+
+@media (max-width:480px){
+  .setup-box{padding:20px 15px;}
+  .qcard{padding:20px 15px;}
+  .qtext{font-size:15.5px;}
+  main#app{padding:20px 14px 50px;}
+}
+
+/* ---------- 用語辞典（むずかしい語の意味） ---------- */
+.term{
+  border-bottom:1px dotted var(--gold);
+  padding-bottom:1px;
+}
+.qtext .term{font-weight:700;}
+.term-inline{
+  font-size:.72em;
+  font-weight:500;
+  color:var(--ink-soft);
+  border-bottom:none;
+  margin:0 1px;
+  letter-spacing:0;
+}
+.term[data-t]{cursor:pointer;}
+.term[data-t]:hover{background:#fdf1e2;}
+.fb-terms{
+  margin-top:12px;
+  padding-top:10px;
+  border-top:1px dashed rgba(28,36,48,.15);
+}
+.fb-term{
+  font-size:12.5px;
+  color:#374151;
+  line-height:1.8;
+  margin-top:2px;
+}
+.fb-term b{color:var(--navy-deep);}
+
+/* ---------- 出題タイプ ---------- */
+.type-row .choice-pill{min-width:78px;padding:9px 10px;font-size:12.5px;}
+.type-pill small{color:inherit;opacity:.7;}
+.type-pill.empty{opacity:.45;}
+.type-tag{
+  font-size:10.5px;font-weight:800;padding:3px 10px;border-radius:999px;
+  background:#eaf3ea;color:#2e7d5b;
+}
+.qtext{white-space:pre-wrap;}
+</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="header-inner">
+    <div class="brand" onclick="Q.go('home')">
+      <span class="brand-mark">算</span>
+      <div class="brand-text">
+        <h1>算数クイズ</h1>
+        <p>小学校 全単元 対応</p>
+      </div>
+    </div>
+    <nav class="tabs" id="tabs">
+      <button class="tab" data-tab="home"  onclick="Q.go('home')">学習</button>
+      <button class="tab" data-tab="review" onclick="Q.go('review')">苦手<span class="tab-badge" id="tabBadge">0</span></button>
+      <button class="tab" data-tab="record" onclick="Q.go('record')">記録</button>
+      <a class="tab" href="教科選択.html" target="_top" title="教科を選びなおす">⇦教科</a>
+    </nav>
+  </div>
+</header>
+
+<main id="app"></main>
+
+<footer class="site-footer">
+  <p>小学校 全単元対応　／　記録はこの端末のブラウザだけに保存されます</p>
+</footer>
+
+<div id="toast" class="toast"></div>
+<script>
+/* =========================================================
+   採点エンジン ―― 記述の答えを、表記のゆれまで読み取って判定する
+   ========================================================= */
+(function (global) {
+  'use strict';
+
+  var GLOBAL_SYNONYM = [];
+  var OPTIONAL_TAIL = ['のなかま', 'のはたらき', 'のしくみ'];
+  var OPTIONAL_HEAD = [];
+
+  function toHalf(s) {
+    return s.replace(/[Ａ-Ｚａ-ｚ０-９]/g, function (c) {
+      return String.fromCharCode(c.charCodeAt(0) - 0xFEE0);
+    });
+  }
+  function kataToHira(s) {
+    return s.replace(/[ァ-ヶ]/g, function (c) {
+      return String.fromCharCode(c.charCodeAt(0) - 0x60);
+    });
+  }
+  var LOOSE_MAP = {
+    'が': 'か', 'ぎ': 'き', 'ぐ': 'く', 'げ': 'け', 'ご': 'こ',
+    'ざ': 'さ', 'じ': 'し', 'ず': 'す', 'ぜ': 'せ', 'ぞ': 'そ',
+    'だ': 'た', 'ぢ': 'し', 'づ': 'す', 'で': 'て', 'ど': 'と',
+    'ば': 'は', 'び': 'ひ', 'ぶ': 'ふ', 'べ': 'へ', 'ぼ': 'ほ',
+    'ぱ': 'は', 'ぴ': 'ひ', 'ぷ': 'ふ', 'ぺ': 'へ', 'ぽ': 'ほ',
+    'ゃ': 'や', 'ゅ': 'ゆ', 'ょ': 'よ', 'っ': '', 'ぁ': 'あ',
+    'ぃ': 'い', 'ぅ': 'う', 'ぇ': 'え', 'ぉ': 'お', 'ゐ': 'い',
+    'ゑ': 'え', 'を': 'お', 'ー': ''
+  };
+  function loosen(s) {
+    var out = '';
+    for (var i = 0; i < s.length; i++) {
+      var c = s[i];
+      out += (LOOSE_MAP.hasOwnProperty(c) ? LOOSE_MAP[c] : c);
+    }
+    return out;
+  }
+  function stripSymbols(s) {
+    return s.replace(/[\s　]/g, '')
+            .replace(/[「」『』（）()\[\]｛｝{}【】〔〕・,、，\.。｡·／\/\\\-‐−―ー~〜→⇒>＞"'"'!！?？:：;；]/g, '');
+  }
+  function norm(s) {
+    if (s == null) return '';
+    s = String(s);
+    s = toHalf(s);
+    s = s.toLowerCase();
+    s = kataToHira(s);
+    s = stripSymbols(s);
+    return s;
+  }
+  function normLoose(s) { return loosen(norm(s)); }
+  function core(s) {
+    var t = normLoose(s);
+    var changed = true;
+    while (changed) {
+      changed = false;
+      for (var i = 0; i < OPTIONAL_TAIL.length; i++) {
+        var tail = loosen(OPTIONAL_TAIL[i]);
+        if (tail && t.length > tail.length + 1 && t.slice(-tail.length) === tail) {
+          t = t.slice(0, -tail.length);
+          changed = true;
+        }
+      }
+      for (var j = 0; j < OPTIONAL_HEAD.length; j++) {
+        var head = loosen(OPTIONAL_HEAD[j]);
+        if (head && t.length > head.length + 1 && t.slice(0, head.length) === head) {
+          t = t.slice(head.length);
+          changed = true;
+        }
+      }
+    }
+    t = t.replace(/の/g, '');
+    return t;
+  }
+  function editDistance(a, b) {
+    if (a === b) return 0;
+    if (!a.length) return b.length;
+    if (!b.length) return a.length;
+    var prev = new Array(b.length + 1), cur = new Array(b.length + 1), i, j;
+    for (j = 0; j <= b.length; j++) prev[j] = j;
+    for (i = 1; i <= a.length; i++) {
+      cur[0] = i;
+      for (j = 1; j <= b.length; j++) {
+        var cost = (a[i - 1] === b[j - 1]) ? 0 : 1;
+        cur[j] = Math.min(prev[j] + 1, cur[j - 1] + 1, prev[j - 1] + cost);
+      }
+      for (j = 0; j <= b.length; j++) prev[j] = cur[j];
+    }
+    return prev[b.length];
+  }
+  function similarity(a, b) {
+    if (!a.length && !b.length) return 1;
+    var d = editDistance(a, b);
+    return 1 - d / Math.max(a.length, b.length);
+  }
+  function hasKanji(s) { return /[一-鿿㐀-䶿]/.test(s); }
+  function isAllKana(s) { return /^[぀-ヿー\s　]+$/.test(s); }
+  function expandSynonyms(list) {
+    var out = list.slice();
+    for (var i = 0; i < list.length; i++) {
+      var n = normLoose(list[i]);
+      for (var g = 0; g < GLOBAL_SYNONYM.length; g++) {
+        var pair = GLOBAL_SYNONYM[g];
+        var p0 = loosen(norm(pair[0])), p1 = loosen(norm(pair[1]));
+        if (n === p0) out.push(pair[1]);
+        if (n === p1) out.push(pair[0]);
+      }
+    }
+    return out;
+  }
+  function kanjiPart(s) { return norm(s).replace(/[^一-鿿㐀-䶿]/g, ''); }
+  function kanaPart(s) { return loosen(norm(s).replace(/[^぀-ゖー]/g, '')); }
+  function isSubsequence(sub, str) {
+    var i = 0;
+    for (var j = 0; j < str.length && i < sub.length; j++) {
+      if (str[j] === sub[i]) i++;
+    }
+    return i === sub.length;
+  }
+  function mixedKanaKanjiMatch(raw, answer, accepted) {
+    var uK = kanjiPart(raw), uN = kanaPart(raw);
+    if (!uK || uN.length < 2) return false;
+    if (norm(raw).length < norm(answer).length * 0.8) return false;
+    var readings = accepted.filter(function (c) {
+      return isAllKana(c) && kanaPart(c).length >= 2;
+    }).map(kanaPart);
+    if (!readings.length) return false;
+    var kanjiForms = accepted.filter(hasKanji).map(kanjiPart);
+    if (!kanjiForms.length) return false;
+    for (var i = 0; i < kanjiForms.length; i++) {
+      var aK = kanjiForms[i];
+      var kPos = aK.indexOf(uK);
+      if (kPos < 0) {
+        if (!isSubsequence(uK, aK)) continue;
+        for (var k = 0; k < readings.length; k++) {
+          if (readings[k].indexOf(uN) >= 0) return true;
+        }
+        continue;
+      }
+      for (var j = 0; j < readings.length; j++) {
+        var r = readings[j];
+        var nPos = r.indexOf(uN);
+        if (nPos < 0) continue;
+        if (kPos === 0 && aK.length > uK.length) {
+          if (nPos + uN.length === r.length) return true;
+        } else if (kPos + uK.length === aK.length && aK.length > uK.length) {
+          if (nPos === 0) return true;
+        } else {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  function grade(userInput, question) {
+    var raw = (userInput == null ? '' : String(userInput)).trim();
+    var answer = question.a[0];
+    var accepted = expandSynonyms([answer].concat(question.al || []));
+    var distractors = question.a.slice(1);
+
+    if (!raw) {
+      return {
+        ok: false, level: 'blank', score: 0,
+        comment: 'まだ書けていません。わからなくても、思い出せる言葉を一つ書くところから始めましょう。',
+        advice: '習った言葉のうち思い出せるものだけでも手を動かして書く練習が、記述の得点力につながります。'
+      };
+    }
+
+    var uN = norm(raw), uL = normLoose(raw), uC = core(raw);
+
+    for (var i = 0; i < accepted.length; i++) {
+      if (uN === norm(accepted[i])) {
+        var isMain = (norm(accepted[i]) === norm(answer));
+        return {
+          ok: true, level: isMain ? 'perfect' : 'alias', score: 1,
+          comment: isMain
+            ? '完全正解です。用語も正確に書けています。'
+            : '正解です。「' + answer + '」も同じ意味の書き方として覚えておきましょう。',
+          advice: isMain
+            ? '解説まで読んで、「なぜそうなるのか」を自分の言葉で説明できるか確かめておきましょう。'
+            : '入試や漢字テストでは「' + answer + '」の表記で書かせる問題も多くあります。'
+        };
+      }
+    }
+
+    if (isAllKana(raw) && hasKanji(answer)) {
+      for (var k = 0; k < accepted.length; k++) {
+        var accL = normLoose(accepted[k]);
+        if (uL === accL || core(accepted[k]) === uC || similarity(uL, accL) >= 0.85) {
+          return {
+            ok: true, level: 'kana', score: 0.9,
+            comment: '読みは正解です。内容は合っています。',
+            advice: '漢字で書かせる問題も多くあります。「' + answer + '」と漢字で書けるようにしておきましょう。'
+          };
+        }
+      }
+    }
+
+    var best = { sim: 0, target: answer };
+    for (var m = 0; m < accepted.length; m++) {
+      var s1 = similarity(uL, normLoose(accepted[m]));
+      var s2 = similarity(uC, core(accepted[m]));
+      var s = Math.max(s1, s2);
+      if (s > best.sim) { best.sim = s; best.target = accepted[m]; }
+    }
+
+    for (var n2 = 0; n2 < accepted.length; n2++) {
+      if (uC && uC === core(accepted[n2])) {
+        return {
+          ok: true, level: 'typo', score: 0.95,
+          comment: '正解とします。書き方が少しちがいますが、指している内容は同じです。',
+          advice: '模範解答は「' + answer + '」です。答案の形をそろえておくと安心です。'
+        };
+      }
+    }
+
+    var lenRef = Math.max(normLoose(answer).length, 1);
+    var tolerance = lenRef <= 3 ? 0.90 : (lenRef <= 6 ? 0.80 : 0.75);
+    if (best.sim >= tolerance) {
+      return {
+        ok: true, level: 'typo', score: 0.9,
+        comment: '正解とします。ただし一部の字がちがっています。',
+        advice: '正しくは「' + answer + '」です。理科用語は一字ちがうと×になることがあるので、書いて確かめておきましょう。'
+      };
+    }
+
+    for (var d = 0; d < distractors.length; d++) {
+      if (uL === normLoose(distractors[d]) || similarity(uL, normLoose(distractors[d])) >= 0.85) {
+        return {
+          ok: false, level: 'wrong', score: 0,
+          comment: '「' + distractors[d] + '」は、この問題ではよく取りちがえられる語です。正解は「' + answer + '」。',
+          advice: '「' + distractors[d] + '」と「' + answer + '」のちがいを整理しておくと混同しなくなります。'
+        };
+      }
+    }
+
+    var aC = core(answer);
+    if (uC && aC) {
+      if (aC.indexOf(uC) >= 0 && uC.length >= 2) {
+        return {
+          ok: false, level: 'partial', score: 0.5,
+          comment: '惜しい。方向は合っていますが、言葉が足りません。正解は「' + answer + '」。',
+          advice: '答えの中心になる語は書けています。もう少しくわしい言い方まで覚えましょう。'
+        };
+      }
+      if (uC.indexOf(aC) >= 0 && aC.length >= 2) {
+        return {
+          ok: true, level: 'partial', score: 0.8,
+          comment: '正解とします。必要な語は入っていますが、よけいな言葉がついています。',
+          advice: '模範解答は「' + answer + '」です。聞かれたことにぴったり答える長さに切りそろえる練習をしましょう。'
+        };
+      }
+    }
+
+    if (mixedKanaKanjiMatch(raw, answer, accepted)) {
+      return {
+        ok: true, level: 'kana', score: 0.9,
+        comment: '正解とします。漢字とかなが混ざっていますが、内容は合っています。',
+        advice: '模範解答は「' + answer + '」です。かなで書いた部分も漢字で書けるようにしておきましょう。'
+      };
+    }
+    if (/[ぁ-ゖァ-ヶ]/.test(raw) && hasKanji(raw) && hasKanji(answer) && best.sim >= 0.6) {
+      return {
+        ok: true, level: 'kana', score: 0.9,
+        comment: '正解とします。漢字とかなが混ざっていますが、内容は合っています。',
+        advice: '模範解答は「' + answer + '」です。かなで書いた部分も漢字で書けるようにしておきましょう。'
+      };
+    }
+
+    if (best.sim >= 0.55) {
+      return {
+        ok: false, level: 'partial', score: 0.3,
+        comment: '不正解。ただし正解「' + answer + '」にかなり近い書き方でした。',
+        advice: 'あと少しです。声に出して読みながら三回書くと、字の形まで定着します。'
+      };
+    }
+
+    return {
+      ok: false, level: 'wrong', score: 0,
+      comment: '不正解です。正解は「' + answer + '」。',
+      advice: '解説を読んだあと、この問題を「苦手」から出し直して、自分の言葉で答えられるか確かめましょう。'
+    };
+  }
+
+  global.Grader = { grade: grade, norm: norm, normLoose: normLoose, core: core, similarity: similarity };
+})(window);
+
+/* =========================================================
+   問題データ ―― 単元ごとの問題集
+   ========================================================= */
+(function () {
+  window.SANSUU = window.SANSUU || {};
+
+
+window.SANSUU.seisuu = {
+  id: "seisuu", no: "第 1 単元", name: "整数のけいさん", short: "整数",
+  period: "3・4・5・6年", color: "#1a4a8c",
+  themes: "たし算・ひき算・かけ算・わり算の筆算／計算のきまり(かっこ・×÷を先に計算するなど)／がい数／倍数と約数／文章題",
+  questions: [
+{q:"347+568を計算しましょう。", a:["915","913","925","905"], t:"計算", ex:"347+568=915です。"},
+    {q:"902-456を計算しましょう。", a:["446","456","436","454"], t:"計算", ex:"902-456=446です。"},
+    {q:"23×34を計算しましょう。", a:["782","776","792","762"], t:"計算", ex:"23×34=23×30+23×4=690+92=782です。"},
+    {q:"144÷12を計算しましょう。", a:["12","11","13","14"], t:"計算", ex:"12×12=144なので、144÷12=12です。"},
+    {q:"3+4×5を計算しましょう。", a:["23","35","27","20"], t:"計算", ex:"かけ算をたし算より先に計算するので、4×5=20、3+20=23です。"},
+    {q:"(3+4)×5を計算しましょう。", a:["35","23","40","15"], t:"計算", ex:"かっこの中を先に計算するので、3+4=7、7×5=35です。"},
+    {q:"125×8を計算しましょう。", a:["1000","1005","900","1080"], t:"計算", ex:"125×8=1000です。"},
+    {q:"100を7でわったとき、あまりはいくつになりますか。", a:["2","1","3","4"], t:"計算", ex:"7×14=98なので、100-98=2があまりになります。"},
+    {q:"2345を四捨五入して百の位までのがい数で表しましょう。", a:["2300","2400","2000","2350"], ex:"十の位の4を四捨五入すると切り捨てになるので、2300になります。"},
+    {q:"3652を四捨五入して百の位までのがい数で表しましょう。", a:["3700","3600","3650","3000"], ex:"十の位の5を四捨五入すると切り上げになるので、3700になります。"},
+    {q:"次のうち、6の倍数はどれでしょう。", a:["24","20","15","28"], ex:"6×4=24なので、24は6の倍数です。"},
+    {q:"12の約数は全部で何こあるでしょう。", a:["6こ","4こ","5こ","8こ"], ex:"12の約数は1,2,3,4,6,12の6こです。"},
+    {q:"4と6の最小公倍数はいくつでしょう。", a:["12","24","10","6"], ex:"4の倍数(4,8,12…)と6の倍数(6,12…)で最初に共通するのは12です。"},
+    {q:"12と18の最大公約数はいくつでしょう。", a:["6","12","3","9"], ex:"12の約数(1,2,3,4,6,12)と18の約数(1,2,3,6,9,18)で最大の共通の数は6です。"},
+    {q:"次のうち、素数はどれでしょう。", a:["17","21","15","27"], ex:"17は1とその数自身以外に約数がないので素数です。21,15,27はほかの数でわりきれます。"},
+    {q:"1こ85円のりんごを6こ買うと、代金は何円になりますか。", a:["510円","500円","520円","480円"], t:"文章題", ex:"85×6=510円です。"},
+    {q:"色紙が144まいあります。8人で同じ数ずつ分けると、1人分は何まいになりますか。", a:["18まい","16まい","20まい","24まい"], t:"文章題", ex:"144÷8=18まいです。"},
+    {q:"2568+1873を計算しましょう。", a:["4441","4431","4451","4341"], t:"計算", ex:"2568+1873=4441です。"},
+    {q:"5003-1876を計算しましょう。", a:["3127","3227","3137","3117"], t:"計算", ex:"5003-1876=3127です。"},
+    {q:"216×34を計算しましょう。", a:["7344","7244","7434","7334"], t:"計算", ex:"216×34=216×30+216×4=6480+864=7344です。"},
+    {q:"2688÷42を計算しましょう。", a:["64","62","66","68"], t:"計算", ex:"42×64=2688なので、2688÷42=64です。"},
+    {q:"20-(3+4)×2を計算しましょう。", a:["6","13","34","10"], t:"計算", ex:"かっこの中3+4=7を先に計算し、7×2=14、20-14=6です。"},
+    {q:"次のうち、奇数はどれでしょう。", a:["37","42","56","80"], ex:"37は2でわりきれないので奇数です。ほかは2でわりきれる偶数です。"},
+    {q:"バスAは4分おき、バスBは6分おきに同じ停留所を出発します。午前9時に同時に出発したとき、次に同時に出発するのは何分後でしょう。", a:["12分後","24分後","10分後","6分後"], t:"文章題", ex:"4と6の最小公倍数は12なので、12分後にまた同時に出発します。"},
+    {q:"あめが18こ、ガムが24こあります。あまりが出ないように、できるだけ多くの子どもに同じ数ずつ分けたいとき、何人に分けられるでしょう。", a:["6人","4人","8人","12人"], t:"文章題", ex:"18と24の最大公約数は6なので、6人に分けられます。"},
+    {q:"388円のノートと512円のペンを買います。代金の合計を百の位までのがい数にして見積もると約何円でしょう。", a:["約900円","約800円","約1000円","約850円"], t:"文章題", ex:"388円は約400円、512円は約500円になるので、合計は約900円です。"},
+    {q:"10-3×2+4を計算しましょう。", a:["8","18","4","14"], t:"計算", ex:"かけ算を先に計算するので3×2=6、10-6=4、4+4=8です。"},
+    {q:"1本120円のジュースを3本と、1こ150円のパンを2こ買います。代金の合計は何円でしょう。", a:["660円","600円","690円","720円"], t:"文章題", ex:"120×3=360円、150×2=300円で、合計360+300=660円です。"},
+{q:"6412+3789を計算しましょう。", a:["10201","10101","10301","10211"], t:"計算", ex:"6412+3789=10201です。"},
+    {q:"2934+4567を計算しましょう。", a:["7501","7401","7601","7511"], t:"計算", ex:"2934+4567=7501です。"},
+    {q:"7256+1638を計算しましょう。", a:["8894","8794","8994","8904"], t:"計算", ex:"7256+1638=8894です。"},
+    {q:"3421+2999を計算しましょう。", a:["6420","6320","6520","6430"], t:"計算", ex:"3421+2999=6420です。"},
+    {q:"8045+1976を計算しましょう。", a:["10021","9921","10121","10031"], t:"計算", ex:"8045+1976=10021です。"},
+    {q:"5567+2845を計算しましょう。", a:["8412","8312","8512","8422"], t:"計算", ex:"5567+2845=8412です。"},
+    {q:"34521+18642を計算しましょう。", a:["53163","53063","53263","53173"], t:"計算", ex:"34521+18642=53163です。"},
+    {q:"62345+17689を計算しましょう。", a:["80034","79934","80134","80044"], t:"計算", ex:"62345+17689=80034です。"},
+    {q:"7000-3456を計算しましょう。", a:["3544","3644","3444","3554"], t:"計算", ex:"7000-3456=3544です。"},
+    {q:"6543-2876を計算しましょう。", a:["3667","3767","3567","3677"], t:"計算", ex:"6543-2876=3667です。"},
+    {q:"5321-1987を計算しましょう。", a:["3334","3434","3234","3344"], t:"計算", ex:"5321-1987=3334です。"},
+    {q:"9500-6789を計算しましょう。", a:["2711","2811","2611","2721"], t:"計算", ex:"9500-6789=2711です。"},
+    {q:"8100-3456を計算しましょう。", a:["4644","4744","4544","4654"], t:"計算", ex:"8100-3456=4644です。"},
+    {q:"12000-4567を計算しましょう。", a:["7433","7533","7333","7443"], t:"計算", ex:"12000-4567=7433です。"},
+    {q:"54321-27689を計算しましょう。", a:["26632","26732","26532","26642"], t:"計算", ex:"54321-27689=26632です。"},
+    {q:"80000-34567を計算しましょう。", a:["45433","45533","45333","45443"], t:"計算", ex:"80000-34567=45433です。"},
+    {q:"64×29を計算しましょう。", a:["1856","1846","1866","1956"], t:"計算", ex:"64×29=1856です。"},
+    {q:"27×48を計算しましょう。", a:["1296","1286","1306","1396"], t:"計算", ex:"27×48=1296です。"},
+    {q:"342×6を計算しましょう。", a:["2052","2042","2062","2152"], t:"計算", ex:"342×6=2052です。"},
+    {q:"528×7を計算しましょう。", a:["3696","3686","3706","3796"], t:"計算", ex:"528×7=3696です。"},
+    {q:"245×34を計算しましょう。", a:["8330","8320","8340","8430"], t:"計算", ex:"245×34=8330です。"},
+    {q:"372×26を計算しましょう。", a:["9672","9662","9682","9772"], t:"計算", ex:"372×26=9672です。"},
+    {q:"150×24を計算しましょう。", a:["3600","3590","3610","3700"], t:"計算", ex:"150×24=3600です。"},
+    {q:"208×45を計算しましょう。", a:["9360","9350","9370","9460"], t:"計算", ex:"208×45=9360です。"},
+    {q:"168÷14を計算しましょう。", a:["12","11","13","14"], t:"計算", ex:"14×12=168なので、168÷14=12です。"},
+    {q:"315÷15を計算しましょう。", a:["21","20","22","23"], t:"計算", ex:"15×21=315なので、315÷15=21です。"},
+    {q:"528÷24を計算しましょう。", a:["22","21","23","24"], t:"計算", ex:"24×22=528なので、528÷24=22です。"},
+    {q:"513÷19を計算しましょう。", a:["27","26","28","29"], t:"計算", ex:"19×27=513なので、513÷19=27です。"},
+    {q:"414÷23を計算しましょう。", a:["18","17","19","20"], t:"計算", ex:"23×18=414なので、414÷23=18です。"},
+    {q:"226を13でわったとき、商とあまりはいくつになるでしょう。", a:["17あまり5","17あまり6","18あまり5","16あまり5"], t:"計算", ex:"13×17=221、226-221=5なので、商17あまり5です。"},
+    {q:"161を17でわったとき、商とあまりはいくつになるでしょう。", a:["9あまり8","9あまり9","10あまり8","8あまり8"], t:"計算", ex:"17×9=153、161-153=8なので、商9あまり8です。"},
+    {q:"205を24でわったとき、商とあまりはいくつになるでしょう。", a:["8あまり13","8あまり14","9あまり13","7あまり13"], t:"計算", ex:"24×8=192、205-192=13なので、商8あまり13です。"},
+    {q:"311を9でわったとき、商とあまりはいくつになるでしょう。", a:["34あまり5","34あまり6","35あまり5","33あまり5"], t:"計算", ex:"9×34=306、311-306=5なので、商34あまり5です。"},
+    {q:"313を27でわったとき、商とあまりはいくつになるでしょう。", a:["11あまり16","11あまり17","12あまり16","10あまり16"], t:"計算", ex:"27×11=297、313-297=16なので、商11あまり16です。"},
+    {q:"6+3×4を計算しましょう。", a:["18","36","13","30"], t:"計算", ex:"かけ算をたし算より先に計算するので、3×4=12、6+12=18です。"},
+    {q:"(6+3)×4を計算しましょう。", a:["36","18","30","42"], t:"計算", ex:"かっこの中を先に計算するので、6+3=9、9×4=36です。"},
+    {q:"20-4×3+5を計算しましょう。", a:["13","8","53","15"], t:"計算", ex:"かけ算を先に計算するので4×3=12、20-12=8、8+5=13です。"},
+    {q:"(20-4)×(3+5)を計算しましょう。", a:["128","96","136","112"], t:"計算", ex:"かっこの中を先に計算するので20-4=16、3+5=8、16×8=128です。"},
+    {q:"15÷3+2×4を計算しましょう。", a:["13","28","12","20"], t:"計算", ex:"わり算とかけ算をたし算より先に計算するので15÷3=5、2×4=8、5+8=13です。"},
+    {q:"100-(6+4)×5を計算しましょう。", a:["50","70","30","45"], t:"計算", ex:"かっこの中を先に計算するので6+4=10、10×5=50、100-50=50です。"},
+    {q:"8×(9-3)÷4を計算しましょう。", a:["12","24","18","6"], t:"計算", ex:"かっこの中を先に計算するので9-3=6、8×6=48、48÷4=12です。"},
+    {q:"5+6×(7-2)を計算しましょう。", a:["35","55","25","41"], t:"計算", ex:"かっこの中を先に計算するので7-2=5、6×5=30、5+30=35です。"},
+    {q:"36÷(2+4)×3を計算しましょう。", a:["18","12","24","4"], t:"計算", ex:"かっこの中を先に計算するので2+4=6、36÷6=6、6×3=18です。"},
+    {q:"(12-2)×3+7を計算しましょう。", a:["37","13","47","27"], t:"計算", ex:"かっこの中を先に計算するので12-2=10、10×3=30、30+7=37です。"},
+    {q:"4567を四捨五入して百の位までのがい数で表しましょう。", a:["4600","4500","4700","4560"], ex:"十の位の6を四捨五入すると切り上げになるので、4600になります。"},
+    {q:"8123を四捨五入して千の位までのがい数で表しましょう。", a:["8000","9000","8100","8200"], ex:"百の位の1を四捨五入すると切り捨てになるので、8000になります。"},
+    {q:"12456を四捨五入して百の位までのがい数で表しましょう。", a:["12500","12400","12000","12600"], ex:"十の位の5を四捨五入すると切り上げになるので、12500になります。"},
+    {q:"6789を四捨五入して十の位までのがい数で表しましょう。", a:["6790","6780","6800","6700"], ex:"一の位の9を四捨五入すると切り上げになるので、6790になります。"},
+    {q:"3456を四捨五入して千の位までのがい数で表しましょう。", a:["3000","4000","3500","3400"], ex:"百の位の4を四捨五入すると切り捨てになるので、3000になります。"},
+    {q:"29876を四捨五入して千の位までのがい数で表しましょう。", a:["30000","29000","29900","31000"], ex:"百の位の8を四捨五入すると切り上げになるので、30000になります。"},
+    {q:"15500を四捨五入して千の位までのがい数で表しましょう。", a:["16000","15000","15600","14000"], ex:"百の位の5を四捨五入すると切り上げになるので、16000になります。"},
+    {q:"999を四捨五入して百の位までのがい数で表しましょう。", a:["1000","900","990","1100"], ex:"十の位の9を四捨五入すると切り上げになるので、1000になります。"},
+    {q:"36の約数は全部で何こあるでしょう。", a:["9こ","8こ","6こ","12こ"], ex:"36の約数は1,2,3,4,6,9,12,18,36の9こです。"},
+    {q:"28の約数は全部で何こあるでしょう。", a:["6こ","8こ","5こ","4こ"], ex:"28の約数は1,2,4,7,14,28の6こです。"},
+    {q:"8と12の最小公倍数はいくつでしょう。", a:["24","96","4","36"], ex:"8の倍数(8,16,24…)と12の倍数(12,24…)で最初に共通するのは24です。"},
+    {q:"24と36の最大公約数はいくつでしょう。", a:["12","6","24","4"], ex:"24の約数と36の約数で最大の共通の数は12です。"},
+    {q:"6と9の最小公倍数はいくつでしょう。", a:["18","54","3","27"], ex:"6の倍数(6,12,18…)と9の倍数(9,18…)で最初に共通するのは18です。"},
+    {q:"18と30の最大公約数はいくつでしょう。", a:["6","3","9","12"], ex:"18の約数と30の約数で最大の共通の数は6です。"},
+    {q:"9と12の最小公倍数はいくつでしょう。", a:["36","72","3","24"], ex:"9の倍数(9,18,27,36…)と12の倍数(12,24,36…)で最初に共通するのは36です。"},
+    {q:"28と42の最大公約数はいくつでしょう。", a:["14","7","28","21"], ex:"28の約数と42の約数で最大の共通の数は14です。"},
+    {q:"1から20までの整数のうち、素数は何こあるでしょう。", a:["8こ","6こ","7こ","9こ"], ex:"2,3,5,7,11,13,17,19の8こが素数です。"},
+    {q:"3と4の公倍数のうち、50より小さい最大の数はどれでしょう。", a:["48","36","60","24"], ex:"3と4の最小公倍数12の倍数(12,24,36,48,60…)のうち、50より小さい最大の数は48です。"},
+    {q:"50にいちばん近い3の倍数はどれでしょう。", a:["51","48","45","54"], ex:"3の倍数48と51のうち、50との差が小さいのは51(差1)なので51です。"},
+    {q:"次のうち、4の倍数でないものはどれでしょう。", a:["27","16","32","44"], ex:"16=4×4、32=4×8、44=4×11は4の倍数ですが、27は4でわりきれません。"},
+    {q:"次のうち、7の倍数はどれでしょう。", a:["63","61","64","66"], ex:"63=7×9なので7の倍数です。61,64,66は7でわりきれません。"},
+    {q:"次のうち、偶数はどれでしょう。", a:["58","43","61","77"], ex:"58は2でわりきれる偶数です。43,61,77は2でわりきれない奇数です。"},
+    {q:"次のうち、合成数はどれでしょう。", a:["21","13","17","19"], ex:"21=3×7で1とその数自身以外にも約数があるので合成数です。13,17,19は素数です。"},
+    {q:"1本95円のジュースを7本買うと、代金は何円になりますか。", a:["665円","655円","675円","660円"], t:"文章題", ex:"95×7=665円です。"},
+    {q:"1こ120円のパンを3こと、1本80円の牛乳を2本買います。代金の合計は何円でしょう。", a:["520円","500円","540円","480円"], t:"文章題", ex:"120×3=360円、80×2=160円で、合計360+160=520円です。"},
+    {q:"色紙が252まいあります。9人で同じ数ずつ分けると、1人分は何まいになりますか。", a:["28まい","26まい","30まい","24まい"], t:"文章題", ex:"252÷9=28まいです。"},
+    {q:"みかんが100こあります。8人で同じ数ずつ分けると、1人何こになって何こあまりますか。", a:["12こずつで4こあまる","12こずつで8こあまる","13こずつで4こあまる","12こずつで0こあまる"], t:"文章題", ex:"8×12=96、100-96=4なので、12こずつで4こあまります。"},
+    {q:"バスAは8分おき、バスBは12分おきに同じ停留所を出発します。午前9時に同時に出発したとき、次に同時に出発するのは何分後でしょう。", a:["24分後","20分後","96分後","12分後"], t:"文章題", ex:"8と12の最小公倍数は24なので、24分後にまた同時に出発します。"},
+    {q:"長さ36cmと48cmのリボンを、あまりが出ないようにできるだけ長く同じ長さに切り分けたいとき、1本の長さは何cmにすればよいでしょう。", a:["12cm","6cm","24cm","4cm"], t:"文章題", ex:"36と48の最大公約数は12なので、1本12cmにすれば切り分けられます。"},
+    {q:"きょう子さんは683円のノートと419円の下じきを買いました。代金の合計を百の位までのがい数にして見積もると約何円でしょう。", a:["約1100円","約1000円","約1200円","約900円"], t:"文章題", ex:"683円は約700円、419円は約400円になるので、合計は約1100円です。"},
+    {q:"1箱15こ入りのチョコレートが12箱あります。さらにばらのチョコレートが3こあるとき、チョコレートは全部で何こでしょう。", a:["183こ","180こ","185こ","178こ"], t:"文章題", ex:"15×12=180、180+3=183こです。"},
+    {q:"えんぴつが150本あります。12本で1束にすると、何束できて何本あまりますか。", a:["12束できて6本あまる","12束できて0本あまる","13束できて6本あまる","11束できて18本あまる"], t:"文章題", ex:"12×12=144、150-144=6なので、12束できて6本あまります。"},
+    {q:"家から学校までは1250m、家から駅までは890mです。学校までの道のりは駅までの道のりより何m長いでしょう。", a:["360m","350m","370m","460m"], t:"文章題", ex:"1250-890=360mです。"},
+    {q:"1000円を出して380円の消しゴムを買うと、おつりは何円になりますか。", a:["620円","630円","610円","720円"], t:"文章題", ex:"1000-380=620円です。"},
+    {q:"1袋45まい入りの色紙が6袋あります。工作で37まい使うと、残りは何まいでしょう。", a:["233まい","235まい","270まい","197まい"], t:"文章題", ex:"45×6=270、270-37=233まいです。"},
+    {q:"ある動物園の来場者数は1288人でした。これを四捨五入して百の位までのがい数で表すと何人でしょう。", a:["1300人","1200人","1290人","1000人"], t:"文章題", ex:"十の位の8を四捨五入すると切り上げになるので、1300人になります。"},
+    {q:"1こ80円のみかんを3こと、1こ120円のりんごを2こ買って、500円出しました。おつりは何円でしょう。", a:["20円","30円","10円","40円"], t:"文章題", ex:"80×3=240円、120×2=240円で代金の合計は480円、500-480=20円がおつりです。"},
+    {q:"1台45人乗りのバスが8台あります。そのほかに、別の車で13人来ました。全部で何人でしょう。", a:["373人","372人","360人","386人"], t:"文章題", ex:"45×8=360、360+13=373人です。"}
+  ]
+};
+
+window.SANSUU.shousuu = {
+  id: "shousuu", no: "第 2 単元", name: "小数のしくみと計算", short: "小数",
+  period: "3・4・5年", color: "#2e6b8c",
+  themes: "小数の位取り／小数のたし算・ひき算・かけ算・わり算の筆算／小数のわり算のあまり／小数と整数の関係",
+  questions: [
+{q:"3.45の一の位の数字は何でしょう。", a:["3","4","5","0"], ex:"3.45は一の位が3、小数第一位が4、小数第二位が5です。"},
+    {q:"3.45の小数第二位の数字は何でしょう。", a:["5","4","3","0"], ex:"3.45の小数第二位(小数点の2つ右)の数字は5です。"},
+    {q:"0.1を7こ集めるといくつになりますか。", a:["0.7","7","0.07","1.7"], ex:"0.1×7=0.7です。"},
+    {q:"2.6+3.75を計算しましょう。", a:["6.35","6.25","6.45","5.35"], t:"計算", ex:"2.60+3.75=6.35です。"},
+    {q:"5-1.35を計算しましょう。", a:["3.65","3.75","3.55","4.65"], t:"計算", ex:"5.00-1.35=3.65です。"},
+    {q:"4.2×3を計算しましょう。", a:["12.6","12.2","14.2","12.4"], t:"計算", ex:"4.2×3=12.6です。"},
+    {q:"6.4÷4を計算しましょう。", a:["1.6","1.4","16","0.16"], t:"計算", ex:"6.4÷4=1.6です。"},
+    {q:"0.8×0.5を計算しましょう。", a:["0.4","0.13","4","0.04"], t:"計算", ex:"8×5=40なので、小数点の位置を考えると0.8×0.5=0.4です。"},
+    {q:"1.2×2.5を計算しましょう。", a:["3","3.5","2.5","2.7"], t:"計算", ex:"12×25=300で、小数点を2つ分もどすと1.2×2.5=3です。"},
+    {q:"7.5÷2.5を計算しましょう。", a:["3","2.5","30","0.3"], t:"計算", ex:"75÷25=3なので、7.5÷2.5=3です。"},
+    {q:"9.6÷0.8を計算しましょう。", a:["12","1.2","120","10.8"], t:"計算", ex:"96÷8=12なので、9.6÷0.8=12です。"},
+    {q:"17.5mのロープを3mずつに切ると、何本とれて何mあまりますか。", a:["5本とれて2.5mあまる","6本とれて0.5mあまる","5本とれて2mあまる","4本とれて5.5mあまる"], t:"文章題", ex:"3×5=15、17.5-15=2.5なので、5本とれて2.5mあまります。"},
+    {q:"26.4Lの水を4Lずつ入れ物に分けると、何こできて何Lあまりますか。", a:["6こできて2.4Lあまる","7こできて0.4Lあまる","6こできて2Lあまる","5こできて6.4Lあまる"], t:"文章題", ex:"4×6=24、26.4-24=2.4なので、6こできて2.4Lあまります。"},
+    {q:"3.7を10倍するといくつになりますか。", a:["37","0.37","370","3.07"], ex:"小数を10倍すると、小数点が右に1つ動くので37になります。"},
+    {q:"456を100でわるといくつになりますか。", a:["4.56","45.6","0.456","0.0456"], ex:"整数を100でわると、小数点が左に2つ動くので4.56になります。"},
+    {q:"0.24を100倍するといくつになりますか。", a:["24","2.4","0.0024","240"], ex:"小数点を右に2つ動かすと24になります。"},
+    {q:"次のうち、いちばん大きい数はどれでしょう。", a:["0.8","0.75","0.08","0.708"], ex:"0.8=0.800として比べると、0.800>0.750>0.708>0.080なので0.8がいちばん大きい数です。"},
+    {q:"次のうち、いちばん小さい数はどれでしょう。", a:["0.09","0.9","0.19","0.91"], ex:"0.09は0.9や0.19、0.91より小さい数です。"},
+    {q:"12.75+8.6を計算しましょう。", a:["21.35","20.35","21.45","20.75"], t:"計算", ex:"12.75+8.60=21.35です。"},
+    {q:"15-6.28を計算しましょう。", a:["8.72","8.82","9.72","8.62"], t:"計算", ex:"15.00-6.28=8.72です。"},
+    {q:"1mのねだんが80円のリボンを2.5m買うと、代金は何円になりますか。", a:["200円","180円","220円","250円"], t:"文章題", ex:"80×2.5=200円です。"},
+    {q:"2.4Lのジュースを6人で等しく分けると、1人分は何Lになりますか。", a:["0.4L","0.6L","4L","0.04L"], t:"文章題", ex:"2.4÷6=0.4Lです。"},
+    {q:"重さ0.75kgの箱が8こあります。全部の重さは何kgでしょう。", a:["6kg","6.5kg","5.6kg","0.6kg"], t:"文章題", ex:"0.75×8=6kgです。"},
+    {q:"5.208の小数第三位の数字は何でしょう。", a:["8","0","2","5"], ex:"5.208の小数第三位(小数点の3つ右)は8です。"},
+    {q:"0.1を23こ集めた数はいくつでしょう。", a:["2.3","23","0.23","230"], ex:"0.1×23=2.3です。"},
+    {q:"2.35×4を計算しましょう。", a:["9.4","9.2","8.4","9.14"], t:"計算", ex:"235×4=940なので、2.35×4=9.4です。"},
+    {q:"13.4kgの米を3kgずつ袋に入れます。何袋できて何kgあまりますか。", a:["4袋できて1.4kgあまる","4袋できて2.4kgあまる","5袋できて1.4kgあまる","3袋できて4.4kgあまる"], t:"文章題", ex:"3×4=12、13.4-12=1.4なので、4袋できて1.4kgあまります。"},
+{q:"8.62の一の位の数字は何でしょう。", a:["8","6","2","0"], ex:"8.62は一の位が8、小数第一位が6、小数第二位が2です。"},
+    {q:"8.62の小数第一位の数字は何でしょう。", a:["6","8","2","0"], ex:"8.62の小数第一位(小数点の1つ右)の数字は6です。"},
+    {q:"5.917の小数第三位の数字は何でしょう。", a:["7","9","1","5"], ex:"5.917の小数第三位(小数点の3つ右)の数字は7です。"},
+    {q:"12.34の十の位の数字は何でしょう。", a:["1","2","3","4"], ex:"12.34の十の位の数字は1です。"},
+    {q:"46.08の小数第一位の数字は何でしょう。", a:["0","4","6","8"], ex:"46.08の小数第一位(小数点の1つ右)の数字は0です。"},
+    {q:"0.463の小数第二位の数字は何でしょう。", a:["6","4","3","0"], ex:"0.463の小数第二位(小数点の2つ右)の数字は6です。"},
+    {q:"123.4の百の位の数字は何でしょう。", a:["1","2","3","4"], ex:"123.4の百の位の数字は1です。"},
+    {q:"3.081の小数第三位の数字は何でしょう。", a:["1","0","8","3"], ex:"3.081の小数第三位(小数点の3つ右)の数字は1です。"},
+    {q:"次の4つの数の中で、いちばん大きい数はどれでしょう。", a:["0.65","0.605","0.6","0.56"], ex:"0.65>0.605>0.6>0.56なので、いちばん大きいのは0.65です。"},
+    {q:"次の4つの数の中で、いちばん小さい数はどれでしょう。", a:["0.09","0.099","0.19","0.9"], ex:"0.09は0.090として比べると、0.099や0.19、0.9より小さい数です。"},
+    {q:"4つの数を比べたとき、いちばん大きい数はどれでしょう。", a:["1.2","1.199","1.19","1.09"], ex:"1.2=1.200として比べると、1.200>1.199>1.190>1.090なので1.2がいちばん大きい数です。"},
+    {q:"4つの数を比べたとき、いちばん小さい数はどれでしょう。", a:["2.03","2.033","2.3","2.301"], ex:"2.03=2.030として比べると、2.030は2.033、2.3、2.301より小さい数です。"},
+    {q:"0.7と0.68では、どちらが大きいでしょう。", a:["0.7","0.68","同じ","比べられない"], ex:"0.7=0.70として比べると、0.70>0.68なので0.7の方が大きいです。"},
+    {q:"1.05と1.5では、どちらが大きいでしょう。", a:["1.5","1.05","同じ","比べられない"], ex:"1.5=1.50、1.05を比べると1.50>1.05なので1.5の方が大きいです。"},
+    {q:"4.68+3.57を計算しましょう。", a:["8.25","8.15","8.35","9.25"], t:"計算", ex:"4.68+3.57=8.25です。"},
+    {q:"12.34+8.9を計算しましょう。", a:["21.24","21.14","21.34","22.24"], t:"計算", ex:"12.34+8.90=21.24です。"},
+    {q:"0.75+0.68を計算しましょう。", a:["1.43","1.33","1.53","2.43"], t:"計算", ex:"0.75+0.68=1.43です。"},
+    {q:"23.6+14.75を計算しましょう。", a:["38.35","38.25","38.45","39.35"], t:"計算", ex:"23.60+14.75=38.35です。"},
+    {q:"6.45+3.8を計算しましょう。", a:["10.25","10.15","10.35","11.25"], t:"計算", ex:"6.45+3.80=10.25です。"},
+    {q:"18.25+6.79を計算しましょう。", a:["25.04","24.94","25.14","26.04"], t:"計算", ex:"18.25+6.79=25.04です。"},
+    {q:"9.6+7.85を計算しましょう。", a:["17.45","17.35","17.55","18.45"], t:"計算", ex:"9.60+7.85=17.45です。"},
+    {q:"14.08+5.67を計算しましょう。", a:["19.75","19.65","19.85","20.75"], t:"計算", ex:"14.08+5.67=19.75です。"},
+    {q:"32.4+18.65を計算しましょう。", a:["51.05","50.95","51.15","52.05"], t:"計算", ex:"32.40+18.65=51.05です。"},
+    {q:"27.35+9.8を計算しましょう。", a:["37.15","37.05","37.25","38.15"], t:"計算", ex:"27.35+9.80=37.15です。"},
+    {q:"8.5-3.67を計算しましょう。", a:["4.83","4.73","4.93","5.83"], t:"計算", ex:"8.50-3.67=4.83です。"},
+    {q:"12-4.35を計算しましょう。", a:["7.65","7.55","7.75","8.65"], t:"計算", ex:"12.00-4.35=7.65です。"},
+    {q:"6.24-2.8を計算しましょう。", a:["3.44","3.34","3.54","4.44"], t:"計算", ex:"6.24-2.80=3.44です。"},
+    {q:"15.3-8.75を計算しましょう。", a:["6.55","6.45","6.65","7.55"], t:"計算", ex:"15.30-8.75=6.55です。"},
+    {q:"9-3.45を計算しましょう。", a:["5.55","5.45","5.65","6.55"], t:"計算", ex:"9.00-3.45=5.55です。"},
+    {q:"20.15-7.6を計算しましょう。", a:["12.55","12.45","12.65","13.55"], t:"計算", ex:"20.15-7.60=12.55です。"},
+    {q:"11.08-4.29を計算しましょう。", a:["6.79","6.69","6.89","7.79"], t:"計算", ex:"11.08-4.29=6.79です。"},
+    {q:"25-13.75を計算しましょう。", a:["11.25","11.15","11.35","12.25"], t:"計算", ex:"25.00-13.75=11.25です。"},
+    {q:"7.6-2.35を計算しましょう。", a:["5.25","5.15","5.35","6.25"], t:"計算", ex:"7.60-2.35=5.25です。"},
+    {q:"30.4-12.65を計算しましょう。", a:["17.75","17.65","17.85","18.75"], t:"計算", ex:"30.40-12.65=17.75です。"},
+    {q:"3.6×4を計算しましょう。", a:["14.4","1.44","15.4","13.4"], t:"計算", ex:"3.6×4=14.4です。"},
+    {q:"2.75×8を計算しましょう。", a:["22","2.2","21.5","22.5"], t:"計算", ex:"2.75×8=22です。"},
+    {q:"0.9×6を計算しましょう。", a:["5.4","0.54","5.3","6.4"], t:"計算", ex:"0.9×6=5.4です。"},
+    {q:"5.4×3を計算しましょう。", a:["16.2","1.62","16.1","17.2"], t:"計算", ex:"5.4×3=16.2です。"},
+    {q:"1.5×3.2を計算しましょう。", a:["4.8","48","4.7","5.8"], t:"計算", ex:"15×32=480なので、小数点の位置を考えると1.5×3.2=4.8です。"},
+    {q:"0.6×0.9を計算しましょう。", a:["0.54","5.4","0.44","0.64"], t:"計算", ex:"6×9=54なので、小数点の位置を考えると0.6×0.9=0.54です。"},
+    {q:"2.4×1.5を計算しましょう。", a:["3.6","36","3.5","4.6"], t:"計算", ex:"24×15=360なので、小数点の位置を考えると2.4×1.5=3.6です。"},
+    {q:"3.25×4を計算しましょう。", a:["13","1.3","12.5","13.5"], t:"計算", ex:"3.25×4=13です。"},
+    {q:"8.4÷4を計算しましょう。", a:["2.1","0.21","2","2.2"], t:"計算", ex:"8.4÷4=2.1です。"},
+    {q:"9.6÷3を計算しましょう。", a:["3.2","0.32","3.1","3.3"], t:"計算", ex:"9.6÷3=3.2です。"},
+    {q:"0.72÷8を計算しましょう。", a:["0.09","0.9","0.009","0.08"], t:"計算", ex:"72÷8=9なので、小数点の位置を考えると0.72÷8=0.09です。"},
+    {q:"12.6÷6を計算しましょう。", a:["2.1","0.21","2.2","2"], t:"計算", ex:"12.6÷6=2.1です。"},
+    {q:"8.4÷2.1を計算しましょう。", a:["4","0.4","40","4.1"], t:"計算", ex:"84÷21=4なので、8.4÷2.1=4です。"},
+    {q:"6.3÷0.9を計算しましょう。", a:["7","0.7","70","6.9"], t:"計算", ex:"63÷9=7なので、6.3÷0.9=7です。"},
+    {q:"15.6÷1.3を計算しましょう。", a:["12","1.2","120","12.6"], t:"計算", ex:"156÷13=12なので、15.6÷1.3=12です。"},
+    {q:"0.48÷0.06を計算しましょう。", a:["8","0.8","80","7.8"], t:"計算", ex:"48÷6=8なので、0.48÷0.06=8です。"},
+    {q:"20.5mのロープを4mずつに切ると、何本とれて何mあまりますか。", a:["5本とれて0.5mあまる","4本とれて4.5mあまる","6本とれて0.5mあまる","5本とれて1mあまる"], t:"文章題", ex:"4×5=20、20.5-20=0.5なので、5本とれて0.5mあまります。"},
+    {q:"15.3Lの水を2Lずつ入れ物に分けると、何こできて何Lあまりますか。", a:["7こできて1.3Lあまる","6こできて3.3Lあまる","8こできて1.3Lあまる","7こできて1Lあまる"], t:"文章題", ex:"2×7=14、15.3-14=1.3なので、7こできて1.3Lあまります。"},
+    {q:"9.8kgの米を3kgずつ袋に入れると、何袋できて何kgあまりますか。", a:["3袋できて0.8kgあまる","2袋できて3.8kgあまる","4袋できて0.8kgあまる","3袋できて1kgあまる"], t:"文章題", ex:"3×3=9、9.8-9=0.8なので、3袋できて0.8kgあまります。"},
+    {q:"34.6cmのリボンを5cmずつ切ると、何本とれて何cmあまりますか。", a:["6本とれて4.6cmあまる","5本とれて9.6cmあまる","7本とれて4.6cmあまる","6本とれて5cmあまる"], t:"文章題", ex:"5×6=30、34.6-30=4.6なので、6本とれて4.6cmあまります。"},
+    {q:"22.4Lのジュースを6Lずつ入れ物に分けると、何こできて何Lあまりますか。", a:["3こできて4.4Lあまる","2こできて10.4Lあまる","4こできて4.4Lあまる","3こできて4Lあまる"], t:"文章題", ex:"6×3=18、22.4-18=4.4なので、3こできて4.4Lあまります。"},
+    {q:"18.7mのはり金を4mずつ切ると、何本とれて何mあまりますか。", a:["4本とれて2.7mあまる","3本とれて6.7mあまる","5本とれて2.7mあまる","4本とれて3mあまる"], t:"文章題", ex:"4×4=16、18.7-16=2.7なので、4本とれて2.7mあまります。"},
+    {q:"27.3kgの砂糖を5kgずつ袋に入れると、何袋できて何kgあまりますか。", a:["5袋できて2.3kgあまる","4袋できて7.3kgあまる","6袋できて2.3kgあまる","5袋できて2kgあまる"], t:"文章題", ex:"5×5=25、27.3-25=2.3なので、5袋できて2.3kgあまります。"},
+    {q:"13.6Lの油を3Lずつ容器に分けると、何こできて何Lあまりますか。", a:["4こできて1.6Lあまる","3こできて4.6Lあまる","5こできて1.6Lあまる","4こできて2Lあまる"], t:"文章題", ex:"3×4=12、13.6-12=1.6なので、4こできて1.6Lあまります。"},
+    {q:"4.8を10倍するといくつになりますか。", a:["48","4.8","0.48","480"], ex:"小数を10倍すると、小数点が右に1つ動くので48になります。"},
+    {q:"0.35を100倍するといくつになりますか。", a:["35","3.5","0.035","350"], ex:"小数点を右に2つ動かすと35になります。"},
+    {q:"6.2を1000倍するといくつになりますか。", a:["6200","620","62000","0.62"], ex:"小数点を右に3つ動かすと6200になります。"},
+    {q:"350を100でわるといくつになりますか。", a:["3.5","35","0.35","3.05"], ex:"整数を100でわると、小数点が左に2つ動くので3.5になります。"},
+    {q:"8を10でわるといくつになりますか。", a:["0.8","8","0.08","80"], ex:"整数を10でわると、小数点が左に1つ動くので0.8になります。"},
+    {q:"0.09を10倍するといくつになりますか。", a:["0.9","9","0.009","90"], ex:"小数点を右に1つ動かすと0.9になります。"},
+    {q:"9÷4を計算して、商を小数で表しましょう。", a:["2.25","2.2","2.5","2.05"], t:"計算", ex:"9÷4=2.25です。"},
+    {q:"7÷8を計算して、商を小数で表しましょう。", a:["0.875","0.85","0.78","0.087"], t:"計算", ex:"7÷8=0.875です。"},
+    {q:"27÷8を計算して、商を小数で表しましょう。", a:["3.375","3.35","3.75","3.037"], t:"計算", ex:"27÷8=3.375です。"},
+    {q:"21÷4を計算して、商を小数で表しましょう。", a:["5.25","5.2","5.5","5.025"], t:"計算", ex:"21÷4=5.25です。"},
+    {q:"1mの重さが2.4kgの鉄の棒があります。この棒3.5mの重さは何kgでしょう。", a:["8.4kg","8kg","8.6kg","7.4kg"], t:"文章題", ex:"2.4×3.5=8.4kgです。"},
+    {q:"1Lのジュースが150円です。0.8L買うと代金は何円でしょう。", a:["120円","130円","110円","150円"], t:"文章題", ex:"150×0.8=120円です。"},
+    {q:"18.6mのロープを3人で等しく分けると、1人分は何mになりますか。", a:["6.2m","6m","6.5m","5.6m"], t:"文章題", ex:"18.6÷3=6.2mです。"},
+    {q:"びんに入った油の重さは2.4kgで、びんだけの重さは0.3kgです。油だけの重さは何kgでしょう。", a:["2.1kg","2kg","2.7kg","2.3kg"], t:"文章題", ex:"2.4-0.3=2.1kgです。"},
+    {q:"1本1.2Lのペットボトルが6本あります。全部で何Lでしょう。", a:["7.2L","7L","7.8L","6.2L"], t:"文章題", ex:"1.2×6=7.2Lです。"},
+    {q:"重さ0.45kgのりんごが8こあります。全部の重さは何kgでしょう。", a:["3.6kg","3.2kg","4kg","3.5kg"], t:"文章題", ex:"0.45×8=3.6kgです。"},
+    {q:"25.2mのテープを1.4mずつ切ると、何本切れますか。", a:["18本","17本","19本","20本"], t:"文章題", ex:"25.2÷1.4=18本です。"},
+    {q:"牛乳が2.7Lあります。1人に0.3Lずつ配ると、何人に配れますか。", a:["9人","8人","10人","7人"], t:"文章題", ex:"2.7÷0.3=9人です。"},
+    {q:"家から公園までは1.8km、公園から図書館までは2.35kmです。家から図書館まで公園を通っていくと、道のりは何kmでしょう。", a:["4.15km","4.05km","4.25km","3.15km"], t:"文章題", ex:"1.8+2.35=4.15kmです。"},
+    {q:"5mのリボンから2.65m使いました。残りは何mでしょう。", a:["2.35m","2.45m","2.25m","3.35m"], t:"文章題", ex:"5-2.65=2.35mです。"},
+    {q:"1kgが780円の肉を1.5kg買うと、代金は何円でしょう。", a:["1170円","1200円","1150円","1080円"], t:"文章題", ex:"780×1.5=1170円です。"},
+    {q:"9.4Lの水を1.5Lずつ入れ物に分けます。何こできて何Lあまりますか。", a:["6こできて0.4Lあまる","6こできて0.9Lあまる","7こできて0.4Lあまる","5こできて1.9Lあまる"], t:"文章題", ex:"1.5×6=9.0、9.4-9.0=0.4なので、6こできて0.4Lあまります。"},
+    {q:"1辺の長さが3.5cmの正三角形のまわりの長さは何cmでしょう。", a:["10.5cm","10cm","11cm","9.5cm"], t:"文章題", ex:"3.5×3=10.5cmです。"},
+    {q:"42.5kgの荷物を3.4kgずつの箱に分けて入れます。何箱できて何kgあまりますか。", a:["12箱できて1.7kgあまる","12箱できて2.5kgあまる","13箱できて1.7kgあまる","11箱できて5.1kgあまる"], t:"文章題", ex:"3.4×12=40.8、42.5-40.8=1.7なので、12箱できて1.7kgあまります。"},
+    {q:"38÷5を計算して、商を小数で表しましょう。", a:["7.6","7.5","7.8","7.06"], t:"文章題", ex:"38÷5=7.6です。"}
+  ]
+};
+
+window.SANSUU.bunsuu = {
+  id: "bunsuu", no: "第 3 単元", name: "分数のしくみと計算", short: "分数",
+  period: "3・4・5・6年", color: "#3c7d6e",
+  themes: "分数の意味／同分母・異分母のたし算ひき算／約分・通分／分数のかけ算わり算／分数と小数・整数の関係",
+  questions: [
+{q:"1mを5等分した1つ分の長さを分数で表すと何mでしょう。", a:["1/5m","5m","1/4m","2/5m"], ex:"1mを5等分した1つ分は1/5mです。"},
+    {q:"3/4の分母はいくつでしょう。", a:["4","3","7","1"], ex:"分数a/bで下の数(b)を分母、上の数(a)を分子といいます。3/4の分母は4です。"},
+    {q:"2/7+3/7を計算しましょう。", a:["5/7","5/14","1/7","6/14"], t:"計算", ex:"分母が同じなので、分子どうしをたして2+3=5、答えは5/7です。"},
+    {q:"5/8-2/8を計算しましょう。", a:["3/8","3/16","7/8","1/8"], t:"計算", ex:"分母が同じなので、分子どうしをひいて5-2=3、答えは3/8です。"},
+    {q:"1/2+1/3を計算しましょう。", a:["5/6","2/5","1/6","5/5"], t:"計算", ex:"通分すると1/2=3/6、1/3=2/6なので、3/6+2/6=5/6です。"},
+    {q:"3/4-1/6を計算しましょう。", a:["7/12","2/2","1/2","5/12"], t:"計算", ex:"通分すると3/4=9/12、1/6=2/12なので、9/12-2/12=7/12です。"},
+    {q:"6/8を約分しましょう。", a:["3/4","2/3","1/4","3/8"], t:"計算", ex:"6と8の最大公約数2で分母分子をわると、3/4になります。"},
+    {q:"18/24を約分しましょう。", a:["3/4","2/3","9/12","6/8"], t:"計算", ex:"18と24の最大公約数6でわると3/4になります(これ以上約分できません)。"},
+    {q:"1/3と1/4を通分すると、分母はいくつになりますか。", a:["12","7","3","4"], ex:"3と4の最小公倍数は12なので、通分すると分母は12になります。"},
+    {q:"2/5×3を計算しましょう。", a:["6/5","2/15","5/6","6/15"], t:"計算", ex:"分子に整数をかけて2×3=6、答えは6/5です。"},
+    {q:"4/5÷2を計算しましょう。", a:["2/5","8/5","4/10","2/10"], t:"計算", ex:"4/5÷2=4/(5×2)=4/10=2/5(約分)です。"},
+    {q:"2/3×3/4を計算しましょう。", a:["1/2","5/7","6/7","5/12"], t:"計算", ex:"2/3×3/4=(2×3)/(3×4)=6/12=1/2(約分)です。"},
+    {q:"3/4÷2/5を計算しましょう。", a:["15/8","6/20","3/10","8/15"], t:"計算", ex:"わる数の逆数をかけて、3/4×5/2=15/8です。"},
+    {q:"2と1/3を仮分数で表しましょう。", a:["7/3","6/3","5/3","2/3"], ex:"2×3+1=7なので、仮分数にすると7/3です。"},
+    {q:"11/4を帯分数で表しましょう。", a:["2と3/4","2と1/4","3と3/4","1と3/4"], ex:"11÷4=2あまり3なので、2と3/4になります。"},
+    {q:"1/4を小数で表すといくつでしょう。", a:["0.25","0.4","0.14","2.5"], ex:"1÷4=0.25です。"},
+    {q:"0.6を分数で表すと(約分した形で)いくつでしょう。", a:["3/5","6/10","2/5","3/10"], ex:"0.6=6/10で、約分すると3/5になります。"},
+    {q:"6/3を計算すると整数でいくつになりますか。", a:["2","3","6","1"], ex:"6÷3=2なので、6/3=2です。"},
+    {q:"1/2と2/5では、どちらが大きいでしょう。", a:["1/2","2/5","同じ","比べられない"], ex:"通分すると1/2=5/10、2/5=4/10なので、1/2の方が大きいです。"},
+    {q:"ジュースが3/4Lあります。友だちに1/4Lあげると、残りは何Lでしょう。", a:["1/2L","1/4L","3/8L","1L"], t:"文章題", ex:"3/4-1/4=2/4=1/2(約分)なので、残りは1/2Lです。"},
+    {q:"1mのテープを7人で同じ長さに分けると、1人分は何mになりますか。", a:["1/7m","7m","1/6m","1/8m"], t:"文章題", ex:"1mを7等分するので、1人分は1/7mです。"},
+    {q:"1/6mのリボンが5本あります。全部つなげると何mになりますか。", a:["5/6m","1/30m","6/5m","5m"], t:"文章題", ex:"1/6×5=5/6mです。"},
+    {q:"1本2/3Lのジュースが4本あります。全部で何Lでしょう。", a:["8/3L","2/12L","6/3L","8L"], t:"文章題", ex:"2/3×4=8/3Lです。帯分数で表すと2と2/3Lです。"},
+    {q:"5/6mのリボンを2人で等しく分けると、1人分は何mになりますか。", a:["5/12m","5/3m","10/6m","5/6m"], t:"文章題", ex:"5/6÷2=5/(6×2)=5/12mです。"},
+    {q:"1/6と1/9を通分するとき、分母はいくつにすればよいでしょう。", a:["18","54","15","9"], ex:"6と9の最小公倍数は18なので、通分の分母は18にします。"},
+    {q:"3/5の逆数はどれでしょう。", a:["5/3","3/5","5/8","3/8"], ex:"分母と分子を入れかえた数を逆数といい、3/5の逆数は5/3です。"},
+    {q:"1と1/4 + 2と1/2を計算しましょう。", a:["3と3/4","3と1/2","3と1/4","4と1/4"], t:"計算", ex:"整数どうし1+2=3、分数どうし1/4+2/4=3/4を合わせて、3と3/4になります。"},
+{q:"1Lを7等分した3つ分の量を分数で表すと何Lでしょう。", a:["3/7L","7/3L","1/7L","3/1L"], ex:"1Lを7等分した1つ分は1/7Lなので、3つ分は3/7Lです。"},
+    {q:"5/9の分子はいくつでしょう。", a:["5","9","4","14"], ex:"分数a/bで上の数(a)を分子、下の数(b)を分母といいます。5/9の分子は5です。"},
+    {q:"1kgを8等分した1つ分の重さを分数で表すと何kgでしょう。", a:["1/8kg","8kg","1/7kg","2/8kg"], ex:"1kgを8等分した1つ分は1/8kgです。"},
+    {q:"7/12の分母と分子の和はいくつでしょう。", a:["19","5","84","12"], ex:"分母12と分子7の和は12+7=19です。"},
+    {q:"1を5等分した4つ分は、1をもとにするとどれだけでしょう。", a:["4/5","5/4","1/5","4/1"], ex:"1を5等分した1つ分は1/5なので、4つ分は4/5です。"},
+    {q:"3/3のように分子と分母が同じ数の分数は、整数で表すといくつでしょう。", a:["1","0","3","1/3"], ex:"分子と分母が同じ数の分数は1になるので、3/3=1です。"},
+    {q:"3/8+2/8を計算しましょう。", a:["5/8","5/16","1/8","3/8"], t:"計算", ex:"分母が同じなので、分子どうしをたして3+2=5、答えは5/8です。"},
+    {q:"7/9-4/9を計算しましょう。", a:["1/3","11/9","3/18","1/9"], t:"計算", ex:"分母が同じなので、分子どうしをひいて7-4=3、3/9を約分すると1/3です。"},
+    {q:"5/11+3/11を計算しましょう。", a:["8/11","8/22","2/11","9/11"], t:"計算", ex:"分母が同じなので、分子どうしをたして5+3=8、答えは8/11です。"},
+    {q:"9/10-3/10を計算しましょう。", a:["3/5","12/10","3/20","3/10"], t:"計算", ex:"分母が同じなので、分子どうしをひいて9-3=6、6/10を約分すると3/5です。"},
+    {q:"4/7+2/7を計算しましょう。", a:["6/7","6/14","2/7","8/7"], t:"計算", ex:"分母が同じなので、分子どうしをたして4+2=6、答えは6/7です。"},
+    {q:"11/12-5/12を計算しましょう。", a:["1/2","16/12","5/24","1/12"], t:"計算", ex:"分母が同じなので、分子どうしをひいて11-5=6、6/12を約分すると1/2です。"},
+    {q:"3/10+6/10を計算しましょう。", a:["9/10","9/20","3/10","15/10"], t:"計算", ex:"分母が同じなので、分子どうしをたして3+6=9、答えは9/10です。"},
+    {q:"8/9-5/9を計算しましょう。", a:["1/3","13/9","3/18","4/9"], t:"計算", ex:"分母が同じなので、分子どうしをひいて8-5=3、3/9を約分すると1/3です。"},
+    {q:"1/4+1/6を計算しましょう。", a:["5/12","1/5","1/24","5/24"], t:"計算", ex:"通分すると1/4=3/12、1/6=2/12なので、3/12+2/12=5/12です。"},
+    {q:"4/5-1/6を計算しましょう。", a:["19/30","1/2","2/15","13/30"], t:"計算", ex:"通分すると4/5=24/30、1/6=5/30なので、24/30-5/30=19/30です。"},
+    {q:"2/3+1/4を計算しましょう。", a:["11/12","3/7","1/6","3/4"], t:"計算", ex:"通分すると2/3=8/12、1/4=3/12なので、8/12+3/12=11/12です。"},
+    {q:"5/6-1/4を計算しましょう。", a:["7/12","5/24","3/4","1/2"], t:"計算", ex:"通分すると5/6=10/12、1/4=3/12なので、10/12-3/12=7/12です。"},
+    {q:"1/3+1/5を計算しましょう。", a:["8/15","1/4","1/15","2/15"], t:"計算", ex:"通分すると1/3=5/15、1/5=3/15なので、5/15+3/15=8/15です。"},
+    {q:"3/5-1/4を計算しましょう。", a:["7/20","3/20","1/10","11/20"], t:"計算", ex:"通分すると3/5=12/20、1/4=5/20なので、12/20-5/20=7/20です。"},
+    {q:"2/5+3/10を計算しましょう。", a:["7/10","1/3","3/25","1/2"], t:"計算", ex:"通分すると2/5=4/10、3/10はそのままなので、4/10+3/10=7/10です。"},
+    {q:"5/6-1/3を計算しましょう。", a:["1/2","4/3","5/18","1/6"], t:"計算", ex:"通分すると5/6=5/6、1/3=2/6なので、5/6-2/6=3/6=1/2です。"},
+    {q:"8/12を約分しましょう。", a:["2/3","4/6","8/12","1/3"], t:"計算", ex:"8と12の最大公約数4で分母分子をわると、2/3になります。"},
+    {q:"15/20を約分しましょう。", a:["3/4","6/8","15/20","3/5"], t:"計算", ex:"15と20の最大公約数5でわると3/4になります。"},
+    {q:"6/10を約分しましょう。", a:["3/5","6/10","2/5","5/3"], t:"計算", ex:"6と10の最大公約数2でわると3/5になります。"},
+    {q:"9/24を約分しましょう。", a:["3/8","9/24","6/16","4/9"], t:"計算", ex:"9と24の最大公約数3でわると3/8になります。"},
+    {q:"16/20を約分しましょう。", a:["4/5","16/20","8/10","3/5"], t:"計算", ex:"16と20の最大公約数4でわると4/5になります。"},
+    {q:"25/40を約分しましょう。", a:["5/8","25/40","10/16","4/8"], t:"計算", ex:"25と40の最大公約数5でわると5/8になります。"},
+    {q:"1/4と1/6を通分するとき、分母はいくつにすればよいでしょう。", a:["12","24","6","18"], ex:"4と6の最小公倍数は12なので、通分の分母は12にします。"},
+    {q:"2/3と3/4を通分するとき、分母はいくつにすればよいでしょう。", a:["12","7","24","6"], ex:"3と4の最小公倍数は12なので、通分の分母は12にします。"},
+    {q:"1/5と1/3を通分するとき、分母はいくつにすればよいでしょう。", a:["15","8","30","10"], ex:"5と3の最小公倍数は15なので、通分の分母は15にします。"},
+    {q:"3/8と1/6を通分するとき、分母はいくつにすればよいでしょう。", a:["24","48","14","16"], ex:"8と6の最小公倍数は24なので、通分の分母は24にします。"},
+    {q:"2/7と1/3を通分するとき、分母はいくつにすればよいでしょう。", a:["21","10","42","14"], ex:"7と3の最小公倍数は21なので、通分の分母は21にします。"},
+    {q:"3/10と1/4を通分するとき、分母はいくつにすればよいでしょう。", a:["20","40","14","24"], ex:"10と4の最小公倍数は20なので、通分の分母は20にします。"},
+    {q:"3/5×2を計算しましょう。", a:["6/5","3/10","5/6","6/7"], t:"計算", ex:"分子に整数をかけて3×2=6、答えは6/5です。"},
+    {q:"2/7×3を計算しましょう。", a:["6/7","2/21","7/6","5/7"], t:"計算", ex:"分子に整数をかけて2×3=6、答えは6/7です。"},
+    {q:"4/9×3を計算しましょう。", a:["4/3","4/27","3/4","4/12"], t:"計算", ex:"4/9×3=4×3/9=12/9で、約分すると4/3です。"},
+    {q:"5/6×4を計算しましょう。", a:["10/3","5/24","3/10","4/3"], t:"計算", ex:"5/6×4=5×4/6=20/6で、約分すると10/3です。"},
+    {q:"2/3×3/5を計算しましょう。", a:["2/5","5/8","3/5","9/10"], t:"計算", ex:"2/3×3/5=(2×3)/(3×5)=6/15で、約分すると2/5です。"},
+    {q:"3/4×2/9を計算しましょう。", a:["1/6","5/13","2/3","1/3"], t:"計算", ex:"3/4×2/9=(3×2)/(4×9)=6/36で、約分すると1/6です。"},
+    {q:"1と1/2×2/3を計算しましょう。", a:["1","2/3","3/2","4/3"], t:"計算", ex:"1と1/2は仮分数で3/2なので、3/2×2/3=6/6=1です。"},
+    {q:"3/4÷2を計算しましょう。", a:["3/8","3/2","1/8","1/2"], t:"計算", ex:"3/4÷2=3/(4×2)=3/8です。"},
+    {q:"5/6÷3を計算しましょう。", a:["5/18","5/2","5/9","5/6"], t:"計算", ex:"5/6÷3=5/(6×3)=5/18です。"},
+    {q:"7/8÷4を計算しましょう。", a:["7/32","7/2","7/16","7/4"], t:"計算", ex:"7/8÷4=7/(8×4)=7/32です。"},
+    {q:"2/3÷5を計算しましょう。", a:["2/15","10/3","1/4","2/5"], t:"計算", ex:"2/3÷5=2/(3×5)=2/15です。"},
+    {q:"3/4÷1/2を計算しましょう。", a:["3/2","3/8","2/3","1/2"], t:"計算", ex:"わる数の逆数をかけて、3/4×2/1=3/2です。"},
+    {q:"5/6÷2/3を計算しましょう。", a:["5/4","5/9","4/5","6/5"], t:"計算", ex:"わる数の逆数をかけて、5/6×3/2=15/12で、約分すると5/4です。"},
+    {q:"3/5÷9/10を計算しましょう。", a:["2/3","27/50","3/2","9/15"], t:"計算", ex:"わる数の逆数をかけて、3/5×10/9=30/45で、約分すると2/3です。"},
+    {q:"3と2/5を仮分数で表しましょう。", a:["17/5","15/5","13/5","19/5"], ex:"3×5+2=17なので、仮分数にすると17/5です。"},
+    {q:"4と1/3を仮分数で表しましょう。", a:["13/3","12/3","11/3","14/3"], ex:"4×3+1=13なので、仮分数にすると13/3です。"},
+    {q:"17/5を帯分数で表しましょう。", a:["3と2/5","3と1/5","2と2/5","4と2/5"], ex:"17÷5=3あまり2なので、3と2/5になります。"},
+    {q:"23/6を帯分数で表しましょう。", a:["3と5/6","3と4/6","4と5/6","2と5/6"], ex:"23÷6=3あまり5なので、3と5/6になります。"},
+    {q:"2と3/8を仮分数で表しましょう。", a:["19/8","16/8","18/8","21/8"], ex:"2×8+3=19なので、仮分数にすると19/8です。"},
+    {q:"29/4を帯分数で表しましょう。", a:["7と1/4","7と2/4","6と1/4","8と1/4"], ex:"29÷4=7あまり1なので、7と1/4になります。"},
+    {q:"5と1/6を仮分数で表しましょう。", a:["31/6","30/6","29/6","32/6"], ex:"5×6+1=31なので、仮分数にすると31/6です。"},
+    {q:"31/7を帯分数で表しましょう。", a:["4と3/7","4と2/7","3と3/7","5と3/7"], ex:"31÷7=4あまり3なので、4と3/7になります。"},
+    {q:"3/5を小数で表すといくつでしょう。", a:["0.6","0.35","0.53","0.3"], ex:"3÷5=0.6です。"},
+    {q:"7/10を小数で表すといくつでしょう。", a:["0.7","0.107","0.17","0.07"], ex:"7÷10=0.7です。"},
+    {q:"0.75を分数で表すと(約分した形で)いくつでしょう。", a:["3/4","75/100","7/5","3/5"], ex:"0.75=75/100で、約分すると3/4になります。"},
+    {q:"0.4を分数で表すと(約分した形で)いくつでしょう。", a:["2/5","4/10","1/4","2/4"], ex:"0.4=4/10で、約分すると2/5になります。"},
+    {q:"8/4を計算すると整数でいくつになりますか。", a:["2","4","1","8"], ex:"8÷4=2なので、8/4=2です。"},
+    {q:"9/20を小数で表すといくつでしょう。", a:["0.45","0.9","0.209","0.54"], ex:"9÷20=0.45です。"},
+    {q:"2/3と3/5では、どちらが大きいでしょう。", a:["2/3","3/5","同じ","比べられない"], ex:"通分すると2/3=10/15、3/5=9/15なので、2/3の方が大きいです。"},
+    {q:"5/8と1/2では、どちらが大きいでしょう。", a:["5/8","1/2","同じ","比べられない"], ex:"1/2=4/8として比べると、5/8>4/8なので5/8の方が大きいです。"},
+    {q:"次のうち、いちばん大きい分数はどれでしょう。", a:["3/4","1/2","2/5","1/3"], ex:"分母をそろえて比べると、3/4がいちばん大きい分数です。"},
+    {q:"次のうち、いちばん小さい分数はどれでしょう。", a:["1/3","2/5","1/2","3/4"], ex:"分母をそろえて比べると、1/3がいちばん小さい分数です。"},
+    {q:"4/7の逆数はどれでしょう。", a:["7/4","4/7","7/11","4/11"], ex:"分母と分子を入れかえた数が逆数なので、4/7の逆数は7/4です。"},
+    {q:"3の逆数はどれでしょう。", a:["1/3","3","1/4","4"], ex:"3=3/1と考えると、逆数は1/3です。"},
+    {q:"赤いテープが3/5m、青いテープが1/5mあります。合わせて何mでしょう。", a:["4/5m","2/5m","3/10m","4/10m"], t:"文章題", ex:"3/5+1/5=4/5mです。"},
+    {q:"ジュースが7/8Lありました。3/8L飲むと、残りは何Lでしょう。", a:["1/2L","1/8L","3/8L","1/4L"], t:"文章題", ex:"7/8-3/8=4/8=1/2(約分)なので、残りは1/2Lです。"},
+    {q:"1mの重さが3/4kgの棒があります。この棒を2m集めると、重さは何kgでしょう。", a:["3/2kg","5/4kg","3/8kg","4/3kg"], t:"文章題", ex:"3/4×2=3/2kgです。帯分数で表すと1と1/2kgです。"},
+    {q:"5/6mのロープを4人で等しく分けると、1人分は何mになりますか。", a:["5/24m","5/10m","20/6m","1/24m"], t:"文章題", ex:"5/6÷4=5/(6×4)=5/24mです。"},
+    {q:"2/3Lの油が入った容器が5こあります。全部で何Lでしょう。", a:["10/3L","2/15L","7/3L","5/3L"], t:"文章題", ex:"2/3×5=10/3Lです。帯分数で表すと3と1/3Lです。"},
+    {q:"3/4kgの小麦粉を1/8kgずつ袋に分けると、何袋できますか。", a:["6袋","8袋","3袋","12袋"], t:"文章題", ex:"3/4÷1/8=3/4×8=6なので、6袋できます。"},
+    {q:"9/10mのリボンを3/10mずつに切ると、何本切れますか。", a:["3本","6本","9本","30本"], t:"文章題", ex:"9/10÷3/10=9÷3=3なので、3本切れます。"},
+    {q:"畑全体の3/8で野菜を、1/8で花を育てています。野菜と花をあわせると畑全体のどれだけになりますか。", a:["1/2","4/16","1/4","1/8"], t:"文章題", ex:"3/8+1/8=4/8=1/2(約分)です。"},
+    {q:"全体の2/5にあたる24このみかんがあります。全体のみかんは何こでしょう。", a:["60こ","48こ","30こ","72こ"], t:"文章題", ex:"2/5にあたる数が24こなので、1/5にあたる数は24÷2=12こ、全体は12×5=60こです。"},
+    {q:"48ページの本の3/4を読みました。読んだページ数は何ページでしょう。", a:["36ページ","32ページ","40ページ","12ページ"], t:"文章題", ex:"48×3/4=36ページです。"},
+    {q:"1/3mと1/4mのリボンをつなげると、何mになりますか。", a:["7/12m","2/7m","1/12m","5/12m"], t:"文章題", ex:"通分すると1/3=4/12、1/4=3/12なので、4/12+3/12=7/12mです。"},
+    {q:"5/8mのテープから1/4m切り取ると、残りは何mでしょう。", a:["3/8m","3/4m","1/8m","7/8m"], t:"文章題", ex:"通分すると1/4=2/8なので、5/8-2/8=3/8mです。"},
+    {q:"2/9と1/3ではどちらが大きいでしょう。", a:["1/3","2/9","同じ","比べられない"], t:"文章題", ex:"通分すると1/3=3/9なので、3/9>2/9より1/3の方が大きいです。"},
+    {q:"2と1/2mのひもを1/2mずつ切ると、何本切れますか。", a:["5本","4本","6本","10本"], t:"文章題", ex:"2と1/2=5/2、5/2÷1/2=5÷1=5なので、5本切れます。"},
+    {q:"1/4の逆数はいくつでしょう。", a:["4","1/4","2","1/2"], t:"文章題", ex:"分母と分子を入れかえた数を逆数といい、1/4の逆数は4/1=4です。"}
+  ]
+};
+
+window.SANSUU.wariai = {
+  id: "wariai", no: "第 4 単元", name: "割合・百分率・速さ", short: "割合",
+  period: "5・6年", color: "#a06a1e",
+  themes: "割合の意味(もとにする量・比べられる量)／百分率・歩合／割引・割増／速さ・時間・道のりの関係／単位量あたりの大きさ",
+  questions: [
+    {q:"定員40人のバスに32人乗っています。定員に対する割合は何%でしょう。", a:["80%","32%","40%","72%"], ex:"32÷40=0.8で、百分率にすると80%です。"},
+    {q:"600円の3割引きは何円になりますか。", a:["420円","480円","180円","540円"], t:"文章題", ex:"600×0.3=180円引きなので、600-180=420円です。"},
+    {q:"定価500円の品物を2割引きで売ると、代金は何円でしょう。", a:["400円","450円","350円","480円"], t:"文章題", ex:"500×0.2=100円引きなので、500-100=400円です。"},
+    {q:"もとにする量が200、割合が0.35のとき、比べられる量はいくつでしょう。", a:["70","57","35","135"], t:"計算", ex:"200×0.35=70です。"},
+    {q:"比べられる量が90、もとにする量が360のとき、割合は何%でしょう。", a:["25%","40%","36%","10%"], t:"計算", ex:"90÷360=0.25で、百分率にすると25%です。"},
+    {q:"定員に対して120%の人数が入場しています。定員が50人のとき、入場者数は何人でしょう。", a:["60人","55人","70人","65人"], t:"文章題", ex:"50×1.2=60人です。"},
+    {q:"3割は百分率で何%でしょう。", a:["30%","3%","300%","0.3%"], ex:"1割は10%なので、3割は30%です。"},
+    {q:"75%を歩合で表すと何割何分でしょう。", a:["7割5分","75割","0割75分","7割"], ex:"75%=0.75で、1割=10%なので7割5分になります。"},
+    {q:"定価800円の品物が2割増しの値段で売られています。売られている値段は何円でしょう。", a:["960円","840円","880円","1000円"], t:"文章題", ex:"800×0.2=160円増えるので、800+160=960円です。"},
+    {q:"120kmの道のりを2時間で進む自動車の速さは、時速何kmでしょう。", a:["時速60km","時速240km","時速40km","時速80km"], t:"計算", ex:"120÷2=60なので、時速60kmです。"},
+    {q:"時速4kmで歩く人が、3時間歩くと何km進みますか。", a:["12km","7km","1.3km","16km"], t:"計算", ex:"4×3=12kmです。"},
+    {q:"180kmの道のりを時速60kmで進むと、何時間かかりますか。", a:["3時間","2時間","4時間","6時間"], t:"計算", ex:"180÷60=3時間です。"},
+    {q:"分速300mで走る自転車は、時速何kmになりますか。", a:["時速18km","時速3km","時速300km","時速5km"], t:"計算", ex:"300×60=18000mで、1時間に18000m=18km進むので時速18kmです。"},
+    {q:"秒速15mで走る電車は、分速何mになりますか。", a:["分速900m","分速150m","分速15m","分速60m"], t:"計算", ex:"15×60=900なので、分速900mです。"},
+    {q:"5m²の畑で40kgの野菜がとれました。1m²あたり何kgとれた計算になりますか。", a:["8kg","5kg","35kg","45kg"], t:"文章題", ex:"40÷5=8kgです。"},
+    {q:"A町の人口は12000人で面積は6km²、B町の人口は18000人で面積は8km²です。どちらの町が人口密度が高いでしょう。", a:["B町","A町","同じ","比べられない"], t:"文章題", ex:"A町は12000÷6=2000人/km²、B町は18000÷8=2250人/km²なので、B町の方が人口密度が高いです。"},
+    {q:"定価の8割で売ったところ、代金は960円でした。定価は何円だったでしょう。", a:["1200円","1152円","800円","1088円"], t:"文章題", ex:"定価×0.8=960円なので、定価=960÷0.8=1200円です。"},
+    {q:"あるクラスの人数は32人で、そのうち男子は18人です。男子の割合は何%でしょう(小数第一位を四捨五入)。", a:["約56%","約60%","約50%","約44%"], t:"文章題", ex:"18÷32=0.5625で、百分率にすると約56%です。"},
+    {q:"分速80mで歩く人が15分歩くと、何m進みますか。", a:["1200m","1195m","800m","1500m"], t:"文章題", ex:"80×15=1200mです。"},
+    {q:"2400mの道のりを分速120mで歩くと、何分かかりますか。", a:["20分","24分","12分","200分"], t:"文章題", ex:"2400÷120=20分です。"},
+    {q:"定価1500円のかばんを25%引きで買いました。代金は何円でしょう。", a:["1125円","1375円","1250円","1000円"], t:"文章題", ex:"1500×0.25=375円引きなので、1500-375=1125円です。"},
+    {q:"4割2分を百分率で表すと何%でしょう。", a:["42%","4.2%","420%","0.42%"], ex:"1割=10%、1分=1%なので、4割2分=42%です。"},
+    {q:"定員150人の映画館に、定員の60%の人が入っています。入っている人数は何人でしょう。", a:["90人","60人","96人","84人"], t:"文章題", ex:"150×0.6=90人です。"},
+    {q:"270円で3個入りのりんごと、400円で5個入りのりんごでは、どちらが1個あたり安いでしょう。", a:["400円で5個入りのりんご","270円で3個入りのりんご","同じねだん","比べられない"], t:"文章題", ex:"270÷3=90円、400÷5=80円なので、400円で5個入りのりんごの方が1個あたり安いです。"},
+    {q:"Aさんは時速12kmで自転車に乗り、Bさんは分速180mで走ります。どちらが速いでしょう。", a:["Aさん","Bさん","同じ速さ","比べられない"], t:"文章題", ex:"Bさんの速さは180×60=10800mで時速10.8kmなので、時速12kmのAさんの方が速いです。"},
+    {q:"1000円の品物を3割引きで買うとき、代金はいくらになりますか。", a:["700円","300円","730円","670円"], t:"文章題", ex:"1000×0.3=300円引きなので、1000-300=700円です。"},
+    {q:"ある数の40%が32のとき、ある数はいくつでしょう。", a:["80","72","12.8","128"], t:"計算", ex:"ある数×0.4=32なので、ある数=32÷0.4=80です。"},
+    {q:"定員45人の教室に36人が座っています。定員に対する割合は何%でしょう。", a:["80%","36%","45%","64%"], t:"計算", ex:"36÷45=0.8で、百分率にすると80%です。"},
+    {q:"本を80ページ持っていて、60ページ読みました。読んだページの割合は何%でしょう。", a:["75%","60%","80%","25%"], t:"文章題", ex:"60÷80=0.75で、百分率にすると75%です。"},
+    {q:"500mLのペットボトルのうち、350mL飲みました。飲んだ量の割合は何%でしょう。", a:["70%","35%","50%","30%"], t:"文章題", ex:"350÷500=0.7で、百分率にすると70%です。"},
+    {q:"もとにする量が150、割合が0.6のとき、比べられる量はいくつでしょう。", a:["90","60","150","210"], t:"計算", ex:"150×0.6=90です。"},
+    {q:"もとにする量が250、割合が1.2のとき、比べられる量はいくつでしょう。", a:["300","250","210","270"], t:"計算", ex:"250×1.2=300です。"},
+    {q:"比べられる量が45、もとにする量が90のとき、割合は何%でしょう。", a:["50%","45%","90%","25%"], t:"計算", ex:"45÷90=0.5で、百分率にすると50%です。"},
+    {q:"比べられる量が126、割合が0.7のとき、もとにする量はいくつでしょう。", a:["180","88.2","126","210"], t:"計算", ex:"もとにする量=126÷0.7=180です。"},
+    {q:"定員60人の電車に、定員の1.5倍の人数が乗っています。乗っている人数は何人でしょう。", a:["90人","60人","40人","120人"], t:"文章題", ex:"60×1.5=90人です。"},
+    {q:"あるバスケットボールチームは20試合中15試合勝ちました。勝った割合は何%でしょう。", a:["75%","15%","20%","80%"], t:"文章題", ex:"15÷20=0.75で、百分率にすると75%です。"},
+    {q:"定価の何%かにあたる350円が、定価700円のときの比べられる量です。この割合は何%でしょう。", a:["50%","35%","70%","45%"], t:"計算", ex:"350÷700=0.5で、百分率にすると50%です。"},
+    {q:"6割を百分率で表すと何%でしょう。", a:["60%","6%","0.6%","600%"], ex:"1割=10%なので、6割=60%です。"},
+    {q:"125%を歩合で表すと何割何分でしょう。", a:["12割5分","1割25分","125割","2割5分"], ex:"100%=10割、25%=2割5分なので、あわせて12割5分です。"},
+    {q:"9分を百分率で表すと何%でしょう。", a:["9%","0.9%","90%","19%"], ex:"1分=1%なので、9分=9%です。"},
+    {q:"3割8分を小数で表すといくつでしょう。", a:["0.38","3.8","0.038","38"], ex:"1割=0.1、1分=0.01なので、3割8分=0.38です。"},
+    {q:"0.6を歩合で表すと何割でしょう。", a:["6割","0.6割","60割","6分"], ex:"1割=0.1なので、0.6=6割です。"},
+    {q:"4割5分を百分率で表すと何%でしょう。", a:["45%","4.5%","450%","405%"], ex:"1割=10%、1分=1%なので、4割5分=45%です。"},
+    {q:"72%を歩合で表すと何割何分でしょう。", a:["7割2分","72割","0割72分","7割20分"], ex:"70%=7割、2%=2分なので、72%=7割2分です。"},
+    {q:"0.03を百分率で表すと何%でしょう。", a:["3%","0.3%","30%","300%"], ex:"0.01=1%なので、0.03=3%です。"},
+    {q:"8割は小数で表すといくつでしょう。", a:["0.8","8","0.08","80"], ex:"1割=0.1なので、8割=0.8です。"},
+    {q:"2分は百分率で何%でしょう。", a:["2%","20%","0.2%","0.02%"], ex:"1分=1%なので、2分=2%です。"},
+    {q:"定価900円の品物を1割引きで買うと、代金は何円でしょう。", a:["810円","800円","90円","990円"], t:"文章題", ex:"900×0.1=90円引きなので、900-90=810円です。"},
+    {q:"定価1200円の品物が3割引きで売られています。代金は何円でしょう。", a:["840円","360円","900円","960円"], t:"文章題", ex:"1200×0.3=360円引きなので、1200-360=840円です。"},
+    {q:"定価2000円の洋服が15%引きで売られています。代金は何円でしょう。", a:["1700円","1850円","300円","1500円"], t:"文章題", ex:"2000×0.15=300円引きなので、2000-300=1700円です。"},
+    {q:"仕入れ値400円の品物に3割の利益を見込んで定価をつけました。定価は何円でしょう。", a:["520円","400円","120円","480円"], t:"文章題", ex:"400×1.3=520円です。"},
+    {q:"定価600円の品物が1割5分引きで売られています。代金は何円でしょう。", a:["510円","450円","540円","570円"], t:"文章題", ex:"600×0.15=90円引きなので、600-90=510円です。"},
+    {q:"定価の2割増しの値段が1440円のとき、定価は何円でしょう。", a:["1200円","1350円","1728円","1152円"], t:"文章題", ex:"定価×1.2=1440円なので、定価=1440÷1.2=1200円です。"},
+    {q:"定価800円の品物を25%引きで買いました。代金は何円でしょう。", a:["600円","550円","700円","650円"], t:"文章題", ex:"800×0.25=200円引きなので、800-200=600円です。"},
+    {q:"去年の入場者数は1500人で、今年は2割増えました。今年の入場者数は何人でしょう。", a:["1800人","1650人","1200人","1300人"], t:"文章題", ex:"1500×1.2=1800人です。"},
+    {q:"定価の3割引きで買ったところ、支払った金額は1400円でした。定価は何円でしょう。", a:["2000円","1820円","1980円","2100円"], t:"文章題", ex:"定価×0.7=1400円なので、定価=1400÷0.7=2000円です。"},
+    {q:"仕入れ値2000円の商品に4割の利益を見込んで定価をつけると、定価は何円でしょう。", a:["2800円","2400円","800円","2080円"], t:"文章題", ex:"2000×1.4=2800円です。"},
+    {q:"240kmの道のりを4時間で進む電車の速さは、時速何kmでしょう。", a:["時速60km","時速40km","時速240km","時速96km"], t:"計算", ex:"240÷4=60なので、時速60kmです。"},
+    {q:"時速90kmで走る自動車が3時間走ると、何km進みますか。", a:["270km","30km","93km","360km"], t:"計算", ex:"90×3=270kmです。"},
+    {q:"450kmの道のりを時速90kmで進むと、何時間かかりますか。", a:["5時間","4時間","6時間","50時間"], t:"計算", ex:"450÷90=5時間です。"},
+    {q:"分速70mで歩く人が、20分歩くと何m進みますか。", a:["1400m","1390m","350m","900m"], t:"計算", ex:"70×20=1400mです。"},
+    {q:"1800mの道のりを分速60mで歩くと、何分かかりますか。", a:["30分","20分","40分","108000分"], t:"計算", ex:"1800÷60=30分です。"},
+    {q:"秒速20mで走る新幹線は、分速何mになりますか。", a:["分速1200m","分速200m","分速20m","分速120m"], t:"計算", ex:"20×60=1200なので、分速1200mです。"},
+    {q:"分速500mで走る電車は、時速何kmになりますか。", a:["時速30km","時速3km","時速500km","時速50km"], t:"計算", ex:"500×60=30000mで1時間に30000m=30km進むので時速30kmです。"},
+    {q:"秒速5mで泳ぐ人が、10秒間に進む距離は何mでしょう。", a:["50m","15m","5m","500m"], t:"計算", ex:"5×10=50mです。"},
+    {q:"時速72kmで走る車は、秒速何mになりますか。", a:["秒速20m","秒速72m","秒速12m","秒速7.2m"], t:"計算", ex:"72km=72000mで、72000÷3600=20なので秒速20mです。"},
+    {q:"家から駅まで2.4kmあります。分速80mで歩くと何分かかりますか。", a:["30分","24分","20分","40分"], t:"文章題", ex:"2.4km=2400mで、2400÷80=30分です。"},
+    {q:"Aさんは12kmを2時間で歩き、Bさんは15kmを3時間で歩きました。どちらが速いでしょう。", a:["Aさん","Bさん","同じ速さ","比べられない"], t:"文章題", ex:"Aさんは12÷2=時速6km、Bさんは15÷3=時速5kmなので、Aさんの方が速いです。"},
+    {q:"時速4.5kmで歩く人が、40分間歩くと何km進みますか。", a:["3km","2.7km","1.8km","6.75km"], t:"文章題", ex:"40分は時間にすると2/3時間なので、4.5×2/3=3kmです。"},
+    {q:"分速250mで走るバスが1時間20分走ると、何km進みますか。", a:["20km","18.75km","16.67km","30km"], t:"文章題", ex:"1時間20分は80分なので、250×80=20000m=20kmです。"},
+    {q:"360kmを4時間30分で走る新幹線の時速は何kmでしょう。", a:["時速80km","時速72km","時速90km","時速40km"], t:"計算", ex:"4時間30分は4.5時間なので、360÷4.5=80kmです。"},
+    {q:"秒速8mで走る人が100m走るのにかかる時間は何秒でしょう。", a:["12.5秒","8秒","800秒","1.25秒"], t:"計算", ex:"100÷8=12.5秒です。"},
+    {q:"6m²の花だんに42kgの肥料をまきました。1m²あたり何kgの肥料をまいた計算になりますか。", a:["7kg","6kg","36kg","48kg"], t:"文章題", ex:"42÷6=7kgです。"},
+    {q:"ある自動車は40Lのガソリンで480km走ります。1Lあたり何km走る計算になりますか。", a:["12km","10km","440km","520km"], t:"文章題", ex:"480÷40=12kmです。"},
+    {q:"C市の人口は21000人で面積は7km²です。人口密度は1km²あたり何人でしょう。", a:["3000人","3人","21000人","14000人"], t:"文章題", ex:"21000÷7=3000人です。"},
+    {q:"D市の人口は45000人で面積は15km²、E市の人口は56000人で面積は16km²です。どちらの人口密度が高いでしょう。", a:["E市","D市","同じ","比べられない"], t:"文章題", ex:"D市は45000÷15=3000人/km²、E市は56000÷16=3500人/km²なので、E市の方が人口密度が高いです。"},
+    {q:"150円で6本のえんぴつを買いました。えんぴつ1本あたりの値段は何円でしょう。", a:["25円","24円","30円","20円"], t:"文章題", ex:"150÷6=25円です。"},
+    {q:"360円で8個のみかんを買いました。みかん1個あたりの値段は何円でしょう。", a:["45円","40円","50円","36円"], t:"文章題", ex:"360÷8=45円です。"},
+    {q:"8人で1600個のおり紙を折ります。1人あたり何個折る計算になりますか。", a:["200個","160個","800個","100個"], t:"文章題", ex:"1600÷8=200個です。"},
+    {q:"5kgで750円の米があります。この米1kgあたりの値段は何円でしょう。", a:["150円","125円","175円","100円"], t:"文章題", ex:"750÷5=150円です。"},
+    {q:"F町の面積は9km²で人口は27000人です。1km²あたりの人口は何人でしょう。", a:["3000人","300人","27000人","9000人"], t:"文章題", ex:"27000÷9=3000人です。"},
+    {q:"12Lで24kmしか走れない古い車と、10Lで25km走れる新しい車では、どちらが燃費が良いでしょう。", a:["新しい車","古い車","同じ燃費","比べられない"], t:"文章題", ex:"古い車は24÷12=2km/L、新しい車は25÷10=2.5km/Lなので、新しい車の方が燃費が良いです。"},
+    {q:"9m²の畑から108kgのじゃがいもがとれました。1m²あたり何kgとれた計算になりますか。", a:["12kg","9kg","96kg","120kg"], t:"文章題", ex:"108÷9=12kgです。"},
+    {q:"500gで400円のお肉と、300gで270円のお肉では、どちらが100gあたり安いでしょう。", a:["500gで400円のお肉","300gで270円のお肉","同じ値段","比べられない"], t:"文章題", ex:"500gの肉は400÷5=100gあたり80円、300gの肉は270÷3=100gあたり90円なので、500gで400円のお肉の方が安いです。"},
+    {q:"定員80人の会議室に定員の90%の人が集まりました。集まった人数は何人でしょう。", a:["72人","90人","8人","88人"], t:"文章題", ex:"80×0.9=72人です。"},
+    {q:"50人のクラスで、視力が1.0以上の人は40%でした。視力が1.0以上の人は何人でしょう。", a:["20人","40人","10人","30人"], t:"文章題", ex:"50×0.4=20人です。"},
+    {q:"定価の40%にあたる金額が240円のとき、定価は何円でしょう。", a:["600円","96円","840円","480円"], t:"計算", ex:"定価×0.4=240円なので、定価=240÷0.4=600円です。"},
+    {q:"ある池の水を全体の3割抜いたところ、残りは210Lになりました。もとの水の量は何Lでしょう。", a:["300L","273L","280L","330L"], t:"文章題", ex:"残り70%が210Lなので、もとの量=210÷0.7=300Lです。"},
+    {q:"定価1800円の本を2割引きで買いました。支払った金額は何円でしょう。", a:["1440円","360円","1620円","1500円"], t:"文章題", ex:"1800×0.8=1440円です。"},
+    {q:"去年500人だった来場者が今年は400人になりました。今年の来場者数は去年の何%でしょう。", a:["80%","20%","125%","75%"], t:"計算", ex:"400÷500=0.8で、百分率にすると80%です。"},
+    {q:"定価の120%の値段で売ったところ、1800円になりました。定価は何円でしょう。", a:["1500円","2160円","1440円","1650円"], t:"計算", ex:"定価×1.2=1800円なので、定価=1800÷1.2=1500円です。"},
+    {q:"8kmの道のりの4分の3を歩いたとき、歩いた道のりは何kmでしょう。", a:["6km","2km","4km","7km"], t:"計算", ex:"8×3/4=6kmです。"},
+    {q:"定価2500円の商品を、割引後1750円で買いました。何%引きだったでしょう。", a:["30%","25%","35%","70%"], t:"計算", ex:"割引額は2500-1750=750円で、750÷2500=0.3なので30%引きです。"},
+    {q:"はじめに持っていたお金の40%にあたる600円を使いました。はじめに持っていたお金は何円でしょう。", a:["1500円","900円","240円","2400円"], t:"文章題", ex:"はじめのお金×0.4=600円なので、はじめのお金=600÷0.4=1500円です。"},
+    {q:"定価の3割5分引きで買ったところ、代金は1300円でした。定価は何円でしょう。", a:["2000円","1755円","1950円","1859円"], t:"文章題", ex:"残り6割5分(0.65)が1300円なので、定価=1300÷0.65=2000円です。"},
+    {q:"分速60mで15分歩いたあと、分速90mで10分歩きました。合計で何m進みましたか。", a:["1800m","1500m","900m","2700m"], t:"文章題", ex:"60×15=900m、90×10=900mで、あわせて1800mです。"},
+    {q:"時速60kmで3時間、時速40kmで1時間走った車の、合計の道のりは何kmでしょう。", a:["220km","200km","240km","180km"], t:"文章題", ex:"60×3=180km、40×1=40kmで、あわせて220kmです。"},
+    {q:"A店では3本200円のジュース、B店では5本300円の同じジュースを売っています。1本あたりの値段が安いのはどちらでしょう。", a:["B店","A店","同じ値段","比べられない"], t:"文章題", ex:"A店は200÷3≈66.7円、B店は300÷5=60円なので、B店の方が安いです。"},
+    {q:"12人で3600円を均等に払うとき、1人あたり何円払うことになりますか。", a:["300円","250円","360円","400円"], t:"文章題", ex:"3600÷12=300円です。"},
+    {q:"水そうに毎分15Lずつ水を入れると、40分でいっぱいになりました。この水そうの容積は何Lでしょう。", a:["600L","550L","400L","640L"], t:"文章題", ex:"15×40=600Lです。"},
+    {q:"定価に対して3割引きで売った品物の代金は、定価の何%にあたりますか。", a:["70%","30%","130%","60%"], t:"計算", ex:"100%-30%=70%です。"},
+    {q:"12kmの道のりを時速4kmで歩くと何時間かかりますか。", a:["3時間","4時間","2時間","48時間"], t:"計算", ex:"12÷4=3時間です。"},
+    {q:"定価の8割5分にあたる値段で買ったところ、1700円でした。定価は何円でしょう。", a:["2000円","1445円","2380円","1955円"], t:"文章題", ex:"定価×0.85=1700円なので、定価=1700÷0.85=2000円です。"},
+    {q:"ある試験を受けた60人のうち、合格したのは45人でした。合格した割合は何%でしょう。", a:["75%","45%","60%","80%"], t:"文章題", ex:"45÷60=0.75で、百分率にすると75%です。"},
+    {q:"定員に対して75%の人が乗っているバスに36人乗っています。このバスの定員は何人でしょう。", a:["48人","27人","45人","50人"], t:"文章題", ex:"定員×0.75=36人なので、定員=36÷0.75=48人です。"},
+    {q:"秒速12mで走る人が、5分間走り続けると何m進みますか。", a:["3600m","60m","720m","1800m"], t:"計算", ex:"5分=300秒なので、12×300=3600mです。"},
+    {q:"定価3000円の品物を2割引きで買い、そのあとさらにクーポンで500円引きになりました。支払った金額は何円でしょう。", a:["1900円","2000円","1600円","2400円"], t:"文章題", ex:"3000×0.8=2400円、そこから500円引くと1900円です。"}
+  ]
+};
+
+window.SANSUU.heimen = {
+  id: "heimen", no: "第 5 単元", name: "平面図形", short: "平面",
+  period: "3・4・5・6年", color: "#6a4a9c",
+  themes: "角度の性質(三角形・四角形の内角の和)／多角形／円と円周率／面積の公式(三角形・四角形・円)／合同と拡大図・縮図",
+  questions: [
+    {q:"三角形の3つの角の大きさの和は何度でしょう。", a:["180度","360度","90度","270度"], t:"図形", ex:"三角形の内角の和はつねに180度です。"},
+    {q:"四角形の4つの角の大きさの和は何度でしょう。", a:["360度","180度","270度","720度"], t:"図形", ex:"四角形は対角線で2つの三角形に分けられ、180×2=360度になります。"},
+    {q:"三角形の2つの角がそれぞれ50度と60度のとき、残りの1つの角は何度でしょう。", a:["70度","60度","80度","110度"], t:"図形", ex:"180-50-60=70度です。"},
+    {q:"正三角形の1つの角の大きさは何度でしょう。", a:["60度","90度","45度","120度"], t:"図形", ex:"正三角形は3つの角がすべて等しく、180÷3=60度です。"},
+    {q:"正方形の1つの角の大きさは何度でしょう。", a:["90度","60度","120度","180度"], t:"図形", ex:"正方形の角はすべて直角(90度)です。"},
+    {q:"辺の数が6つある多角形を何というでしょう。", a:["六角形","五角形","七角形","八角形"], t:"図形", ex:"辺(と頂点)が6つある多角形を六角形といいます。"},
+    {q:"円周率はおよそいくつとして計算することが多いでしょう。", a:["3.14","3.41","3.1","3.2"], t:"図形", ex:"円周率は約3.14として計算することが多いです(実際は無限に続く数です)。"},
+    {q:"直径10cmの円の円周の長さは何cmでしょう(円周率3.14)。", a:["31.4cm","15.7cm","62.8cm","30cm"], t:"図形", ex:"円周=直径×円周率なので、10×3.14=31.4cmです。"},
+    {q:"半径5cmの円の円周の長さは何cmでしょう(円周率3.14)。", a:["31.4cm","15.7cm","62.8cm","78.5cm"], t:"図形", ex:"直径は5×2=10cmなので、円周=10×3.14=31.4cmです。"},
+    {q:"底辺8cm、高さ5cmの三角形の面積は何cm²でしょう。", a:["20cm²","40cm²","13cm²","30cm²"], t:"図形", ex:"三角形の面積=底辺×高さ÷2なので、8×5÷2=20cm²です。"},
+    {q:"たて6cm、横9cmの長方形の面積は何cm²でしょう。", a:["54cm²","15cm²","45cm²","60cm²"], t:"図形", ex:"長方形の面積=たて×横なので、6×9=54cm²です。"},
+    {q:"1辺7cmの正方形の面積は何cm²でしょう。", a:["49cm²","28cm²","14cm²","35cm²"], t:"図形", ex:"正方形の面積=1辺×1辺なので、7×7=49cm²です。"},
+    {q:"底辺12cm、高さ6cmの平行四辺形の面積は何cm²でしょう。", a:["72cm²","36cm²","18cm²","60cm²"], t:"図形", ex:"平行四辺形の面積=底辺×高さなので、12×6=72cm²です。"},
+    {q:"上底4cm、下底8cm、高さ5cmの台形の面積は何cm²でしょう。", a:["30cm²","60cm²","20cm²","24cm²"], t:"図形", ex:"台形の面積=(上底+下底)×高さ÷2なので、(4+8)×5÷2=30cm²です。"},
+    {q:"対角線が6cmと8cmのひし形の面積は何cm²でしょう。", a:["24cm²","48cm²","14cm²","28cm²"], t:"図形", ex:"ひし形の面積=対角線×対角線÷2なので、6×8÷2=24cm²です。"},
+    {q:"半径5cmの円の面積は何cm²でしょう(円周率3.14)。", a:["78.5cm²","31.4cm²","15.7cm²","157cm²"], t:"図形", ex:"円の面積=半径×半径×円周率なので、5×5×3.14=78.5cm²です。"},
+    {q:"直径12cmの円の面積は何cm²でしょう(円周率3.14)。", a:["113.04cm²","37.68cm²","56.52cm²","144cm²"], t:"図形", ex:"半径は12÷2=6cmなので、面積=6×6×3.14=113.04cm²です。"},
+    {q:"形も大きさも同じで、ぴったり重ね合わせることができる図形の関係を何というでしょう。", a:["合同","相似","対称","平行"], t:"図形", ex:"形も大きさも同じ図形どうしを合同であるといいます。"},
+    {q:"ある図形を2倍に拡大した図で、もとの図形の辺の長さが3cmだった辺は何cmになりますか。", a:["6cm","9cm","1.5cm","3cm"], t:"図形", ex:"2倍に拡大すると辺の長さも2倍になるので、3×2=6cmです。"},
+    {q:"実際の長さが400mの道を1/1000の縮図にかくと、縮図上では何cmになりますか。", a:["40cm","4cm","400cm","0.4cm"], t:"図形", ex:"400m=40000cmで、1000分の1にすると40000÷1000=40cmです。"},
+    {q:"2本の直線が交わってできる4つの角のうち、向かい合う角の大きさの関係はどうなっていますか。", a:["等しい","たすと180度になる","たすと90度になる","つねに90度になる"], t:"図形", ex:"向かい合う角(対頂角)の大きさはつねに等しくなります。"},
+    {q:"五角形の内角の和は何度でしょう。", a:["540度","360度","450度","720度"], t:"図形", ex:"多角形の内角の和は(辺の数-2)×180度で求められるので、(5-2)×180=540度です。"},
+    {q:"二等辺三角形で、等しい2つの角のうち1つが70度のとき、もう1つの等しい角は何度でしょう。", a:["70度","110度","40度","55度"], t:"図形", ex:"二等辺三角形は2つの角が等しいので、もう1つも70度です。"},
+    {q:"たて15m、横20mの長方形の形をした畑の面積は何m²でしょう。", a:["300m²","35m²","70m²","150m²"], t:"文章題", ex:"15×20=300m²です。"},
+    {q:"底辺14cm、高さ10cmの三角形の面積は何cm²でしょう。", a:["70cm²","140cm²","24cm²","35cm²"], t:"図形", ex:"14×10÷2=70cm²です。"},
+    {q:"周の長さが62.8cmの円の直径は何cmでしょう(円周率3.14)。", a:["20cm","10cm","31.4cm","40cm"], t:"図形", ex:"円周=直径×3.14なので、直径=62.8÷3.14=20cmです。"},
+    {q:"すべての辺の長さが等しく、すべての角の大きさも等しい多角形を何というでしょう。", a:["正多角形","合同な図形","対称な図形","相似な図形"], t:"図形", ex:"辺の長さと角の大きさがすべて等しい多角形を正多角形といいます。"},
+    {q:"三角形の2つの角がそれぞれ45度と80度のとき、残りの1つの角は何度でしょう。", a:["55度","65度","45度","75度"], t:"図形", ex:"180-45-80=55度です。"},
+    {q:"四角形の4つの角のうち3つが90度、80度、95度のとき、残りの1つの角は何度でしょう。", a:["95度","85度","100度","90度"], t:"図形", ex:"360-90-80-95=95度です。"},
+    {q:"二等辺三角形の頂角(等しくない角)が40度のとき、底角はそれぞれ何度でしょう。", a:["70度","80度","65度","75度"], t:"図形", ex:"(180-40)÷2=70度です。"},
+    {q:"正五角形の1つの内角の大きさは何度でしょう。", a:["108度","100度","120度","90度"], t:"図形", ex:"内角の和は540度で、540÷5=108度です。"},
+    {q:"正六角形の1つの内角の大きさは何度でしょう。", a:["120度","108度","135度","100度"], t:"図形", ex:"内角の和は720度で、720÷6=120度です。"},
+    {q:"六角形の内角の和は何度でしょう。", a:["720度","540度","900度","480度"], t:"図形", ex:"(6-2)×180=720度です。"},
+    {q:"七角形の内角の和は何度でしょう。", a:["900度","720度","1080度","630度"], t:"図形", ex:"(7-2)×180=900度です。"},
+    {q:"八角形の内角の和は何度でしょう。", a:["1080度","900度","1260度","720度"], t:"図形", ex:"(8-2)×180=1080度です。"},
+    {q:"1つの内角が135度である正多角形は何角形でしょう。", a:["八角形","六角形","九角形","十角形"], t:"図形", ex:"外角は180-135=45度で、360÷45=8なので八角形です。"},
+    {q:"ある三角形の2つの内角が55度と65度のとき、この2つの角ととなり合う外角は何度でしょう(外角はとなり合わない2つの内角の和に等しい)。", a:["120度","60度","110度","130度"], t:"図形", ex:"55+65=120度です。"},
+    {q:"2本の平行線に1本の直線が交わるとき、同位角の関係にある角の大きさはどうなっていますか。", a:["等しい","たすと180度になる","たすと90度になる","つねに直角になる"], t:"図形", ex:"平行線に1本の直線が交わるとき、同位角はつねに等しくなります。"},
+    {q:"2本の平行線に1本の直線が交わるとき、錯角の関係にある角の大きさはどうなっていますか。", a:["等しい","たすと180度になる","たすと90度になる","つねに0度になる"], t:"図形", ex:"平行線に1本の直線が交わるとき、錯角はつねに等しくなります。"},
+    {q:"二等辺三角形で、底角がそれぞれ55度のとき、頂角は何度でしょう。", a:["70度","55度","65度","110度"], t:"図形", ex:"180-55×2=70度です。"},
+    {q:"三角形をどのように組み合わせても、できる四角形の内角の和は何度でしょう。", a:["360度","180度","720度","270度"], t:"図形", ex:"四角形の内角の和はつねに360度です。"},
+    {q:"1つの外角が72度である正多角形は何角形でしょう。", a:["正五角形","正六角形","正四角形","正八角形"], t:"図形", ex:"外角の和は360度なので、360÷72=5で正五角形です。"},
+    {q:"正多角形の外角の和はつねに何度でしょう。", a:["360度","180度","720度","540度"], t:"図形", ex:"正多角形の外角の和はいつも360度になります。"},
+    {q:"四角形の内角のうち3つが100度、70度、110度のとき、残りの角は何度でしょう。", a:["80度","90度","70度","85度"], t:"図形", ex:"360-100-70-110=80度です。"},
+    {q:"三角形の1つの角が90度で、もう1つの角が35度のとき、残りの角は何度でしょう。", a:["55度","45度","65度","60度"], t:"図形", ex:"180-90-35=55度です。"},
+    {q:"正方形の対角線が交わってできる角は何度でしょう。", a:["90度","45度","60度","180度"], t:"図形", ex:"正方形の対角線はたがいに垂直に交わるので90度です。"},
+    {q:"二等辺三角形の頂角が100度のとき、底角はそれぞれ何度でしょう。", a:["40度","50度","45度","80度"], t:"図形", ex:"(180-100)÷2=40度です。"},
+    {q:"辺の数が9つある多角形を何というでしょう。", a:["九角形","八角形","十角形","七角形"], t:"図形", ex:"辺が9つある多角形を九角形といいます。"},
+    {q:"辺の数が10ある多角形を何というでしょう。", a:["十角形","九角形","十一角形","八角形"], t:"図形", ex:"辺が10ある多角形を十角形といいます。"},
+    {q:"3本の辺でできている多角形を何というでしょう。", a:["三角形","四角形","五角形","二角形"], t:"図形", ex:"3本の辺でできている図形は三角形です。"},
+    {q:"辺の長さがすべて等しく、角の大きさもすべて等しい三角形を何というでしょう。", a:["正三角形","二等辺三角形","直角三角形","不等辺三角形"], t:"図形", ex:"3辺と3角がすべて等しい三角形を正三角形といいます。"},
+    {q:"2つの辺の長さが等しい三角形を何というでしょう。", a:["二等辺三角形","正三角形","直角三角形","不等辺三角形"], t:"図形", ex:"2つの辺の長さが等しい三角形を二等辺三角形といいます。"},
+    {q:"1つの角が直角である三角形を何というでしょう。", a:["直角三角形","二等辺三角形","正三角形","鈍角三角形"], t:"図形", ex:"1つの角が90度である三角形を直角三角形といいます。"},
+    {q:"4つの辺の長さがすべて等しい四角形を何というでしょう(角の大きさは問いません)。", a:["ひし形","正方形","長方形","台形"], t:"図形", ex:"4辺の長さがすべて等しい四角形をひし形といいます。"},
+    {q:"向かい合う1組の辺だけが平行な四角形を何というでしょう。", a:["台形","平行四辺形","ひし形","長方形"], t:"図形", ex:"1組の辺だけが平行な四角形を台形といいます。"},
+    {q:"向かい合う2組の辺がそれぞれ平行な四角形を何というでしょう。", a:["平行四辺形","台形","ひし形","長方形"], t:"図形", ex:"2組の辺がそれぞれ平行な四角形を平行四辺形といいます。"},
+    {q:"4つの角がすべて等しい(すべて直角の)四角形を何というでしょう。", a:["長方形","正方形","ひし形","台形"], t:"図形", ex:"角がすべて直角の四角形を長方形といいます。"},
+    {q:"直径20cmの円の円周の長さは何cmでしょう(円周率3.14)。", a:["62.8cm","31.4cm","125.6cm","20cm"], t:"図形", ex:"20×3.14=62.8cmです。"},
+    {q:"半径8cmの円の円周の長さは何cmでしょう(円周率3.14)。", a:["50.24cm","25.12cm","100.48cm","24cm"], t:"図形", ex:"直径は16cmなので、16×3.14=50.24cmです。"},
+    {q:"円周の長さが37.68cmの円の直径は何cmでしょう(円周率3.14)。", a:["12cm","6cm","18.84cm","24cm"], t:"図形", ex:"37.68÷3.14=12cmです。"},
+    {q:"円周の長さが94.2cmの円の半径は何cmでしょう(円周率3.14)。", a:["15cm","30cm","47.1cm","10cm"], t:"図形", ex:"直径は94.2÷3.14=30cmなので、半径は15cmです。"},
+    {q:"半径10cmの円の面積は何cm²でしょう(円周率3.14)。", a:["314cm²","62.8cm²","100cm²","157cm²"], t:"図形", ex:"10×10×3.14=314cm²です。"},
+    {q:"直径20cmの円の面積は何cm²でしょう(円周率3.14)。", a:["314cm²","62.8cm²","400cm²","157cm²"], t:"図形", ex:"半径は10cmなので、10×10×3.14=314cm²です。"},
+    {q:"半径4cmの円の面積は何cm²でしょう(円周率3.14)。", a:["50.24cm²","25.12cm²","16cm²","12.56cm²"], t:"図形", ex:"4×4×3.14=50.24cm²です。"},
+    {q:"半径6cmの円の面積は何cm²でしょう(円周率3.14)。", a:["113.04cm²","37.68cm²","36cm²","56.52cm²"], t:"図形", ex:"6×6×3.14=113.04cm²です。"},
+    {q:"円の直径が14cmのとき、円周の長さは何cmでしょう(円周率3.14)。", a:["43.96cm","21.98cm","153.86cm","28cm"], t:"図形", ex:"14×3.14=43.96cmです。"},
+    {q:"半径3cmの円の面積は何cm²でしょう(円周率3.14)。", a:["28.26cm²","18.84cm²","9cm²","14.13cm²"], t:"図形", ex:"3×3×3.14=28.26cm²です。"},
+    {q:"底辺10cm、高さ7cmの三角形の面積は何cm²でしょう。", a:["35cm²","70cm²","17cm²","24.5cm²"], t:"図形", ex:"10×7÷2=35cm²です。"},
+    {q:"底辺15cm、高さ4cmの三角形の面積は何cm²でしょう。", a:["30cm²","60cm²","19cm²","37.5cm²"], t:"図形", ex:"15×4÷2=30cm²です。"},
+    {q:"たて8cm、横13cmの長方形の面積は何cm²でしょう。", a:["104cm²","21cm²","42cm²","96cm²"], t:"図形", ex:"8×13=104cm²です。"},
+    {q:"1辺9cmの正方形の面積は何cm²でしょう。", a:["81cm²","36cm²","18cm²","72cm²"], t:"図形", ex:"9×9=81cm²です。"},
+    {q:"底辺16cm、高さ7cmの平行四辺形の面積は何cm²でしょう。", a:["112cm²","56cm²","23cm²","98cm²"], t:"図形", ex:"16×7=112cm²です。"},
+    {q:"上底6cm、下底10cm、高さ8cmの台形の面積は何cm²でしょう。", a:["64cm²","128cm²","48cm²","80cm²"], t:"図形", ex:"(6+10)×8÷2=64cm²です。"},
+    {q:"対角線が10cmと12cmのひし形の面積は何cm²でしょう。", a:["60cm²","120cm²","22cm²","44cm²"], t:"図形", ex:"10×12÷2=60cm²です。"},
+    {q:"上底5cm、下底9cm、高さ6cmの台形の面積は何cm²でしょう。", a:["42cm²","84cm²","14cm²","27cm²"], t:"図形", ex:"(5+9)×6÷2=42cm²です。"},
+    {q:"底辺20cm、高さ9cmの平行四辺形の面積は何cm²でしょう。", a:["180cm²","90cm²","29cm²","145cm²"], t:"図形", ex:"20×9=180cm²です。"},
+    {q:"対角線が14cmと6cmのひし形の面積は何cm²でしょう。", a:["42cm²","84cm²","20cm²","28cm²"], t:"図形", ex:"14×6÷2=42cm²です。"},
+    {q:"たて12cm、横15cmの長方形の面積は何cm²でしょう。", a:["180cm²","27cm²","54cm²","90cm²"], t:"図形", ex:"12×15=180cm²です。"},
+    {q:"1辺11cmの正方形の面積は何cm²でしょう。", a:["121cm²","44cm²","22cm²","110cm²"], t:"図形", ex:"11×11=121cm²です。"},
+    {q:"底辺18cm、高さ12cmの三角形の面積は何cm²でしょう。", a:["108cm²","216cm²","30cm²","54cm²"], t:"図形", ex:"18×12÷2=108cm²です。"},
+    {q:"面積96cm²、底辺12cmの平行四辺形の高さは何cmでしょう。", a:["8cm","12cm","96cm","4cm"], t:"図形", ex:"高さ=96÷12=8cmです。"},
+    {q:"面積60cm²、高さ12cmの三角形の底辺は何cmでしょう。", a:["10cm","5cm","6cm","30cm"], t:"図形", ex:"底辺=60×2÷12=10cmです。"},
+    {q:"面積が84cm²、上底6cm、下底8cmの台形の高さは何cmでしょう。", a:["12cm","14cm","7cm","24cm"], t:"図形", ex:"高さ=84×2÷(6+8)=12cmです。"},
+    {q:"たて18m、横25mの長方形の形をした校庭の面積は何m²でしょう。", a:["450m²","43m²","86m²","900m²"], t:"文章題", ex:"18×25=450m²です。"},
+    {q:"1辺が12mの正方形の花だんの面積は何m²でしょう。", a:["144m²","48m²","24m²","72m²"], t:"文章題", ex:"12×12=144m²です。"},
+    {q:"底辺20m、高さ15mの三角形の形をした土地の面積は何m²でしょう。", a:["150m²","300m²","35m²","75m²"], t:"文章題", ex:"20×15÷2=150m²です。"},
+    {q:"半径7mの円形の池の面積は何m²でしょう(円周率3.14)。", a:["153.86m²","43.96m²","21.98m²","307.72m²"], t:"文章題", ex:"7×7×3.14=153.86m²です。"},
+    {q:"合同な図形で、対応する辺の長さや角の大きさはどうなっていますか。", a:["それぞれ等しい","2倍になる","半分になる","異なる"], t:"図形", ex:"合同な図形は対応する辺の長さや角の大きさがそれぞれ等しくなります。"},
+    {q:"ある図形を3倍に拡大した図で、もとの図形の辺の長さが4cmだった辺は何cmになりますか。", a:["12cm","16cm","7cm","4cm"], t:"図形", ex:"4×3=12cmです。"},
+    {q:"ある図形を1/2に縮小した図で、もとの図形の辺の長さが16cmだった辺は何cmになりますか。", a:["8cm","32cm","4cm","14cm"], t:"図形", ex:"16×1/2=8cmです。"},
+    {q:"実際の長さが2kmの道を1/20000の縮図にかくと、縮図上では何cmになりますか。", a:["10cm","20cm","5cm","100cm"], t:"図形", ex:"2km=200000cmで、200000÷20000=10cmです。"},
+    {q:"縮図上で3cmの長さが、実際には1500mにあたるとき、この縮図の縮尺は何分の1でしょう。", a:["1/50000","1/5000","1/500000","1/15000"], t:"図形", ex:"1500m=150000cmで、3:150000=1:50000です。"},
+    {q:"2倍の拡大図をかくとき、もとの図形の角の大きさはどうなりますか。", a:["変わらない","2倍になる","半分になる","90度になる"], t:"図形", ex:"拡大図・縮図では辺の長さは変わりますが、角の大きさは変わりません。"},
+    {q:"合同な2つの三角形で、1つの三角形の角が50度、70度、60度のとき、もう1つの三角形の対応する角の大きさはどうなりますか。", a:["50度、70度、60度と同じ","2倍の角度になる","すべて60度になる","わからない"], t:"図形", ex:"合同な図形は対応する角の大きさが等しいので、同じ50度、70度、60度になります。"},
+    {q:"実際の距離が600mの道のりを、1/10000の縮図にかくと、縮図上では何cmになりますか。", a:["6cm","60cm","0.6cm","600cm"], t:"図形", ex:"600m=60000cmで、60000÷10000=6cmです。"},
+    {q:"1辺3cmの正三角形を4倍に拡大すると、辺の長さは何cmになりますか。", a:["12cm","7cm","9cm","3cm"], t:"図形", ex:"3×4=12cmです。"},
+    {q:"拡大図・縮図で、対応する辺の長さの比はどうなっていますか。", a:["すべて等しい","バラバラである","角度によって変わる","2倍で固定されている"], t:"図形", ex:"拡大図・縮図では、対応する辺の長さの比はすべて等しくなります。"},
+    {q:"2本の直線が交わってできる角の1つが70度のとき、それと向かい合う角(対頂角)は何度でしょう。", a:["70度","110度","20度","180度"], t:"図形", ex:"対頂角はつねに等しいので70度です。"},
+    {q:"2本の直線が交わってできる角の1つが70度のとき、それととなり合う角は何度でしょう。", a:["110度","70度","20度","90度"], t:"図形", ex:"となり合う角をたすと180度になるので、180-70=110度です。"},
+    {q:"3つの角がすべて等しい三角形の1つの角の大きさは何度でしょう。", a:["60度","90度","45度","120度"], t:"図形", ex:"180÷3=60度です。"},
+    {q:"四角形を対角線で2つの三角形に分けたとき、三角形1つの内角の和は何度でしょう。", a:["180度","90度","360度","270度"], t:"図形", ex:"三角形の内角の和はつねに180度です。"},
+    {q:"五角形は対角線によっていくつの三角形に分けられますか。", a:["3つ","2つ","4つ","5つ"], t:"図形", ex:"n角形は(n-2)個の三角形に分けられるので、5角形は3つです。"},
+    {q:"六角形は対角線によっていくつの三角形に分けられますか。", a:["4つ","3つ","5つ","6つ"], t:"図形", ex:"n角形は(n-2)個の三角形に分けられるので、6角形は4つです。"},
+    {q:"直角三角形の直角でない2つの角の和は何度でしょう。", a:["90度","180度","45度","135度"], t:"図形", ex:"180-90=90度です。"},
+    {q:"二等辺三角形の底角の1つが48度のとき、頂角は何度でしょう。", a:["84度","96度","66度","42度"], t:"図形", ex:"180-48×2=84度です。"},
+    {q:"正八角形の1つの外角は何度でしょう。", a:["45度","36度","60度","30度"], t:"図形", ex:"360÷8=45度です。"},
+    {q:"正十角形の1つの内角は何度でしょう。", a:["144度","150度","162度","140度"], t:"図形", ex:"内角の和は(10-2)×180=1440度で、1440÷10=144度です。"}
+  ]
+};
+
+window.SANSUU.rittai = {
+  id: "rittai", no: "第 6 単元", name: "立体図形", short: "立体",
+  period: "4・5・6年", color: "#8c3c4a",
+  themes: "直方体・立方体の体積／角柱・円柱の体積と表面積／展開図／見取図",
+  questions: [
+    {q:"直方体の体積を求める公式は、たて×横×何でしょう。", a:["高さ","面積","奥行き","体積"], t:"図形", ex:"直方体の体積=たて×横×高さで求めます。"},
+    {q:"たて3cm、横4cm、高さ5cmの直方体の体積は何cm³でしょう。", a:["60cm³","12cm³","35cm³","47cm³"], t:"図形", ex:"3×4×5=60cm³です。"},
+    {q:"1辺6cmの立方体の体積は何cm³でしょう。", a:["216cm³","36cm³","18cm³","108cm³"], t:"図形", ex:"立方体の体積=1辺×1辺×1辺なので、6×6×6=216cm³です。"},
+    {q:"底面積20cm²、高さ8cmの角柱の体積は何cm³でしょう。", a:["160cm³","28cm³","80cm³","200cm³"], t:"図形", ex:"角柱の体積=底面積×高さなので、20×8=160cm³です。"},
+    {q:"底面の半径3cm、高さ10cmの円柱の体積は何cm³でしょう(円周率3.14)。", a:["282.6cm³","94.2cm³","28.26cm³","565.2cm³"], t:"図形", ex:"底面積は3×3×3.14=28.26cm²、体積=28.26×10=282.6cm³です。"},
+    {q:"底面が1辺5cmの正方形で、高さ9cmの四角柱の体積は何cm³でしょう。", a:["225cm³","45cm³","25cm³","90cm³"], t:"図形", ex:"底面積は5×5=25cm²、体積=25×9=225cm³です。"},
+    {q:"直方体の展開図では、面はいくつありますか。", a:["6つ","4つ","8つ","12こ"], t:"図形", ex:"直方体は6つの長方形(または正方形)の面でできています。"},
+    {q:"立方体の辺の数はいくつでしょう。", a:["12本","6本","8本","10本"], t:"図形", ex:"立方体には辺が12本あります。"},
+    {q:"立方体の頂点の数はいくつでしょう。", a:["8こ","6こ","12こ","4こ"], t:"図形", ex:"立方体には頂点が8こあります。"},
+    {q:"円柱の底面の形はどんな形でしょう。", a:["円","三角形","四角形","長方形"], t:"図形", ex:"円柱の底面(上下の面)は円の形をしています。"},
+    {q:"角柱の側面はどんな形になっていますか。", a:["長方形(または正方形)","円","三角形","台形"], t:"図形", ex:"角柱の側面はすべて長方形(または正方形)になっています。"},
+    {q:"1辺4cmの立方体の表面積は何cm²でしょう。", a:["96cm²","16cm²","64cm²","48cm²"], t:"図形", ex:"1つの面の面積は4×4=16cm²で、立方体には面が6つあるので、16×6=96cm²です。"},
+    {q:"たて2cm、横3cm、高さ4cmの直方体の表面積は何cm²でしょう。", a:["52cm²","24cm²","26cm²","104cm²"], t:"図形", ex:"3組の面の面積(2×3,3×4,2×4)をそれぞれ2倍してたすと、6×2+12×2+8×2=52cm²です。"},
+    {q:"水そうの形が、たて20cm、横30cm、高さ25cmの直方体です。この水そういっぱいに水を入れると、何cm³の水が入りますか。", a:["15000cm³","1500cm³","5000cm³","75cm³"], t:"文章題", ex:"20×30×25=15000cm³です。"},
+    {q:"1000cm³は何Lでしょう。", a:["1L","10L","100L","0.1L"], ex:"1000cm³=1Lです。"},
+    {q:"3.5Lは何cm³でしょう。", a:["3500cm³","350cm³","35cm³","35000cm³"], ex:"1L=1000cm³なので、3.5×1000=3500cm³です。"},
+    {q:"底面の半径2cm、高さ5cmの円柱の体積は何cm³でしょう(円周率3.14)。", a:["62.8cm³","31.4cm³","125.6cm³","20cm³"], t:"図形", ex:"底面積は2×2×3.14=12.56cm²、体積は12.56×5=62.8cm³です。"},
+    {q:"立体の形を、辺が見える線で描いた図を何というでしょう。", a:["見取図","展開図","投影図","設計図"], t:"図形", ex:"立体の全体の形がわかるように描いた図を見取図といいます。"},
+    {q:"立体の表面を切り開いて平面に広げた図を何というでしょう。", a:["展開図","見取図","断面図","設計図"], t:"図形", ex:"立体の面を切り開いて平らに広げた図を展開図といいます。"},
+    {q:"三角柱の面の数はいくつでしょう。", a:["5つ","3つ","6つ","4つ"], t:"図形", ex:"三角柱には三角形の底面が2つと長方形の側面が3つで、合わせて5つの面があります。"},
+    {q:"三角柱の頂点の数はいくつでしょう。", a:["6こ","5こ","8こ","9こ"], t:"図形", ex:"三角柱の頂点は、上下の三角形にそれぞれ3こずつで、合わせて6こです。"},
+    {q:"底面が直角三角形(直角をはさむ2辺が6cmと8cm)で、高さ10cmの三角柱の体積は何cm³でしょう。", a:["240cm³","480cm³","140cm³","48cm³"], t:"図形", ex:"底面積は6×8÷2=24cm²、体積は24×10=240cm³です。"},
+    {q:"次のうち、立方体の展開図の面の形として正しいのはどれでしょう。", a:["正方形","長方形","三角形","円"], t:"図形", ex:"立方体の展開図はすべて正方形の面でできています。"},
+    {q:"円柱の展開図で、側面はどんな形になりますか。", a:["長方形","円","三角形","台形"], t:"図形", ex:"円柱の側面を切り開くと長方形(側面が平らな長方形)になります。"},
+    {q:"たて4cm、横5cm、高さ6cmの直方体Aと、1辺5cmの立方体Bでは、どちらの体積が大きいでしょう。", a:["立方体B","直方体A","同じ体積","比べられない"], t:"文章題", ex:"直方体Aの体積は4×5×6=120cm³、立方体Bの体積は5×5×5=125cm³なので、立方体Bの方が大きいです。"},
+    {q:"1m³は何cm³でしょう。", a:["1000000cm³","10000cm³","100000cm³","10000000cm³"], ex:"1m=100cmなので、1m³=100×100×100=1000000cm³です。"},
+    {q:"内のりが、たて15cm、横20cm、深さ12cmの直方体の容器があります。この容器の容積は何cm³でしょう。", a:["3600cm³","47cm³","360cm³","1800cm³"], t:"文章題", ex:"15×20×12=3600cm³です。"},
+    {q:"たて7cm、横6cm、高さ4cmの直方体の体積は何cm³でしょう。", a:["168cm³","17cm³","84cm³","144cm³"], t:"図形", ex:"7×6×4=168cm³です。"},
+    {q:"1辺8cmの立方体の体積は何cm³でしょう。", a:["512cm³","64cm³","24cm³","256cm³"], t:"図形", ex:"8×8×8=512cm³です。"},
+    {q:"たて10cm、横5cm、高さ3cmの直方体の体積は何cm³でしょう。", a:["150cm³","18cm³","75cm³","90cm³"], t:"図形", ex:"10×5×3=150cm³です。"},
+    {q:"1辺10cmの立方体の体積は何cm³でしょう。", a:["1000cm³","100cm³","30cm³","500cm³"], t:"図形", ex:"10×10×10=1000cm³です。"},
+    {q:"たて12cm、横8cm、高さ5cmの直方体の体積は何cm³でしょう。", a:["480cm³","25cm³","96cm³","240cm³"], t:"図形", ex:"12×8×5=480cm³です。"},
+    {q:"たて2m、横3m、高さ4mの直方体の体積は何m³でしょう。", a:["24m³","9m³","12m³","48m³"], t:"図形", ex:"2×3×4=24m³です。"},
+    {q:"1辺2mの立方体の体積は何m³でしょう。", a:["8m³","6m³","4m³","2m³"], t:"図形", ex:"2×2×2=8m³です。"},
+    {q:"体積が240cm³で、たて6cm、横5cmの直方体の高さは何cmでしょう。", a:["8cm","6cm","10cm","4cm"], t:"図形", ex:"高さ=240÷(6×5)=8cmです。"},
+    {q:"体積が126cm³で、たて7cm、高さ3cmの直方体の横の長さは何cmでしょう。", a:["6cm","9cm","3cm","18cm"], t:"図形", ex:"横=126÷(7×3)=6cmです。"},
+    {q:"1辺が5cmの立方体の体積は何cm³でしょう。", a:["125cm³","25cm³","15cm³","75cm³"], t:"図形", ex:"5×5×5=125cm³です。"},
+    {q:"底面積30cm²、高さ12cmの角柱の体積は何cm³でしょう。", a:["360cm³","42cm³","180cm³","300cm³"], t:"図形", ex:"30×12=360cm³です。"},
+    {q:"底面の半径4cm、高さ7cmの円柱の体積は何cm³でしょう(円周率3.14)。", a:["351.68cm³","50.24cm³","175.84cm³","703.36cm³"], t:"図形", ex:"底面積は4×4×3.14=50.24cm²、体積は50.24×7=351.68cm³です。"},
+    {q:"底面が1辺6cmの正方形で、高さ10cmの四角柱の体積は何cm³でしょう。", a:["360cm³","60cm³","46cm³","216cm³"], t:"図形", ex:"底面積は6×6=36cm²、体積は36×10=360cm³です。"},
+    {q:"底面が直角三角形(直角をはさむ2辺が5cmと12cm)で、高さ8cmの三角柱の体積は何cm³でしょう。", a:["240cm³","480cm³","150cm³","60cm³"], t:"図形", ex:"底面積は5×12÷2=30cm²、体積は30×8=240cm³です。"},
+    {q:"底面の半径5cm、高さ6cmの円柱の体積は何cm³でしょう(円周率3.14)。", a:["471cm³","78.5cm³","235.5cm³","942cm³"], t:"図形", ex:"底面積は5×5×3.14=78.5cm²、体積は78.5×6=471cm³です。"},
+    {q:"底面積45cm²、高さ6cmの角柱の体積は何cm³でしょう。", a:["270cm³","51cm³","135cm³","225cm³"], t:"図形", ex:"45×6=270cm³です。"},
+    {q:"底面の半径1cm、高さ20cmの円柱の体積は何cm³でしょう(円周率3.14)。", a:["62.8cm³","31.4cm³","3.14cm³","125.6cm³"], t:"図形", ex:"底面積は1×1×3.14=3.14cm²、体積は3.14×20=62.8cm³です。"},
+    {q:"底辺4cm、高さ3cmの三角形を底面とし、高さ15cmの三角柱の体積は何cm³でしょう。", a:["90cm³","36cm³","45cm³","180cm³"], t:"図形", ex:"底面積は4×3÷2=6cm²、体積は6×15=90cm³です。"},
+    {q:"底面の半径10cm、高さ3cmの円柱の体積は何cm³でしょう(円周率3.14)。", a:["942cm³","314cm³","471cm³","1256cm³"], t:"図形", ex:"底面積は10×10×3.14=314cm²、体積は314×3=942cm³です。"},
+    {q:"体積が240cm³、高さ8cmの角柱の底面積は何cm²でしょう。", a:["30cm²","1920cm²","32cm²","28cm²"], t:"図形", ex:"底面積=240÷8=30cm²です。"},
+    {q:"1辺5cmの立方体の表面積は何cm²でしょう。", a:["150cm²","25cm²","100cm²","75cm²"], t:"図形", ex:"1つの面は5×5=25cm²で、面が6つあるので、25×6=150cm²です。"},
+    {q:"1辺10cmの立方体の表面積は何cm²でしょう。", a:["600cm²","100cm²","400cm²","300cm²"], t:"図形", ex:"1つの面は10×10=100cm²で、面が6つあるので、100×6=600cm²です。"},
+    {q:"たて3cm、横5cm、高さ2cmの直方体の表面積は何cm²でしょう。", a:["62cm²","31cm²","30cm²","60cm²"], t:"図形", ex:"3組の面(3×5,5×2,3×2)を2倍してたすと、15×2+10×2+6×2=62cm²です。"},
+    {q:"たて4cm、横6cm、高さ3cmの直方体の表面積は何cm²でしょう。", a:["108cm²","54cm²","72cm²","96cm²"], t:"図形", ex:"3組の面(4×6,6×3,4×3)を2倍してたすと、24×2+18×2+12×2=108cm²です。"},
+    {q:"1辺6cmの立方体の表面積は何cm²でしょう。", a:["216cm²","36cm²","144cm²","108cm²"], t:"図形", ex:"1つの面は6×6=36cm²で、面が6つあるので、36×6=216cm²です。"},
+    {q:"たて5cm、横5cm、高さ8cmの直方体の表面積は何cm²でしょう。", a:["210cm²","105cm²","160cm²","200cm²"], t:"図形", ex:"3組の面(5×5,5×8,5×8)を2倍してたすと、25×2+40×2+40×2=210cm²です。"},
+    {q:"円柱の展開図で、底面はいくつありますか。", a:["2つ","1つ","3つ","4つ"], t:"図形", ex:"円柱の展開図には上下2つの底面(円)があります。"},
+    {q:"三角柱の展開図で、長方形の側面はいくつありますか。", a:["3つ","2つ","4つ","5つ"], t:"図形", ex:"三角柱の側面は3つの長方形でできています。"},
+    {q:"六角柱の展開図で、面はいくつありますか。", a:["8つ","6つ","10こ","12こ"], t:"図形", ex:"六角柱は底面2つと側面6つで、合わせて8つの面があります。"},
+    {q:"円柱の展開図の側面(長方形)の横の長さは、底面の円の何にあたりますか。", a:["円周","半径","直径","面積"], t:"図形", ex:"円柱の側面を切り開くと、横の長さは底面の円周と同じになります。"},
+    {q:"五角柱の展開図で、面はいくつありますか。", a:["7つ","5つ","6つ","10こ"], t:"図形", ex:"五角柱は底面2つと側面5つで、合わせて7つの面があります。"},
+    {q:"立方体の展開図はいくつの正方形からできていますか。", a:["6つ","4つ","8つ","5つ"], t:"図形", ex:"立方体の展開図は6つの正方形からできています。"},
+    {q:"四角柱の面の数はいくつでしょう。", a:["6つ","4つ","8つ","5つ"], t:"図形", ex:"四角柱は底面2つと側面4つで、合わせて6つの面があります。"},
+    {q:"四角柱の頂点の数はいくつでしょう。", a:["8こ","6こ","4こ","12こ"], t:"図形", ex:"四角柱の頂点は上下の四角形にそれぞれ4こずつで、合わせて8こです。"},
+    {q:"四角柱の辺の数はいくつでしょう。", a:["12本","8本","6本","10本"], t:"図形", ex:"四角柱の辺は上下の四角形にそれぞれ4本、たての辺が4本で、合わせて12本です。"},
+    {q:"五角柱の面の数はいくつでしょう。", a:["7つ","5つ","6つ","10こ"], t:"図形", ex:"五角柱は底面2つと側面5つで、合わせて7つの面があります。"},
+    {q:"五角柱の頂点の数はいくつでしょう。", a:["10こ","5こ","8こ","12こ"], t:"図形", ex:"五角柱の頂点は上下の五角形にそれぞれ5こずつで、合わせて10こです。"},
+    {q:"五角柱の辺の数はいくつでしょう。", a:["15本","10本","12本","20本"], t:"図形", ex:"五角柱の辺は上下の五角形にそれぞれ5本、たての辺が5本で、合わせて15本です。"},
+    {q:"円柱の面の数はいくつでしょう(平面と曲面をあわせて)。", a:["3つ","2つ","1つ","4つ"], t:"図形", ex:"円柱は上下の円の面2つと、まわりの曲面1つで、合わせて3つの面です。"},
+    {q:"三角柱の底面はどんな形でしょう。", a:["三角形","四角形","五角形","円"], t:"図形", ex:"三角柱の底面(上下の面)は三角形です。"},
+    {q:"たて4m、横3m、深さ2mの直方体の形をしたプールに水をいっぱいに入れると、何m³の水が入りますか。", a:["24m³","9m³","12m³","48m³"], t:"文章題", ex:"4×3×2=24m³です。"},
+    {q:"1辺40cmの立方体の形をした箱の容積は何cm³でしょう。", a:["64000cm³","1600cm³","12000cm³","6400cm³"], t:"文章題", ex:"40×40×40=64000cm³です。"},
+    {q:"内のりが、たて25cm、横30cm、深さ20cmの水そうに水を満たすと、何Lの水が入りますか。", a:["15L","1.5L","150L","1500L"], t:"文章題", ex:"25×30×20=15000cm³で、1000cm³=1Lなので15Lです。"},
+    {q:"底面の半径7cm、高さ10cmの円柱の形をしたバケツに水をいっぱい入れると、何cm³入りますか(円周率3.14)。", a:["1538.6cm³","153.86cm³","769.3cm³","3077.2cm³"], t:"文章題", ex:"底面積は7×7×3.14=153.86cm²、体積は153.86×10=1538.6cm³です。"},
+    {q:"たて6m、横4m、高さ2.5mの直方体の形をした部屋の体積は何m³でしょう。", a:["60m³","24m³","30m³","48m³"], t:"文章題", ex:"6×4×2.5=60m³です。"},
+    {q:"2Lは何cm³でしょう。", a:["2000cm³","200cm³","20cm³","20000cm³"], ex:"1L=1000cm³なので、2×1000=2000cm³です。"},
+    {q:"4500cm³は何Lでしょう。", a:["4.5L","45L","0.45L","450L"], ex:"1000cm³=1Lなので、4500÷1000=4.5Lです。"},
+    {q:"1辺20cmの立方体の容器いっぱいに水を入れると、何Lの水が入りますか。", a:["8L","4L","2L","0.8L"], t:"文章題", ex:"20×20×20=8000cm³で、1000cm³=1Lなので8Lです。"},
+    {q:"たて2cm、横3cm、高さ50cmの直方体Aと、1辺6cmの立方体Bでは、どちらの体積が大きいでしょう。", a:["直方体A","立方体B","同じ体積","比べられない"], t:"文章題", ex:"直方体Aは2×3×50=300cm³、立方体Bは6×6×6=216cm³なので、直方体Aの方が大きいです。"},
+    {q:"底面積40cm²、高さ15cmの角柱アと、底面積30cm²、高さ25cmの角柱イでは、どちらの体積が大きいでしょう。", a:["角柱イ","角柱ア","同じ体積","比べられない"], t:"文章題", ex:"角柱アは40×15=600cm³、角柱イは30×25=750cm³なので、角柱イの方が大きいです。"},
+    {q:"立体を、真上・正面・真横などから見た形で表す図を何というでしょう。", a:["投影図","見取図","展開図","断面図"], t:"図形", ex:"立体をいろいろな方向から見た形で表す図を投影図といいます。"},
+    {q:"角柱や円柱で、上下に向かい合う2つの合同な面を何というでしょう。", a:["底面","側面","頂面","断面"], t:"図形", ex:"角柱・円柱の上下にある合同な面を底面といいます。"},
+    {q:"角柱や円柱で、底面と底面をつなぐまわりの面を何というでしょう。", a:["側面","底面","頂点","稜"], t:"図形", ex:"底面をつなぐまわりの面を側面といいます。"},
+    {q:"角柱の名前は、何によって決まりますか。", a:["底面の形","側面の数","高さ","体積"], t:"図形", ex:"角柱の名前は底面の形(三角形なら三角柱など)によって決まります。"},
+    {q:"円柱を真上から見ると、どんな形に見えますか。", a:["円","四角形","三角形","楕円"], t:"図形", ex:"円柱を真上から見ると、底面と同じ円に見えます。"},
+    {q:"円柱を正面から見ると、どんな形に見えますか。", a:["長方形","円","三角形","台形"], t:"図形", ex:"円柱を横から見ると、長方形に見えます。"},
+    {q:"角柱の底面と側面は、どのように交わっていますか。", a:["垂直に交わる","平行になる","交わらない","斜めに交わる"], t:"図形", ex:"角柱の底面と側面はつねに垂直に交わっています。"},
+    {q:"立方体の面はすべてどんな形でしょう。", a:["正方形","長方形","三角形","五角形"], t:"図形", ex:"立方体の6つの面はすべて正方形です。"},
+    {q:"直方体の面のうち、向かい合う面の形と大きさはどうなっていますか。", a:["合同である","形だけ同じ","大きさだけ同じ","異なる"], t:"図形", ex:"直方体の向かい合う面は、形も大きさも同じ(合同)です。"},
+    {q:"角柱で、底面の形が五角形であるものを何というでしょう。", a:["五角柱","五角錐","五角形","五面体"], t:"図形", ex:"底面が五角形の角柱を五角柱といいます。"},
+    {q:"たて9cm、横7cm、高さ4cmの直方体の体積は何cm³でしょう。", a:["252cm³","20cm³","63cm³","126cm³"], t:"図形", ex:"9×7×4=252cm³です。"},
+    {q:"1辺12cmの立方体の体積は何cm³でしょう。", a:["1728cm³","144cm³","432cm³","864cm³"], t:"図形", ex:"12×12×12=1728cm³です。"},
+    {q:"底面積25cm²、高さ9cmの角柱の体積は何cm³でしょう。", a:["225cm³","34cm³","112.5cm³","250cm³"], t:"図形", ex:"25×9=225cm³です。"},
+    {q:"底面の半径6cm、高さ4cmの円柱の体積は何cm³でしょう(円周率3.14)。", a:["452.16cm³","113.04cm³","226.08cm³","904.32cm³"], t:"図形", ex:"底面積は6×6×3.14=113.04cm²、体積は113.04×4=452.16cm³です。"},
+    {q:"たて15cm、横4cm、高さ6cmの直方体の体積は何cm³でしょう。", a:["360cm³","25cm³","90cm³","180cm³"], t:"図形", ex:"15×4×6=360cm³です。"},
+    {q:"1辺9cmの立方体の体積は何cm³でしょう。", a:["729cm³","81cm³","243cm³","364.5cm³"], t:"図形", ex:"9×9×9=729cm³です。"},
+    {q:"底面が1辺8cmの正方形で、高さ12cmの四角柱の体積は何cm³でしょう。", a:["768cm³","96cm³","576cm³","384cm³"], t:"図形", ex:"底面積は8×8=64cm²、体積は64×12=768cm³です。"},
+    {q:"底面の半径2cm、高さ15cmの円柱の体積は何cm³でしょう(円周率3.14)。", a:["188.4cm³","62.8cm³","37.68cm³","376.8cm³"], t:"図形", ex:"底面積は2×2×3.14=12.56cm²、体積は12.56×15=188.4cm³です。"},
+    {q:"底面が直角三角形(直角をはさむ2辺が3cmと4cm)で、高さ20cmの三角柱の体積は何cm³でしょう。", a:["120cm³","240cm³","60cm³","30cm³"], t:"図形", ex:"底面積は3×4÷2=6cm²、体積は6×20=120cm³です。"},
+    {q:"1辺7cmの立方体の表面積は何cm²でしょう。", a:["294cm²","49cm²","196cm²","147cm²"], t:"図形", ex:"1つの面は7×7=49cm²で、面が6つあるので、49×6=294cm²です。"},
+    {q:"たて2cm、横8cm、高さ5cmの直方体の表面積は何cm²でしょう。", a:["132cm²","66cm²","80cm²","112cm²"], t:"図形", ex:"3組の面(2×8,8×5,2×5)を2倍してたすと、16×2+40×2+10×2=132cm²です。"},
+    {q:"体積が360cm³で底面積が40cm²の角柱の高さは何cmでしょう。", a:["9cm","8cm","10cm","4cm"], t:"図形", ex:"高さ=360÷40=9cmです。"},
+    {q:"体積が1000cm³の立方体の1辺の長さは何cmでしょう。", a:["10cm","100cm","33.3cm","31.6cm"], t:"図形", ex:"10×10×10=1000なので、1辺は10cmです。"},
+    {q:"5000cm³は何Lでしょう。", a:["5L","50L","0.5L","500L"], ex:"1000cm³=1Lなので、5000÷1000=5Lです。"},
+    {q:"0.8Lは何cm³でしょう。", a:["800cm³","80cm³","8cm³","8000cm³"], ex:"1L=1000cm³なので、0.8×1000=800cm³です。"},
+    {q:"たて1m、横2m、高さ1.5mの直方体の体積は何m³でしょう。", a:["3m³","4.5m³","2m³","1.5m³"], t:"図形", ex:"1×2×1.5=3m³です。"},
+    {q:"底面積が18cm²、体積が162cm³の角柱の高さは何cmでしょう。", a:["9cm","8cm","6cm","18cm"], t:"図形", ex:"高さ=162÷18=9cmです。"},
+    {q:"底面の半径3cm、高さ10cmの円柱の側面積は何cm²でしょう(円周率3.14、側面積=底面の円周×高さ)。", a:["188.4cm²","94.2cm²","282.6cm²","56.52cm²"], t:"図形", ex:"円周は2×3×3.14=18.84cmで、側面積は18.84×10=188.4cm²です。"},
+    {q:"底面の半径5cm、高さ8cmの円柱の側面積は何cm²でしょう(円周率3.14)。", a:["251.2cm²","125.6cm²","502.4cm²","62.8cm²"], t:"図形", ex:"円周は2×5×3.14=31.4cmで、側面積は31.4×8=251.2cm²です。"},
+    {q:"立方体の展開図には何種類の異なる形が使われていますか(すべて同じ形の場合は1種類)。", a:["1種類","2種類","3種類","6種類"], t:"図形", ex:"立方体の展開図はすべて正方形でできているので1種類です。"}
+  ]
+};
+window.SANSUU.tanni = {
+  id: "tanni", no: "第 7 単元", name: "単位のしくみと単位量あたり", short: "単位",
+  period: "3・4・5年", color: "#3c8c7d",
+  themes: "長さ・重さ・かさ・時間の単位換算／面積・体積の単位／単位量あたりの大きさ(こみぐあい・人口密度など)",
+  questions: [
+    {q:"2km300mは何mでしょう。", a:["2300m","1700m","500m","302m"], ex:"2km=2000mなので、2000+300=2300mです。"},
+    {q:"3km450mは何mでしょう。", a:["3450m","2550m","750m","453m"], ex:"3km=3000mなので、3000+450=3450mです。"},
+    {q:"5km80mは何mでしょう。", a:["5080m","4920m","580m","85m"], ex:"5km=5000mなので、5000+80=5080mです。"},
+    {q:"1km600mは何mでしょう。", a:["1600m","400m","700m","601m"], ex:"1km=1000mなので、1000+600=1600mです。"},
+    {q:"4km25mは何mでしょう。", a:["4025m","3975m","425m","29m"], ex:"4km=4000mなので、4000+25=4025mです。"},
+    {q:"6km700mは何mでしょう。", a:["6700m","5300m","1300m","706m"], ex:"6km=6000mなので、6000+700=6700mです。"},
+    {q:"7km150mは何mでしょう。", a:["7150m","6850m","850m","157m"], ex:"7km=7000mなので、7000+150=7150mです。"},
+    {q:"8km5mは何mでしょう。", a:["8005m","7995m","805m","13m"], ex:"8km=8000mなので、8000+5=8005mです。"},
+    {q:"2300mは何km何mでしょう。", a:["2km300m","2km400m","1km300m","2km290m"], ex:"2300m=2×1000+300なので、2km300mです。"},
+    {q:"3450mは何km何mでしょう。", a:["3km450m","3km550m","2km450m","3km440m"], ex:"3450m=3×1000+450なので、3km450mです。"},
+    {q:"5080mは何km何mでしょう。", a:["5km80m","5km180m","4km80m","5km70m"], ex:"5080m=5×1000+80なので、5km80mです。"},
+    {q:"1600mは何km何mでしょう。", a:["1km600m","1km700m","0km600m","1km590m"], ex:"1600m=1×1000+600なので、1km600mです。"},
+    {q:"4025mは何km何mでしょう。", a:["4km25m","4km125m","3km25m","4km15m"], ex:"4025m=4×1000+25なので、4km25mです。"},
+    {q:"6700mは何km何mでしょう。", a:["6km700m","6km800m","5km700m","6km690m"], ex:"6700m=6×1000+700なので、6km700mです。"},
+    {q:"7150mは何km何mでしょう。", a:["7km150m","7km250m","6km150m","7km140m"], ex:"7150m=7×1000+150なので、7km150mです。"},
+    {q:"9005mは何km何mでしょう。", a:["9km5m","9km105m","8km5m","9km20m"], ex:"9005m=9×1000+5なので、9km5mです。"},
+    {q:"2m30cmは何cmでしょう。", a:["230cm","170cm","50cm","32cm"], ex:"2m=200cmなので、200+30=230cmです。"},
+    {q:"3m45cmは何cmでしょう。", a:["345cm","255cm","75cm","48cm"], ex:"3m=300cmなので、300+45=345cmです。"},
+    {q:"5m8cmは何cmでしょう。", a:["508cm","492cm","58cm","13cm"], ex:"5m=500cmなので、500+8=508cmです。"},
+    {q:"1m60cmは何cmでしょう。", a:["160cm","40cm","70cm","61cm"], ex:"1m=100cmなので、100+60=160cmです。"},
+    {q:"4m25cmは何cmでしょう。", a:["425cm","375cm","65cm","29cm"], ex:"4m=400cmなので、400+25=425cmです。"},
+    {q:"6m70cmは何cmでしょう。", a:["670cm","530cm","130cm","76cm"], ex:"6m=600cmなので、600+70=670cmです。"},
+    {q:"230cmは何m何cmでしょう。", a:["2m30cm","3m30cm","2m40cm","1m30cm"], ex:"230cm=2×100+30なので、2m30cmです。"},
+    {q:"345cmは何m何cmでしょう。", a:["3m45cm","4m45cm","3m55cm","2m45cm"], ex:"345cm=3×100+45なので、3m45cmです。"},
+    {q:"508cmは何m何cmでしょう。", a:["5m8cm","6m8cm","5m18cm","4m8cm"], ex:"508cm=5×100+8なので、5m8cmです。"},
+    {q:"160cmは何m何cmでしょう。", a:["1m60cm","2m60cm","1m70cm","0m60cm"], ex:"160cm=1×100+60なので、1m60cmです。"},
+    {q:"425cmは何m何cmでしょう。", a:["4m25cm","5m25cm","4m35cm","3m25cm"], ex:"425cm=4×100+25なので、4m25cmです。"},
+    {q:"670cmは何m何cmでしょう。", a:["6m70cm","7m70cm","6m80cm","5m70cm"], ex:"670cm=6×100+70なので、6m70cmです。"},
+    {q:"5cmは何mmでしょう。", a:["50mm","15mm","5mm","40mm"], ex:"1cm=10mmなので、5×10=50mmです。"},
+    {q:"12cmは何mmでしょう。", a:["120mm","22mm","12mm","110mm"], ex:"1cm=10mmなので、12×10=120mmです。"},
+    {q:"8cmは何mmでしょう。", a:["80mm","18mm","8mm","70mm"], ex:"1cm=10mmなので、8×10=80mmです。"},
+    {q:"23cmは何mmでしょう。", a:["230mm","33mm","23mm","220mm"], ex:"1cm=10mmなので、23×10=230mmです。"},
+    {q:"80mmは何cmでしょう。", a:["8cm","80cm","18cm","7cm"], ex:"10mm=1cmなので、80÷10=8cmです。"},
+    {q:"150mmは何cmでしょう。", a:["15cm","150cm","25cm","14cm"], ex:"10mm=1cmなので、150÷10=15cmです。"},
+    {q:"40mmは何cmでしょう。", a:["4cm","40cm","14cm","3cm"], ex:"10mm=1cmなので、40÷10=4cmです。"},
+    {q:"230mmは何cmでしょう。", a:["23cm","230cm","33cm","22cm"], ex:"10mm=1cmなので、230÷10=23cmです。"},
+    {q:"2kg300gは何gでしょう。", a:["2300g","1700g","500g","302g"], ex:"2kg=2000gなので、2000+300=2300gです。"},
+    {q:"3kg450gは何gでしょう。", a:["3450g","2550g","750g","453g"], ex:"3kg=3000gなので、3000+450=3450gです。"},
+    {q:"5kg80gは何gでしょう。", a:["5080g","4920g","580g","85g"], ex:"5kg=5000gなので、5000+80=5080gです。"},
+    {q:"1kg600gは何gでしょう。", a:["1600g","400g","700g","601g"], ex:"1kg=1000gなので、1000+600=1600gです。"},
+    {q:"4kg25gは何gでしょう。", a:["4025g","3975g","425g","29g"], ex:"4kg=4000gなので、4000+25=4025gです。"},
+    {q:"6kg700gは何gでしょう。", a:["6700g","5300g","1300g","706g"], ex:"6kg=6000gなので、6000+700=6700gです。"},
+    {q:"7kg150gは何gでしょう。", a:["7150g","6850g","850g","157g"], ex:"7kg=7000gなので、7000+150=7150gです。"},
+    {q:"2300gは何kg何gでしょう。", a:["2kg300g","1kg300g","2kg400g","3kg300g"], ex:"2300g=2×1000+300なので、2kg300gです。"},
+    {q:"3450gは何kg何gでしょう。", a:["3kg450g","2kg450g","3kg550g","4kg450g"], ex:"3450g=3×1000+450なので、3kg450gです。"},
+    {q:"5080gは何kg何gでしょう。", a:["5kg80g","4kg80g","5kg180g","6kg80g"], ex:"5080g=5×1000+80なので、5kg80gです。"},
+    {q:"1600gは何kg何gでしょう。", a:["1kg600g","0kg600g","1kg700g","2kg600g"], ex:"1600g=1×1000+600なので、1kg600gです。"},
+    {q:"4025gは何kg何gでしょう。", a:["4kg25g","3kg25g","4kg125g","5kg25g"], ex:"4025g=4×1000+25なので、4kg25gです。"},
+    {q:"6700gは何kg何gでしょう。", a:["6kg700g","5kg700g","6kg800g","7kg700g"], ex:"6700g=6×1000+700なので、6kg700gです。"},
+    {q:"7150gは何kg何gでしょう。", a:["7kg150g","6kg150g","7kg250g","8kg150g"], ex:"7150g=7×1000+150なので、7kg150gです。"},
+    {q:"3kgは何gでしょう。", a:["3000g","300g","4000g","2000g"], ex:"1kg=1000gなので、3×1000=3000gです。"},
+    {q:"8kgは何gでしょう。", a:["8000g","800g","9000g","7000g"], ex:"1kg=1000gなので、8×1000=8000gです。"},
+    {q:"15kgは何gでしょう。", a:["15000g","1500g","16000g","14000g"], ex:"1kg=1000gなので、15×1000=15000gです。"},
+    {q:"26kgは何gでしょう。", a:["26000g","2600g","27000g","25000g"], ex:"1kg=1000gなので、26×1000=26000gです。"},
+    {q:"40kgは何gでしょう。", a:["40000g","4000g","41000g","39000g"], ex:"1kg=1000gなので、40×1000=40000gです。"},
+    {q:"2t(トン)は何kgでしょう。", a:["2000kg","200kg","2100kg","2kg"], ex:"1t=1000kgなので、2×1000=2000kgです。"},
+    {q:"5t(トン)は何kgでしょう。", a:["5000kg","500kg","5100kg","5kg"], ex:"1t=1000kgなので、5×1000=5000kgです。"},
+    {q:"3t(トン)は何kgでしょう。", a:["3000kg","300kg","3100kg","3kg"], ex:"1t=1000kgなので、3×1000=3000kgです。"},
+    {q:"8t(トン)は何kgでしょう。", a:["8000kg","800kg","8100kg","8kg"], ex:"1t=1000kgなので、8×1000=8000kgです。"},
+    {q:"4000kgは何tでしょう。", a:["4t","40t","5t","4000000t"], ex:"1000kg=1tなので、4000÷1000=4tです。"},
+    {q:"7500kgは何tでしょう。", a:["7.5t","75t","8.5t","7500000t"], ex:"1000kg=1tなので、7500÷1000=7.5tです。"},
+    {q:"2300kgは何tでしょう。", a:["2.3t","23t","3.3t","2300000t"], ex:"1000kg=1tなので、2300÷1000=2.3tです。"},
+    {q:"6000kgは何tでしょう。", a:["6t","60t","7t","6000000t"], ex:"1000kg=1tなので、6000÷1000=6tです。"},
+    {q:"3Lは何dLでしょう。", a:["30dL","300dL","3dL","40dL"], ex:"1L=10dLなので、3×10=30dLです。"},
+    {q:"7Lは何dLでしょう。", a:["70dL","700dL","7dL","80dL"], ex:"1L=10dLなので、7×10=70dLです。"},
+    {q:"12Lは何dLでしょう。", a:["120dL","1200dL","12dL","130dL"], ex:"1L=10dLなので、12×10=120dLです。"},
+    {q:"5Lは何dLでしょう。", a:["50dL","500dL","5dL","60dL"], ex:"1L=10dLなので、5×10=50dLです。"},
+    {q:"9Lは何dLでしょう。", a:["90dL","900dL","9dL","100dL"], ex:"1L=10dLなので、9×10=90dLです。"},
+    {q:"40dLは何Lでしょう。", a:["4L","4L1dL","5L0dL","40L"], ex:"10dL=1Lなので、40dL=4Lです。"},
+    {q:"80dLは何Lでしょう。", a:["8L","8L1dL","9L0dL","80L"], ex:"10dL=1Lなので、80dL=8Lです。"},
+    {q:"120dLは何Lでしょう。", a:["12L","12L1dL","13L0dL","120L"], ex:"10dL=1Lなので、120dL=12Lです。"},
+    {q:"35dLは何Lでしょう。", a:["3L5dL","3L4dL","4L5dL","35L"], ex:"10dL=1Lなので、35dL=3L5dLです。"},
+    {q:"67dLは何Lでしょう。", a:["6L7dL","6L6dL","7L7dL","67L"], ex:"10dL=1Lなので、67dL=6L7dLです。"},
+    {q:"2Lは何mLでしょう。", a:["2000mL","200mL","2100mL","2mL"], ex:"1L=1000mLなので、2×1000=2000mLです。"},
+    {q:"5Lは何mLでしょう。", a:["5000mL","500mL","5100mL","5mL"], ex:"1L=1000mLなので、5×1000=5000mLです。"},
+    {q:"3.5Lは何mLでしょう。", a:["3500mL","350mL","3600mL","3.5mL"], ex:"1L=1000mLなので、3.5×1000=3500mLです。"},
+    {q:"7Lは何mLでしょう。", a:["7000mL","700mL","7100mL","7mL"], ex:"1L=1000mLなので、7×1000=7000mLです。"},
+    {q:"1.2Lは何mLでしょう。", a:["1200mL","120mL","1300mL","1.2mL"], ex:"1L=1000mLなので、1.2×1000=1200mLです。"},
+    {q:"3000mLは何Lでしょう。", a:["3L","30L","4L","3000000L"], ex:"1000mL=1Lなので、3000÷1000=3Lです。"},
+    {q:"7500mLは何Lでしょう。", a:["7.5L","75L","8.5L","7500000L"], ex:"1000mL=1Lなので、7500÷1000=7.5Lです。"},
+    {q:"2400mLは何Lでしょう。", a:["2.4L","24L","3.4L","2400000L"], ex:"1000mL=1Lなので、2400÷1000=2.4Lです。"},
+    {q:"6000mLは何Lでしょう。", a:["6L","60L","7L","6000000L"], ex:"1000mL=1Lなので、6000÷1000=6Lです。"},
+    {q:"3dLは何mLでしょう。", a:["300mL","30mL","400mL","3mL"], ex:"1dL=100mLなので、3×100=300mLです。"},
+    {q:"7dLは何mLでしょう。", a:["700mL","70mL","800mL","7mL"], ex:"1dL=100mLなので、7×100=700mLです。"},
+    {q:"15dLは何mLでしょう。", a:["1500mL","150mL","1600mL","15mL"], ex:"1dL=100mLなので、15×100=1500mLです。"},
+    {q:"24dLは何mLでしょう。", a:["2400mL","240mL","2500mL","24mL"], ex:"1dL=100mLなので、24×100=2400mLです。"},
+    {q:"2L3dLは何dLでしょう。", a:["23dL","203dL","5dL","17dL"], ex:"2L=20dLなので、20+3=23dLです。"},
+    {q:"4L5dLは何dLでしょう。", a:["45dL","405dL","9dL","35dL"], ex:"4L=40dLなので、40+5=45dLです。"},
+    {q:"6L7dLは何dLでしょう。", a:["67dL","607dL","13dL","53dL"], ex:"6L=60dLなので、60+7=67dLです。"},
+    {q:"1L8dLは何dLでしょう。", a:["18dL","108dL","9dL","2dL"], ex:"1L=10dLなので、10+8=18dLです。"},
+    {q:"3分は何秒でしょう。", a:["180秒","300秒","240秒","18秒"], ex:"1分=60秒なので、3×60=180秒です。"},
+    {q:"5分は何秒でしょう。", a:["300秒","500秒","360秒","30秒"], ex:"1分=60秒なので、5×60=300秒です。"},
+    {q:"8分は何秒でしょう。", a:["480秒","800秒","540秒","48秒"], ex:"1分=60秒なので、8×60=480秒です。"},
+    {q:"12分は何秒でしょう。", a:["720秒","1200秒","780秒","72秒"], ex:"1分=60秒なので、12×60=720秒です。"},
+    {q:"7分は何秒でしょう。", a:["420秒","700秒","480秒","42秒"], ex:"1分=60秒なので、7×60=420秒です。"},
+    {q:"150秒は何分何秒でしょう。", a:["2分30秒","2分40秒","3分30秒","1分30秒"], ex:"150÷60=2あまり30なので、2分30秒です。"},
+    {q:"200秒は何分何秒でしょう。", a:["3分20秒","3分30秒","4分20秒","2分20秒"], ex:"200÷60=3あまり20なので、3分20秒です。"},
+    {q:"95秒は何分何秒でしょう。", a:["1分35秒","1分45秒","2分35秒","0分35秒"], ex:"95÷60=1あまり35なので、1分35秒です。"},
+    {q:"320秒は何分何秒でしょう。", a:["5分20秒","5分30秒","6分20秒","4分20秒"], ex:"320÷60=5あまり20なので、5分20秒です。"},
+    {q:"2時間は何分でしょう。", a:["120分","200分","180分","12分"], ex:"1時間=60分なので、2×60=120分です。"},
+    {q:"3時間は何分でしょう。", a:["180分","300分","240分","18分"], ex:"1時間=60分なので、3×60=180分です。"},
+    {q:"5時間は何分でしょう。", a:["300分","500分","360分","30分"], ex:"1時間=60分なので、5×60=300分です。"},
+    {q:"7時間は何分でしょう。", a:["420分","700分","480分","42分"], ex:"1時間=60分なので、7×60=420分です。"},
+    {q:"150分は何時間何分でしょう。", a:["2時間30分","2時間40分","3時間30分","1時間30分"], ex:"150÷60=2あまり30なので、2時間30分です。"},
+    {q:"200分は何時間何分でしょう。", a:["3時間20分","3時間30分","4時間20分","2時間20分"], ex:"200÷60=3あまり20なので、3時間20分です。"},
+    {q:"95分は何時間何分でしょう。", a:["1時間35分","1時間45分","2時間35分","0時間35分"], ex:"95÷60=1あまり35なので、1時間35分です。"},
+    {q:"400分は何時間何分でしょう。", a:["6時間40分","6時間50分","7時間40分","5時間40分"], ex:"400÷60=6あまり40なので、6時間40分です。"},
+    {q:"2時間15分は何分でしょう。", a:["135分","215分","17分","105分"], ex:"2時間=120分なので、120+15=135分です。"},
+    {q:"3時間40分は何分でしょう。", a:["220分","340分","43分","140分"], ex:"3時間=180分なので、180+40=220分です。"},
+    {q:"1時間50分は何分でしょう。", a:["110分","150分","51分","10分"], ex:"1時間=60分なので、60+50=110分です。"},
+    {q:"4時間5分は何分でしょう。", a:["245分","405分","9分","235分"], ex:"4時間=240分なので、240+5=245分です。"},
+    {q:"午前9時20分から午前10時5分までは何分間でしょう。", t:"文章題", a:["45分間","55分間","35分間","105分間"], ex:"午前9時20分から午前10時5分までは45分間です。"},
+    {q:"午前8時45分から午前9時30分までは何分間でしょう。", t:"文章題", a:["45分間","55分間","35分間","105分間"], ex:"午前8時45分から午前9時30分までは45分間です。"},
+    {q:"午後1時10分から午後2時0分までは何分間でしょう。", t:"文章題", a:["50分間","60分間","40分間","110分間"], ex:"午後1時10分から午後2時0分までは50分間です。"},
+    {q:"午前10時50分から午前11時30分までは何分間でしょう。", t:"文章題", a:["40分間","50分間","30分間","100分間"], ex:"午前10時50分から午前11時30分までは40分間です。"},
+    {q:"午後3時25分から午後4時15分までは何分間でしょう。", t:"文章題", a:["50分間","60分間","40分間","110分間"], ex:"午後3時25分から午後4時15分までは50分間です。"},
+    {q:"1日は何時間でしょう。", a:["24時間","12時間","48時間","30時間"], ex:"1日=24時間です。"},
+    {q:"1週間は何日でしょう。", a:["7日","5日","10日","14日"], ex:"1週間=7日です。"},
+    {q:"1時間は何秒でしょう。", a:["3600秒","600秒","60秒","1000秒"], ex:"1時間=60分=60×60=3600秒です。"},
+    {q:"うるう年でない1年は何日でしょう。", a:["365日","360日","364日","366日"], ex:"うるう年でない1年は365日です。"},
+    {q:"1m²は何cm²でしょう。", a:["10000cm²","100cm²","1000cm²","100000cm²"], ex:"1m=100cmなので、1m²=100×100=10000cm²です。"},
+    {q:"1a(アール)は何m²でしょう。", a:["100m²","10m²","1000m²","10000m²"], ex:"1a=100m²です(1辺10mの正方形の面積)。"},
+    {q:"1ha(ヘクタール)は何m²でしょう。", a:["10000m²","1000m²","100m²","100000m²"], ex:"1ha=10000m²です(1辺100mの正方形の面積)。"},
+    {q:"1ha(ヘクタール)は何aでしょう。", a:["100a","10a","1000a","10a未満"], ex:"1ha=10000m²、1a=100m²なので、10000÷100=100aです。"},
+    {q:"1km²は何m²でしょう。", a:["1000000m²","10000m²","100000m²","10000000m²"], ex:"1km=1000mなので、1km²=1000×1000=1000000m²です。"},
+    {q:"3haは何m²でしょう。", a:["30000m²","3000m²","300m²","300000m²"], ex:"1ha=10000m²なので、3×10000=30000m²です。"},
+    {q:"250aは何haでしょう。", a:["2.5ha","25ha","0.25ha","250ha"], ex:"1ha=100aなので、250÷100=2.5haです。"},
+    {q:"500m²は何aでしょう。", a:["5a","50a","0.5a","500a"], ex:"1a=100m²なので、500÷100=5aです。"},
+    {q:"6km²は何haでしょう。", a:["600ha","60ha","6000ha","6ha"], ex:"1km²=100haなので、6×100=600haです。"},
+    {q:"40000cm²は何m²でしょう。", a:["4m²","40m²","400m²","0.4m²"], ex:"1m²=10000cm²なので、40000÷10000=4m²です。"},
+    {q:"7000aは何haでしょう。", a:["70ha","700ha","7ha","0.7ha"], ex:"1ha=100aなので、7000÷100=70haです。"},
+    {q:"1250m²は何a何m²でしょう。", a:["12a50m²","1a250m²","125a","12a5m²"], ex:"1a=100m²なので、1250÷100=12あまり50で12a50m²です。"},
+    {q:"1cm³は何mLでしょう。", a:["1mL","10mL","100mL","0.1mL"], ex:"1cm³=1mLです。"},
+    {q:"500cm³は何mLでしょう。", a:["500mL","50mL","5000mL","5mL"], ex:"1cm³=1mLなので、500cm³=500mLです。"},
+    {q:"6.2Lは何cm³でしょう。", a:["6200cm³","620cm³","62cm³","62000cm³"], ex:"1L=1000cm³なので、6.2×1000=6200cm³です。"},
+    {q:"2000cm³は何Lでしょう。", a:["2L","20L","200L","0.2L"], ex:"1000cm³=1Lなので、2000÷1000=2Lです。"},
+    {q:"2m³は何cm³でしょう。", a:["2000000cm³","200000cm³","20000cm³","20000000cm³"], ex:"1m³=1000000cm³なので、2×1000000=2000000cm³です。"},
+    {q:"4500000cm³は何m³でしょう。", a:["4.5m³","45m³","450m³","0.45m³"], ex:"1m³=1000000cm³なので、4500000÷1000000=4.5m³です。"},
+    {q:"800mLは何cm³でしょう。", a:["800cm³","80cm³","8000cm³","8cm³"], ex:"1mL=1cm³なので、800mL=800cm³です。"},
+    {q:"3.6Lは何mLでしょう。", a:["3600mL","360mL","36mL","36000mL"], ex:"1L=1000mLなので、3.6×1000=3600mLです。"},
+    {q:"1m³は何Lでしょう。", a:["1000L","100L","10000L","10L"], ex:"1m³=1000000cm³=1000000mL=1000Lです。"},
+    {q:"15000mLは何Lでしょう。", a:["15L","150L","1.5L","1500L"], ex:"1000mL=1Lなので、15000÷1000=15Lです。"},
+    {q:"A教室は面積24m²に生徒32人、B教室は面積30m²に生徒36人います。1m²あたりの人数がより多い(こんでいる)のはどちらでしょう。", t:"文章題", a:["A教室","B教室","同じこみぐあい","比べられない"], ex:"A教室は32÷24=約1.33人/m²、B教室は36÷30=1.2人/m²なので、A教室の方がこんでいます。"},
+    {q:"6m²の花だんに42本のチューリップが植えてあります。1m²あたり何本になりますか。", t:"文章題", a:["7本","6本","8本","36本"], ex:"42÷6=7本です。"},
+    {q:"8m²の田んぼから96kgの米がとれました。1m²あたり何kgとれた計算になりますか。", t:"文章題", a:["12kg","10kg","14kg","88kg"], ex:"96÷8=12kgです。"},
+    {q:"140円で7本の えんぴつが買えます。1本あたりのねだんは何円でしょう。", t:"文章題", a:["20円","14円","28円","10円"], ex:"140÷7=20円です。"},
+    {q:"3本300円のボールペンAと、5本450円のボールペンBでは、1本あたりどちらが安いでしょう。", t:"文章題", a:["ボールペンB","ボールペンA","同じねだん","比べられない"], ex:"Aは300÷3=100円、Bは450÷5=90円なので、Bの方が1本あたり安いです。"},
+    {q:"面積5haの畑Aで400kg、面積8haの畑Bで720kgの小麦がとれました。1haあたりの収穫量が多いのはどちらでしょう。", t:"文章題", a:["畑B","畑A","同じ収穫量","比べられない"], ex:"畑Aは400÷5=80kg/ha、畑Bは720÷8=90kg/haなので、畑Bの方が多いです。"},
+    {q:"12Lのガソリンで180km走る車があります。1Lあたり何km走る計算になりますか。", t:"文章題", a:["15km","12km","18km","20km"], ex:"180÷12=15kmです。"},
+    {q:"P公園は面積400m²に人が20人、Q公園は面積300m²に人が18人います。1m²あたりの人数が多いのはどちらでしょう。", t:"文章題", a:["Q公園","P公園","同じこみぐあい","比べられない"], ex:"P公園は20÷400=0.05人/m²、Q公園は18÷300=0.06人/m²なので、Q公園の方がこんでいます。"},
+    {q:"9kgで1170円の米Aと、6kgで696円の米Bでは、1kgあたりどちらが安いでしょう。", t:"文章題", a:["米B","米A","同じねだん","比べられない"], ex:"米Aは1170÷9=130円/kg、米Bは696÷6=116円/kgなので、米Bの方が安いです。"},
+    {q:"畑Cは3aで210kg、畑Dは4aで320kgのじゃがいもがとれました。1aあたりの収穫量が多いのはどちらでしょう。", t:"文章題", a:["畑D","畑C","同じ収穫量","比べられない"], ex:"畑Cは210÷3=70kg/a、畑Dは320÷4=80kg/aなので、畑Dの方が多いです。"},
+    {q:"16Lの水そうに水を入れるのに、ポンプAは4分でいっぱいにし、ポンプBは5分でいっぱいにします。1分あたりに入れる水の量が多いのはどちらでしょう。", t:"文章題", a:["ポンプA","ポンプB","同じ量","比べられない"], ex:"ポンプAは16÷4=4L/分、ポンプBは16÷5=3.2L/分なので、ポンプAの方が多いです。"},
+    {q:"あるコピー機は5分間に150まい印刷できます。1分あたり何まい印刷できる計算になりますか。", t:"文章題", a:["30まい","25まい","35まい","20まい"], ex:"150÷5=30まいです。"},
+    {q:"部屋Xは畳6畳(面積約9.72m²)に3人、部屋Yは畳8畳(面積約12.96m²)に4人います。1m²あたりの人数はどちらが多いでしょう(小数第2位を四捨五入)。", t:"文章題", a:["ほぼ同じ(約0.31人/m²)","部屋Xの方がかなり多い","部屋Yの方がかなり多い","比べられない"], ex:"Xは3÷9.72≒0.31人/m²、Yは4÷12.96≒0.31人/m²でほぼ同じです。"},
+    {q:"あるプリンターは10分間で400まい印刷し、別のプリンターは8分間で360まい印刷します。1分あたりの印刷まい数が多いのはどちらでしょう。", t:"文章題", a:["8分間で360まいのプリンター","10分間で400まいのプリンター","同じ枚数","比べられない"], ex:"前者は400÷10=40まい/分、後者は360÷8=45まい/分なので、後者の方が多いです。"},
+    {q:"7haの畑Eで595kg、9haの畑Fで801kgの野菜がとれました。1haあたりの収穫量が多いのはどちらでしょう。", t:"文章題", a:["畑F","畑E","同じ収穫量","比べられない"], ex:"畑Eは595÷7=85kg/ha、畑Fは801÷9=89kg/haなので、畑Fの方が多いです。"}
+  ]
+};
+
+window.SANSUU.hiritsu = {
+  id: "hiritsu", no: "第 8 単元", name: "比とその利用", short: "比",
+  period: "6年", color: "#8c6a3c",
+  themes: "比の意味(a:b)／比の値／等しい比／比を簡単にする／比を使って全体を分ける文章題",
+  questions: [
+    {q:"みかんが4個、りんごが6個あります。みかんとりんごの比を表しましょう。", a:["4:6","6:4","10:4","4:10"], ex:"みかんは4個、りんごは6個なので、比は4:6と表します。"},
+    {q:"赤い花が5本、白い花が3本あります。赤い花と白い花の比を表しましょう。", a:["5:3","3:5","8:5","5:8"], ex:"赤い花は5本、白い花は3本なので、比は5:3と表します。"},
+    {q:"男子が12人、女子が15人あります。男子と女子の比を表しましょう。", a:["12:15","15:12","27:12","12:27"], ex:"男子は12人、女子は15人なので、比は12:15と表します。"},
+    {q:"さとうが2カップ、小麦粉が7カップあります。さとうと小麦粉の比を表しましょう。", a:["2:7","7:2","9:2","2:9"], ex:"さとうは2カップ、小麦粉は7カップなので、比は2:7と表します。"},
+    {q:"水が6dL、ジュースの原液が1dLあります。水とジュースの原液の比を表しましょう。", a:["6:1","1:6","7:6","6:7"], ex:"水は6dL、ジュースの原液は1dLなので、比は6:1と表します。"},
+    {q:"犬が8ひき、ねこが5ひきあります。犬とねこの比を表しましょう。", a:["8:5","5:8","13:8","8:13"], ex:"犬は8ひき、ねこは5ひきなので、比は8:5と表します。"},
+    {q:"赤いビー玉が9こ、青いビー玉が4こあります。赤いビー玉と青いビー玉の比を表しましょう。", a:["9:4","4:9","13:9","9:13"], ex:"赤いビー玉は9こ、青いビー玉は4こなので、比は9:4と表します。"},
+    {q:"1組の人数が18人、2組の人数が20人あります。1組の人数と2組の人数の比を表しましょう。", a:["18:20","20:18","38:18","18:38"], ex:"1組の人数は18人、2組の人数は20人なので、比は18:20と表します。"},
+    {q:"たての長さが3cm、横の長さが5cmあります。たての長さと横の長さの比を表しましょう。", a:["3:5","5:3","8:3","3:8"], ex:"たての長さは3cm、横の長さは5cmなので、比は3:5と表します。"},
+    {q:"米が7kg、もち米が3kgあります。米ともち米の比を表しましょう。", a:["7:3","3:7","10:7","7:10"], ex:"米は7kg、もち米は3kgなので、比は7:3と表します。"},
+    {q:"切手Aが10まい、切手Bが6まいあります。切手Aと切手Bの比を表しましょう。", a:["10:6","6:10","16:10","10:16"], ex:"切手Aは10まい、切手Bは6まいなので、比は10:6と表します。"},
+    {q:"兄の年れいが14才、弟の年れいが8才あります。兄の年れいと弟の年れいの比を表しましょう。", a:["14:8","8:14","22:14","14:22"], ex:"兄の年れいは14才、弟の年れいは8才なので、比は14:8と表します。"},
+    {q:"白いご石が11こ、黒いご石が7こあります。白いご石と黒いご石の比を表しましょう。", a:["11:7","7:11","18:11","11:18"], ex:"白いご石は11こ、黒いご石は7こなので、比は11:7と表します。"},
+    {q:"ノートが5本(さつ)、えんぴつが9本(さつ)あります。ノートとえんぴつの比を表しましょう。", a:["5:9","9:5","14:5","5:14"], ex:"ノートは5本(さつ)、えんぴつは9本(さつ)なので、比は5:9と表します。"},
+    {q:"赤いテープが13m、青いテープが4mあります。赤いテープと青いテープの比を表しましょう。", a:["13:4","4:13","17:13","13:17"], ex:"赤いテープは13m、青いテープは4mなので、比は13:4と表します。"},
+    {q:"4:5の比の値を求めましょう。", a:["4/5","5/4","9/5","4/9"], ex:"比の値はa:bのa÷bなので、4÷5=4/5です。"},
+    {q:"3:4の比の値を求めましょう。", a:["3/4","4/3","7/4","3/7"], ex:"比の値はa:bのa÷bなので、3÷4=3/4です。"},
+    {q:"6:9の比の値を求めましょう。", a:["2/3","3/2","5/3","2/5"], ex:"比の値はa:bのa÷bなので、6÷9=2/3です。"},
+    {q:"8:12の比の値を求めましょう。", a:["2/3","3/2","5/3","2/5"], ex:"比の値はa:bのa÷bなので、8÷12=2/3です。"},
+    {q:"5:2の比の値を求めましょう。", a:["5/2","2/5","7/2","5/7"], ex:"比の値はa:bのa÷bなので、5÷2=5/2です。"},
+    {q:"9:6の比の値を求めましょう。", a:["3/2","2/3","5/2","3/5"], ex:"比の値はa:bのa÷bなので、9÷6=3/2です。"},
+    {q:"10:4の比の値を求めましょう。", a:["5/2","2/5","7/2","5/7"], ex:"比の値はa:bのa÷bなので、10÷4=5/2です。"},
+    {q:"7:14の比の値を求めましょう。", a:["1/2","2","3/2","1/3"], ex:"比の値はa:bのa÷bなので、7÷14=1/2です。"},
+    {q:"15:10の比の値を求めましょう。", a:["3/2","2/3","5/2","3/5"], ex:"比の値はa:bのa÷bなので、15÷10=3/2です。"},
+    {q:"8:3の比の値を求めましょう。", a:["8/3","3/8","11/3","8/11"], ex:"比の値はa:bのa÷bなので、8÷3=8/3です。"},
+    {q:"12:18の比の値を求めましょう。", a:["2/3","3/2","5/3","2/5"], ex:"比の値はa:bのa÷bなので、12÷18=2/3です。"},
+    {q:"5:8の比の値を求めましょう。", a:["5/8","8/5","13/8","5/13"], ex:"比の値はa:bのa÷bなので、5÷8=5/8です。"},
+    {q:"20:5の比の値を求めましょう。", a:["4","1/4","5","4/5"], ex:"比の値はa:bのa÷bなので、20÷5=4です。"},
+    {q:"9:12の比の値を求めましょう。", a:["3/4","4/3","7/4","3/7"], ex:"比の値はa:bのa÷bなので、9÷12=3/4です。"},
+    {q:"14:21の比の値を求めましょう。", a:["2/3","3/2","5/3","2/5"], ex:"比の値はa:bのa÷bなので、14÷21=2/3です。"},
+    {q:"6:4の比の値を求めましょう。", a:["3/2","2/3","5/2","3/5"], ex:"比の値はa:bのa÷bなので、6÷4=3/2です。"},
+    {q:"16:10の比の値を求めましょう。", a:["8/5","5/8","13/5","8/13"], ex:"比の値はa:bのa÷bなので、16÷10=8/5です。"},
+    {q:"3:9の比の値を求めましょう。", a:["1/3","3","4/3","1/4"], ex:"比の値はa:bのa÷bなので、3÷9=1/3です。"},
+    {q:"11:4の比の値を求めましょう。", a:["11/4","4/11","15/4","11/15"], ex:"比の値はa:bのa÷bなので、11÷4=11/4です。"},
+    {q:"25:15の比の値を求めましょう。", a:["5/3","3/5","8/3","5/8"], ex:"比の値はa:bのa÷bなので、25÷15=5/3です。"},
+    {q:"2:3 = 8:□ の□に当てはまる数を求めましょう。", a:["12","14","9","15"], ex:"2を4倍すると8になるので、3も4倍して、□=3×4=12です。"},
+    {q:"3:4 = 12:□ の□に当てはまる数を求めましょう。", a:["16","19","12","20"], ex:"3を4倍すると12になるので、4も4倍して、□=4×4=16です。"},
+    {q:"5:6 = 30:□ の□に当てはまる数を求めましょう。", a:["36","41","30","42"], ex:"5を6倍すると30になるので、6も6倍して、□=6×6=36です。"},
+    {q:"4:7 = 20:□ の□に当てはまる数を求めましょう。", a:["35","39","28","42"], ex:"4を5倍すると20になるので、7も5倍して、□=7×5=35です。"},
+    {q:"2:5 = 14:□ の□に当てはまる数を求めましょう。", a:["35","37","30","40"], ex:"2を7倍すると14になるので、5も7倍して、□=5×7=35です。"},
+    {q:"3:8 = 24:□ の□に当てはまる数を求めましょう。", a:["64","67","56","72"], ex:"3を8倍すると24になるので、8も8倍して、□=8×8=64です。"},
+    {q:"6:5 = 18:□ の□に当てはまる数を求めましょう。", a:["15","21","10","20"], ex:"6を3倍すると18になるので、5も3倍して、□=5×3=15です。"},
+    {q:"7:3 = 28:□ の□に当てはまる数を求めましょう。", a:["12","19","9","15"], ex:"7を4倍すると28になるので、3も4倍して、□=3×4=12です。"},
+    {q:"9:4 = 36:□ の□に当てはまる数を求めましょう。", a:["16","25","12","20"], ex:"9を4倍すると36になるので、4も4倍して、□=4×4=16です。"},
+    {q:"5:9 = 25:□ の□に当てはまる数を求めましょう。", a:["45","50","36","54"], ex:"5を5倍すると25になるので、9も5倍して、□=9×5=45です。"},
+    {q:"8:3 = 32:□ の□に当てはまる数を求めましょう。", a:["12","20","9","15"], ex:"8を4倍すると32になるので、3も4倍して、□=3×4=12です。"},
+    {q:"4:9 = 16:□ の□に当てはまる数を求めましょう。", a:["36","40","27","45"], ex:"4を4倍すると16になるので、9も4倍して、□=9×4=36です。"},
+    {q:"11:2 = 33:□ の□に当てはまる数を求めましょう。", a:["6","17","4","8"], ex:"11を3倍すると33になるので、2も3倍して、□=2×3=6です。"},
+    {q:"3:7 = 15:□ の□に当てはまる数を求めましょう。", a:["35","38","28","42"], ex:"3を5倍すると15になるので、7も5倍して、□=7×5=35です。"},
+    {q:"6:11 = 18:□ の□に当てはまる数を求めましょう。", a:["33","39","22","44"], ex:"6を3倍すると18になるので、11も3倍して、□=11×3=33です。"},
+    {q:"2:9 = 10:□ の□に当てはまる数を求めましょう。", a:["45","47","36","54"], ex:"2を5倍すると10になるので、9も5倍して、□=9×5=45です。"},
+    {q:"10:7 = 40:□ の□に当てはまる数を求めましょう。", a:["28","38","21","35"], ex:"10を4倍すると40になるので、7も4倍して、□=7×4=28です。"},
+    {q:"5:4 = 35:□ の□に当てはまる数を求めましょう。", a:["28","33","24","32"], ex:"5を7倍すると35になるので、4も7倍して、□=4×7=28です。"},
+    {q:"13:2 = 26:□ の□に当てはまる数を求めましょう。", a:["4","17","2","6"], ex:"13を2倍すると26になるので、2も2倍して、□=2×2=4です。"},
+    {q:"7:10 = 21:□ の□に当てはまる数を求めましょう。", a:["30","37","20","40"], ex:"7を3倍すると21になるので、10も3倍して、□=10×3=30です。"},
+    {q:"3:4 = □:20 の□に当てはまる数を求めましょう。", a:["15","19","12","18"], ex:"4を5倍すると20になるので、3も5倍して、□=3×5=15です。"},
+    {q:"2:5 = □:15 の□に当てはまる数を求めましょう。", a:["6","11","4","8"], ex:"5を3倍すると15になるので、2も3倍して、□=2×3=6です。"},
+    {q:"7:2 = □:14 の□に当てはまる数を求めましょう。", a:["49","51","42","56"], ex:"2を7倍すると14になるので、7も7倍して、□=7×7=49です。"},
+    {q:"5:6 = □:24 の□に当てはまる数を求めましょう。", a:["20","26","15","25"], ex:"6を4倍すると24になるので、5も4倍して、□=5×4=20です。"},
+    {q:"4:9 = □:27 の□に当てはまる数を求めましょう。", a:["12","21","8","16"], ex:"9を3倍すると27になるので、4も3倍して、□=4×3=12です。"},
+    {q:"6:7 = □:21 の□に当てはまる数を求めましょう。", a:["18","25","12","24"], ex:"7を3倍すると21になるので、6も3倍して、□=6×3=18です。"},
+    {q:"8:3 = □:9 の□に当てはまる数を求めましょう。", a:["24","27","16","32"], ex:"3を3倍すると9になるので、8も3倍して、□=8×3=24です。"},
+    {q:"9:5 = □:25 の□に当てはまる数を求めましょう。", a:["45","50","36","54"], ex:"5を5倍すると25になるので、9も5倍して、□=9×5=45です。"},
+    {q:"2:7 = □:21 の□に当てはまる数を求めましょう。", a:["6","13","4","8"], ex:"7を3倍すると21になるので、2も3倍して、□=2×3=6です。"},
+    {q:"11:4 = □:16 の□に当てはまる数を求めましょう。", a:["44","48","33","55"], ex:"4を4倍すると16になるので、11も4倍して、□=11×4=44です。"},
+    {q:"16:24を簡単にしましょう。", a:["2:3","3:3","2:4","24:16"], ex:"8で分母分子ならぬ両方の項をわると、16÷8:24÷8=2:3になります。"},
+    {q:"12:18を簡単にしましょう。", a:["2:3","3:3","2:4","18:12"], ex:"6で分母分子ならぬ両方の項をわると、12÷6:18÷6=2:3になります。"},
+    {q:"20:30を簡単にしましょう。", a:["2:3","3:3","2:4","30:20"], ex:"10で分母分子ならぬ両方の項をわると、20÷10:30÷10=2:3になります。"},
+    {q:"15:25を簡単にしましょう。", a:["3:5","4:5","3:6","25:15"], ex:"5で分母分子ならぬ両方の項をわると、15÷5:25÷5=3:5になります。"},
+    {q:"18:24を簡単にしましょう。", a:["3:4","4:4","3:5","24:18"], ex:"6で分母分子ならぬ両方の項をわると、18÷6:24÷6=3:4になります。"},
+    {q:"21:14を簡単にしましょう。", a:["3:2","4:2","3:3","14:21"], ex:"7で分母分子ならぬ両方の項をわると、21÷7:14÷7=3:2になります。"},
+    {q:"36:24を簡単にしましょう。", a:["3:2","4:2","3:3","24:36"], ex:"12で分母分子ならぬ両方の項をわると、36÷12:24÷12=3:2になります。"},
+    {q:"28:20を簡単にしましょう。", a:["7:5","8:5","7:6","20:28"], ex:"4で分母分子ならぬ両方の項をわると、28÷4:20÷4=7:5になります。"},
+    {q:"32:48を簡単にしましょう。", a:["2:3","3:3","2:4","48:32"], ex:"16で分母分子ならぬ両方の項をわると、32÷16:48÷16=2:3になります。"},
+    {q:"45:30を簡単にしましょう。", a:["3:2","4:2","3:3","30:45"], ex:"15で分母分子ならぬ両方の項をわると、45÷15:30÷15=3:2になります。"},
+    {q:"27:18を簡単にしましょう。", a:["3:2","4:2","3:3","18:27"], ex:"9で分母分子ならぬ両方の項をわると、27÷9:18÷9=3:2になります。"},
+    {q:"40:16を簡単にしましょう。", a:["5:2","6:2","5:3","16:40"], ex:"8で分母分子ならぬ両方の項をわると、40÷8:16÷8=5:2になります。"},
+    {q:"24:36を簡単にしましょう。", a:["2:3","3:3","2:4","36:24"], ex:"12で分母分子ならぬ両方の項をわると、24÷12:36÷12=2:3になります。"},
+    {q:"35:49を簡単にしましょう。", a:["5:7","6:7","5:8","49:35"], ex:"7で分母分子ならぬ両方の項をわると、35÷7:49÷7=5:7になります。"},
+    {q:"18:45を簡単にしましょう。", a:["2:5","3:5","2:6","45:18"], ex:"9で分母分子ならぬ両方の項をわると、18÷9:45÷9=2:5になります。"},
+    {q:"42:28を簡単にしましょう。", a:["3:2","4:2","3:3","28:42"], ex:"14で分母分子ならぬ両方の項をわると、42÷14:28÷14=3:2になります。"},
+    {q:"54:36を簡単にしましょう。", a:["3:2","4:2","3:3","36:54"], ex:"18で分母分子ならぬ両方の項をわると、54÷18:36÷18=3:2になります。"},
+    {q:"16:40を簡単にしましょう。", a:["2:5","3:5","2:6","40:16"], ex:"8で分母分子ならぬ両方の項をわると、16÷8:40÷8=2:5になります。"},
+    {q:"63:27を簡単にしましょう。", a:["7:3","8:3","7:4","27:63"], ex:"9で分母分子ならぬ両方の項をわると、63÷9:27÷9=7:3になります。"},
+    {q:"20:50を簡単にしましょう。", a:["2:5","3:5","2:6","50:20"], ex:"10で分母分子ならぬ両方の項をわると、20÷10:50÷10=2:5になります。"},
+    {q:"0.4:0.6を、できるだけ小さい整数の比に簡単にしましょう。", a:["2:3","3:2","3:3","1:1"], ex:"両方に10をかけるなどして整数の比になおしてから簡単にすると、2:3になります。"},
+    {q:"1.2:0.8を、できるだけ小さい整数の比に簡単にしましょう。", a:["3:2","2:3","4:2","1:1"], ex:"両方に10をかけるなどして整数の比になおしてから簡単にすると、3:2になります。"},
+    {q:"0.6:1.5を、できるだけ小さい整数の比に簡単にしましょう。", a:["2:5","5:2","3:5","1:1"], ex:"両方に10をかけるなどして整数の比になおしてから簡単にすると、2:5になります。"},
+    {q:"2.5:1を、できるだけ小さい整数の比に簡単にしましょう。", a:["5:2","2:5","6:2","1:1"], ex:"両方に10をかけるなどして整数の比になおしてから簡単にすると、5:2になります。"},
+    {q:"0.3:0.9を、できるだけ小さい整数の比に簡単にしましょう。", a:["1:3","3:1","2:3","1:1"], ex:"両方に10をかけるなどして整数の比になおしてから簡単にすると、1:3になります。"},
+    {q:"全体90個のおかしを3:2の比で2つに分けます。それぞれ何個になりますか。", t:"文章題", a:["54個と36個","36個と54個","55個と35個","45個と45個"], ex:"全体を3+2=5等分すると1あたり18個。3倍で54個、2倍で36個です。"},
+    {q:"全体80円のお金を3:5の比で2つに分けます。それぞれ何円になりますか。", t:"文章題", a:["30円と50円","50円と30円","31円と49円","40円と40円"], ex:"全体を3+5=8等分すると1あたり10円。3倍で30円、5倍で50円です。"},
+    {q:"全体56まいの色紙を4:3の比で2つに分けます。それぞれ何まいになりますか。", t:"文章題", a:["32まいと24まい","24まいと32まい","33まいと23まい","28まいと28まい"], ex:"全体を4+3=7等分すると1あたり8まい。4倍で32まい、3倍で24まいです。"},
+    {q:"全体72個のあめを5:4の比で2つに分けます。それぞれ何個になりますか。", t:"文章題", a:["40個と32個","32個と40個","41個と31個","36個と36個"], ex:"全体を5+4=9等分すると1あたり8個。5倍で40個、4倍で32個です。"},
+    {q:"全体100cmのテープを2:3の比で2つに分けます。それぞれ何cmになりますか。", t:"文章題", a:["40cmと60cm","60cmと40cm","41cmと59cm","50cmと50cm"], ex:"全体を2+3=5等分すると1あたり20cm。2倍で40cm、3倍で60cmです。"},
+    {q:"全体63人の子どもを4:5の比で2つに分けます。それぞれ何人になりますか。", t:"文章題", a:["28人と35人","35人と28人","29人と34人","31.5人と31.5人"], ex:"全体を4+5=9等分すると1あたり7人。4倍で28人、5倍で35人です。"},
+    {q:"全体48個のみかんを5:3の比で2つに分けます。それぞれ何個になりますか。", t:"文章題", a:["30個と18個","18個と30個","31個と17個","24個と24個"], ex:"全体を5+3=8等分すると1あたり6個。5倍で30個、3倍で18個です。"},
+    {q:"全体96mLのジュースを7:5の比で2つに分けます。それぞれ何mLになりますか。", t:"文章題", a:["56mLと40mL","40mLと56mL","57mLと39mL","48mLと48mL"], ex:"全体を7+5=12等分すると1あたり8mL。7倍で56mL、5倍で40mLです。"},
+    {q:"全体60mのリボンを7:3の比で2つに分けます。それぞれ何mになりますか。", t:"文章題", a:["42mと18m","18mと42m","43mと17m","30mと30m"], ex:"全体を7+3=10等分すると1あたり6m。7倍で42m、3倍で18mです。"},
+    {q:"全体55このおはじきを6:5の比で2つに分けます。それぞれ何こになりますか。", t:"文章題", a:["30こと25こ","25こと30こ","31こと24こ","27.5こと27.5こ"], ex:"全体を6+5=11等分すると1あたり5こ。6倍で30こ、5倍で25こです。"},
+    {q:"全体84kgの米を4:3の比で2つに分けます。それぞれ何kgになりますか。", t:"文章題", a:["48kgと36kg","36kgと48kg","49kgと35kg","42kgと42kg"], ex:"全体を4+3=7等分すると1あたり12kg。4倍で48kg、3倍で36kgです。"},
+    {q:"全体45本のえんぴつを4:5の比で2つに分けます。それぞれ何本になりますか。", t:"文章題", a:["20本と25本","25本と20本","21本と24本","22.5本と22.5本"], ex:"全体を4+5=9等分すると1あたり5本。4倍で20本、5倍で25本です。"},
+    {q:"全体120円のお金を7:5の比で2つに分けます。それぞれ何円になりますか。", t:"文章題", a:["70円と50円","50円と70円","71円と49円","60円と60円"], ex:"全体を7+5=12等分すると1あたり10円。7倍で70円、5倍で50円です。"},
+    {q:"全体77まいのカードを4:7の比で2つに分けます。それぞれ何まいになりますか。", t:"文章題", a:["28まいと49まい","49まいと28まい","29まいと48まい","38.5まいと38.5まい"], ex:"全体を4+7=11等分すると1あたり7まい。4倍で28まい、7倍で49まいです。"},
+    {q:"全体64個のくりを3:5の比で2つに分けます。それぞれ何個になりますか。", t:"文章題", a:["24個と40個","40個と24個","25個と39個","32個と32個"], ex:"全体を3+5=8等分すると1あたり8個。3倍で24個、5倍で40個です。"},
+    {q:"全体108mLの牛にゅうを5:4の比で2つに分けます。それぞれ何mLになりますか。", t:"文章題", a:["60mLと48mL","48mLと60mL","61mLと47mL","54mLと54mL"], ex:"全体を5+4=9等分すると1あたり12mL。5倍で60mL、4倍で48mLです。"},
+    {q:"全体88mのなわを5:3の比で2つに分けます。それぞれ何mになりますか。", t:"文章題", a:["55mと33m","33mと55m","56mと32m","44mと44m"], ex:"全体を5+3=8等分すると1あたり11m。5倍で55m、3倍で33mです。"},
+    {q:"全体65このボールを7:6の比で2つに分けます。それぞれ何こになりますか。", t:"文章題", a:["35こと30こ","30こと35こ","36こと29こ","32.5こと32.5こ"], ex:"全体を7+6=13等分すると1あたり5こ。7倍で35こ、6倍で30こです。"},
+    {q:"全体104gのねん土を7:6の比で2つに分けます。それぞれ何gになりますか。", t:"文章題", a:["56gと48g","48gと56g","57gと47g","52gと52g"], ex:"全体を7+6=13等分すると1あたり8g。7倍で56g、6倍で48gです。"},
+    {q:"全体95人の生徒を4:15の比で2つに分けます。それぞれ何人になりますか。", t:"文章題", a:["20人と75人","75人と20人","21人と74人","47.5人と47.5人"], ex:"全体を4+15=19等分すると1あたり5人。4倍で20人、15倍で75人です。"},
+    {q:"全体66まいの切手を5:6の比で2つに分けます。それぞれ何まいになりますか。", t:"文章題", a:["30まいと36まい","36まいと30まい","31まいと35まい","33まいと33まい"], ex:"全体を5+6=11等分すると1あたり6まい。5倍で30まい、6倍で36まいです。"},
+    {q:"全体130円のお金を9:4の比で2つに分けます。それぞれ何円になりますか。", t:"文章題", a:["90円と40円","40円と90円","91円と39円","65円と65円"], ex:"全体を9+4=13等分すると1あたり10円。9倍で90円、4倍で40円です。"},
+    {q:"全体75本の花を7:8の比で2つに分けます。それぞれ何本になりますか。", t:"文章題", a:["35本と40本","40本と35本","36本と39本","37.5本と37.5本"], ex:"全体を7+8=15等分すると1あたり5本。7倍で35本、8倍で40本です。"},
+    {q:"全体51個のビー玉を10:7の比で2つに分けます。それぞれ何個になりますか。", t:"文章題", a:["30個と21個","21個と30個","31個と20個","25.5個と25.5個"], ex:"全体を10+7=17等分すると1あたり3個。10倍で30個、7倍で21個です。"},
+    {q:"全体98Lの水を3:4の比で2つに分けます。それぞれ何Lになりますか。", t:"文章題", a:["42Lと56L","56Lと42L","43Lと55L","49Lと49L"], ex:"全体を3+4=7等分すると1あたり14L。3倍で42L、4倍で56Lです。"}
+  ]
+};
+
+window.SANSUU.baai = {
+  id: "baai", no: "第 9 単元", name: "場合の数と資料の調べ方", short: "資料",
+  period: "5・6年", color: "#6a3c8c",
+  themes: "順列・組み合わせ(樹形図)／平均／度数分布表・柱状図(ヒストグラム)／代表値(最頻値・中央値など)",
+  questions: [
+    {q:"A,B,Cの3まいのカードを1列に並べる並べ方は、全部で何通りありますか。", t:"文章題", a:["6通り","3通り","9通り","5通り"], ex:"3×2×…×1=6通りです(樹形図で考えると3の階乗になります)。"},
+    {q:"赤,青,黄,緑の4まいの色のふだを1列に並べる並べ方は、全部で何通りありますか。", t:"文章題", a:["24通り","4通り","16通り","10通り"], ex:"4×3×…×1=24通りです(樹形図で考えると4の階乗になります)。"},
+    {q:"1,2,3,4の4まいの数字カードを1列に並べる並べ方は、全部で何通りありますか。", t:"文章題", a:["24通り","4通り","16通り","10通り"], ex:"4×3×…×1=24通りです(樹形図で考えると4の階乗になります)。"},
+    {q:"国語,算数,理科の3まいの教科書を1列に並べる並べ方は、全部で何通りありますか。", t:"文章題", a:["6通り","3通り","9通り","5通り"], ex:"3×2×…×1=6通りです(樹形図で考えると3の階乗になります)。"},
+    {q:"犬,ねこ,鳥,魚の4まいの動物のカードを1列に並べる並べ方は、全部で何通りありますか。", t:"文章題", a:["24通り","4通り","16通り","10通り"], ex:"4×3×…×1=24通りです(樹形図で考えると4の階乗になります)。"},
+    {q:"さくら,ゆき,はなの3まいの名前のふだを1列に並べる並べ方は、全部で何通りありますか。", t:"文章題", a:["6通り","3通り","9通り","5通り"], ex:"3×2×…×1=6通りです(樹形図で考えると3の階乗になります)。"},
+    {q:"4人の中から2人を選んで1列に並べる(順番を区別する)方法は、全部で何通りありますか。", t:"文章題", a:["12通り","6通り","8通り","13通り"], ex:"4人から2人を選んで並べるので、4×3=12通りです。"},
+    {q:"13人の中から2人を選んで1列に並べる(順番を区別する)方法は、全部で何通りありますか。", t:"文章題", a:["156通り","78通り","26通り","157通り"], ex:"13人から2人を選んで並べるので、13×12=156通りです。"},
+    {q:"5人の中から3人を選んで1列に並べる(順番を区別する)方法は、全部で何通りありますか。", t:"文章題", a:["60通り","10通り","15通り","61通り"], ex:"5人から3人を選んで並べるので、5×4×3=60通りです。"},
+    {q:"6人の中から2人を選んで1列に並べる(順番を区別する)方法は、全部で何通りありますか。", t:"文章題", a:["30通り","15通り","12通り","31通り"], ex:"6人から2人を選んで並べるので、6×5=30通りです。"},
+    {q:"4人の中から3人を選んで1列に並べる(順番を区別する)方法は、全部で何通りありますか。", t:"文章題", a:["24通り","4通り","12通り","25通り"], ex:"4人から3人を選んで並べるので、4×3×2=24通りです。"},
+    {q:"7人の中から2人を選んで1列に並べる(順番を区別する)方法は、全部で何通りありますか。", t:"文章題", a:["42通り","21通り","14通り","43通り"], ex:"7人から2人を選んで並べるので、7×6=42通りです。"},
+    {q:"6人の中から3人を選んで1列に並べる(順番を区別する)方法は、全部で何通りありますか。", t:"文章題", a:["120通り","20通り","18通り","121通り"], ex:"6人から3人を選んで並べるので、6×5×4=120通りです。"},
+    {q:"8人の中から2人を選んで1列に並べる(順番を区別する)方法は、全部で何通りありますか。", t:"文章題", a:["56通り","28通り","16通り","57通り"], ex:"8人から2人を選んで並べるので、8×7=56通りです。"},
+    {q:"5人の中から4人を選んで1列に並べる(順番を区別する)方法は、全部で何通りありますか。", t:"文章題", a:["120通り","5通り","20通り","121通り"], ex:"5人から4人を選んで並べるので、5×4×3×2=120通りです。"},
+    {q:"9人の中から2人を選んで1列に並べる(順番を区別する)方法は、全部で何通りありますか。", t:"文章題", a:["72通り","36通り","18通り","73通り"], ex:"9人から2人を選んで並べるので、9×8=72通りです。"},
+    {q:"4人で走ったかけっこで、1位と2位の順位の決まり方は全部で何通りありますか。", t:"文章題", a:["12通り","6通り","24通り","16通り"], ex:"4人から2人を順番を区別して選ぶので、4×3=12通りです。"},
+    {q:"5人で走ったかけっこで、1位から3位までの順位の決まり方は全部で何通りありますか。", t:"文章題", a:["60通り","10通り","120通り","25通り"], ex:"5人から3人を順番を区別して選ぶので、5×4×3=60通りです。"},
+    {q:"6人で走ったかけっこで、1位と2位の順位の決まり方は全部で何通りありますか。", t:"文章題", a:["30通り","15通り","720通り","36通り"], ex:"6人から2人を順番を区別して選ぶので、6×5=30通りです。"},
+    {q:"5人で走ったかけっこで、1位と2位の順位の決まり方は全部で何通りありますか。", t:"文章題", a:["20通り","10通り","120通り","25通り"], ex:"5人から2人を順番を区別して選ぶので、5×4=20通りです。"},
+    {q:"7人で走ったかけっこで、1位から3位までの順位の決まり方は全部で何通りありますか。", t:"文章題", a:["210通り","35通り","5040通り","49通り"], ex:"7人から3人を順番を区別して選ぶので、7×6×5=210通りです。"},
+    {q:"6人で走ったかけっこで、1位から3位までの順位の決まり方は全部で何通りありますか。", t:"文章題", a:["120通り","20通り","720通り","36通り"], ex:"6人から3人を順番を区別して選ぶので、6×5×4=120通りです。"},
+    {q:"11人の中から2人を選ぶ(順番は考えない)組み合わせは、全部で何通りありますか。", t:"文章題", a:["55通り","110通り","22通り","56通り"], ex:"組み合わせの数は11C2で、順列110通りを2人の並べ方2通りでわって、110÷2=55通りです。"},
+    {q:"6人の中から2人を選ぶ(順番は考えない)組み合わせは、全部で何通りありますか。", t:"文章題", a:["15通り","30通り","12通り","16通り"], ex:"組み合わせの数は6C2で、順列30通りを2人の並べ方2通りでわって、30÷2=15通りです。"},
+    {q:"5人の中から3人を選ぶ(順番は考えない)組み合わせは、全部で何通りありますか。", t:"文章題", a:["10通り","60通り","15通り","11通り"], ex:"組み合わせの数は5C3で、順列60通りを3人の並べ方6通りでわって、60÷6=10通りです。"},
+    {q:"6人の中から3人を選ぶ(順番は考えない)組み合わせは、全部で何通りありますか。", t:"文章題", a:["20通り","120通り","18通り","21通り"], ex:"組み合わせの数は6C3で、順列120通りを3人の並べ方6通りでわって、120÷6=20通りです。"},
+    {q:"4人の中から2人を選ぶ(順番は考えない)組み合わせは、全部で何通りありますか。", t:"文章題", a:["6通り","12通り","8通り","7通り"], ex:"組み合わせの数は4C2で、順列12通りを2人の並べ方2通りでわって、12÷2=6通りです。"},
+    {q:"7人の中から2人を選ぶ(順番は考えない)組み合わせは、全部で何通りありますか。", t:"文章題", a:["21通り","42通り","14通り","22通り"], ex:"組み合わせの数は7C2で、順列42通りを2人の並べ方2通りでわって、42÷2=21通りです。"},
+    {q:"6人の中から4人を選ぶ(順番は考えない)組み合わせは、全部で何通りありますか。", t:"文章題", a:["15通り","360通り","24通り","16通り"], ex:"組み合わせの数は6C4で、順列360通りを4人の並べ方24通りでわって、360÷24=15通りです。"},
+    {q:"8人の中から2人を選ぶ(順番は考えない)組み合わせは、全部で何通りありますか。", t:"文章題", a:["28通り","56通り","16通り","29通り"], ex:"組み合わせの数は8C2で、順列56通りを2人の並べ方2通りでわって、56÷2=28通りです。"},
+    {q:"7人の中から3人を選ぶ(順番は考えない)組み合わせは、全部で何通りありますか。", t:"文章題", a:["35通り","210通り","21通り","36通り"], ex:"組み合わせの数は7C3で、順列210通りを3人の並べ方6通りでわって、210÷6=35通りです。"},
+    {q:"9人の中から2人を選ぶ(順番は考えない)組み合わせは、全部で何通りありますか。", t:"文章題", a:["36通り","72通り","18通り","37通り"], ex:"組み合わせの数は9C2で、順列72通りを2人の並べ方2通りでわって、72÷2=36通りです。"},
+    {q:"10人の中から2人を選ぶ(順番は考えない)組み合わせは、全部で何通りありますか。", t:"文章題", a:["45通り","90通り","20通り","46通り"], ex:"組み合わせの数は10C2で、順列90通りを2人の並べ方2通りでわって、90÷2=45通りです。"},
+    {q:"5人の中から4人を選ぶ(順番は考えない)組み合わせは、全部で何通りありますか。", t:"文章題", a:["5通り","120通り","20通り","6通り"], ex:"組み合わせの数は5C4で、順列120通りを4人の並べ方24通りでわって、120÷24=5通りです。"},
+    {q:"4人が1回ずつ全員とあくしゅをすると、あくしゅの回数は全部で何回になりますか。", t:"文章題", a:["6回","12回","4回","10回"], ex:"4人から2人を選ぶ組み合わせなので、4C2=12÷2=6です。"},
+    {q:"5人が1回ずつ全員とあくしゅをすると、あくしゅの回数は全部で何回になりますか。", t:"文章題", a:["10回","20回","5回","15回"], ex:"5人から2人を選ぶ組み合わせなので、5C2=20÷2=10です。"},
+    {q:"6人が1回ずつ全員とあくしゅをすると、あくしゅの回数は全部で何回になりますか。", t:"文章題", a:["15回","30回","6回","21回"], ex:"6人から2人を選ぶ組み合わせなので、6C2=30÷2=15です。"},
+    {q:"7人が1回ずつ全員とあくしゅをすると、あくしゅの回数は全部で何回になりますか。", t:"文章題", a:["21回","42回","7回","28回"], ex:"7人から2人を選ぶ組み合わせなので、7C2=42÷2=21です。"},
+    {q:"4人が総当たり戦(リーグ戦)で1回ずつ試合をすると、試合数は全部で何試合になりますか。", t:"文章題", a:["6試合","12試合","4試合","10試合"], ex:"4人から2人を選ぶ組み合わせなので、4C2=12÷2=6です。"},
+    {q:"5人が総当たり戦(リーグ戦)で1回ずつ試合をすると、試合数は全部で何試合になりますか。", t:"文章題", a:["10試合","20試合","5試合","15試合"], ex:"5人から2人を選ぶ組み合わせなので、5C2=20÷2=10です。"},
+    {q:"6人が総当たり戦(リーグ戦)で1回ずつ試合をすると、試合数は全部で何試合になりますか。", t:"文章題", a:["15試合","30試合","6試合","21試合"], ex:"6人から2人を選ぶ組み合わせなので、6C2=30÷2=15です。"},
+    {q:"8人が総当たり戦(リーグ戦)で1回ずつ試合をすると、試合数は全部で何試合になりますか。", t:"文章題", a:["28試合","56試合","8試合","36試合"], ex:"8人から2人を選ぶ組み合わせなので、8C2=56÷2=28です。"},
+    {q:"5種類のケーキの中から2つを選ぶ組み合わせは、全部で何通りありますか。", t:"文章題", a:["10通り","20通り","3通り","5通り"], ex:"5C2=20÷2=10通りです。"},
+    {q:"4色のリボンの中から2つを選ぶ組み合わせは、全部で何通りありますか。", t:"文章題", a:["6通り","12通り","2通り","4通り"], ex:"4C2=12÷2=6通りです。"},
+    {q:"6種類の果物の中から3つを選ぶ組み合わせは、全部で何通りありますか。", t:"文章題", a:["20通り","120通り","3通り","15通り"], ex:"6C3=120÷6=20通りです。"},
+    {q:"5種類のパンの中から2つを選ぶ組み合わせは、全部で何通りありますか。", t:"文章題", a:["10通り","20通り","3通り","5通り"], ex:"5C2=20÷2=10通りです。"},
+    {q:"7色のペンの中から2つを選ぶ組み合わせは、全部で何通りありますか。", t:"文章題", a:["21通り","42通り","5通り","7通り"], ex:"7C2=42÷2=21通りです。"},
+    {q:"8、6、10、4の平均を求めましょう。", t:"計算", a:["7","28","8","5.6"], ex:"合計は28で、個数は4こなので、平均は28÷4=7です。"},
+    {q:"15、18、21、14、12の平均を求めましょう。", t:"計算", a:["16","80","17","13.333"], ex:"合計は80で、個数は5こなので、平均は80÷5=16です。"},
+    {q:"70、85、90、75の平均を求めましょう。", t:"計算", a:["80","320","81","64"], ex:"合計は320で、個数は4こなので、平均は320÷4=80です。"},
+    {q:"3、5、7、9、11の平均を求めましょう。", t:"計算", a:["7","35","8","5.833"], ex:"合計は35で、個数は5こなので、平均は35÷5=7です。"},
+    {q:"120、150、90、160の平均を求めましょう。", t:"計算", a:["130","520","131","104"], ex:"合計は520で、個数は4こなので、平均は520÷4=130です。"},
+    {q:"6、8、4、10、7の平均を求めましょう。", t:"計算", a:["7","35","8","5.833"], ex:"合計は35で、個数は5こなので、平均は35÷5=7です。"},
+    {q:"200、180、220、160の平均を求めましょう。", t:"計算", a:["190","760","191","152"], ex:"合計は760で、個数は4こなので、平均は760÷4=190です。"},
+    {q:"9、7、8、10、6の平均を求めましょう。", t:"計算", a:["8","40","9","6.667"], ex:"合計は40で、個数は5こなので、平均は40÷5=8です。"},
+    {q:"55、60、65、70の平均を求めましょう。", t:"計算", a:["62.5","250","63.5","50"], ex:"合計は250で、個数は4こなので、平均は250÷4=62.5です。"},
+    {q:"12、15、9、18、16の平均を求めましょう。", t:"計算", a:["14","70","15","11.667"], ex:"合計は70で、個数は5こなので、平均は70÷5=14です。"},
+    {q:"4、4、4、4、4の平均を求めましょう。", t:"計算", a:["4","20","5","3.333"], ex:"合計は20で、個数は5こなので、平均は20÷5=4です。"},
+    {q:"30、45、60、25の平均を求めましょう。", t:"計算", a:["40","160","41","32"], ex:"合計は160で、個数は4こなので、平均は160÷4=40です。"},
+    {q:"100、95、90、105、110の平均を求めましょう。", t:"計算", a:["100","500","101","83.333"], ex:"合計は500で、個数は5こなので、平均は500÷5=100です。"},
+    {q:"2、3、4、5、6、7の平均を求めましょう。", t:"計算", a:["4.5","27","5.5","3.857"], ex:"合計は27で、個数は6こなので、平均は27÷6=4.5です。"},
+    {q:"80、70、60、90の平均を求めましょう。", t:"計算", a:["75","300","76","60"], ex:"合計は300で、個数は4こなので、平均は300÷4=75です。"},
+    {q:"ある野球選手は4試合でヒットを5本,3本,7本,1本打ちました。1試合あたりの平均本数は何本でしょう。", t:"文章題", a:["4本","16本","3.2本","5本"], ex:"合計16本を4でわって、16÷4=4本です。"},
+    {q:"ある学級文庫で5日間に貸し出された本の数は6さつ,9さつ,4さつ,10さつ,6さつでした。1日あたりの平均は何さつでしょう。", t:"文章題", a:["7さつ","35さつ","5.833さつ","8さつ"], ex:"合計35さつを5でわって、35÷5=7さつです。"},
+    {q:"ある牧場で1週間の間に生まれた子牛の数を数えると、月〜日で2頭,3頭,1頭,4頭,2頭,0頭,2頭でした。1日あたりの平均は何頭でしょう。", t:"文章題", a:["2頭","14頭","1.75頭","3頭"], ex:"合計14頭を7でわって、14÷7=2頭です。"},
+    {q:"ある人が5日間で歩いた歩数は8000歩,9500歩,7000歩,8500歩,7000歩でした。1日あたりの平均は何歩でしょう。", t:"文章題", a:["8000歩","40000歩","6666.667歩","8001歩"], ex:"合計40000歩を5でわって、40000÷5=8000歩です。"},
+    {q:"6人の身長を測ると140cm,145cm,138cm,150cm,142cm,143cmでした。6人の平均身長は何cmでしょう。", t:"文章題", a:["143cm","858cm","122.571cm","144cm"], ex:"合計858cmを6でわって、858÷6=143cmです。"},
+    {q:"あるクラス32人の体重を、度数分布表に表しました。\n20kg以上30kg未満　……　3人\n30kg以上40kg未満　……　8人\n40kg以上50kg未満　……　12人\n50kg以上60kg未満　……　6人\n60kg以上70kg未満　……　3人\nこの中で、人数がいちばん多い階級はどれでしょう。", t:"文章題", a:["40kg以上50kg未満","50kg以上60kg未満","60kg以上70kg未満","20kg以上30kg未満"], ex:"度数(人数)がいちばん多いのは「40kg以上50kg未満」の12人です。"},
+    {q:"あるクラス32人の体重を、度数分布表に表しました。\n20kg以上30kg未満　……　3人\n30kg以上40kg未満　……　8人\n40kg以上50kg未満　……　12人\n50kg以上60kg未満　……　6人\n60kg以上70kg未満　……　3人\nこの度数分布表の度数の合計(全体の人数)は何人でしょう。", t:"文章題", a:["32人","20人","34人","12人"], ex:"すべての階級の人数をたすと、3+8+12+6+3=32人です。"},
+    {q:"あるクラス32人の体重を、度数分布表に表しました。\n20kg以上30kg未満　……　3人\n30kg以上40kg未満　……　8人\n40kg以上50kg未満　……　12人\n50kg以上60kg未満　……　6人\n60kg以上70kg未満　……　3人\n「30kg以上40kg未満」の階級の人数は何人でしょう。", t:"文章題", a:["8人","10人","3人","32人"], ex:"表から「30kg以上40kg未満」の階級の人数は8人と読み取れます。"},
+    {q:"あるクラス32人の体重を、度数分布表に表しました。\n20kg以上30kg未満　……　3人\n30kg以上40kg未満　……　8人\n40kg以上50kg未満　……　12人\n50kg以上60kg未満　……　6人\n60kg以上70kg未満　……　3人\n体重が「20kg以上30kg未満」と「30kg以上40kg未満」の階級に入る人を合わせると、何人になりますか。", t:"文章題", a:["11人","32人","23人","5人"], ex:"3+8=11人です。"},
+    {q:"あるクラス32人の体重を、度数分布表に表しました。\n20kg以上30kg未満　……　3人\n30kg以上40kg未満　……　8人\n40kg以上50kg未満　……　12人\n50kg以上60kg未満　……　6人\n60kg以上70kg未満　……　3人\n体重が「50kg以上60kg未満」と「60kg以上70kg未満」の階級に入る人を合わせると、何人になりますか。", t:"文章題", a:["9人","32人","23人","3人"], ex:"6+3=9人です。"},
+    {q:"ある学年35人の通学時間を、度数分布表に表しました。\n0分以上10分未満　……　5人\n10分以上20分未満　……　9人\n20分以上30分未満　……　11人\n30分以上40分未満　……　7人\n40分以上50分未満　……　3人\nこの中で、人数がいちばん多い階級はどれでしょう。", t:"文章題", a:["20分以上30分未満","30分以上40分未満","40分以上50分未満","0分以上10分未満"], ex:"度数(人数)がいちばん多いのは「20分以上30分未満」の11人です。"},
+    {q:"ある学年35人の通学時間を、度数分布表に表しました。\n0分以上10分未満　……　5人\n10分以上20分未満　……　9人\n20分以上30分未満　……　11人\n30分以上40分未満　……　7人\n40分以上50分未満　……　3人\nこの度数分布表の度数の合計(全体の人数)は何人でしょう。", t:"文章題", a:["35人","24人","37人","11人"], ex:"すべての階級の人数をたすと、5+9+11+7+3=35人です。"},
+    {q:"ある学年35人の通学時間を、度数分布表に表しました。\n0分以上10分未満　……　5人\n10分以上20分未満　……　9人\n20分以上30分未満　……　11人\n30分以上40分未満　……　7人\n40分以上50分未満　……　3人\n「10分以上20分未満」の階級の人数は何人でしょう。", t:"文章題", a:["9人","11人","5人","35人"], ex:"表から「10分以上20分未満」の階級の人数は9人と読み取れます。"},
+    {q:"ある学年35人の通学時間を、度数分布表に表しました。\n0分以上10分未満　……　5人\n10分以上20分未満　……　9人\n20分以上30分未満　……　11人\n30分以上40分未満　……　7人\n40分以上50分未満　……　3人\n通学時間が「0分以上10分未満」と「10分以上20分未満」の階級に入る人を合わせると、何人になりますか。", t:"文章題", a:["14人","35人","25人","4人"], ex:"5+9=14人です。"},
+    {q:"ある学年35人の通学時間を、度数分布表に表しました。\n0分以上10分未満　……　5人\n10分以上20分未満　……　9人\n20分以上30分未満　……　11人\n30分以上40分未満　……　7人\n40分以上50分未満　……　3人\n通学時間が「30分以上40分未満」と「40分以上50分未満」の階級に入る人を合わせると、何人になりますか。", t:"文章題", a:["10人","35人","25人","4人"], ex:"7+3=10人です。"},
+    {q:"あるクラス30人のテストの点数を、度数分布表に表しました。\n40点以上50点未満　……　2人\n50点以上60点未満　……　5人\n60点以上70点未満　……　10人\n70点以上80点未満　……　9人\n80点以上90点未満　……　3人\n90点以上100点未満　……　1人\nこの中で、人数がいちばん多い階級はどれでしょう。", t:"文章題", a:["60点以上70点未満","70点以上80点未満","80点以上90点未満","40点以上50点未満"], ex:"度数(人数)がいちばん多いのは「60点以上70点未満」の10人です。"},
+    {q:"あるクラス30人のテストの点数を、度数分布表に表しました。\n40点以上50点未満　……　2人\n50点以上60点未満　……　5人\n60点以上70点未満　……　10人\n70点以上80点未満　……　9人\n80点以上90点未満　……　3人\n90点以上100点未満　……　1人\nこの度数分布表の度数の合計(全体の人数)は何人でしょう。", t:"文章題", a:["30人","20人","32人","10人"], ex:"すべての階級の人数をたすと、2+5+10+9+3+1=30人です。"},
+    {q:"あるクラス30人のテストの点数を、度数分布表に表しました。\n40点以上50点未満　……　2人\n50点以上60点未満　……　5人\n60点以上70点未満　……　10人\n70点以上80点未満　……　9人\n80点以上90点未満　……　3人\n90点以上100点未満　……　1人\n「50点以上60点未満」の階級の人数は何人でしょう。", t:"文章題", a:["5人","7人","2人","30人"], ex:"表から「50点以上60点未満」の階級の人数は5人と読み取れます。"},
+    {q:"あるクラス30人のテストの点数を、度数分布表に表しました。\n40点以上50点未満　……　2人\n50点以上60点未満　……　5人\n60点以上70点未満　……　10人\n70点以上80点未満　……　9人\n80点以上90点未満　……　3人\n90点以上100点未満　……　1人\n点数が「40点以上50点未満」と「50点以上60点未満」の階級に入る人を合わせると、何人になりますか。", t:"文章題", a:["7人","30人","17人","3人"], ex:"2+5=7人です。"},
+    {q:"あるクラス30人のテストの点数を、度数分布表に表しました。\n40点以上50点未満　……　2人\n50点以上60点未満　……　5人\n60点以上70点未満　……　10人\n70点以上80点未満　……　9人\n80点以上90点未満　……　3人\n90点以上100点未満　……　1人\n点数が「80点以上90点未満」と「90点以上100点未満」の階級に入る人を合わせると、何人になりますか。", t:"文章題", a:["4人","30人","26人","2人"], ex:"3+1=4人です。"},
+    {q:"あるクラス30人の1か月の読書冊数を、度数分布表に表しました。\n0さつ以上2さつ未満　……　4人\n2さつ以上4さつ未満　……　10人\n4さつ以上6さつ未満　……　8人\n6さつ以上8さつ未満　……　5人\n8さつ以上10さつ未満　……　3人\nこの中で、人数がいちばん多い階級はどれでしょう。", t:"文章題", a:["2さつ以上4さつ未満","4さつ以上6さつ未満","6さつ以上8さつ未満","0さつ以上2さつ未満"], ex:"度数(人数)がいちばん多いのは「2さつ以上4さつ未満」の10人です。"},
+    {q:"あるクラス30人の1か月の読書冊数を、度数分布表に表しました。\n0さつ以上2さつ未満　……　4人\n2さつ以上4さつ未満　……　10人\n4さつ以上6さつ未満　……　8人\n6さつ以上8さつ未満　……　5人\n8さつ以上10さつ未満　……　3人\nこの度数分布表の度数の合計(全体の人数)は何人でしょう。", t:"文章題", a:["30人","20人","32人","10人"], ex:"すべての階級の人数をたすと、4+10+8+5+3=30人です。"},
+    {q:"あるクラス30人の1か月の読書冊数を、度数分布表に表しました。\n0さつ以上2さつ未満　……　4人\n2さつ以上4さつ未満　……　10人\n4さつ以上6さつ未満　……　8人\n6さつ以上8さつ未満　……　5人\n8さつ以上10さつ未満　……　3人\n「2さつ以上4さつ未満」の階級の人数は何人でしょう。", t:"文章題", a:["10人","12人","4人","30人"], ex:"表から「2さつ以上4さつ未満」の階級の人数は10人と読み取れます。"},
+    {q:"あるクラス30人の1か月の読書冊数を、度数分布表に表しました。\n0さつ以上2さつ未満　……　4人\n2さつ以上4さつ未満　……　10人\n4さつ以上6さつ未満　……　8人\n6さつ以上8さつ未満　……　5人\n8さつ以上10さつ未満　……　3人\n読書冊数が「0さつ以上2さつ未満」と「2さつ以上4さつ未満」の階級に入る人を合わせると、何人になりますか。", t:"文章題", a:["14人","30人","22人","6人"], ex:"4+10=14人です。"},
+    {q:"あるクラス30人の1か月の読書冊数を、度数分布表に表しました。\n0さつ以上2さつ未満　……　4人\n2さつ以上4さつ未満　……　10人\n4さつ以上6さつ未満　……　8人\n6さつ以上8さつ未満　……　5人\n8さつ以上10さつ未満　……　3人\n読書冊数が「6さつ以上8さつ未満」と「8さつ以上10さつ未満」の階級に入る人を合わせると、何人になりますか。", t:"文章題", a:["8人","30人","22人","2人"], ex:"5+3=8人です。"},
+    {q:"ある学年35人の身長を、度数分布表に表しました。\n130cm以上135cm未満　……　2人\n135cm以上140cm未満　……　6人\n140cm以上145cm未満　……　14人\n145cm以上150cm未満　……　9人\n150cm以上155cm未満　……　4人\nこの中で、人数がいちばん多い階級はどれでしょう。", t:"文章題", a:["140cm以上145cm未満","145cm以上150cm未満","150cm以上155cm未満","130cm以上135cm未満"], ex:"度数(人数)がいちばん多いのは「140cm以上145cm未満」の14人です。"},
+    {q:"ある学年35人の身長を、度数分布表に表しました。\n130cm以上135cm未満　……　2人\n135cm以上140cm未満　……　6人\n140cm以上145cm未満　……　14人\n145cm以上150cm未満　……　9人\n150cm以上155cm未満　……　4人\nこの度数分布表の度数の合計(全体の人数)は何人でしょう。", t:"文章題", a:["35人","21人","37人","14人"], ex:"すべての階級の人数をたすと、2+6+14+9+4=35人です。"},
+    {q:"ある学年35人の身長を、度数分布表に表しました。\n130cm以上135cm未満　……　2人\n135cm以上140cm未満　……　6人\n140cm以上145cm未満　……　14人\n145cm以上150cm未満　……　9人\n150cm以上155cm未満　……　4人\n「135cm以上140cm未満」の階級の人数は何人でしょう。", t:"文章題", a:["6人","8人","2人","35人"], ex:"表から「135cm以上140cm未満」の階級の人数は6人と読み取れます。"},
+    {q:"ある学年35人の身長を、度数分布表に表しました。\n130cm以上135cm未満　……　2人\n135cm以上140cm未満　……　6人\n140cm以上145cm未満　……　14人\n145cm以上150cm未満　……　9人\n150cm以上155cm未満　……　4人\n身長が「130cm以上135cm未満」と「135cm以上140cm未満」の階級に入る人を合わせると、何人になりますか。", t:"文章題", a:["8人","35人","22人","4人"], ex:"2+6=8人です。"},
+    {q:"ある学年35人の身長を、度数分布表に表しました。\n130cm以上135cm未満　……　2人\n135cm以上140cm未満　……　6人\n140cm以上145cm未満　……　14人\n145cm以上150cm未満　……　9人\n150cm以上155cm未満　……　4人\n身長が「145cm以上150cm未満」と「150cm以上155cm未満」の階級に入る人を合わせると、何人になりますか。", t:"文章題", a:["13人","35人","22人","5人"], ex:"9+4=13人です。"},
+    {q:"あるクラスの反復横とびの回数(7人分)は次の通りです。\n4、6、6、9、11、13、15回\nこのデータの最頻値(いちばん多く出てくる値)を求めましょう。", t:"文章題", a:["6回","9回","15回","4回"], ex:"小さい順に並べると 4、6、6、9、11、13、15 です。いちばん多く出てくる値は6回です。"},
+    {q:"あるクラスの反復横とびの回数(7人分)は次の通りです。\n4、6、6、9、11、13、15回\nこのデータの中央値(小さい順に並べたときの真ん中の値)を求めましょう。", t:"文章題", a:["9回","6回","15回","4回"], ex:"小さい順に並べると 4、6、6、9、11、13、15 です。真ん中の値は9回です。"},
+    {q:"あるクラスの反復横とびの回数(7人分)は次の通りです。\n4、6、6、9、11、13、15回\nこのデータの範囲(最大値と最小値の差)を求めましょう。", t:"文章題", a:["11回","15回","4回","9回"], ex:"最大値15回から最小値4回をひいて、範囲は15-4=11回です。"},
+    {q:"ある店の1週間の来客数の記録(8日分)は次の通りです。\n10、13、13、15、17、19、20、22人\nこのデータの最頻値(いちばん多く出てくる値)を求めましょう。", t:"文章題", a:["13人","16人","22人","10人"], ex:"小さい順に並べると 10、13、13、15、17、19、20、22 です。いちばん多く出てくる値は13人です。"},
+    {q:"ある店の1週間の来客数の記録(8日分)は次の通りです。\n10、13、13、15、17、19、20、22人\nこのデータの中央値(小さい順に並べたときの真ん中の値)を求めましょう。", t:"文章題", a:["16人","13人","22人","10人"], ex:"小さい順に並べると 10、13、13、15、17、19、20、22 です。真ん中2つの値の平均をとって、中央値は16人です。"},
+    {q:"ある店の1週間の来客数の記録(8日分)は次の通りです。\n10、13、13、15、17、19、20、22人\nこのデータの範囲(最大値と最小値の差)を求めましょう。", t:"文章題", a:["12人","22人","10人","16人"], ex:"最大値22人から最小値10人をひいて、範囲は22-10=12人です。"},
+    {q:"あるグループの読書冊数(7人分)は次の通りです。\n2、4、4、5、7、9、11さつ\nこのデータの最頻値(いちばん多く出てくる値)を求めましょう。", t:"文章題", a:["4さつ","5さつ","11さつ","2さつ"], ex:"小さい順に並べると 2、4、4、5、7、9、11 です。いちばん多く出てくる値は4さつです。"},
+    {q:"あるグループの読書冊数(7人分)は次の通りです。\n2、4、4、5、7、9、11さつ\nこのデータの中央値(小さい順に並べたときの真ん中の値)を求めましょう。", t:"文章題", a:["5さつ","4さつ","11さつ","2さつ"], ex:"小さい順に並べると 2、4、4、5、7、9、11 です。真ん中の値は5さつです。"},
+    {q:"あるグループの読書冊数(7人分)は次の通りです。\n2、4、4、5、7、9、11さつ\nこのデータの範囲(最大値と最小値の差)を求めましょう。", t:"文章題", a:["9さつ","11さつ","2さつ","5さつ"], ex:"最大値11さつから最小値2さつをひいて、範囲は11-2=9さつです。"},
+    {q:"あるクラスの漢字テストの点数(7人分)は次の通りです。\n20、23、23、25、27、29、31点\nこのデータの最頻値(いちばん多く出てくる値)を求めましょう。", t:"文章題", a:["23点","25点","31点","20点"], ex:"小さい順に並べると 20、23、23、25、27、29、31 です。いちばん多く出てくる値は23点です。"},
+    {q:"あるクラスの漢字テストの点数(7人分)は次の通りです。\n20、23、23、25、27、29、31点\nこのデータの中央値(小さい順に並べたときの真ん中の値)を求めましょう。", t:"文章題", a:["25点","23点","31点","20点"], ex:"小さい順に並べると 20、23、23、25、27、29、31 です。真ん中の値は25点です。"},
+    {q:"あるクラスの漢字テストの点数(7人分)は次の通りです。\n20、23、23、25、27、29、31点\nこのデータの範囲(最大値と最小値の差)を求めましょう。", t:"文章題", a:["11点","31点","20点","25点"], ex:"最大値31点から最小値20点をひいて、範囲は31-20=11点です。"},
+    {q:"ある家庭の1週間の卵の使用数(8日分)は次の通りです。\n4、6、6、7、9、10、12、14こ\nこのデータの最頻値(いちばん多く出てくる値)を求めましょう。", t:"文章題", a:["6こ","8こ","14こ","4こ"], ex:"小さい順に並べると 4、6、6、7、9、10、12、14 です。いちばん多く出てくる値は6こです。"},
+    {q:"ある家庭の1週間の卵の使用数(8日分)は次の通りです。\n4、6、6、7、9、10、12、14こ\nこのデータの中央値(小さい順に並べたときの真ん中の値)を求めましょう。", t:"文章題", a:["8こ","6こ","14こ","4こ"], ex:"小さい順に並べると 4、6、6、7、9、10、12、14 です。真ん中2つの値の平均をとって、中央値は8こです。"},
+    {q:"ある家庭の1週間の卵の使用数(8日分)は次の通りです。\n4、6、6、7、9、10、12、14こ\nこのデータの範囲(最大値と最小値の差)を求めましょう。", t:"文章題", a:["10こ","14こ","4こ","8こ"], ex:"最大値14こから最小値4こをひいて、範囲は14-4=10こです。"},
+    {q:"あるクラスの計算テストの点数(7人分)は次の通りです。\n80、83、83、90、93、96、100点\nこのデータの最頻値(いちばん多く出てくる値)を求めましょう。", t:"文章題", a:["83点","90点","100点","80点"], ex:"小さい順に並べると 80、83、83、90、93、96、100 です。いちばん多く出てくる値は83点です。"},
+    {q:"あるクラスの計算テストの点数(7人分)は次の通りです。\n80、83、83、90、93、96、100点\nこのデータの中央値(小さい順に並べたときの真ん中の値)を求めましょう。", t:"文章題", a:["90点","83点","100点","80点"], ex:"小さい順に並べると 80、83、83、90、93、96、100 です。真ん中の値は90点です。"},
+    {q:"あるクラスの計算テストの点数(7人分)は次の通りです。\n80、83、83、90、93、96、100点\nこのデータの範囲(最大値と最小値の差)を求めましょう。", t:"文章題", a:["20点","100点","80点","90点"], ex:"最大値100点から最小値80点をひいて、範囲は100-80=20点です。"},
+    {q:"ある公園の1日ごとの利用者数(8日分)は次の通りです。\n1、3、3、5、7、9、11、13人\nこのデータの最頻値(いちばん多く出てくる値)を求めましょう。", t:"文章題", a:["3人","6人","13人","1人"], ex:"小さい順に並べると 1、3、3、5、7、9、11、13 です。いちばん多く出てくる値は3人です。"},
+    {q:"ある公園の1日ごとの利用者数(8日分)は次の通りです。\n1、3、3、5、7、9、11、13人\nこのデータの中央値(小さい順に並べたときの真ん中の値)を求めましょう。", t:"文章題", a:["6人","3人","13人","1人"], ex:"小さい順に並べると 1、3、3、5、7、9、11、13 です。真ん中2つの値の平均をとって、中央値は6人です。"},
+    {q:"ある公園の1日ごとの利用者数(8日分)は次の通りです。\n1、3、3、5、7、9、11、13人\nこのデータの範囲(最大値と最小値の差)を求めましょう。", t:"文章題", a:["12人","13人","1人","6人"], ex:"最大値13人から最小値1人をひいて、範囲は13-1=12人です。"},
+    {q:"あるグループの上体起こしの回数(7人分)は次の通りです。\n45、48、48、50、55、60、65回\nこのデータの最頻値(いちばん多く出てくる値)を求めましょう。", t:"文章題", a:["48回","50回","65回","45回"], ex:"小さい順に並べると 45、48、48、50、55、60、65 です。いちばん多く出てくる値は48回です。"},
+    {q:"あるグループの上体起こしの回数(7人分)は次の通りです。\n45、48、48、50、55、60、65回\nこのデータの中央値(小さい順に並べたときの真ん中の値)を求めましょう。", t:"文章題", a:["50回","48回","65回","45回"], ex:"小さい順に並べると 45、48、48、50、55、60、65 です。真ん中の値は50回です。"},
+    {q:"あるグループの上体起こしの回数(7人分)は次の通りです。\n45、48、48、50、55、60、65回\nこのデータの範囲(最大値と最小値の差)を求めましょう。", t:"文章題", a:["20回","65回","45回","50回"], ex:"最大値65回から最小値45回をひいて、範囲は65-45=20回です。"}
+  ]
+};
+
+window.SANSUU.kankei = {
+  id: "kankei", no: "第 10 単元", name: "変わり方ときまり", short: "変わり方",
+  period: "4・5・6年", color: "#3c5c8c",
+  themes: "比例と反比例／xとyの関係を表す式／文字を使った式／規則性を見つける問題",
+  questions: [
+    {q:"yはxに比例していて、x=3のときy=12です。x=7のときのyの値を求めましょう。", t:"計算", a:["28","32","24","1.75"], ex:"y=ax の a は 12÷3=4。x=7のとき、y=4×7=28です。"},
+    {q:"yはxに比例していて、x=2のときy=10です。x=6のときのyの値を求めましょう。", t:"計算", a:["30","35","25","1.2"], ex:"y=ax の a は 10÷2=5。x=6のとき、y=5×6=30です。"},
+    {q:"yはxに比例していて、x=4のときy=20です。x=9のときのyの値を求めましょう。", t:"計算", a:["45","50","40","1.8"], ex:"y=ax の a は 20÷4=5。x=9のとき、y=5×9=45です。"},
+    {q:"yはxに比例していて、x=5のときy=15です。x=8のときのyの値を求めましょう。", t:"計算", a:["24","27","21","2.667"], ex:"y=ax の a は 15÷5=3。x=8のとき、y=3×8=24です。"},
+    {q:"yはxに比例していて、x=6のときy=18です。x=10のときのyの値を求めましょう。", t:"計算", a:["30","33","27","3.333"], ex:"y=ax の a は 18÷6=3。x=10のとき、y=3×10=30です。"},
+    {q:"yはxに比例していて、x=3のときy=21です。x=5のときのyの値を求めましょう。", t:"計算", a:["35","42","28","0.714"], ex:"y=ax の a は 21÷3=7。x=5のとき、y=7×5=35です。"},
+    {q:"yはxに比例していて、x=2のときy=16です。x=9のときのyの値を求めましょう。", t:"計算", a:["72","80","64","1.125"], ex:"y=ax の a は 16÷2=8。x=9のとき、y=8×9=72です。"},
+    {q:"yはxに比例していて、x=4のときy=32です。x=7のときのyの値を求めましょう。", t:"計算", a:["56","64","48","0.875"], ex:"y=ax の a は 32÷4=8。x=7のとき、y=8×7=56です。"},
+    {q:"yはxに比例していて、x=5のときy=40です。x=6のときのyの値を求めましょう。", t:"計算", a:["48","56","40","0.75"], ex:"y=ax の a は 40÷5=8。x=6のとき、y=8×6=48です。"},
+    {q:"yはxに比例していて、x=3のときy=27です。x=8のときのyの値を求めましょう。", t:"計算", a:["72","81","63","0.889"], ex:"y=ax の a は 27÷3=9。x=8のとき、y=9×8=72です。"},
+    {q:"yはxに比例していて、x=7のときy=14です。x=10のときのyの値を求めましょう。", t:"計算", a:["20","22","18","5"], ex:"y=ax の a は 14÷7=2。x=10のとき、y=2×10=20です。"},
+    {q:"yはxに比例していて、x=6のときy=24です。x=9のときのyの値を求めましょう。", t:"計算", a:["36","40","32","2.25"], ex:"y=ax の a は 24÷6=4。x=9のとき、y=4×9=36です。"},
+    {q:"yはxに比例していて、x=8のときy=32です。x=5のときのyの値を求めましょう。", t:"計算", a:["20","24","16","1.25"], ex:"y=ax の a は 32÷8=4。x=5のとき、y=4×5=20です。"},
+    {q:"yはxに比例していて、x=2のときy=14です。x=11のときのyの値を求めましょう。", t:"計算", a:["77","84","70","1.571"], ex:"y=ax の a は 14÷2=7。x=11のとき、y=7×11=77です。"},
+    {q:"yはxに比例していて、x=9のときy=36です。x=4のときのyの値を求めましょう。", t:"計算", a:["16","20","12","1"], ex:"y=ax の a は 36÷9=4。x=4のとき、y=4×4=16です。"},
+    {q:"yはxに比例していて、x=5のときy=35です。x=4のときのyの値を求めましょう。", t:"計算", a:["28","35","21","0.571"], ex:"y=ax の a は 35÷5=7。x=4のとき、y=7×4=28です。"},
+    {q:"yはxに比例していて、x=3のときy=18です。x=12のときのyの値を求めましょう。", t:"計算", a:["72","78","66","2"], ex:"y=ax の a は 18÷3=6。x=12のとき、y=6×12=72です。"},
+    {q:"yはxに比例していて、x=4のときy=28です。x=6のときのyの値を求めましょう。", t:"計算", a:["42","49","35","0.857"], ex:"y=ax の a は 28÷4=7。x=6のとき、y=7×6=42です。"},
+    {q:"yはxに比例していて、x=6のときy=42です。x=3のときのyの値を求めましょう。", t:"計算", a:["21","28","14","0.429"], ex:"y=ax の a は 42÷6=7。x=3のとき、y=7×3=21です。"},
+    {q:"yはxに比例していて、x=10のときy=50です。x=7のときのyの値を求めましょう。", t:"計算", a:["35","40","30","1.4"], ex:"y=ax の a は 50÷10=5。x=7のとき、y=5×7=35です。"},
+    {q:"1mの重さが8gの針金の長さxmと重さygの関係で、y=□×xと表すとき、□に当てはまる数を求めましょう。", t:"計算", a:["8","9","16","7"], ex:"表やことばの関係から、□=8です。"},
+    {q:"1本のねだんが70円のえんぴつをx本買うときの代金y円の関係で、y=□×xと表すとき、□に当てはまる数を求めましょう。", t:"計算", a:["70","71","140","69"], ex:"表やことばの関係から、□=70です。"},
+    {q:"時速4kmで歩く人が歩いた時間x時間と道のりykmの関係で、y=□×xと表すとき、□に当てはまる数を求めましょう。", t:"計算", a:["4","5","8","3"], ex:"表やことばの関係から、□=4です。"},
+    {q:"1さつの厚さが5mmの本をx さつ積んだ高さymmの関係で、y=□×xと表すとき、□に当てはまる数を求めましょう。", t:"計算", a:["5","6","10","4"], ex:"表やことばの関係から、□=5です。"},
+    {q:"1分間に3Lずつ水を入れるとき、時間x分と水の量yLの関係で、y=□×xと表すとき、□に当てはまる数を求めましょう。", t:"計算", a:["3","4","6","2"], ex:"表やことばの関係から、□=3です。"},
+    {q:"xが1,2,3,4と増えるとき、yが5,10,15,20と増えるとき、yはxに比例していると言えますか。", a:["比例している","比例していない","反比例している","データが足りない"], ex:"yの値がxの値の一定の倍になっているので、比例しています。"},
+    {q:"xが1,2,3,4と増えるとき、yが3,4,5,6と増えるとき、yはxに比例していると言えますか。", a:["比例していない","比例している","反比例している","データが足りない"], ex:"yがxの一定の倍になっていないので、比例していません。"},
+    {q:"xが1,2,3,4と増えるとき、yが2,4,6,8と増えるとき、yはxに比例していると言えますか。", a:["比例している","比例していない","反比例している","データが足りない"], ex:"yの値がxの値の一定の倍になっているので、比例しています。"},
+    {q:"xが2,4,6と増えるとき、yが7,9,11と増えるとき、yはxに比例していると言えますか。", a:["比例していない","比例している","反比例している","データが足りない"], ex:"yがxの一定の倍になっていないので、比例していません。"},
+    {q:"xが1,2,3と増えるとき、yが6,12,18と増えるとき、yはxに比例していると言えますか。", a:["比例している","比例していない","反比例している","データが足りない"], ex:"yの値がxの値の一定の倍になっているので、比例しています。"},
+    {q:"xが1,2,3と増えるとき、yが1,4,9と増えるとき、yはxに比例していると言えますか。", a:["比例していない","比例している","反比例している","データが足りない"], ex:"yがxの一定の倍になっていないので、比例していません。"},
+    {q:"xが3,6,9と増えるとき、yが2,4,6と増えるとき、yはxに比例していると言えますか。", a:["比例している","比例していない","反比例している","データが足りない"], ex:"yの値がxの値の一定の倍になっているので、比例しています。"},
+    {q:"yはxに反比例していて、x=4のときy=6です。x=6のときのyの値を求めましょう。", t:"計算", a:["4","5","24","3"], ex:"反比例では x×y の積が一定なので、4×6=24。x=6のとき、y=24÷6=4です。"},
+    {q:"yはxに反比例していて、x=3のときy=8です。x=4のときのyの値を求めましょう。", t:"計算", a:["6","7","24","5"], ex:"反比例では x×y の積が一定なので、3×8=24。x=4のとき、y=24÷4=6です。"},
+    {q:"yはxに反比例していて、x=2のときy=12です。x=8のときのyの値を求めましょう。", t:"計算", a:["3","4","24","2"], ex:"反比例では x×y の積が一定なので、2×12=24。x=8のとき、y=24÷8=3です。"},
+    {q:"yはxに反比例していて、x=5のときy=6です。x=3のときのyの値を求めましょう。", t:"計算", a:["10","11","30","9"], ex:"反比例では x×y の積が一定なので、5×6=30。x=3のとき、y=30÷3=10です。"},
+    {q:"yはxに反比例していて、x=6のときy=4です。x=8のときのyの値を求めましょう。", t:"計算", a:["3","4","24","2"], ex:"反比例では x×y の積が一定なので、6×4=24。x=8のとき、y=24÷8=3です。"},
+    {q:"yはxに反比例していて、x=3のときy=10です。x=5のときのyの値を求めましょう。", t:"計算", a:["6","7","30","5"], ex:"反比例では x×y の積が一定なので、3×10=30。x=5のとき、y=30÷5=6です。"},
+    {q:"yはxに反比例していて、x=4のときy=9です。x=6のときのyの値を求めましょう。", t:"計算", a:["6","7","36","5"], ex:"反比例では x×y の積が一定なので、4×9=36。x=6のとき、y=36÷6=6です。"},
+    {q:"yはxに反比例していて、x=2のときy=18です。x=9のときのyの値を求めましょう。", t:"計算", a:["4","5","36","3"], ex:"反比例では x×y の積が一定なので、2×18=36。x=9のとき、y=36÷9=4です。"},
+    {q:"yはxに反比例していて、x=8のときy=3です。x=4のときのyの値を求めましょう。", t:"計算", a:["6","7","24","5"], ex:"反比例では x×y の積が一定なので、8×3=24。x=4のとき、y=24÷4=6です。"},
+    {q:"yはxに反比例していて、x=6のときy=8です。x=12のときのyの値を求めましょう。", t:"計算", a:["4","5","48","3"], ex:"反比例では x×y の積が一定なので、6×8=48。x=12のとき、y=48÷12=4です。"},
+    {q:"yはxに反比例していて、x=5のときy=12です。x=4のときのyの値を求めましょう。", t:"計算", a:["15","16","60","14"], ex:"反比例では x×y の積が一定なので、5×12=60。x=4のとき、y=60÷4=15です。"},
+    {q:"yはxに反比例していて、x=9のときy=4です。x=6のときのyの値を求めましょう。", t:"計算", a:["6","7","36","5"], ex:"反比例では x×y の積が一定なので、9×4=36。x=6のとき、y=36÷6=6です。"},
+    {q:"yはxに反比例していて、x=3のときy=16です。x=4のときのyの値を求めましょう。", t:"計算", a:["12","13","48","11"], ex:"反比例では x×y の積が一定なので、3×16=48。x=4のとき、y=48÷4=12です。"},
+    {q:"yはxに反比例していて、x=4のときy=15です。x=5のときのyの値を求めましょう。", t:"計算", a:["12","13","60","11"], ex:"反比例では x×y の積が一定なので、4×15=60。x=5のとき、y=60÷5=12です。"},
+    {q:"yはxに反比例していて、x=2のときy=20です。x=10のときのyの値を求めましょう。", t:"計算", a:["4","5","40","3"], ex:"反比例では x×y の積が一定なので、2×20=40。x=10のとき、y=40÷10=4です。"},
+    {q:"yはxに反比例していて、x=6のときy=10です。x=4のときのyの値を求めましょう。", t:"計算", a:["15","16","60","14"], ex:"反比例では x×y の積が一定なので、6×10=60。x=4のとき、y=60÷4=15です。"},
+    {q:"yはxに反比例していて、x=8のときy=6です。x=12のときのyの値を求めましょう。", t:"計算", a:["4","5","48","3"], ex:"反比例では x×y の積が一定なので、8×6=48。x=12のとき、y=48÷12=4です。"},
+    {q:"yはxに反比例していて、x=10のときy=4です。x=5のときのyの値を求めましょう。", t:"計算", a:["8","9","40","7"], ex:"反比例では x×y の積が一定なので、10×4=40。x=5のとき、y=40÷5=8です。"},
+    {q:"yはxに反比例していて、x=3のときy=12です。x=9のときのyの値を求めましょう。", t:"計算", a:["4","5","36","3"], ex:"反比例では x×y の積が一定なので、3×12=36。x=9のとき、y=36÷9=4です。"},
+    {q:"yはxに反比例していて、x=5のときy=10です。x=2のときのyの値を求めましょう。", t:"計算", a:["25","26","50","24"], ex:"反比例では x×y の積が一定なので、5×10=50。x=2のとき、y=50÷2=25です。"},
+    {q:"yはxに反比例しており、x=4のときy=6です。xとyの積(x×y)はいくつでしょう。", t:"計算", a:["24","10","28","18"], ex:"4×6=24です。反比例ではこの積がつねに一定になります。"},
+    {q:"yはxに反比例しており、x=3のときy=8です。xとyの積(x×y)はいくつでしょう。", t:"計算", a:["24","11","27","16"], ex:"3×8=24です。反比例ではこの積がつねに一定になります。"},
+    {q:"yはxに反比例しており、x=5のときy=6です。xとyの積(x×y)はいくつでしょう。", t:"計算", a:["30","11","35","24"], ex:"5×6=30です。反比例ではこの積がつねに一定になります。"},
+    {q:"yはxに反比例しており、x=6のときy=4です。xとyの積(x×y)はいくつでしょう。", t:"計算", a:["24","10","30","20"], ex:"6×4=24です。反比例ではこの積がつねに一定になります。"},
+    {q:"yはxに反比例しており、x=2のときy=12です。xとyの積(x×y)はいくつでしょう。", t:"計算", a:["24","14","26","12"], ex:"2×12=24です。反比例ではこの積がつねに一定になります。"},
+    {q:"yはxに反比例しており、x=9のときy=4です。xとyの積(x×y)はいくつでしょう。", t:"計算", a:["36","13","45","32"], ex:"9×4=36です。反比例ではこの積がつねに一定になります。"},
+    {q:"yはxに反比例しており、x=7のときy=3です。xとyの積(x×y)はいくつでしょう。", t:"計算", a:["21","10","28","18"], ex:"7×3=21です。反比例ではこの積がつねに一定になります。"},
+    {q:"yはxに反比例しており、x=8のときy=5です。xとyの積(x×y)はいくつでしょう。", t:"計算", a:["40","13","48","35"], ex:"8×5=40です。反比例ではこの積がつねに一定になります。"},
+    {q:"yはxに反比例しており、x=6のときy=6です。xとyの積(x×y)はいくつでしょう。", t:"計算", a:["36","12","42","30"], ex:"6×6=36です。反比例ではこの積がつねに一定になります。"},
+    {q:"yはxに反比例しており、x=10のときy=2です。xとyの積(x×y)はいくつでしょう。", t:"計算", a:["20","12","30","18"], ex:"10×2=20です。反比例ではこの積がつねに一定になります。"},
+    {q:"1辺の長さがxcmの正方形の、まわりの長さをycmとします。xとyの関係を式に表しましょう。", t:"計算", a:["y=4×x","y=x÷4","y=x+4","y=4-x"], ex:"正方形のまわりの長さは1辺の4倍なので、y=4×xです。"},
+    {q:"1辺の長さがxcmの正三角形の、まわりの長さをycmとします。xとyの関係を式に表しましょう。", t:"計算", a:["y=3×x","y=x÷3","y=x+3","y=3-x"], ex:"正三角形のまわりの長さは1辺の3倍なので、y=3×xです。"},
+    {q:"1本120円のジュースをx本買ったときの代金をy円とします。xとyの関係を式に表しましょう。", t:"計算", a:["y=120×x","y=x÷120","y=x+120","y=120-x"], ex:"代金は本数に比例するので、y=120×xです。"},
+    {q:"面積が36cm²の長方形の、たての長さをxcm、横の長さをycmとします。xとyの関係を式に表しましょう。", t:"計算", a:["y=36÷x","y=36×x","y=36-x","y=x÷36"], ex:"たて×横=面積なので、x×y=36、つまりy=36÷xです。"},
+    {q:"60kmの道のりを時速xkmで進むときにかかる時間をy時間とします。xとyの関係を式に表しましょう。", t:"計算", a:["y=60÷x","y=60×x","y=60-x","y=x÷60"], ex:"道のり÷速さ=時間なので、y=60÷xです。"},
+    {q:"同じ水そうに毎分xLずつ水を入れるとき、80Lになるまでにかかる時間をy分とします。xとyの関係を式に表しましょう。", t:"計算", a:["y=80÷x","y=80×x","y=80-x","y=x÷80"], ex:"全体の水の量÷1分あたりの量=時間なので、y=80÷xです。"},
+    {q:"直径xcmの円の円周をycmとします(円周率3.14)。xとyの関係を式に表しましょう。", t:"計算", a:["y=3.14×x","y=x÷3.14","y=x+3.14","y=3.14-x"], ex:"円周=直径×円周率なので、y=3.14×xです。"},
+    {q:"1mの重さが15gのはり金の長さをxm、重さをygとします。xとyの関係を式に表しましょう。", t:"計算", a:["y=15×x","y=x÷15","y=x+15","y=15-x"], ex:"重さは長さに比例するので、y=15×xです。"},
+    {q:"50cmのリボンからxcm使ったときの残りの長さをycmとします。xとyの関係を式に表しましょう。", t:"計算", a:["y=50-x","y=x-50","y=50+x","y=50×x"], ex:"全体から使った分をひくので、y=50-xです。"},
+    {q:"1個x円のパンを4個買ったときの代金をy円とします。xとyの関係を式に表しましょう。", t:"計算", a:["y=4×x","y=x÷4","y=x+4","y=4-x"], ex:"代金は1個のねだんの4倍なので、y=4×xです。"},
+    {q:"100ページの本をxページ読んだとき、残りのページ数をyページとします。xとyの関係を式に表しましょう。", t:"計算", a:["y=100-x","y=x-100","y=100+x","y=100×x"], ex:"全体から読んだ分をひくので、y=100-xです。"},
+    {q:"面積が48cm²の平行四辺形の、底辺の長さをxcm、高さをycmとします。xとyの関係を式に表しましょう。", t:"計算", a:["y=48÷x","y=48×x","y=48-x","y=x÷48"], ex:"底辺×高さ=面積なので、x×y=48、つまりy=48÷xです。"},
+    {q:"1個90円のりんごをx個買うときの代金を、xを使った式で表しましょう(単位は円)。", a:["90×x","x÷90","90+x","90-x"], ex:"1個分のねだんに個数をかけて、90×xと表せます。"},
+    {q:"1人に3こずつあめを配るとき、x人に配るのに必要なあめの数を、xを使った式で表しましょう(単位はこ)。", a:["3×x","x÷3","3+x","3-x"], ex:"1人分の3こに人数をかけて、3×xと表せます。"},
+    {q:"長さ50cmのテープからxcm切り取ったときの残りの長さを、xを使った式で表しましょう(単位はcm)。", a:["50-x","x-50","50+x","50×x"], ex:"全体からxをひいて、50-xと表せます。"},
+    {q:"1辺の長さがxcmの正方形の面積を、xを使った式で表しましょう(単位はcm²)。", a:["x×x","x+x","x÷x","x-x"], ex:"正方形の面積は1辺×1辺なので、x×xと表せます。"},
+    {q:"x円持っていて、120円の本を買ったときの残金を、xを使った式で表しましょう(単位は円)。", a:["x-120","120-x","x+120","x×120"], ex:"持っていたお金から本のねだんをひいて、x-120と表せます。"},
+    {q:"1箱にケーキが6こ入っています。x箱分のケーキの数を、xを使った式で表しましょう(単位はこ)。", a:["6×x","x÷6","6+x","6-x"], ex:"1箱分の6こに箱数をかけて、6×xと表せます。"},
+    {q:"x mのリボンを4人で等しく分けたときの1人分の長さを、xを使った式で表しましょう(単位はm)。", a:["x÷4","x×4","x+4","x-4"], ex:"全体を人数でわって、x÷4と表せます。"},
+    {q:"みかんがx個あります。5個食べたときの残りの数を、xを使った式で表しましょう(単位はこ)。", a:["x-5","5-x","x+5","x×5"], ex:"全体から5個をひいて、x-5と表せます。"},
+    {q:"1本80円のえんぴつをx本と、1個50円の消しゴムを1個買ったときの代金の合計を、xを使った式で表しましょう(単位は円)。", a:["80×x+50","80+x+50","80×x-50","80×(x+50)"], ex:"えんぴつの代金80×xに消しゴムの50円をたして、80×x+50と表せます。"},
+    {q:"x人いる子どもを1つの長いすに4人ずつすわらせるとき、必要な長いすの数を、xを使った式で表しましょう(単位はきゃく)。", a:["x÷4","4÷x","x×4","x-4"], ex:"全体の人数を1つの長いすの人数でわって、x÷4と表せます。"},
+    {q:"x×5の式で、x=8のときの値を求めましょう。", t:"計算", a:["40","48","39","80"], ex:"式にx=8をあてはめて計算すると、40になります。"},
+    {q:"x×7の式で、x=6のときの値を求めましょう。", t:"計算", a:["42","48","41","84"], ex:"式にx=6をあてはめて計算すると、42になります。"},
+    {q:"40-xの式で、x=15のときの値を求めましょう。", t:"計算", a:["25","40","24","50"], ex:"式にx=15をあてはめて計算すると、25になります。"},
+    {q:"x+25の式で、x=18のときの値を求めましょう。", t:"計算", a:["43","61","42","86"], ex:"式にx=18をあてはめて計算すると、43になります。"},
+    {q:"x÷4の式で、x=32のときの値を求めましょう。", t:"計算", a:["8","40","7","16"], ex:"式にx=32をあてはめて計算すると、8になります。"},
+    {q:"90÷xの式で、x=6のときの値を求めましょう。", t:"計算", a:["15","21","14","30"], ex:"式にx=6をあてはめて計算すると、15になります。"},
+    {q:"x×x の式で、x=9のときの値を求めましょう。", t:"計算", a:["81","90","80","162"], ex:"式にx=9をあてはめて計算すると、81になります。"},
+    {q:"3×x+10の式で、x=12のときの値を求めましょう。", t:"計算", a:["46","58","45","92"], ex:"式にx=12をあてはめて計算すると、46になります。"},
+    {q:"100-x×4の式で、x=15のときの値を求めましょう。", t:"計算", a:["40","55","39","80"], ex:"式にx=15をあてはめて計算すると、40になります。"},
+    {q:"x×6-8の式で、x=10のときの値を求めましょう。", t:"計算", a:["52","62","51","104"], ex:"式にx=10をあてはめて計算すると、52になります。"},
+    {q:"1,4,7,10,13,…というきまりで数が並んでいます。10番目の数を求めましょう。", t:"文章題", a:["28","31","25","10"], ex:"1番目の数が1で、3ずつ増えるきまりなので、10番目の数は1+3×(10-1)=28です。"},
+    {q:"2,5,8,11,14,…というきまりで数が並んでいます。20番目の数を求めましょう。", t:"文章題", a:["59","62","56","40"], ex:"1番目の数が2で、3ずつ増えるきまりなので、20番目の数は2+3×(20-1)=59です。"},
+    {q:"5,9,13,17,21,…というきまりで数が並んでいます。12番目の数を求めましょう。", t:"文章題", a:["49","53","45","60"], ex:"1番目の数が5で、4ずつ増えるきまりなので、12番目の数は5+4×(12-1)=49です。"},
+    {q:"3,8,13,18,23,…というきまりで数が並んでいます。15番目の数を求めましょう。", t:"文章題", a:["73","78","68","45"], ex:"1番目の数が3で、5ずつ増えるきまりなので、15番目の数は3+5×(15-1)=73です。"},
+    {q:"4,10,16,22,28,…というきまりで数が並んでいます。10番目の数を求めましょう。", t:"文章題", a:["58","64","52","40"], ex:"1番目の数が4で、6ずつ増えるきまりなので、10番目の数は4+6×(10-1)=58です。"},
+    {q:"2,6,10,14,18,…というきまりで数が並んでいます。25番目の数を求めましょう。", t:"文章題", a:["98","102","94","50"], ex:"1番目の数が2で、4ずつ増えるきまりなので、25番目の数は2+4×(25-1)=98です。"},
+    {q:"7,10,13,16,19,…というきまりで数が並んでいます。18番目の数を求めましょう。", t:"文章題", a:["58","61","55","126"], ex:"1番目の数が7で、3ずつ増えるきまりなので、18番目の数は7+3×(18-1)=58です。"},
+    {q:"1,6,11,16,21,…というきまりで数が並んでいます。14番目の数を求めましょう。", t:"文章題", a:["66","71","61","14"], ex:"1番目の数が1で、5ずつ増えるきまりなので、14番目の数は1+5×(14-1)=66です。"},
+    {q:"10,12,14,16,18,…というきまりで数が並んでいます。30番目の数を求めましょう。", t:"文章題", a:["68","70","66","300"], ex:"1番目の数が10で、2ずつ増えるきまりなので、30番目の数は10+2×(30-1)=68です。"},
+    {q:"6,13,20,27,34,…というきまりで数が並んでいます。9番目の数を求めましょう。", t:"文章題", a:["62","69","55","54"], ex:"1番目の数が6で、7ずつ増えるきまりなので、9番目の数は6+7×(9-1)=62です。"},
+    {q:"3,7,11,15,19,…というきまりで数が並んでいます。22番目の数を求めましょう。", t:"文章題", a:["87","91","83","66"], ex:"1番目の数が3で、4ずつ増えるきまりなので、22番目の数は3+4×(22-1)=87です。"},
+    {q:"8,13,18,23,28,…というきまりで数が並んでいます。16番目の数を求めましょう。", t:"文章題", a:["83","88","78","128"], ex:"1番目の数が8で、5ずつ増えるきまりなので、16番目の数は8+5×(16-1)=83です。"},
+    {q:"1辺1本のぼうで正三角形を横に1列につなげて並べていきます。正三角形が1こなら3本、2こなら5本、3こなら7本のぼうが必要です。正三角形が10こ並んでいるとき、必要なぼうの本数を求めましょう。", t:"文章題", a:["21本","22本","19本","42本"], ex:"きまりを見つけて計算すると、10番目(だんめ)の答えは21本です。"},
+    {q:"1辺1本のぼうで正方形を横に1列につなげて並べていきます。正方形が1こなら4本、2こなら7本、3こなら10本のぼうが必要です。正方形が8こ並んでいるとき、必要なぼうの本数を求めましょう。", t:"文章題", a:["25本","26本","23本","50本"], ex:"きまりを見つけて計算すると、8番目(だんめ)の答えは25本です。"},
+    {q:"碁石を四角形のわくの形に並べます。1番目の図形(1辺2個)が4個、2番目の図形(1辺3個)が8個、3番目の図形(1辺4個)が12個の碁石でできているとき、7番目の図形の碁石の数を求めましょう。", t:"文章題", a:["28個","29個","26個","56個"], ex:"きまりを見つけて計算すると、7番目(だんめ)の答えは28個です。"},
+    {q:"マッチぼうで六角形を横に1列につなげて並べていきます。六角形が1こなら6本、2こなら11本、3こなら16本のぼうが必要です。六角形が9こ並んでいるとき、必要なぼうの本数を求めましょう。", t:"文章題", a:["46本","47本","44本","92本"], ex:"きまりを見つけて計算すると、9番目(だんめ)の答えは46本です。"},
+    {q:"1だんめに1個、2だんめに3個、3だんめに5個、…と、だんごとに2個ずつ増えるように碁石を並べていきます。6だんめまでに使う碁石の合計を求めましょう。", t:"文章題", a:["36個","37個","34個","72個"], ex:"きまりを見つけて計算すると、6番目(だんめ)の答えは36個です。"}
+  ]
+};
+})();
+/* =========================================================
+   app.js ―― 画面制御・出題・記録
+   ========================================================= */
+(function (global) {
+  'use strict';
+
+  var ERA_ORDER = [
+    'seisuu', 'shousuu', 'bunsuu', 'wariai', 'heimen', 'rittai',
+    'tanni', 'hiritsu', 'baai', 'kankei'
+  ];
+  var DATA = global.SANSUU || {};
+  var ERAS = ERA_ORDER.filter(function (id) { return DATA[id]; }).map(function (id) { return DATA[id]; });
+
+  function allQuestions() {
+    var out = [];
+    ERAS.forEach(function (era) {
+      era.questions.forEach(function (q, i) {
+        out.push({ q: q, era: era, idx: i, id: era.id + '-' + i });
+      });
+    });
+    return out;
+  }
+  var ALL = allQuestions();
+
+  function eraById(id) {
+    for (var i = 0; i < ERAS.length; i++) if (ERAS[i].id === id) return ERAS[i];
+    return null;
+  }
+  function itemById(id) {
+    for (var i = 0; i < ALL.length; i++) if (ALL[i].id === id) return ALL[i];
+    return null;
+  }
+
+  var KEY = {
+    weak: 'sansuu_weak_v1',
+    stat: 'sansuu_stat_v1',
+    pref: 'sansuu_pref_v1',
+    dev:  'sansuu_device_v1'
+  };
+
+  function load(key, def) {
+    try {
+      var s = localStorage.getItem(key);
+      return s ? JSON.parse(s) : def;
+    } catch (e) { return def; }
+  }
+  function save(key, val) {
+    try { localStorage.setItem(key, JSON.stringify(val)); } catch (e) {}
+  }
+
+  var weak = load(KEY.weak, {});
+  var stat = load(KEY.stat, {});
+
+  /* 保存データは数値・形式を検証してから使う（壊れた値や細工された値をそのまま画面に出さないため） */
+  (function normalizeStored() {
+    function isPlainObject(v) { return !!v && typeof v === 'object' && !Array.isArray(v); }
+    if (!isPlainObject(weak)) weak = {};
+    if (!isPlainObject(stat)) stat = {};
+    Object.keys(weak).forEach(function (k) {
+      var w = weak[k];
+      if (!w || typeof w !== 'object') { delete weak[k]; return; }
+      w.m = Number(w.m) || 0;
+      w.s = Number(w.s) || 0;
+      w.t = Number(w.t) || 0;
+    });
+    Object.keys(stat).forEach(function (k) {
+      var e = stat[k];
+      if (!e || typeof e !== 'object') { delete stat[k]; return; }
+      e.ans = Number(e.ans) || 0;
+      e.cor = Number(e.cor) || 0;
+      e.best = Number(e.best) || 0;
+    });
+  })();
+  var pref = load(KEY.pref, { mode: 'mix', count: 10, gloss: 'on' });
+  if (!pref.gloss) pref.gloss = 'on';
+  if (!pref.type) pref.type = 'すべて';
+
+  var deviceId = load(KEY.dev, null);
+  if (!deviceId) {
+    deviceId = 'D-' + Math.random().toString(36).slice(2, 6).toUpperCase() +
+               Math.random().toString(36).slice(2, 6).toUpperCase();
+    save(KEY.dev, deviceId);
+  }
+
+  function weakIds() { return Object.keys(weak); }
+  function weakCount() { return weakIds().length; }
+
+  function recordAnswer(item, correct) {
+    var id = item.id;
+    if (correct) {
+      if (weak[id]) {
+        weak[id].s = (weak[id].s || 0) + 1;
+        weak[id].t = Date.now();
+        if (weak[id].s >= 2) delete weak[id];
+      }
+    } else {
+      var w = weak[id] || { m: 0, s: 0 };
+      w.m = (w.m || 0) + 1;
+      w.s = 0;
+      w.t = Date.now();
+      weak[id] = w;
+    }
+    var e = stat[item.era.id] || { ans: 0, cor: 0, best: 0 };
+    e.ans++; if (correct) e.cor++;
+    stat[item.era.id] = e;
+    save(KEY.weak, weak);
+    save(KEY.stat, stat);
+  }
+
+  function recordBest(eraId, pct) {
+    var e = stat[eraId] || { ans: 0, cor: 0, best: 0 };
+    if (pct > (e.best || 0)) e.best = pct;
+    stat[eraId] = e;
+    save(KEY.stat, stat);
+  }
+
+  var $ = function (sel) { return document.querySelector(sel); };
+  var app = document.getElementById('app');
+
+  function esc(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+  var GLOSS = window.YOUGO || {};
+  var glossRe = null;
+  (function buildGlossRegex() {
+    var keys = Object.keys(GLOSS);
+    if (!keys.length) return;
+    keys.sort(function (a, b) { return b.length - a.length; });
+    var esc2 = keys.map(function (k) {
+      return k.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    });
+    glossRe = new RegExp('(' + esc2.join('|') + ')', 'g');
+  })();
+
+  function gloss(text, mode, avoid) {
+    var html = esc(text);
+    if (!glossRe || mode === 'off') return html;
+    var seen = {};
+    return html.replace(glossRe, function (m, _g, offset, whole) {
+      if (seen[m]) return m;
+      if (whole.charAt(offset + m.length) === '（') return m;
+      if (avoid && (m === avoid || GLOSS[m].indexOf(avoid) >= 0)) return m;
+      seen[m] = true;
+      if (mode === 'tap') {
+        return '<span class="term" data-t="' + esc(m) + '" onclick="Q.term(this)">' + m + '</span>';
+      }
+      return '<span class="term">' + m +
+             '<span class="term-inline">（' + esc(GLOSS[m]) + '）</span></span>';
+    });
+  }
+
+  function collectTerms(texts) {
+    if (!glossRe) return [];
+    var found = [], seen = {};
+    texts.forEach(function (t) {
+      if (!t) return;
+      String(t).replace(glossRe, function (m) {
+        if (!seen[m]) { seen[m] = true; found.push(m); }
+        return m;
+      });
+    });
+    return found;
+  }
+
+  function termListHtml(texts) {
+    var terms = collectTerms(texts);
+    if (!terms.length) return '';
+    return '<div class="fb-terms">' +
+      '<span class="fb-label">ことばの意味</span>' +
+      terms.map(function (t) {
+        return '<div class="fb-term"><b>' + esc(t) + '</b>（' + esc(GLOSS[t]) + '）</div>';
+      }).join('') +
+    '</div>';
+  }
+
+  function showTerm(el) {
+    var t = el.getAttribute('data-t');
+    if (GLOSS[t]) toast(t + '　＝　' + GLOSS[t]);
+  }
+
+  function shuffle(arr) {
+    var a = arr.slice();
+    for (var i = a.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = a[i]; a[i] = a[j]; a[j] = t;
+    }
+    return a;
+  }
+  function toast(msg) {
+    var t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    clearTimeout(t._tid);
+    t._tid = setTimeout(function () { t.classList.remove('show'); }, 1800);
+  }
+  function setTab(name) {
+    Array.prototype.forEach.call(document.querySelectorAll('.tab'), function (b) {
+      b.classList.toggle('active', b.dataset.tab === name);
+    });
+  }
+  function updateBadge() {
+    var b = document.getElementById('tabBadge');
+    var n = weakCount();
+    b.textContent = n;
+    b.classList.toggle('zero', n === 0);
+  }
+
+  /* ---------- 画面：ホーム ---------- */
+  function viewHome() {
+    setTab('home');
+    var totalQ = ALL.length;
+    var totalAns = 0, totalCor = 0;
+    ERAS.forEach(function (e) {
+      var s = stat[e.id]; if (s) { totalAns += s.ans; totalCor += s.cor; }
+    });
+    var rate = totalAns ? Math.round(totalCor / totalAns * 100) : 0;
+
+    var cards = ERAS.map(function (era) {
+      var s = stat[era.id] || { ans: 0, cor: 0, best: 0 };
+      var acc = s.ans ? Math.round(s.cor / s.ans * 100) : 0;
+      var wk = weakIds().filter(function (id) { return id.indexOf(era.id + '-') === 0; }).length;
+      return '' +
+      '<button class="era-card" style="--era-color:' + era.color + '" onclick="Q.setup(\'era\',\'' + era.id + '\')">' +
+        '<div class="era-no">' + esc(era.no) + '</div>' +
+        '<h3>' + esc(era.name) + '</h3>' +
+        '<div class="era-period">' + esc(era.period) + '</div>' +
+        '<div class="era-themes">' + esc(era.themes) + '</div>' +
+        '<div class="era-progress"><div style="width:' + acc + '%"></div></div>' +
+        '<div class="era-meta">' +
+          '<span class="era-count">全' + era.questions.length + '問</span>' +
+          '<span>' + (s.ans ? '正答率 ' + acc + '％' : 'まだ挑戦していません') + '</span>' +
+        '</div>' +
+        (wk ? '<div class="era-weak">苦手 ' + wk + '問</div>' : '') +
+      '</button>';
+    }).join('');
+
+    app.innerHTML = '' +
+    '<section class="hero">' +
+      '<h2>単元を選んで、10問ずつ。</h2>' +
+      '<p>各単元20問以上・全' + totalQ + '問から毎回ランダムに出題します。4択と記述の両方に対応し、記述は書き方のゆれも読み取って添削します。</p>' +
+      '<div class="hero-badges">' +
+        '<span class="badge">収録 <b>' + totalQ + '</b> 問</span>' +
+        '<span class="badge">単元 <b>' + ERAS.length + '</b> 区分</span>' +
+        '<span class="badge">通算正答率 <b>' + rate + '</b>％</span>' +
+      '</div>' +
+    '</section>' +
+
+    '<div class="quick-row">' +
+      '<button class="quick-card quick-all" onclick="Q.setup(\'all\')">' +
+        '<div><h3>全単元ランダム10問</h3><p>単元をまたいで出題。実戦形式の総合演習。</p></div>' +
+        '<span class="quick-go">はじめる</span>' +
+      '</button>' +
+      '<button class="quick-card quick-weak' + (weakCount() ? '' : ' disabled') + '" onclick="Q.setup(\'weak\')">' +
+        '<div><h3>苦手克服 <span id="weakNum">' + weakCount() + '</span>問</h3>' +
+        '<p>' + (weakCount() ? 'まちがえた問題だけを出し直します。' : 'まちがえた問題がここにたまります。') + '</p></div>' +
+        '<span class="quick-go">' + (weakCount() ? '復習する' : '—') + '</span>' +
+      '</button>' +
+    '</div>' +
+
+    '<div class="section-label">単元から選ぶ</div>' +
+    '<div class="era-grid">' + cards + '</div>' +
+
+    '<div class="danger-zone">' +
+      '<button class="btn btn-ghost" onclick="Q.resetAll()">全データをリセット（苦手・記録をすべて消去）</button>' +
+    '</div>';
+    updateBadge();
+  }
+
+  /* ---------- 画面：出題設定 ---------- */
+  var setupCtx = null;
+  var TYPES = ['すべて', '計算', '文章題', '図形'];
+
+  function typeOf(q) { return q.t || '一問一答'; }
+  function matchType(item) {
+    return pref.type === 'すべて' || typeOf(item.q) === pref.type;
+  }
+  function typeLabel() {
+    return pref.type === 'すべて' ? '' : '「' + pref.type + '」の';
+  }
+
+  function poolFor(kind, eraId) {
+    var base;
+    if (kind === 'all') base = ALL;
+    else if (kind === 'weak') base = weakIds().map(itemById).filter(Boolean);
+    else base = ALL.filter(function (it) { return it.era.id === eraId; });
+    return base.filter(matchType);
+  }
+
+  function typePill(val) {
+    var n = poolFor(setupCtx.kind, setupCtx.eraId).length;
+    var save0 = pref.type;
+    pref.type = val;
+    var cnt = poolFor(setupCtx.kind, setupCtx.eraId).length;
+    pref.type = save0;
+    return '<button class="choice-pill type-pill' + (pref.type === val ? ' active' : '') +
+           (cnt === 0 ? ' empty' : '') +
+           '" data-type="' + val + '" onclick="Q.pickType(\'' + val + '\')">' +
+           val + '<small>' + cnt + '問</small></button>';
+  }
+
+  function pickType(t) {
+    pref.type = t; save(KEY.pref, pref);
+    setup(setupCtx.kind, setupCtx.eraId);
+  }
+
+  function setup(kind, eraId) {
+    if (kind === 'weak' && weakCount() === 0) { toast('まだ苦手な問題はありません'); return; }
+    setupCtx = { kind: kind, eraId: eraId || null };
+
+    var pool = poolFor(kind, eraId);
+    var poolSize = pool.length;
+    var title, sub;
+    if (kind === 'all') {
+      title = '全単元ランダム';
+      sub = typeLabel() + '全' + poolSize + '問からランダムに出題します。';
+    } else if (kind === 'weak') {
+      title = '苦手克服';
+      sub = 'まちがえた' + weakCount() + '問のうち、' + typeLabel() + poolSize +
+            '問から出題します。2回続けて正解すると卒業です。';
+    } else {
+      var era = eraById(eraId);
+      title = era.name;
+      sub = era.period + '　' + typeLabel() + '全' + poolSize + '問からランダムに出題します。';
+    }
+    if (poolSize === 0) {
+      sub = 'この組み合わせに当てはまる問題がありません。出題タイプを変えてください。';
+    }
+
+    var counts = [5, 10, 15, 20, 30].filter(function (n, i, arr) {
+      return n <= poolSize || i === 0 || arr[i - 1] < poolSize;
+    });
+    if (!counts.length) counts = [5];
+    var activeCount = counts.indexOf(pref.count) >= 0 ? pref.count : counts[counts.length - 1];
+
+    app.innerHTML = '' +
+    '<div class="setup-box">' +
+      '<div class="back-link" onclick="Q.go(\'home\')">← もどる</div>' +
+      '<h2 class="setup-title">' + esc(title) + '</h2>' +
+      '<p class="setup-sub">' + esc(sub) + '</p>' +
+
+      '<div class="setup-group">' +
+        '<div class="setup-group-label">出題タイプ</div>' +
+        '<div class="choice-row type-row">' + TYPES.map(typePill).join('') + '</div>' +
+      '</div>' +
+
+      '<div class="setup-group">' +
+        '<div class="setup-group-label">解答の形式</div>' +
+        '<div class="choice-row">' +
+          modePill('choice', '4択', '選択肢から選ぶ') +
+          modePill('write', '記述', 'キーボードで書く') +
+          modePill('mix', 'ミックス', '4択と記述が交ざる') +
+        '</div>' +
+      '</div>' +
+
+      '<div class="setup-group">' +
+        '<div class="setup-group-label">むずかしい語の意味</div>' +
+        '<div class="choice-row">' +
+          glossPill('on', '文中に出す', '語のあとに（意味）') +
+          glossPill('tap', 'タップで見る', '語を押すと意味が出る') +
+          glossPill('off', 'つけない', '本番と同じ形で解く') +
+        '</div>' +
+      '</div>' +
+
+      '<div class="setup-group">' +
+        '<div class="setup-group-label">問題数</div>' +
+        '<div class="choice-row">' +
+          counts.map(function (n) {
+            return '<button class="choice-pill' + (activeCount === n ? ' active' : '') +
+                   '" data-count="' + n + '" onclick="Q.pickCount(' + n + ')">' + n + '問</button>';
+          }).join('') +
+        '</div>' +
+      '</div>' +
+
+      '<div class="setup-actions">' +
+        '<button class="btn btn-primary" onclick="Q.start()">スタート</button>' +
+      '</div>' +
+    '</div>';
+  }
+
+  function modePill(val, label, note) {
+    return '<button class="choice-pill' + (pref.mode === val ? ' active' : '') +
+           '" data-mode="' + val + '" onclick="Q.pickMode(\'' + val + '\')">' +
+           label + '<small>' + note + '</small></button>';
+  }
+  function glossPill(val, label, note) {
+    return '<button class="choice-pill' + (pref.gloss === val ? ' active' : '') +
+           '" data-gloss="' + val + '" onclick="Q.pickGloss(\'' + val + '\')">' +
+           label + '<small>' + note + '</small></button>';
+  }
+  function pickGloss(g) {
+    pref.gloss = g; save(KEY.pref, pref);
+    Array.prototype.forEach.call(document.querySelectorAll('[data-gloss]'), function (b) {
+      b.classList.toggle('active', b.dataset.gloss === g);
+    });
+  }
+  function pickMode(m) {
+    pref.mode = m; save(KEY.pref, pref);
+    Array.prototype.forEach.call(document.querySelectorAll('[data-mode]'), function (b) {
+      b.classList.toggle('active', b.dataset.mode === m);
+    });
+  }
+  function pickCount(n) {
+    pref.count = n; save(KEY.pref, pref);
+    Array.prototype.forEach.call(document.querySelectorAll('[data-count]'), function (b) {
+      b.classList.toggle('active', Number(b.dataset.count) === n);
+    });
+  }
+
+  /* ---------- 出題 ---------- */
+  var session = null;
+
+  function start() {
+    var pool = poolFor(setupCtx.kind, setupCtx.eraId);
+    if (!pool.length) { toast('出題できる問題がありません'); go('home'); return; }
+
+    var picked = shuffle(pool).slice(0, Math.min(pref.count, pool.length));
+    session = {
+      kind: setupCtx.kind,
+      eraId: setupCtx.eraId,
+      list: picked.map(function (it) {
+        var m = pref.mode === 'mix' ? (Math.random() < 0.5 ? 'choice' : 'write') : pref.mode;
+        return { item: it, mode: m, order: shuffle([0, 1, 2, 3]), result: null };
+      }),
+      i: 0, score: 0, points: 0, log: []
+    };
+    renderQuestion();
+  }
+
+  function renderQuestion() {
+    setTab(null);
+    var s = session, cur = s.list[s.i], it = cur.item, q = it.q;
+    var pct = Math.round(s.i / s.list.length * 100);
+
+    var body;
+    if (cur.mode === 'choice') {
+      body = '<div class="choices" id="choices">' +
+        cur.order.map(function (oi, n) {
+          return '<button class="choice-btn" data-oi="' + oi + '" onclick="Q.answerChoice(' + oi + ')">' +
+                 '<span class="choice-letter">' + (n + 1) + '</span>' +
+                 '<span>' + esc(q.a[oi]) + '</span></button>';
+        }).join('') +
+      '</div>';
+    } else {
+      body = '<div class="answer-input-row">' +
+        '<input class="answer-input" id="ansInput" type="text" autocomplete="off" ' +
+        'placeholder="答えを書いてください" onkeydown="Q.inputKey(event)">' +
+        '<button class="btn btn-primary" id="submitBtn" onclick="Q.answerWrite()">採点</button>' +
+      '</div>' +
+      '<div class="write-hint">漢字で書くのが理想ですが、ひらがなでも判定します。</div>';
+    }
+
+    app.innerHTML = '' +
+    '<div class="quiz-wrap">' +
+      '<div class="quiz-top">' +
+        '<span>' + (s.i + 1) + ' / ' + s.list.length + '問</span>' +
+        '<span class="quiz-score">正解 ' + s.score + '</span>' +
+      '</div>' +
+      '<div class="progress-bar"><div style="width:' + pct + '%"></div></div>' +
+      '<div class="qcard">' +
+        '<div class="qcard-head">' +
+          '<span class="era-tag" style="--era-color:' + it.era.color + '">' + esc(it.era.short) + '</span>' +
+          '<span class="mode-tag ' + cur.mode + '">' + (cur.mode === 'choice' ? '4択' : '記述') + '</span>' +
+          (typeOf(q) !== '一問一答'
+            ? '<span class="type-tag">' + esc(typeOf(q)) + '</span>' : '') +
+        '</div>' +
+        '<p class="qtext">' + gloss(q.q, pref.gloss, q.a[0]) + '</p>' +
+        body +
+        '<div class="feedback" id="feedback"></div>' +
+        '<div class="quiz-actions" id="quizActions">' +
+          '<button class="btn btn-ghost" onclick="Q.quit()">やめる</button>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
+
+    if (cur.mode === 'write') {
+      var el = document.getElementById('ansInput');
+      if (el) el.focus();
+    }
+  }
+
+  function answerChoice(oi) {
+    var cur = session.list[session.i];
+    if (cur.result) return;
+    var q = cur.item.q;
+    var correct = (oi === 0);
+    var btns = document.querySelectorAll('.choice-btn');
+    Array.prototype.forEach.call(btns, function (b) {
+      var bi = Number(b.dataset.oi);
+      b.classList.add('locked');
+      if (bi === 0) b.classList.add('correct');
+      else if (bi === oi) b.classList.add('wrong');
+      else b.classList.add('dim');
+      b.onclick = null;
+    });
+
+    var isTerm = q.a[0].length <= 12 && !/(ため|こと|から|ように|なった|られた)$/.test(q.a[0]);
+    var comment, advice;
+    if (correct) {
+      comment = '正解です。';
+      advice = isTerm
+        ? '選べただけで満足せず、記述モードでも書けるか試してみましょう。'
+        : '選べただけで満足せず、なぜそうなるのかを自分の言葉で説明してみましょう。';
+    } else {
+      comment = '不正解。あなたが選んだ「' + q.a[oi] + '」ではなく、正解は「' + q.a[0] + '」です。';
+      advice = isTerm
+        ? '「' + q.a[oi] + '」がどんな場面で出てくる言葉かを調べておくと、次から迷わなくなります。'
+        : '選んだ選択肢のどこがちがっていたのかを、解説と見くらべて確かめておきましょう。';
+    }
+    finish(correct, correct ? 1 : 0, comment, advice, null);
+  }
+
+  function answerWrite() {
+    var cur = session.list[session.i];
+    if (cur.result) return;
+    var el = document.getElementById('ansInput');
+    var raw = el ? el.value : '';
+    var g = Grader.grade(raw, cur.item.q);
+
+    if (el) {
+      el.classList.add(g.ok ? 'correct' : 'wrong');
+      el.readOnly = true;
+    }
+    var sb = document.getElementById('submitBtn');
+    if (sb) { sb.disabled = true; sb.textContent = '採点ずみ'; }
+
+    finish(g.ok, g.score, g.comment, g.advice, raw);
+  }
+
+  function finish(correct, points, comment, advice, userAnswer) {
+    var s = session, cur = s.list[s.i], q = cur.item.q;
+    cur.result = { correct: correct, points: points, user: userAnswer };
+    if (correct) s.score++;
+    s.points += points;
+    recordAnswer(cur.item, correct);
+    s.log.push({ item: cur.item, correct: correct, user: userAnswer, mode: cur.mode, comment: comment });
+
+    var fb = document.getElementById('feedback');
+    fb.className = 'feedback show ' + (correct ? 'good' : 'bad');
+    fb.innerHTML = '' +
+      '<div class="fb-head">' + (correct ? '○ 正解' : '× 不正解') + '</div>' +
+      (userAnswer !== null && userAnswer !== undefined && userAnswer !== ''
+        ? '<div class="fb-yours">あなたの答え：<b>' + esc(userAnswer) + '</b></div>' : '') +
+      '<div class="fb-answer">模範解答：' + esc(q.a[0]) + '</div>' +
+      '<div class="fb-block"><span class="fb-label">添削</span>' + esc(comment) + '</div>' +
+      (advice ? '<div class="fb-block"><span class="fb-label">アドバイス</span>' + esc(advice) + '</div>' : '') +
+      '<div class="fb-block"><span class="fb-label">解説</span>' + esc(q.ex) + '</div>' +
+      termListHtml([q.q, q.ex].concat(q.a));
+
+    var last = (s.i === s.list.length - 1);
+    document.getElementById('quizActions').innerHTML =
+      '<button class="btn btn-ghost" onclick="Q.quit()">やめる</button>' +
+      '<button class="btn btn-primary" id="nextBtn" onclick="Q.next()">' +
+      (last ? '結果を見る' : '次の問題へ') + '</button>';
+    var nb = document.getElementById('nextBtn');
+    if (nb) nb.focus();
+    updateBadge();
+  }
+
+  function next() {
+    if (session.i < session.list.length - 1) { session.i++; renderQuestion(); }
+    else viewResult();
+  }
+  function quit() {
+    if (confirm('このセットをやめて、学習画面にもどりますか？（ここまでの記録は保存されています）')) go('home');
+  }
+  function inputKey(e) {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      var cur = session.list[session.i];
+      if (cur.result) next(); else answerWrite();
+    }
+  }
+
+  /* ---------- 画面：結果 ---------- */
+  function viewResult() {
+    var s = session;
+    var total = s.list.length;
+    var pct = Math.round(s.score / total * 100);
+    if (s.kind === 'era') recordBest(s.eraId, pct);
+
+    var title, sub;
+    if (pct === 100) { title = '全問正解'; sub = '完璧です。次は記述モードや、ほかの単元に進みましょう。'; }
+    else if (pct >= 80) { title = 'よくできました'; sub = '合格ラインです。まちがえた問題は「苦手」に入っています。'; }
+    else if (pct >= 50) { title = 'もう一歩'; sub = '解説を読み直してから、同じ単元をもう一度回してみましょう。'; }
+    else { title = 'ここが伸びしろ'; sub = 'まずは解説を読むところから。苦手タブで復習できます。'; }
+
+    var wrongs = s.log.filter(function (l) { return !l.correct; });
+    var wrongHtml = wrongs.length
+      ? '<div class="wrong-list">' +
+          '<div class="wl-head">まちがえた問題（' + wrongs.length + '問）― 苦手に登録しました</div>' +
+          wrongs.map(function (l) {
+            return '<div class="wrong-item">' +
+              '<div class="wq"><span class="wl-era" style="--era-color:' + l.item.era.color + '">' +
+                esc(l.item.era.short) + '</span>' + esc(l.item.q.q) + '</div>' +
+              '<div class="wa">' +
+                (l.user ? '<span class="mine">' + esc(l.user) + '</span>' : '') +
+                '正解：<b>' + esc(l.item.q.a[0]) + '</b></div>' +
+              '<div class="wex">' + esc(l.item.q.ex) + '</div>' +
+            '</div>';
+          }).join('') +
+        '</div>'
+      : '<div class="all-correct">まちがえた問題はありません。</div>';
+
+    setTab(null);
+    app.innerHTML = '' +
+    '<div class="result-box">' +
+      '<div class="result-ring" style="--pct:' + pct + '">' +
+        '<div class="ring-num">' + s.score + '<small>／' + total + '問</small></div>' +
+      '</div>' +
+      '<h2 class="result-title">' + title + '</h2>' +
+      '<p class="result-sub">' + sub + '　正答率' + pct + '％</p>' +
+      '<div class="result-actions">' +
+        '<button class="btn btn-primary" onclick="Q.retry()">もう一度10問</button>' +
+        (weakCount() ? '<button class="btn btn-gold" onclick="Q.setup(\'weak\')">苦手を復習（' + weakCount() + '問）</button>' : '') +
+        '<button class="btn btn-ghost" onclick="Q.go(\'home\')">学習トップへ</button>' +
+      '</div>' +
+      wrongHtml +
+    '</div>';
+    updateBadge();
+  }
+
+  function retry() {
+    setupCtx = { kind: session.kind, eraId: session.eraId };
+    start();
+  }
+
+  /* ---------- 画面：苦手 ---------- */
+  function viewReview() {
+    setTab('review');
+    var ids = weakIds().sort(function (a, b) { return (weak[b].m || 0) - (weak[a].m || 0); });
+    if (!ids.length) {
+      app.innerHTML =
+        '<div class="setup-box"><h2 class="setup-title">苦手リスト</h2>' +
+        '<p class="setup-sub">まだ登録はありません。問題をまちがえると、ここに自動でたまっていきます。</p>' +
+        '<div class="empty-note">2回続けて正解すると、そのままリストから消えます。<br>記録はこの端末のブラウザにだけ残るので、タブを閉じても消えません。</div>' +
+        '<div class="setup-actions"><button class="btn btn-primary" onclick="Q.go(\'home\')">学習をはじめる</button></div></div>';
+      return;
+    }
+
+    var byEra = {};
+    ids.forEach(function (id) {
+      var it = itemById(id); if (!it) return;
+      (byEra[it.era.id] = byEra[it.era.id] || []).push({ id: id, it: it, w: weak[id] });
+    });
+
+    var groups = ERAS.filter(function (e) { return byEra[e.id]; }).map(function (era) {
+      var list = byEra[era.id];
+      return '<div class="weak-group">' +
+        '<div class="weak-group-head" style="--era-color:' + era.color + '">' +
+          '<span>' + esc(era.name) + '</span><span class="wg-count">' + list.length + '問</span>' +
+        '</div>' +
+        list.map(function (r) {
+          return '<div class="weak-item">' +
+            '<div class="wi-q">' + esc(r.it.q.q) + '</div>' +
+            '<div class="wi-a">正解：<b>' + esc(r.it.q.a[0]) + '</b>' +
+              '<span class="wi-miss">×' + (r.w.m || 1) + '回</span>' +
+              (r.w.s ? '<span class="wi-streak">あと' + (2 - r.w.s) + '回正解で卒業</span>' : '') +
+            '</div>' +
+            '<button class="wi-del" data-id="' + esc(r.id) + '" onclick="Q.dropWeak(this.dataset.id)">削除</button>' +
+          '</div>';
+        }).join('') +
+      '</div>';
+    }).join('');
+
+    app.innerHTML = '' +
+    '<div class="review-wrap">' +
+      '<div class="review-head">' +
+        '<div><h2 class="setup-title">苦手リスト <span class="rh-num">' + ids.length + '問</span></h2>' +
+        '<p class="setup-sub">2回続けて正解すると自動で卒業します。</p></div>' +
+        '<button class="btn btn-gold" onclick="Q.setup(\'weak\')">まとめて復習</button>' +
+      '</div>' + groups +
+    '</div>';
+  }
+
+  function dropWeak(id) {
+    delete weak[id]; save(KEY.weak, weak);
+    toast('苦手リストから削除しました');
+    viewReview(); updateBadge();
+  }
+
+  /* ---------- 画面：記録 ---------- */
+  function viewRecord() {
+    setTab('record');
+    var totalAns = 0, totalCor = 0;
+    ERAS.forEach(function (e) { var s = stat[e.id]; if (s) { totalAns += s.ans; totalCor += s.cor; } });
+    var rate = totalAns ? Math.round(totalCor / totalAns * 100) : 0;
+
+    var rows = ERAS.map(function (era) {
+      var s = stat[era.id] || { ans: 0, cor: 0, best: 0 };
+      var acc = s.ans ? Math.round(s.cor / s.ans * 100) : 0;
+      var wk = weakIds().filter(function (id) { return id.indexOf(era.id + '-') === 0; }).length;
+      return '<tr>' +
+        '<td><span class="rec-dot" style="background:' + era.color + '"></span>' + esc(era.name) + '</td>' +
+        '<td class="num">' + s.ans + '</td>' +
+        '<td class="num">' + (s.ans ? acc + '％' : '—') + '</td>' +
+        '<td class="num">' + (s.best ? s.best + '％' : '—') + '</td>' +
+        '<td class="num' + (wk ? ' warn' : '') + '">' + wk + '</td>' +
+      '</tr>';
+    }).join('');
+
+    app.innerHTML = '' +
+    '<div class="record-wrap">' +
+      '<h2 class="setup-title">学習の記録</h2>' +
+      '<p class="setup-sub">この端末（' + esc(deviceId) + '）のブラウザに保存されています。ほかの端末とは別の記録になります。</p>' +
+      '<div class="rec-summary">' +
+        '<div class="rec-card"><span>のべ解答数</span><b>' + totalAns + '</b></div>' +
+        '<div class="rec-card"><span>通算正答率</span><b>' + rate + '％</b></div>' +
+        '<div class="rec-card"><span>苦手の数</span><b>' + weakCount() + '</b></div>' +
+      '</div>' +
+      '<table class="rec-table">' +
+        '<thead><tr><th>単元</th><th class="num">解答</th><th class="num">正答率</th><th class="num">最高</th><th class="num">苦手</th></tr></thead>' +
+        '<tbody>' + rows + '</tbody>' +
+      '</table>' +
+      '<div class="danger-zone">' +
+        '<button class="btn btn-ghost" onclick="Q.resetAll()">記録をすべて消去</button>' +
+      '</div>' +
+    '</div>';
+  }
+
+  function resetAll() {
+    if (!confirm('苦手リストと学習記録をすべて消去します。もとにもどせません。よろしいですか？')) return;
+    weak = {}; stat = {};
+    save(KEY.weak, weak); save(KEY.stat, stat);
+    toast('記録を消去しました');
+    go('home');
+  }
+
+  /* ---------- ルーティング ---------- */
+  function go(name) {
+    window.scrollTo(0, 0);
+    if (name === 'home') viewHome();
+    else if (name === 'review') viewReview();
+    else if (name === 'record') viewRecord();
+    updateBadge();
+  }
+
+  document.addEventListener('keydown', function (e) {
+    if (!session || !document.querySelector('.qcard')) return;
+    var cur = session.list[session.i];
+    if (!cur) return;
+    if (cur.mode === 'choice' && !cur.result && e.key >= '1' && e.key <= '4') {
+      var btns = document.querySelectorAll('.choice-btn');
+      var b = btns[Number(e.key) - 1];
+      if (b) b.click();
+    } else if (cur.result && e.key === 'Enter' && document.activeElement.tagName !== 'INPUT') {
+      next();
+    }
+  });
+
+  global.Q = {
+    go: go, setup: setup, start: start, retry: retry, quit: quit, next: next,
+    pickMode: pickMode, pickCount: pickCount, pickGloss: pickGloss, pickType: pickType, term: showTerm,
+    answerChoice: answerChoice, answerWrite: answerWrite, inputKey: inputKey,
+    dropWeak: dropWeak, resetAll: resetAll
+  };
+
+  go('home');
+})(window);
+</script>
+</body>
+</html>

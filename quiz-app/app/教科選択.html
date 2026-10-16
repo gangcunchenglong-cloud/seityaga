@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self'; frame-src 'self' file:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none';">
+<title>クイズひろば ｜ 教科をえらぼう</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@700;900&family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --white:#ffffff;
+  --paper:#f7faf8;
+  --ink:#1c2430;
+  --ink-soft:#5a6472;
+  --navy:#1a3c6e;
+  --navy-deep:#122a4d;
+  --line:#e4e1d8;
+  --shadow:0 2px 10px rgba(28,36,48,.06), 0 1px 2px rgba(28,36,48,.04);
+  --shadow-lg:0 10px 30px rgba(18,42,77,.10), 0 2px 8px rgba(18,42,77,.06);
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;height:100%;}
+body{
+  background:var(--white);color:var(--ink);
+  font-family:"Noto Sans JP","Hiragino Sans","Meiryo",sans-serif;
+  height:100vh;display:flex;flex-direction:column;
+  -webkit-text-size-adjust:100%;
+}
+
+/* ---------- Top bar (quiz view only) ---------- */
+.topbar{
+  display:none;align-items:center;justify-content:space-between;
+  padding:10px 16px;border-bottom:2px solid var(--navy);flex-shrink:0;
+}
+.topbar.show{display:flex;}
+.topbar-title{font-family:"Noto Serif JP",serif;font-weight:900;font-size:14px;color:var(--navy-deep);}
+.back-btn{
+  border:none;background:var(--paper);color:var(--navy-deep);font-weight:800;font-size:12.5px;
+  padding:8px 14px;border-radius:999px;cursor:pointer;
+}
+.back-btn:hover{background:var(--line);}
+
+/* ---------- Select view ---------- */
+#selectView{flex:1;display:flex;flex-direction:column;overflow:auto;}
+header{text-align:center;padding:44px 18px 8px;}
+header h1{font-family:"Noto Serif JP",serif;font-size:clamp(22px,5vw,32px);color:var(--navy-deep);margin:0 0 10px;font-weight:900;}
+header p{color:var(--ink-soft);font-size:13.5px;margin:0;}
+
+main{flex:1;max-width:760px;width:100%;margin:0 auto;padding:26px 18px 60px;}
+.card-row{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+@media (max-width:600px){ .card-row{grid-template-columns:1fr;} }
+
+.subject-card{
+  display:block;width:100%;text-align:center;font:inherit;color:inherit;
+  background:var(--white);border:1px solid var(--line);border-radius:18px;cursor:pointer;
+  padding:26px 22px 22px;box-shadow:var(--shadow);
+  transition:transform .15s ease,box-shadow .15s ease;
+}
+.subject-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg);}
+.subject-mark{
+  width:64px;height:64px;border-radius:16px;margin:0 auto 16px;
+  display:flex;align-items:center;justify-content:center;
+  font-family:"Noto Serif JP",serif;font-weight:900;font-size:30px;color:#fff;
+}
+.rika .subject-mark{background:linear-gradient(155deg,#1a6e5c,#0f4a3d);}
+.rekishi .subject-mark{background:linear-gradient(155deg,#1a3c6e,#122a4d);}
+.sansuu .subject-mark{background:linear-gradient(155deg,#1a4a8c,#0f3161);}
+.shakai .subject-mark{background:linear-gradient(155deg,#8c4a1e,#5c3013);}
+.subject-card h2{font-family:"Noto Serif JP",serif;font-size:19px;margin:0 0 6px;color:var(--navy-deep);font-weight:900;}
+.subject-card p{margin:0 0 18px;font-size:12.5px;color:var(--ink-soft);line-height:1.7;}
+.subject-go{
+  display:inline-block;font-size:13px;font-weight:800;padding:10px 22px;border-radius:999px;color:#fff;
+}
+.rika .subject-go{background:#1a6e5c;}
+.rekishi .subject-go{background:#1a3c6e;}
+.sansuu .subject-go{background:#1a4a8c;}
+.shakai .subject-go{background:#8c4a1e;}
+
+footer{text-align:center;padding:18px;font-size:11px;color:#9aa0a8;border-top:1px solid #edece6;}
+
+/* ---------- Quiz view ---------- */
+#quizView{flex:1;display:none;}
+#quizView.show{display:flex;}
+#quizFrame{flex:1;width:100%;border:none;}
+</style>
+</head>
+<body>
+<div class="topbar" id="topbar">
+  <span class="topbar-title" id="topbarTitle"></span>
+  <button class="back-btn" onclick="goSelect()">⇦ 教科をえらびなおす</button>
+</div>
+
+<div id="selectView">
+  <header>
+    <h1>教科をえらぼう</h1>
+    <p>やりたいクイズをタップしてスタート</p>
+  </header>
+
+  <main>
+    <div class="card-row">
+      <button type="button" class="subject-card rika" onclick="openSubject('理科kuizu.html','理科クイズ')">
+        <div class="subject-mark">理</div>
+        <h2>理科クイズ</h2>
+        <p>小学校 全単元対応<br>10単元・1120問</p>
+        <span class="subject-go">はじめる</span>
+      </button>
+      <button type="button" class="subject-card rekishi" onclick="openSubject('歴史クイズ1000.html','歴史クイズ1000')">
+        <div class="subject-mark">史</div>
+        <h2>歴史クイズ1000</h2>
+        <p>都内難関中学受験 対応<br>全11時代・1000問以上</p>
+        <span class="subject-go">はじめる</span>
+      </button>
+      <button type="button" class="subject-card sansuu" onclick="openSubject('算数kuizu.html','算数クイズ')">
+        <div class="subject-mark">算</div>
+        <h2>算数クイズ</h2>
+        <p>小学校 全単元対応<br>10単元・1150問以上</p>
+        <span class="subject-go">はじめる</span>
+      </button>
+      <button type="button" class="subject-card shakai" onclick="openSubject('社会kuizu.html','社会クイズ')">
+        <div class="subject-mark">社</div>
+        <h2>社会クイズ</h2>
+        <p>地理・公民 対応<br>10単元・1070問以上</p>
+        <span class="subject-go">はじめる</span>
+      </button>
+    </div>
+  </main>
+
+  <footer>
+    <p>記録はこの端末のブラウザだけに保存されます</p>
+  </footer>
+</div>
+
+<div id="quizView">
+  <iframe id="quizFrame" title="クイズ" src="about:blank"></iframe>
+</div>
+
+<script>
+function openSubject(url, title) {
+  document.getElementById('quizFrame').src = url;
+  document.getElementById('topbarTitle').textContent = title;
+  document.getElementById('topbar').classList.add('show');
+  document.getElementById('selectView').style.display = 'none';
+  document.getElementById('quizView').classList.add('show');
+}
+function goSelect() {
+  document.getElementById('quizFrame').src = 'about:blank';
+  document.getElementById('topbar').classList.remove('show');
+  document.getElementById('quizView').classList.remove('show');
+  document.getElementById('selectView').style.display = 'flex';
+}
+</script>
+</body>
+</html>
