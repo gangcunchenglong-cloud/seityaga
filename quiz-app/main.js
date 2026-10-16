@@ -1,7 +1,13 @@
-// クイズひろば：同梱した HTML をそのまま表示するだけの Electron ラッパー
+// 学び広場：同梱した HTML をそのまま表示するだけの Electron ラッパー
 const { app, BrowserWindow, Menu, shell } = require('electron');
 const path = require('path');
 const { installOfflineFonts } = require('./offline-fonts');
+
+const APP_TITLE = '学び広場';
+
+// 学習の記録（localStorage）の保存先は旧アプリ名「クイズひろば」のフォルダのまま使う。
+// アプリ名を変えると保存先も変わり、これまでの記録が読めなくなるため。
+app.setPath('userData', path.join(app.getPath('appData'), 'クイズひろば'));
 
 function createWindow() {
   const win = new BrowserWindow({
@@ -9,7 +15,7 @@ function createWindow() {
     height: 860,
     minWidth: 360,
     minHeight: 480,
-    title: 'クイズひろば',
+    title: APP_TITLE,
     autoHideMenuBar: true,
     webPreferences: {
       contextIsolation: true,
@@ -19,6 +25,9 @@ function createWindow() {
   });
 
   // 外部リンク（http/https）は既定のブラウザで開き、アプリ内では開かない
+  // HTML の <title> ではなく、常にアプリ名をウィンドウのタイトルにする
+  win.on('page-title-updated', (e) => e.preventDefault());
+
   win.webContents.setWindowOpenHandler(({ url }) => {
     if (/^https?:/i.test(url)) shell.openExternal(url);
     return { action: 'deny' };
