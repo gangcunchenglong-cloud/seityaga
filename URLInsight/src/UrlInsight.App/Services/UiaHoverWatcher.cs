@@ -163,7 +163,7 @@ internal sealed class UiaHoverWatcher : IDisposable
                 if (!NativeMethods.GetCursorPos(out var pt)) continue;
                 long now = Environment.TickCount64;
 
-                // Ctrl を押している間は、カードを出さずにリンクを集める(Ctrl を離したらまとめて Chrome の Gemini に送る)
+                // Ctrl を押している間は、カードを出さずにリンクを集める(Ctrl を離したらまとめて Chrome のサイドバーの AI に送る)
                 bool ctrl = s.CtrlHoverToGemini && NativeMethods.IsDown(NativeMethods.VK_CONTROL);
                 if (ctrl && !batch)
                 {

@@ -55,7 +55,7 @@ public partial class SettingsWindow : Window
         AutoPinCheck.IsChecked = s.AutoPinSummaries;
         CtrlGeminiCheck.IsChecked = s.CtrlHoverToGemini;
         DirectGeminiCheck.IsChecked = s.HoverDirectToGemini;
-        SidePanelAiCombo.SelectedIndex = s.SidePanelAiId switch { "gemini" => 1, "claude" => 2, _ => 0 };
+        SidePanelAiCombo.SelectedIndex = s.SidePanelAiId == "claude" ? 1 : 0;
         DelaySlider.Value = s.HoverDelayMs;
         DelayText.Text = $"{s.HoverDelayMs} ms";
         DisplayModeCombo.SelectedIndex = s.DisplayMode == DisplayMode.Pinned ? 1 : 0;
@@ -125,7 +125,7 @@ public partial class SettingsWindow : Window
         var autoPin = AutoPinCheck.IsChecked == true;
         var ctrlGemini = CtrlGeminiCheck.IsChecked == true;
         var directGemini = DirectGeminiCheck.IsChecked == true;
-        var sidePanelAi = (SidePanelAiCombo.SelectedItem as ComboBoxItem)?.Tag as string ?? "sider";
+        var sidePanelAi = (SidePanelAiCombo.SelectedItem as ComboBoxItem)?.Tag as string ?? "chatgpt";
 
         apply = s =>
         {

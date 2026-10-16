@@ -3,7 +3,7 @@ using UrlInsight.Core.Pipeline;
 
 namespace UrlInsight.Core.Tests;
 
-/// <summary>Ctrl を押しながら重ねたリンクをまとめて Chrome の Gemini に送る機能のテスト。</summary>
+/// <summary>Ctrl を押しながら重ねたリンクをまとめて Chrome のサイドバーの AI(ChatGPT など)に送る機能のテスト。</summary>
 public class LinkBatchTests
 {
     [Fact]
@@ -41,6 +41,10 @@ public class LinkBatchTests
     [InlineData("Things to be considered", "Sider", false)]
     [InlineData("Outsider", "Sider", false)]
     [InlineData("Gemini in Chrome", "Gemini", true)]
+    [InlineData("ChatGPT", "ChatGPT", true)]
+    [InlineData("Ask ChatGPT", "ChatGPT", true)]
+    [InlineData("chatgpt side chat", "ChatGPT", true)]
+    [InlineData("MyChatGPTs list", "ChatGPT", false)]
     [InlineData("Claude", "Claude", true)]
     [InlineData(null, "Sider", false)]
     public void PanelNamesMatchOnlyWholeWords(string? name, string word, bool expected)
@@ -49,11 +53,11 @@ public class LinkBatchTests
     [Fact]
     public void PromptsAreSingleLineAndListEveryLink()
     {
-        var one = SidePanelPrompts.Gemini(new[] { "https://a.example/\nx" });
+        var one = SidePanelPrompts.Summarize(new[] { "https://a.example/\nx" });
         Assert.DoesNotContain('\n', one);
         Assert.Contains("https://a.example/ x", one);
 
-        var many = SidePanelPrompts.Gemini(new[] { "https://a.example/", "https://b.example/", "https://c.example/" });
+        var many = SidePanelPrompts.Summarize(new[] { "https://a.example/", "https://b.example/", "https://c.example/" });
         Assert.DoesNotContain('\n', many);
         Assert.Contains("3件", many);
         Assert.Contains("(1) https://a.example/ (2) https://b.example/ (3) https://c.example/", many);
@@ -61,10 +65,10 @@ public class LinkBatchTests
         Assert.Contains("開いて", SidePanelPrompts.Claude(new[] { "https://a.example/" }));
 
         // 上限の100件でも1行のまま、すべて番号付きで入る
-        var hundred = SidePanelPrompts.Gemini(Enumerable.Range(1, 100).Select(i => $"https://e{i}.example/").ToList());
+        var hundred = SidePanelPrompts.Summarize(Enumerable.Range(1, 100).Select(i => $"https://e{i}.example/").ToList());
         Assert.DoesNotContain('\n', hundred);
         Assert.Contains("100件", hundred);
         Assert.Contains("(100) https://e100.example/", hundred);
-        Assert.Throws<ArgumentException>(() => SidePanelPrompts.Gemini(Array.Empty<string>()));
+        Assert.Throws<ArgumentException>(() => SidePanelPrompts.Summarize(Array.Empty<string>()));
     }
 }

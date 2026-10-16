@@ -3,7 +3,7 @@ using UrlInsight.Core.Net;
 namespace UrlInsight.Core.Pipeline;
 
 /// <summary>
-/// Ctrl を押しながらカーソルを重ねたリンクを集める入れ物(Ctrl を離したときに、まとめて Chrome の Gemini に送る)。
+/// Ctrl を押しながらカーソルを重ねたリンクを集める入れ物(Ctrl を離したときに、まとめて Chrome のサイドバーの AI に送る)。
 /// 同じリンクは1回だけ数え、http/https として検証できない URL と無視リストの URL は入れない。多すぎると依頼文が長くなるため上限を設ける。
 /// </summary>
 public sealed class LinkBatch

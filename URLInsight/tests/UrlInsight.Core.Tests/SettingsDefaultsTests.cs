@@ -24,7 +24,7 @@ public class SettingsDefaultsTests
     {
         Assert.True(new AppSettings().CtrlHoverToGemini);
         Assert.True(new AppSettings().HoverDirectToGemini);
-        Assert.Equal("sider", new AppSettings().SidePanelAiId);
+        Assert.Equal("chatgpt", new AppSettings().SidePanelAiId);
 
         using var dir = new TempDir();
         var path = Path.Combine(dir.Path, "settings.json");

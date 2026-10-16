@@ -62,7 +62,7 @@ Windows 版と同じように、リンクや URL にカーソルを重ねて少�
 | データの保存先 | `~/Library/Application Support/URLInsight`（設定 → プライバシー に表示） |
 | 自動起動 | `~/Library/LaunchAgents/com.urlinsight.app.plist`（ログイン時） |
 | 常駐の場所 | メニューバー（Windows 版は通知領域） |
-| 「Claude in Chrome で要約」「Chrome の Gemini で要約」ボタン | **まだありません**（Windows 版のみ） |
+| 「Claude in Chrome で要約」「ChatGPT で要約」ボタン・Chrome のサイドバーの AI への送信 | **まだありません**（Windows 版のみ） |
 | Chrome 拡張（ネイティブメッセージング） | ありません（拡張なしのホバー検出で動きます） |
 
 ## 6. アンインストール

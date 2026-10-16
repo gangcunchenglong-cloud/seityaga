@@ -47,7 +47,7 @@ public partial class CardWindow : Window
     public event Action? ResummarizeRequested;
     public event Action? OpenRequested;
     public event Action? ClaudeRequested;
-    public event Action? GeminiRequested;
+    public event Action? ChatGptRequested;
     public event Action? CopyRequested;
     public event Action? IgnoreRequested;
     public event Action? SettingsRequested;
@@ -93,7 +93,7 @@ public partial class CardWindow : Window
 
     public void ApplyState(CardState state)
     {
-        // 別の URL を表示するときは、前の「Claude in Chrome / Gemini で要約」の結果表示を消す
+        // 別の URL を表示するときは、前の「Claude in Chrome / ChatGPT で要約」の結果表示を消す
         if (State?.Url != state.Url) SetAiStatus(string.Empty);
         State = state;
         Phase = state.Phase;
@@ -195,7 +195,7 @@ public partial class CardWindow : Window
         bool busy = state.Phase is CardPhase.Loading or CardPhase.Summarizing or CardPhase.Consent;
         OpenButton.IsEnabled = hasUrl;
         ClaudeButton.IsEnabled = hasUrl;
-        GeminiButton.IsEnabled = hasUrl;
+        ChatGptButton.IsEnabled = hasUrl;
         IgnoreButton.IsEnabled = hasUrl;
         ResummarizeButton.Visibility = Vis(state.Phase == CardPhase.Result);
         CopyButton.Visibility = Vis(state.Phase == CardPhase.Result);
@@ -277,9 +277,9 @@ public partial class CardWindow : Window
     private void Resummarize_Click(object sender, RoutedEventArgs e) => ResummarizeRequested?.Invoke();
     private void Open_Click(object sender, RoutedEventArgs e) => OpenRequested?.Invoke();
     private void Claude_Click(object sender, RoutedEventArgs e) => ClaudeRequested?.Invoke();
-    private void Gemini_Click(object sender, RoutedEventArgs e) => GeminiRequested?.Invoke();
+    private void ChatGpt_Click(object sender, RoutedEventArgs e) => ChatGptRequested?.Invoke();
 
-    /// <summary>「Claude in Chrome で要約」「Chrome の Gemini で要約」の結果をボタンの下に表示する。</summary>
+    /// <summary>「Claude in Chrome で要約」「ChatGPT で要約」の結果をボタンの下に表示する。</summary>
     public void SetAiStatus(string text)
     {
         AiStatusText.Text = text;

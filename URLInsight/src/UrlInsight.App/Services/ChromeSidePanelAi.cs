@@ -41,37 +41,32 @@ internal sealed record SidePanelAi(
         "Claude in Chrome のパネルを開けませんでした（Chrome に拡張機能「Claude」を入れてログインし、拡張機能のボタンをツールバーに固定してください）",
         SidePanelPrompts.Claude);
 
-    /// <summary>Gemini in Chrome。Alt+G(Chrome の Gemini 呼び出しキー)で開き、だめならツールバーの Gemini ボタンを押す。</summary>
-    public static readonly SidePanelAi Gemini = new(
-        "gemini", "Gemini", "Gemini",
-        NativeMethods.VK_MENU, 0x47 /* G */, "Alt+G", ButtonFirst: false,
-        "Gemini を開けませんでした（Chrome の設定で「Gemini in Chrome」と Alt+G のショートカットが有効か確認してください）",
-        SidePanelPrompts.Gemini);
-
     /// <summary>
-    /// Sider(Chrome 拡張機能のサイドバー AI)。ツールバーの「Sider」ボタン(拡張機能のアイコン)を押してサイドバーを開く。
-    /// ボタンがツールバーに固定されていないときは Ctrl+E を送る(Sider のサイドバーを開くショートカットを
-    /// chrome://extensions/shortcuts で Ctrl+E にしておく前提。違うキーのときはボタンを固定すれば動く)。
+    /// ChatGPT(OpenAI の公式 Chrome 拡張機能のサイドバー「サイドチャット」)。ツールバーの「ChatGPT」ボタン(拡張機能のアイコン)を押してサイドバーを開く。
+    /// ボタンがツールバーに固定されていないときは Ctrl+E を送る(Windows での既定のショートカットは確認できなかったため、
+    /// chrome://extensions/shortcuts で ChatGPT のサイドバーを開くキーを Ctrl+E にしておく前提。違うキーのときはボタンを固定すれば動く)。
+    /// ChatGPT はリンク先を自分で読みに行けるため、依頼文はリンク先の要約を頼むだけにする。
     /// </summary>
-    public static readonly SidePanelAi Sider = new(
-        "sider", "Sider", "Sider",
+    public static readonly SidePanelAi ChatGpt = new(
+        "chatgpt", "ChatGPT", "ChatGPT",
         NativeMethods.VK_CONTROL, 0x45 /* E */, "Ctrl+E", ButtonFirst: true,
-        "Sider のサイドバーを開けませんでした（Chrome に拡張機能「Sider」を入れてログインし、拡張機能のボタンをツールバーに固定してください。または chrome://extensions/shortcuts で Sider のサイドバーを開くキーを Ctrl+E にしてください）",
-        SidePanelPrompts.Gemini);
+        "ChatGPT のサイドバーを開けませんでした（Chrome に OpenAI の拡張機能「ChatGPT」を入れてログインし、拡張機能のボタンをツールバーに固定してください。または chrome://extensions/shortcuts で ChatGPT のサイドバーを開くキーを Ctrl+E にしてください）",
+        SidePanelPrompts.Summarize);
 
     /// <summary>設定で選べる送り先(リンクに重ねたとき・Ctrl を押しながら集めたとき)。</summary>
-    public static readonly IReadOnlyList<SidePanelAi> All = new[] { Sider, Gemini, Claude };
+    public static readonly IReadOnlyList<SidePanelAi> All = new[] { ChatGpt, Claude };
 
-    public static SidePanelAi Get(string? id) => All.FirstOrDefault(a => a.Id == id) ?? Sider;
+    /// <summary>id の送り先(以前の版で選べた "sider" / "gemini" や不明な id は ChatGPT)。</summary>
+    public static SidePanelAi Get(string? id) => All.FirstOrDefault(a => a.Id == id) ?? ChatGpt;
 
     /// <summary>
-    /// 名前が依頼先の語を「単語として」含むか(「Sider」が「Considered」の一部に一致するような取り違えを防ぐ)。
+    /// 名前が依頼先の語を「単語として」含むか(「ChatGPT」が「ChatGPTs」のような別の単語の一部に一致する取り違えを防ぐ)。
     /// </summary>
     public bool NameMatches(string? name) => SidePanelPrompts.NameHasWord(name, Keyword);
 }
 
 /// <summary>
-/// カードのボタンから、Chrome のサイドバーの AI(Claude in Chrome / Gemini in Chrome)に要約を頼む。
+/// Chrome のサイドバーの AI(ChatGPT / Claude in Chrome)に要約を頼む。
 /// Chrome には外からサイドバーの AI を操作する公式の仕組みが無いため、利用者の操作と同じ方法で動かす:
 /// 1. 起動中の Chrome のウィンドウを前面に出す(最小化されていれば元に戻す)
 /// 2. AI のパネルが閉じていれば、ツールバーのボタンを押すかショートカットを送って開く
@@ -79,7 +74,7 @@ internal sealed record SidePanelAi(
 /// 3. パネル内の入力欄にキーボードの入力先を移し、入力先が本当にパネルの中かを確かめてから
 ///    依頼文を1文字ずつ入力して Enter を送る(確かめられなければ何も入力しない。Web ページのフォームなどへ誤って入力しないため)
 /// クリップボードは使わない(利用者がコピーした内容を上書きしないため)。
-/// カードのボタンを押したとき、または Ctrl を押しながらリンクに重ねて Ctrl を離したとき(まとめて送信)だけ動く。
+/// カードのボタンを押したとき、リンクに重ねたとき(設定でオン)、Ctrl を押しながらリンクに重ねて Ctrl を離したとき(まとめて送信)に動く。
 /// </summary>
 internal sealed class ChromeSidePanelAi
 {
@@ -334,8 +329,8 @@ internal sealed class ChromeSidePanelAi
     }
 
     /// <summary>
-    /// Chrome のウィンドウ内から、名前に依頼先の語(「Claude」「Gemini」)を含むパネル(ボタン・タブ・リンク等は除く)を探す。
-    /// 表示中のタブのページ本体(claude.ai や gemini.google.com を開いているときなど)は、
+    /// Chrome のウィンドウ内から、名前に依頼先の語(「ChatGPT」「Claude」)を含むパネル(ボタン・タブ・リンク等は除く)を探す。
+    /// 表示中のタブのページ本体(chatgpt.com や claude.ai を開いているときなど)は、
     /// サイドバーではないので除く(ウィンドウの幅の6割を超える Document はページ本体とみなす)。
     /// </summary>
     private UIA.IUIAutomationElement? FindPanel(SidePanelAi ai, UIA.IUIAutomationElement window)

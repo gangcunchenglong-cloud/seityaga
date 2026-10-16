@@ -1,7 +1,7 @@
 namespace UrlInsight.Core.AI;
 
 /// <summary>
-/// Chrome のサイドバーの AI(Gemini in Chrome / Claude in Chrome)へ入力する依頼文。
+/// Chrome のサイドバーの AI(ChatGPT / Claude in Chrome)へ入力する依頼文。
 /// 入力欄では改行(Enter)で送信されてしまうため、何件あっても1行にする。
 /// </summary>
 public static class SidePanelPrompts
@@ -11,7 +11,8 @@ public static class SidePanelPrompts
     private static string Numbered(IReadOnlyList<string> urls)
         => string.Join(" ", urls.Select((u, i) => $"({i + 1}) {OneLine(u)}"));
 
-    public static string Gemini(IReadOnlyList<string> urls)
+    /// <summary>リンク先の要約を頼む依頼文(ChatGPT 用)。</summary>
+    public static string Summarize(IReadOnlyList<string> urls)
     {
         if (urls.Count == 0) throw new ArgumentException("no urls", nameof(urls));
         return urls.Count == 1
@@ -20,8 +21,8 @@ public static class SidePanelPrompts
     }
 
     /// <summary>
-    /// 画面の部品の名前が、AI の名前(「Sider」など)を単語として含むか。
-    /// 「Considered」の中の「sider」のような、別の単語の一部には一致させない。
+    /// 画面の部品の名前が、AI の名前(「ChatGPT」など)を単語として含むか。
+    /// 「ChatGPTs」の中の「ChatGPT」のような、別の単語の一部には一致させない。
     /// </summary>
     public static bool NameHasWord(string? name, string word)
         => !string.IsNullOrEmpty(name) && System.Text.RegularExpressions.Regex.IsMatch(name,

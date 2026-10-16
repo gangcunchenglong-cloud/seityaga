@@ -47,7 +47,7 @@ internal sealed class HoverCoordinator
     private readonly AppServices _services;
     private readonly Dispatcher _dispatcher;
     private readonly DispatcherTimer _hideTimer;
-    /// <summary>カードの「Claude in Chrome で要約」「Chrome の Gemini で要約」ボタンの処理。</summary>
+    /// <summary>カードの「Claude in Chrome で要約」「ChatGPT で要約」ボタンの処理。</summary>
     private readonly ChromeSidePanelAi _chromeAi = new();
     /// <summary>Ctrl を押しながら重ねたリンク(Ctrl を離したらまとめて Chrome のサイドバーの AI に送る)。</summary>
     private readonly LinkBatch _batch = new();
@@ -158,7 +158,7 @@ internal sealed class HoverCoordinator
         };
         w.OpenRequested += () => OpenInBrowser(s.Url);
         w.ClaudeRequested += () => AskChromeAi(s, SidePanelAi.Claude);
-        w.GeminiRequested += () => AskChromeAi(s, SidePanelAi.Gemini);
+        w.ChatGptRequested += () => AskChromeAi(s, SidePanelAi.ChatGpt);
         w.CopyRequested += () => CopyToClipboard(s);
         w.IgnoreRequested += () => Ignore(s);
         w.SettingsRequested += () => SettingsRequested?.Invoke();
@@ -182,7 +182,7 @@ internal sealed class HoverCoordinator
         Handle(new BrowserMessage { Type = "hoverLink", RequestId = _localRequestId, Url = url, LinkText = linkText });
     });
 
-    // ---------- Ctrl を押しながら重ねたリンクを、カードを出さずにまとめて Chrome のサイドバーの AI(既定は Sider)に送る ----------
+    // ---------- Ctrl を押しながら重ねたリンクを、カードを出さずにまとめて Chrome のサイドバーの AI(既定は ChatGPT)に送る ----------
 
     /// <summary>Ctrl を押し始めた。どのスレッドからでも可。</summary>
     public void OnBatchStarted() => _dispatcher.BeginInvoke(() =>
@@ -229,7 +229,7 @@ internal sealed class HoverCoordinator
     private readonly Dictionary<string, DateTime> _directSent = new();
     private static readonly TimeSpan DirectResendInterval = TimeSpan.FromMinutes(1);
 
-    /// <summary>リンクに重ねたとき・Ctrl を押しながら集めたときの送り先(設定で選ぶ。既定は Sider)。</summary>
+    /// <summary>リンクに重ねたとき・Ctrl を押しながら集めたときの送り先(設定で選ぶ。既定は ChatGPT)。</summary>
     private SidePanelAi Target => SidePanelAi.Get(_services.Settings.SidePanelAiId);
 
     private void SendDirect(string url)
@@ -285,7 +285,7 @@ internal sealed class HoverCoordinator
         if (settings.Paused || m.Url == null) return;
         if (UrlPolicy.TryNormalize(m.Url, out var normalized, out _) && _services.IsIgnored(normalized!)) return;
 
-        // カードを出さずに、そのリンクを直接 Chrome のサイドバーの AI(既定は Sider)に送る(設定でオフにできる)
+        // カードを出さずに、そのリンクを直接 Chrome のサイドバーの AI(既定は ChatGPT)に送る(設定でオフにできる)
         if (settings.HoverDirectToGemini && normalized != null)
         {
             SendDirect(normalized.ToString());

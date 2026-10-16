@@ -22,12 +22,12 @@ public sealed class AppSettings
     public bool UseUiAutomationHover { get; set; } = true;
     /// <summary>URL にカーソルを重ねたカードをその時点で自動で固定し、要約が出るまで(出たあとも)消さない。</summary>
     public bool AutoPinSummaries { get; set; } = true;
-    /// <summary>Ctrl を押しながらリンクにカーソルを重ねると、カードを出さずにリンクを集め、Ctrl を離したときにまとめて Chrome の Gemini に要約を頼む。</summary>
+    /// <summary>Ctrl を押しながらリンクにカーソルを重ねると、カードを出さずにリンクを集め、Ctrl を離したときにまとめて Chrome のサイドバーの AI(既定は ChatGPT)に要約を頼む(名前は以前の版の設定ファイルと合わせるため変えない)。</summary>
     public bool CtrlHoverToGemini { get; set; } = true;
-    /// <summary>リンクにカーソルを重ねたとき、要約カード(AI 未設定ならページ情報だけのカード)を出さずに、そのリンクを直接 Chrome の Gemini に送る。</summary>
+    /// <summary>リンクにカーソルを重ねたとき、要約カード(AI 未設定ならページ情報だけのカード)を出さずに、そのリンクを直接 Chrome のサイドバーの AI(既定は ChatGPT)に送る(名前は以前の版の設定ファイルと合わせるため変えない)。</summary>
     public bool HoverDirectToGemini { get; set; } = true;
-    /// <summary>リンクに重ねたとき・Ctrl を押しながら集めたときに要約を頼む Chrome のサイドバーの AI("sider" / "gemini" / "claude")。</summary>
-    public string SidePanelAiId { get; set; } = "sider";
+    /// <summary>リンクに重ねたとき・Ctrl を押しながら集めたときに要約を頼む Chrome のサイドバーの AI("chatgpt" / "claude")。以前の版の "sider" / "gemini" は ChatGPT として扱う。</summary>
+    public string SidePanelAiId { get; set; } = "chatgpt";
 
     public string ProviderId { get; set; } = "none";
     public string Model { get; set; } = string.Empty;
