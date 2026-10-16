@@ -1,6 +1,6 @@
 {
   "name": "quiz-hiroba",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "クイズひろば（理科・算数・社会・歴史）",
   "author": "seityaga",
   "main": "main.js",
