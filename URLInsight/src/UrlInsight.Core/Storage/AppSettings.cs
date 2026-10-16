@@ -26,6 +26,8 @@ public sealed class AppSettings
     public bool CtrlHoverToGemini { get; set; } = true;
     /// <summary>リンクにカーソルを重ねたとき、要約カード(AI 未設定ならページ情報だけのカード)を出さずに、そのリンクを直接 Chrome の Gemini に送る。</summary>
     public bool HoverDirectToGemini { get; set; } = true;
+    /// <summary>リンクに重ねたとき・Ctrl を押しながら集めたときに要約を頼む Chrome のサイドバーの AI("sider" / "gemini" / "claude")。</summary>
+    public string SidePanelAiId { get; set; } = "sider";
 
     public string ProviderId { get; set; } = "none";
     public string Model { get; set; } = string.Empty;

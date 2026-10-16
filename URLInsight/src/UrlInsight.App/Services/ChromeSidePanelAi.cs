@@ -47,6 +47,27 @@ internal sealed record SidePanelAi(
         NativeMethods.VK_MENU, 0x47 /* G */, "Alt+G", ButtonFirst: false,
         "Gemini を開けませんでした（Chrome の設定で「Gemini in Chrome」と Alt+G のショートカットが有効か確認してください）",
         SidePanelPrompts.Gemini);
+
+    /// <summary>
+    /// Sider(Chrome 拡張機能のサイドバー AI)。ツールバーの「Sider」ボタン(拡張機能のアイコン)を押してサイドバーを開く。
+    /// ボタンがツールバーに固定されていないときは Ctrl+E を送る(Sider のサイドバーを開くショートカットを
+    /// chrome://extensions/shortcuts で Ctrl+E にしておく前提。違うキーのときはボタンを固定すれば動く)。
+    /// </summary>
+    public static readonly SidePanelAi Sider = new(
+        "sider", "Sider", "Sider",
+        NativeMethods.VK_CONTROL, 0x45 /* E */, "Ctrl+E", ButtonFirst: true,
+        "Sider のサイドバーを開けませんでした（Chrome に拡張機能「Sider」を入れてログインし、拡張機能のボタンをツールバーに固定してください。または chrome://extensions/shortcuts で Sider のサイドバーを開くキーを Ctrl+E にしてください）",
+        SidePanelPrompts.Gemini);
+
+    /// <summary>設定で選べる送り先(リンクに重ねたとき・Ctrl を押しながら集めたとき)。</summary>
+    public static readonly IReadOnlyList<SidePanelAi> All = new[] { Sider, Gemini, Claude };
+
+    public static SidePanelAi Get(string? id) => All.FirstOrDefault(a => a.Id == id) ?? Sider;
+
+    /// <summary>
+    /// 名前が依頼先の語を「単語として」含むか(「Sider」が「Considered」の一部に一致するような取り違えを防ぐ)。
+    /// </summary>
+    public bool NameMatches(string? name) => SidePanelPrompts.NameHasWord(name, Keyword);
 }
 
 /// <summary>
@@ -293,7 +314,7 @@ internal sealed class ChromeSidePanelAi
         {
             if (e.CurrentControlType != ButtonControlTypeId) return false;
             var name = SafeName(e);
-            return name != null && name.Contains(ai.Keyword, StringComparison.OrdinalIgnoreCase) && !IsInsideDocument(e);
+            return ai.NameMatches(name) && !IsInsideDocument(e);
         }, maxNodes: 1500);
         if (button?.GetCurrentPattern(InvokePatternId) is not UIA.IUIAutomationInvokePattern invoke) return null;
         AppLog.Info($"{ai.Id}: pressing toolbar button");
@@ -327,7 +348,7 @@ internal sealed class ChromeSidePanelAi
             if (type is ButtonControlTypeId or EditControlTypeId or HyperlinkControlTypeId or ListItemControlTypeId
                 or MenuItemControlTypeId or TabItemControlTypeId or TextControlTypeId) return false;
             var name = SafeName(e);
-            if (name == null || !name.Contains(ai.Keyword, StringComparison.OrdinalIgnoreCase)) return false;
+            if (!ai.NameMatches(name)) return false;
             if (type == DocumentControlTypeId)
             {
                 var r = e.CurrentBoundingRectangle;

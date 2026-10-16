@@ -34,6 +34,18 @@ public class LinkBatchTests
         Assert.False(b.Overflowed);
     }
 
+    [Theory]
+    [InlineData("Sider: Chat with all AI", "Sider", true)]
+    [InlineData("Sider", "Sider", true)]
+    [InlineData("Open Sider sidebar", "Sider", true)]
+    [InlineData("Things to be considered", "Sider", false)]
+    [InlineData("Outsider", "Sider", false)]
+    [InlineData("Gemini in Chrome", "Gemini", true)]
+    [InlineData("Claude", "Claude", true)]
+    [InlineData(null, "Sider", false)]
+    public void PanelNamesMatchOnlyWholeWords(string? name, string word, bool expected)
+        => Assert.Equal(expected, SidePanelPrompts.NameHasWord(name, word));
+
     [Fact]
     public void PromptsAreSingleLineAndListEveryLink()
     {

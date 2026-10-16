@@ -12,7 +12,7 @@ namespace UrlInsight.App.UI;
 /// <summary>
 /// Ctrl を押しながらリンクに重ねている間、カーソルの近くに出す小さな表示(集めたリンクの件数と一覧)。
 /// クリックを素通りさせ、キーボードの入力先も奪わない(Chrome などでの操作を邪魔しないため)。
-/// Ctrl を離して Gemini に送ったあとは、結果を数秒表示してから消える。
+/// Ctrl を離してサイドバーの AI に送ったあとは、結果を数秒表示してから消える。
 /// </summary>
 internal sealed class BatchIndicatorWindow : Window
 {
@@ -65,12 +65,12 @@ internal sealed class BatchIndicatorWindow : Window
     }
 
     /// <summary>集めているリンクを表示する(Ctrl を押している間)。</summary>
-    public void ShowCollecting(IReadOnlyList<string> labels, bool overflowed)
+    public void ShowCollecting(IReadOnlyList<string> labels, bool overflowed, string aiName)
     {
         _hideTimer.Stop();
         _title.Text = labels.Count == 0
-            ? "Gemini にまとめて送る: リンクにカーソルを重ねてください"
-            : $"Gemini にまとめて送る: {labels.Count} 件";
+            ? $"{aiName} にまとめて送る: リンクにカーソルを重ねてください"
+            : $"{aiName} にまとめて送る: {labels.Count} 件";
         _items.Children.Clear();
         // 件数が多いときは、新しく加えた分だけを表示する(画面からはみ出さないように)
         int first = Math.Max(0, labels.Count - MaxShown);
@@ -85,7 +85,7 @@ internal sealed class BatchIndicatorWindow : Window
                 TextTrimming = TextTrimming.CharacterEllipsis,
             });
         _hint.Text = (overflowed ? "これ以上は追加できません（上限に達しました）。" : string.Empty)
-                     + "Ctrl を離すと Chrome の Gemini に送ります。ほかのキーやクリックで取り消します。";
+                     + $"Ctrl を離すと Chrome の {aiName} に送ります。ほかのキーやクリックで取り消します。";
         ShowNearCursor();
     }
 

@@ -49,7 +49,7 @@ internal sealed class HoverCoordinator
     private readonly DispatcherTimer _hideTimer;
     /// <summary>カードの「Claude in Chrome で要約」「Chrome の Gemini で要約」ボタンの処理。</summary>
     private readonly ChromeSidePanelAi _chromeAi = new();
-    /// <summary>Ctrl を押しながら重ねたリンク(Ctrl を離したらまとめて Chrome の Gemini に送る)。</summary>
+    /// <summary>Ctrl を押しながら重ねたリンク(Ctrl を離したらまとめて Chrome のサイドバーの AI に送る)。</summary>
     private readonly LinkBatch _batch = new();
     private BatchIndicatorWindow? _batchIndicator;
     /// <summary>ホバーに合わせて内容が切り替わるカード。</summary>
@@ -182,7 +182,7 @@ internal sealed class HoverCoordinator
         Handle(new BrowserMessage { Type = "hoverLink", RequestId = _localRequestId, Url = url, LinkText = linkText });
     });
 
-    // ---------- Ctrl を押しながら重ねたリンクを、カードを出さずにまとめて Chrome の Gemini に送る ----------
+    // ---------- Ctrl を押しながら重ねたリンクを、カードを出さずにまとめて Chrome のサイドバーの AI(既定は Sider)に送る ----------
 
     /// <summary>Ctrl を押し始めた。どのスレッドからでも可。</summary>
     public void OnBatchStarted() => _dispatcher.BeginInvoke(() =>
@@ -200,7 +200,7 @@ internal sealed class HoverCoordinator
         if (!added && !_batch.Overflowed) return;
         if (_batch.Count == 0) return;
         _batchIndicator ??= new BatchIndicatorWindow();
-        _batchIndicator.ShowCollecting(BatchLabels(), _batch.Overflowed);
+        _batchIndicator.ShowCollecting(BatchLabels(), _batch.Overflowed, Target.DisplayName);
     });
 
     /// <summary>Ctrl を離した(send=true)か、ほかのキー・クリックで取り消した(false)。どのスレッドからでも可。</summary>
@@ -219,14 +219,18 @@ internal sealed class HoverCoordinator
             _batchIndicator.ShowResult("まとめて送るのを取り消しました（Ctrl と一緒にほかのキーかクリックが押されました）");
             return;
         }
-        AppLog.Info($"batch: sending {urls.Count} links to Gemini");
+        var ai = Target;
+        AppLog.Info($"batch: sending {urls.Count} links to {ai.Id}");
         var indicator = _batchIndicator;
-        _chromeAi.Request(SidePanelAi.Gemini, urls, text => _dispatcher.BeginInvoke(() => indicator.ShowResult(text)));
+        _chromeAi.Request(ai, urls, text => _dispatcher.BeginInvoke(() => indicator.ShowResult(text)));
     });
 
-    /// <summary>直接 Gemini に送った URL と時刻(同じリンクに何度も重ねても、続けて送らないように)。</summary>
+    /// <summary>直接サイドバーの AI に送った URL と時刻(同じリンクに何度も重ねても、続けて送らないように)。</summary>
     private readonly Dictionary<string, DateTime> _directSent = new();
     private static readonly TimeSpan DirectResendInterval = TimeSpan.FromMinutes(1);
+
+    /// <summary>リンクに重ねたとき・Ctrl を押しながら集めたときの送り先(設定で選ぶ。既定は Sider)。</summary>
+    private SidePanelAi Target => SidePanelAi.Get(_services.Settings.SidePanelAiId);
 
     private void SendDirect(string url)
     {
@@ -236,8 +240,9 @@ internal sealed class HoverCoordinator
         _directSent[url] = now;
         _batchIndicator ??= new BatchIndicatorWindow();
         var indicator = _batchIndicator;
-        AppLog.Info("direct: sending a hovered link to Gemini");
-        _chromeAi.Request(SidePanelAi.Gemini, url, text => _dispatcher.BeginInvoke(() => indicator.ShowResult(text)));
+        var ai = Target;
+        AppLog.Info($"direct: sending a hovered link to {ai.Id}");
+        _chromeAi.Request(ai, url, text => _dispatcher.BeginInvoke(() => indicator.ShowResult(text)));
     }
 
     private List<string> BatchLabels()
@@ -280,7 +285,7 @@ internal sealed class HoverCoordinator
         if (settings.Paused || m.Url == null) return;
         if (UrlPolicy.TryNormalize(m.Url, out var normalized, out _) && _services.IsIgnored(normalized!)) return;
 
-        // カードを出さずに、そのリンクを直接 Chrome の Gemini に送る(設定でオフにできる)
+        // カードを出さずに、そのリンクを直接 Chrome のサイドバーの AI(既定は Sider)に送る(設定でオフにできる)
         if (settings.HoverDirectToGemini && normalized != null)
         {
             SendDirect(normalized.ToString());

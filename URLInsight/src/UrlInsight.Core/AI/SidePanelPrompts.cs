@@ -19,6 +19,15 @@ public static class SidePanelPrompts
             : $"次の{urls.Count}件のリンク先のページの内容を、それぞれ日本語で3〜5文に要約してください。リンクごとに番号とページの題名を見出しにしてください: {Numbered(urls)}";
     }
 
+    /// <summary>
+    /// 画面の部品の名前が、AI の名前(「Sider」など)を単語として含むか。
+    /// 「Considered」の中の「sider」のような、別の単語の一部には一致させない。
+    /// </summary>
+    public static bool NameHasWord(string? name, string word)
+        => !string.IsNullOrEmpty(name) && System.Text.RegularExpressions.Regex.IsMatch(name,
+            $"(?<![A-Za-z]){System.Text.RegularExpressions.Regex.Escape(word)}(?![A-Za-z])",
+            System.Text.RegularExpressions.RegexOptions.IgnoreCase | System.Text.RegularExpressions.RegexOptions.CultureInvariant);
+
     public static string Claude(IReadOnlyList<string> urls)
     {
         if (urls.Count == 0) throw new ArgumentException("no urls", nameof(urls));
