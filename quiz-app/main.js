@@ -1,6 +1,7 @@
 // クイズひろば：同梱した HTML をそのまま表示するだけの Electron ラッパー
 const { app, BrowserWindow, Menu, shell } = require('electron');
 const path = require('path');
+const { installOfflineFonts } = require('./offline-fonts');
 
 function createWindow() {
   const win = new BrowserWindow({
@@ -46,6 +47,7 @@ if (!app.requestSingleInstanceLock()) {
 
   app.whenReady().then(() => {
     Menu.setApplicationMenu(null);
+    installOfflineFonts();
     createWindow();
   });
 

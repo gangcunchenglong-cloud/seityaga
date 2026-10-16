@@ -1,6 +1,6 @@
 {
   "name": "quiz-hiroba",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "クイズひろば（理科・算数・社会・歴史）",
   "author": "seityaga",
   "main": "main.js",
@@ -18,6 +18,8 @@
     "productName": "クイズひろば",
     "files": [
       "main.js",
+      "offline-fonts.js",
+      "fonts/**/*",
       "app/**/*"
     ],
     "directories": {
