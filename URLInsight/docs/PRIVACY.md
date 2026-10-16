@@ -12,6 +12,7 @@ URL Insight は、あなたが理解・制御できる範囲でだけ情報を�
 | 3 | アプリ → AI 提供元（あなたが選んだもののみ） | ページの URL・タイトル・説明・本文（上限文字数まで。初期12,000字） | AI プロバイダとキーを設定し、**送信前の確認で「送信」を選んだとき**（毎回確認／各プロバイダ初回のみ確認 を選択可） |
 | 4 | アプリ → YouTube（公式 oEmbed / Data API） | 動画ID（Data API キーを設定した場合はキーも） | YouTube のリンクを要約するとき |
 | 4'' | アプリ → Claude in Chrome（Anthropic） | カードの URL と、要約の依頼文（Chrome のサイドバーの Claude の入力欄に入力して送信。以後の扱いは Anthropic の Claude in Chrome の規約に従う。Claude in Chrome がリンク先を開いて読む場合があります） | カードの「Claude in Chrome で要約」ボタンを押したときだけ |
+| 4s | アプリ → Sider（Chrome 拡張機能。1.9.0 以降の既定の送り先） | カードの URL と、要約の依頼文（Sider のサイドバーの入力欄に入力して送信。以後の扱いは Sider の規約に従う） | 下の 4' と同じ条件（リンクに重ねたとき・Ctrl を押しながら集めて離したとき）で、設定「要約を頼む Chrome のサイドバーの AI」が Sider（既定）のとき |
 | 4' | アプリ → Chrome の Gemini（Google） | カードの URL と、要約の依頼文（Chrome の Gemini の入力欄に入力して送信。以後の扱いは Google の Gemini in Chrome の規約に従う） | カードの「Chrome の Gemini で要約」ボタンを押したとき、リンクにカーソルを重ねて少し止めたとき（設定「リンクに重ねたら、カードを出さずに Chrome の Gemini に直接送る」がオン＝既定。同じリンクは1分以内に送り直さない）、または Ctrl を押しながらリンクに重ねて Ctrl を離したとき（重ねたリンクの URL を最大100件まとめて送る。Ctrl と一緒にほかのキーやクリックを押した場合は送らない）だけ |
 | 5 | アプリ → DuckDuckGo（取得できない場合は Bing） | Google 検索の URL に含まれる検索キーワード（Cookie・ログイン情報は送らない） | Google 検索の URL（`google.*/search?q=…`）を要約するとき。Google は JavaScript なしでは検索結果を返さないため、同じキーワードの結果をこれらから取得します |
 
