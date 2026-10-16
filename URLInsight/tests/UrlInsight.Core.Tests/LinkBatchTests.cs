@@ -26,6 +26,7 @@ public class LinkBatchTests
     {
         var b = new LinkBatch();
         for (int i = 0; i < LinkBatch.MaxLinks + 3; i++) b.Add($"https://e{i}.example/");
+        Assert.Equal(100, LinkBatch.MaxLinks);
         Assert.Equal(LinkBatch.MaxLinks, b.Count);
         Assert.True(b.Overflowed);
         b.Clear();
@@ -46,6 +47,12 @@ public class LinkBatchTests
         Assert.Contains("(1) https://a.example/ (2) https://b.example/ (3) https://c.example/", many);
 
         Assert.Contains("開いて", SidePanelPrompts.Claude(new[] { "https://a.example/" }));
+
+        // 上限の100件でも1行のまま、すべて番号付きで入る
+        var hundred = SidePanelPrompts.Gemini(Enumerable.Range(1, 100).Select(i => $"https://e{i}.example/").ToList());
+        Assert.DoesNotContain('\n', hundred);
+        Assert.Contains("100件", hundred);
+        Assert.Contains("(100) https://e100.example/", hundred);
         Assert.Throws<ArgumentException>(() => SidePanelPrompts.Gemini(Array.Empty<string>()));
     }
 }

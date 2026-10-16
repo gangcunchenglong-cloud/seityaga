@@ -23,6 +23,7 @@ public class SettingsDefaultsTests
     public void CtrlHoverToGeminiIsOnByDefaultAndIsSaved()
     {
         Assert.True(new AppSettings().CtrlHoverToGemini);
+        Assert.True(new AppSettings().HoverDirectToGemini);
 
         using var dir = new TempDir();
         var path = Path.Combine(dir.Path, "settings.json");

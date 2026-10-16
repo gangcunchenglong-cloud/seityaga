@@ -72,7 +72,13 @@ internal sealed class ChromeSidePanelAi
     private const int DocumentControlTypeId = 50030;
     private const int InvokePatternId = 10000;
 
+    /// <summary>送信待ちにしておく URL の上限(まとめて送る件数の上限と同じ)。</summary>
+    private const int MaxPending = UrlInsight.Core.Pipeline.LinkBatch.MaxLinks;
+    private readonly object _queueLock = new();
     private int _busy;
+    private readonly List<string> _pending = new();
+    private SidePanelAi? _pendingAi;
+    private Action<string>? _pendingStatus;
     private UIA.IUIAutomation? _uia;
 
     /// <summary>
@@ -81,21 +87,36 @@ internal sealed class ChromeSidePanelAi
     /// </summary>
     public void Request(SidePanelAi ai, string url, Action<string> status) => Request(ai, new[] { url }, status);
 
-    /// <summary>複数の URL の要約を、1回の依頼でまとめて頼む。</summary>
+    /// <summary>
+    /// 複数の URL の要約を、1回の依頼でまとめて頼む。
+    /// 送信中に頼まれた URL(リンクに次々と重ねた場合など)は捨てずに待たせ、今の送信が終わったらまとめて送る。
+    /// </summary>
     public void Request(SidePanelAi ai, IReadOnlyList<string> urls, Action<string> status)
     {
         if (urls.Count == 0) return;
-        if (Interlocked.Exchange(ref _busy, 1) == 1)
+        lock (_queueLock)
         {
-            status("Chrome の AI に送信中です。少し待ってください");
-            return;
+            if (_busy != 0)
+            {
+                if (_pendingAi != null && _pendingAi != ai)
+                {
+                    status("ほかの AI に送信中です。少し待ってからもう一度押してください");
+                    return;
+                }
+                _pendingAi = ai;
+                foreach (var u in urls) if (!_pending.Contains(u) && _pending.Count < MaxPending) _pending.Add(u);
+                _pendingStatus = status;
+                status($"送信中のため、{_pending.Count} 件を待たせています（終わったら続けて送ります）");
+                return;
+            }
+            _busy = 1;
         }
-        // 前面に出す操作は、利用者の操作(ボタン・Ctrl を離す)の直後に行う
+        // 前面に出す操作は、利用者の操作(ボタン・Ctrl を離す・リンクに重ねる)の直後に行う
         var chrome = FindChromeWindow();
         if (chrome == IntPtr.Zero)
         {
-            Interlocked.Exchange(ref _busy, 0);
-            status("Chrome が起動していません。Chrome を開いてからもう一度押してください");
+            lock (_queueLock) _busy = 0;
+            status("Chrome が起動していません。Chrome を開いてからもう一度試してください");
             return;
         }
         if (NativeMethods.IsIconic(chrome)) NativeMethods.ShowWindow(chrome, NativeMethods.SW_RESTORE);
@@ -104,18 +125,47 @@ internal sealed class ChromeSidePanelAi
 
         _ = Task.Run(() =>
         {
-            try
+            var current = urls;
+            var currentStatus = status;
+            var window = chrome;
+            while (true)
             {
-                status(Run(ai, urls, chrome));
-            }
-            catch (Exception ex) when (ex is COMException or InvalidCastException or InvalidOperationException)
-            {
-                AppLog.Warn($"{ai.Id}: failed ({ex.GetType().Name} 0x{ex.HResult:X8})");
-                status($"{ai.DisplayName} の操作に失敗しました（ログを確認してください）");
-            }
-            finally
-            {
-                Interlocked.Exchange(ref _busy, 0);
+                try
+                {
+                    currentStatus(Run(ai, current, window));
+                }
+                catch (Exception ex) when (ex is COMException or InvalidCastException or InvalidOperationException)
+                {
+                    AppLog.Warn($"{ai.Id}: failed ({ex.GetType().Name} 0x{ex.HResult:X8})");
+                    currentStatus($"{ai.DisplayName} の操作に失敗しました（ログを確認してください）");
+                }
+                // 送信中に待たせた分があれば、続けてまとめて送る
+                lock (_queueLock)
+                {
+                    if (_pending.Count == 0 || _pendingAi != ai)
+                    {
+                        _pending.Clear();
+                        _pendingAi = null;
+                        _pendingStatus = null;
+                        _busy = 0;
+                        return;
+                    }
+                    current = _pending.ToList();
+                    currentStatus = _pendingStatus ?? currentStatus;
+                    _pending.Clear();
+                    _pendingAi = null;
+                    _pendingStatus = null;
+                }
+                // 回答の表示が始まるのを少し待ってから次を入力する
+                Thread.Sleep(1500);
+                window = FindChromeWindow();
+                if (window == IntPtr.Zero)
+                {
+                    currentStatus("Chrome が見つからないため、待たせていた分は送れませんでした");
+                    lock (_queueLock) _busy = 0;
+                    return;
+                }
+                NativeMethods.BringToFront(window);
             }
         });
     }

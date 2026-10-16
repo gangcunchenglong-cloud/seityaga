@@ -54,6 +54,7 @@ public partial class SettingsWindow : Window
         UiaHoverCheck.IsChecked = s.UseUiAutomationHover;
         AutoPinCheck.IsChecked = s.AutoPinSummaries;
         CtrlGeminiCheck.IsChecked = s.CtrlHoverToGemini;
+        DirectGeminiCheck.IsChecked = s.HoverDirectToGemini;
         DelaySlider.Value = s.HoverDelayMs;
         DelayText.Text = $"{s.HoverDelayMs} ms";
         DisplayModeCombo.SelectedIndex = s.DisplayMode == DisplayMode.Pinned ? 1 : 0;
@@ -122,6 +123,7 @@ public partial class SettingsWindow : Window
         var uiaHover = UiaHoverCheck.IsChecked == true;
         var autoPin = AutoPinCheck.IsChecked == true;
         var ctrlGemini = CtrlGeminiCheck.IsChecked == true;
+        var directGemini = DirectGeminiCheck.IsChecked == true;
 
         apply = s =>
         {
@@ -144,6 +146,7 @@ public partial class SettingsWindow : Window
             s.UseUiAutomationHover = uiaHover;
             s.AutoPinSummaries = autoPin;
             s.CtrlHoverToGemini = ctrlGemini;
+            s.HoverDirectToGemini = directGemini;
         };
         return true;
     }

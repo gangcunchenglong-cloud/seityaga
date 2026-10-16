@@ -224,6 +224,22 @@ internal sealed class HoverCoordinator
         _chromeAi.Request(SidePanelAi.Gemini, urls, text => _dispatcher.BeginInvoke(() => indicator.ShowResult(text)));
     });
 
+    /// <summary>直接 Gemini に送った URL と時刻(同じリンクに何度も重ねても、続けて送らないように)。</summary>
+    private readonly Dictionary<string, DateTime> _directSent = new();
+    private static readonly TimeSpan DirectResendInterval = TimeSpan.FromMinutes(1);
+
+    private void SendDirect(string url)
+    {
+        var now = DateTime.UtcNow;
+        if (_directSent.TryGetValue(url, out var at) && now - at < DirectResendInterval) return;
+        if (_directSent.Count > 500) _directSent.Clear();
+        _directSent[url] = now;
+        _batchIndicator ??= new BatchIndicatorWindow();
+        var indicator = _batchIndicator;
+        AppLog.Info("direct: sending a hovered link to Gemini");
+        _chromeAi.Request(SidePanelAi.Gemini, url, text => _dispatcher.BeginInvoke(() => indicator.ShowResult(text)));
+    }
+
     private List<string> BatchLabels()
         => _batch.Urls.Select((u, i) =>
         {
@@ -263,6 +279,13 @@ internal sealed class HoverCoordinator
         var settings = _services.Settings;
         if (settings.Paused || m.Url == null) return;
         if (UrlPolicy.TryNormalize(m.Url, out var normalized, out _) && _services.IsIgnored(normalized!)) return;
+
+        // カードを出さずに、そのリンクを直接 Chrome の Gemini に送る(設定でオフにできる)
+        if (settings.HoverDirectToGemini && normalized != null)
+        {
+            SendDirect(normalized.ToString());
+            return;
+        }
 
         var card = _active.Window;
         // 送信確認中のカードは、別のリンクを通過しただけでは消さない

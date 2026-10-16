@@ -8,7 +8,7 @@ namespace UrlInsight.Core.Pipeline;
 /// </summary>
 public sealed class LinkBatch
 {
-    public const int MaxLinks = 10;
+    public const int MaxLinks = 100;
 
     private readonly List<string> _urls = new();
     private readonly List<string?> _titles = new();

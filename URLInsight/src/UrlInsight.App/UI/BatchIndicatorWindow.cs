@@ -17,6 +17,8 @@ namespace UrlInsight.App.UI;
 internal sealed class BatchIndicatorWindow : Window
 {
     private const long WS_EX_TRANSPARENT = 0x00000020L;
+    /// <summary>一覧に表示する件数(これより多いときは新しい分だけ)。</summary>
+    private const int MaxShown = 8;
     private readonly TextBlock _title = new() { FontWeight = FontWeights.Bold, FontSize = 13.5, TextWrapping = TextWrapping.Wrap };
     private readonly StackPanel _items = new();
     private readonly TextBlock _hint = new() { FontSize = 11.5, Margin = new Thickness(0, 6, 0, 0), TextWrapping = TextWrapping.Wrap };
@@ -70,7 +72,11 @@ internal sealed class BatchIndicatorWindow : Window
             ? "Gemini にまとめて送る: リンクにカーソルを重ねてください"
             : $"Gemini にまとめて送る: {labels.Count} 件";
         _items.Children.Clear();
-        for (int i = 0; i < labels.Count; i++)
+        // 件数が多いときは、新しく加えた分だけを表示する(画面からはみ出さないように)
+        int first = Math.Max(0, labels.Count - MaxShown);
+        if (first > 0)
+            _items.Children.Add(new TextBlock { Text = $"…ほか {first} 件", FontSize = 12, Margin = new Thickness(0, 3, 0, 0) });
+        for (int i = first; i < labels.Count; i++)
             _items.Children.Add(new TextBlock
             {
                 Text = $"{i + 1}. {labels[i]}",
