@@ -28,7 +28,9 @@ internal sealed record SidePanelAi(
     // パネルを開けなかったときの案内。
     string SetupHint,
     // 依頼文(1件でも複数でも1行。SidePanelPrompts)。
-    Func<IReadOnlyList<string>, string> BuildPrompt)
+    Func<IReadOnlyList<string>, string> BuildPrompt,
+    // サイドバーを開けなかったときに、依頼文を付けて新しいタブで開く Web 版の URL(末尾に依頼文を付ける。null なら開かない)。
+    string? WebUrlPrefix = null)
 {
     /// <summary>
     /// Claude in Chrome(Anthropic の Chrome 拡張機能)。ツールバーの「Claude」ボタン(拡張機能のアイコン)を押してサイドパネルを開く。
@@ -51,7 +53,8 @@ internal sealed record SidePanelAi(
         "chatgpt", "ChatGPT", "ChatGPT",
         NativeMethods.VK_CONTROL, 0x45 /* E */, "Ctrl+E", ButtonFirst: true,
         "ChatGPT のサイドバーを開けませんでした（Chrome に OpenAI の拡張機能「ChatGPT」を入れてログインし、拡張機能のボタンをツールバーに固定してください。または chrome://extensions/shortcuts で ChatGPT のサイドバーを開くキーを Ctrl+E にしてください）",
-        SidePanelPrompts.Summarize);
+        SidePanelPrompts.Summarize,
+        WebUrlPrefix: "https://chatgpt.com/?q=");
 
     /// <summary>設定で選べる送り先(リンクに重ねたとき・Ctrl を押しながら集めたとき)。</summary>
     public static readonly IReadOnlyList<SidePanelAi> All = new[] { ChatGpt, Claude };
@@ -96,6 +99,13 @@ internal sealed class ChromeSidePanelAi
     private SidePanelAi? _pendingAi;
     private Action<string>? _pendingStatus;
     private UIA.IUIAutomation? _uia;
+    /// <summary>
+    /// サイドバーを最後に開けなかった時刻(依頼先ごと)。この後しばらくは、サイドバーを試さずに新しいタブで開く
+    /// (リンクに重ねるたびに、開けないサイドバーのボタンを押して数秒待つのを繰り返さないため)。
+    /// </summary>
+    private readonly Dictionary<string, DateTime> _panelFailedAt = new();
+    private static readonly TimeSpan PanelRetryInterval = TimeSpan.FromMinutes(10);
+    private const int ValuePatternId = 10002;
 
     /// <summary>
     /// URL の要約を Chrome のサイドバーの AI に頼む(UI スレッドから呼ぶ。操作は別スレッドで行う)。
@@ -240,14 +250,20 @@ internal sealed class ChromeSidePanelAi
         for (int i = 0; i < 10 && !IsForeground(root); i++) Thread.Sleep(100);
         if (!IsForeground(root)) return "Chrome を前面に出せませんでした。Chrome を手前に表示してからもう一度押してください";
 
+        if (ai.WebUrlPrefix != null && RecentlyFailed(ai))
+            return OpenInTab(ai, urls, root, "（少し前にサイドバーを開けなかったため）");
+
         var uia = Uia();
         var window = uia.ElementFromHandle(root);
-        var panel = FindPanel(ai, window) ?? OpenPanel(ai, window);
-        if (panel == null)
+        var found = FindPanel(ai, window) ?? OpenPanel(ai, window);
+        if (found == null)
         {
             AppLog.Info($"{ai.Id}: panel not found");
-            return ai.SetupHint;
+            LogToolbarButtons(window);
+            return PanelFailed(ai, urls, root);
         }
+        // 名前が一致したのはパネルの見出しなど一部のことがあるため、入力欄を含む範囲まで広げる
+        var panel = ExpandToInputContainer(found, window) ?? found;
 
         // 開いた直後は入力欄の準備に少し時間がかかる
         UIA.IUIAutomationElement? input = null;
@@ -266,9 +282,11 @@ internal sealed class ChromeSidePanelAi
         // 入力先がパネルの中であることを確かめてから入力する
         if (!FocusIsInside(uia, panel) || !IsForeground(root))
         {
-            AppLog.Info($"{ai.Id}: focus not in panel (input found: {input != null})");
+            AppLog.Info($"{ai.Id}: focus not in panel (input found: {input != null}, panel type: {SafeType(panel)})");
+            if (ai.WebUrlPrefix != null) return PanelFailed(ai, urls, root);
             return $"{ai.DisplayName} の入力欄を確認できなかったため、送信しませんでした（ログインしているか確認してください）";
         }
+        lock (_panelFailedAt) _panelFailedAt.Remove(ai.Id);
 
         var keys = new List<NativeMethods.INPUT>();
         foreach (var ch in ai.BuildPrompt(urls))
@@ -283,6 +301,172 @@ internal sealed class ChromeSidePanelAi
         return urls.Count == 1
             ? $"{ai.DisplayName} に要約を頼みました（Chrome のサイドバーに表示されます）"
             : $"{ai.DisplayName} に {urls.Count} 件の要約をまとめて頼みました（Chrome のサイドバーに表示されます）";
+    }
+
+    private bool RecentlyFailed(SidePanelAi ai)
+    {
+        lock (_panelFailedAt)
+            return _panelFailedAt.TryGetValue(ai.Id, out var at) && DateTime.UtcNow - at < PanelRetryInterval;
+    }
+
+    /// <summary>サイドバーを開けなかったとき。Web 版があれば新しいタブで開き、無ければ準備の案内を返す。</summary>
+    private string PanelFailed(SidePanelAi ai, IReadOnlyList<string> urls, IntPtr root)
+    {
+        if (ai.WebUrlPrefix == null) return ai.SetupHint;
+        lock (_panelFailedAt) _panelFailedAt[ai.Id] = DateTime.UtcNow;
+        return OpenInTab(ai, urls, root, "（サイドバーを開けなかったため）");
+    }
+
+    /// <summary>
+    /// Web 版(chatgpt.com など)を、依頼文を付けた URL で Chrome の新しいタブに開く。
+    /// 依頼文が入力欄に入ったまま送信されていなければ、入力欄が依頼文を含むことを確かめてから Enter を送る。
+    /// URL が長くなりすぎる件数のときは、数件ずつ別のタブに分ける。
+    /// </summary>
+    private string OpenInTab(SidePanelAi ai, IReadOnlyList<string> urls, IntPtr root, string reason)
+    {
+        var pages = SidePanelPrompts.WebQueryUrls(ai.WebUrlPrefix!, urls, ai.BuildPrompt);
+        var chrome = ChromePath(root);
+        if (chrome == null)
+        {
+            AppLog.Warn($"{ai.Id}: chrome.exe not found");
+            return $"{ai.DisplayName} のサイドバーを開けず、Chrome の場所も分かりませんでした。{ai.SetupHint}";
+        }
+        foreach (var (page, prompt) in pages)
+        {
+            try
+            {
+                var psi = new ProcessStartInfo(chrome) { UseShellExecute = false };
+                psi.ArgumentList.Add(page);
+                using var _ = Process.Start(psi);
+            }
+            catch (Exception ex) when (ex is System.ComponentModel.Win32Exception or InvalidOperationException)
+            {
+                AppLog.Warn($"{ai.Id}: failed to open a tab ({ex.GetType().Name})");
+                return $"{ai.DisplayName} を新しいタブで開けませんでした";
+            }
+            AppLog.Info($"{ai.Id}: opened the web version in a new tab");
+            SubmitIfPrefilled(ai, prompt);
+        }
+        var count = urls.Count == 1 ? "要約" : $"{urls.Count} 件の要約";
+        var tabs = pages.Count == 1 ? "新しいタブ" : $"新しいタブ {pages.Count} 枚";
+        return $"{ai.DisplayName} に{count}を頼みました{reason}。Chrome の{tabs}に表示されます";
+    }
+
+    /// <summary>
+    /// 開いたページの入力欄に依頼文が入ったまま送信されていないとき、Enter を押して送る。
+    /// キーボードの入力先が Chrome の中の入力欄で、その内容が依頼文の書き出しと同じときだけ送る(ほかの場所に Enter を送らないため)。
+    /// 自動で送信された場合は入力欄が空になるので、何もしない。
+    /// </summary>
+    private void SubmitIfPrefilled(SidePanelAi ai, string prompt)
+    {
+        var head = prompt.Length > 16 ? prompt[..16] : prompt;
+        var uia = Uia();
+        for (int i = 0; i < 40; i++)
+        {
+            Thread.Sleep(250);
+            try
+            {
+                var fg = NativeMethods.GetAncestor(NativeMethods.GetForegroundWindow(), NativeMethods.GA_ROOT);
+                if (fg == IntPtr.Zero || !IsChrome(fg)) continue;
+                var focused = uia.GetFocusedElement();
+                if (focused == null || focused.CurrentControlType != EditControlTypeId) continue;
+                string? value = focused.GetCurrentPattern(ValuePatternId) is UIA.IUIAutomationValuePattern vp ? vp.CurrentValue : null;
+                if (string.IsNullOrEmpty(value)) value = SafeName(focused);
+                if (value == null || !value.Contains(head, StringComparison.Ordinal)) continue;
+                if (NativeMethods.IsDown(NativeMethods.VK_CONTROL) || NativeMethods.IsDown(NativeMethods.VK_SHIFT)
+                    || NativeMethods.IsDown(NativeMethods.VK_MENU)) return;
+                NativeMethods.Send(NativeMethods.Key(NativeMethods.VK_RETURN, false), NativeMethods.Key(NativeMethods.VK_RETURN, true));
+                AppLog.Info($"{ai.Id}: pressed Enter on the prefilled prompt");
+                Thread.Sleep(800);
+                return;
+            }
+            catch (Exception ex) when (ex is COMException or InvalidCastException) { }
+        }
+        // 入力欄に依頼文が見えなかった(自動で送信された、または読み込み中)ときは何もしない
+    }
+
+    private static bool IsChrome(IntPtr hwnd)
+    {
+        NativeMethods.GetWindowThreadProcessId(hwnd, out var pid);
+        try
+        {
+            using var p = Process.GetProcessById((int)pid);
+            return string.Equals(p.ProcessName, "chrome", StringComparison.OrdinalIgnoreCase);
+        }
+        catch (Exception ex) when (ex is ArgumentException or InvalidOperationException) { return false; }
+    }
+
+    /// <summary>起動中の Chrome の chrome.exe の場所(分からなければ、Windows に登録された場所)。</summary>
+    private static string? ChromePath(IntPtr root)
+    {
+        if (root != IntPtr.Zero)
+        {
+            NativeMethods.GetWindowThreadProcessId(root, out var pid);
+            try
+            {
+                using var p = Process.GetProcessById((int)pid);
+                var path = p.MainModule?.FileName;
+                if (path != null && System.IO.File.Exists(path)) return path;
+            }
+            catch (Exception ex) when (ex is ArgumentException or InvalidOperationException or System.ComponentModel.Win32Exception) { }
+        }
+        foreach (var hive in new[] { Microsoft.Win32.Registry.CurrentUser, Microsoft.Win32.Registry.LocalMachine })
+        {
+            using var key = hive.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\chrome.exe");
+            if (key?.GetValue(null) is string path && System.IO.File.Exists(path)) return path;
+        }
+        return null;
+    }
+
+    /// <summary>
+    /// 名前が一致した要素から親へたどり、入力欄を含む最初の範囲を返す(ページ本体ほど広い範囲には広げない)。
+    /// </summary>
+    private UIA.IUIAutomationElement? ExpandToInputContainer(UIA.IUIAutomationElement found, UIA.IUIAutomationElement window)
+    {
+        var w = window.CurrentBoundingRectangle;
+        int windowWidth = Math.Max(1, w.right - w.left);
+        var uia = Uia();
+        var walker = uia.ControlViewWalker;
+        var current = found;
+        for (int depth = 0; depth < 8 && current != null; depth++)
+        {
+            try
+            {
+                if (uia.CompareElements(current, window) != 0) return null;
+                var r = current.CurrentBoundingRectangle;
+                if (r.right - r.left > windowWidth * 0.6) return null;
+                if (FindInput(current) != null) return current;
+                current = walker.GetParentElement(current);
+            }
+            catch (COMException) { return null; }
+        }
+        return null;
+    }
+
+    private static string SafeType(UIA.IUIAutomationElement e)
+    {
+        try { return e.CurrentControlType.ToString(); }
+        catch (COMException) { return "?"; }
+    }
+
+    /// <summary>ツールバーのボタンの名前をログに残す(サイドバーを開けなかった原因を調べるため。Web ページの中のボタンは除く)。</summary>
+    private void LogToolbarButtons(UIA.IUIAutomationElement window)
+    {
+        try
+        {
+            var names = new List<string>();
+            Find(window, e =>
+            {
+                if (names.Count < 40 && e.CurrentControlType == ButtonControlTypeId && !IsInsideDocument(e))
+                {
+                    var n = SafeName(e);
+                    if (!string.IsNullOrWhiteSpace(n)) names.Add(n.Length > 40 ? n[..40] : n);
+                }
+                return false;
+            }, maxNodes: 1500);
+            AppLog.Info("toolbar buttons: " + string.Join(" | ", names));
+        }
+        catch (COMException) { }
     }
 
     /// <summary>ツールバーのボタンかショートカットでパネルを開く(順番は依頼先ごとに決める)。</summary>

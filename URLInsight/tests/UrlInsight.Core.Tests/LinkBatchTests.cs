@@ -71,4 +71,20 @@ public class LinkBatchTests
         Assert.Contains("(100) https://e100.example/", hundred);
         Assert.Throws<ArgumentException>(() => SidePanelPrompts.Summarize(Array.Empty<string>()));
     }
+
+    [Fact]
+    public void WebQueryUrlsEncodesThePromptAndKeepsEveryLink()
+    {
+        var one = SidePanelPrompts.WebQueryUrls("https://chatgpt.com/?q=", new[] { "https://a.example/?x=1&y=2" }, SidePanelPrompts.Summarize);
+        Assert.Single(one);
+        Assert.StartsWith("https://chatgpt.com/?q=", one[0].Url);
+        Assert.DoesNotContain("&y=", one[0].Url);
+        Assert.Equal(Uri.EscapeDataString(one[0].Prompt), one[0].Url["https://chatgpt.com/?q=".Length..]);
+
+        var urls = Enumerable.Range(1, 100).Select(i => $"https://example{i}.example/some/long/path/{i}").ToList();
+        var pages = SidePanelPrompts.WebQueryUrls("https://chatgpt.com/?q=", urls, SidePanelPrompts.Summarize);
+        Assert.True(pages.Count > 1);
+        Assert.All(pages, p => Assert.True(p.Url.Length - "https://chatgpt.com/?q=".Length <= SidePanelPrompts.MaxEncodedQuery));
+        foreach (var u in urls) Assert.Single(pages, p => p.Prompt.Contains(u + " ") || p.Prompt.EndsWith(u));
+    }
 }
