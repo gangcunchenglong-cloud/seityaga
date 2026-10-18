@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self'; frame-src 'self' file:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none';">
+<title>クイズひろば ｜ 教科をえらぼう</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@700;900&family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --white:#ffffff;
+  --paper:#f7faf8;
+  --ink:#1c2430;
+  --ink-soft:#5a6472;
+  --navy:#1a3c6e;
+  --navy-deep:#122a4d;
+  --line:#e4e1d8;
+  --shadow:0 2px 10px rgba(28,36,48,.06), 0 1px 2px rgba(28,36,48,.04);
+  --shadow-lg:0 10px 30px rgba(18,42,77,.10), 0 2px 8px rgba(18,42,77,.06);
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;height:100%;}
+body{
+  background:var(--white);color:var(--ink);
+  font-family:"Noto Sans JP","Hiragino Sans","Meiryo",sans-serif;
+  height:100vh;display:flex;flex-direction:column;
+  -webkit-text-size-adjust:100%;
+}
+
+/* ---------- Top bar (quiz view only) ---------- */
+.topbar{
+  display:none;align-items:center;justify-content:space-between;
+  padding:10px 16px;border-bottom:2px solid var(--navy);flex-shrink:0;
+}
+.topbar.show{display:flex;}
+.topbar-title{font-family:"Noto Serif JP",serif;font-weight:900;font-size:14px;color:var(--navy-deep);}
+.back-btn{
+  border:none;background:var(--paper);color:var(--navy-deep);font-weight:800;font-size:12.5px;
+  padding:8px 14px;border-radius:999px;cursor:pointer;
+}
+.back-btn:hover{background:var(--line);}
+
+/* ---------- Select view ---------- */
+#selectView{flex:1;display:flex;flex-direction:column;overflow:auto;}
+header{text-align:center;padding:44px 18px 8px;}
+header h1{font-family:"Noto Serif JP",serif;font-size:clamp(22px,5vw,32px);color:var(--navy-deep);margin:0 0 10px;font-weight:900;}
+header p{color:var(--ink-soft);font-size:13.5px;margin:0;}
+
+main{flex:1;max-width:760px;width:100%;margin:0 auto;padding:26px 18px 60px;}
+.card-row{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+@media (max-width:600px){ .card-row{grid-template-columns:1fr;} }
+
+.subject-card{
+  display:block;width:100%;text-align:center;font:inherit;color:inherit;
+  background:var(--white);border:1px solid var(--line);border-radius:18px;cursor:pointer;
+  padding:26px 22px 22px;box-shadow:var(--shadow);
+  transition:transform .15s ease,box-shadow .15s ease;
+}
+.subject-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg);}
+.subject-mark{
+  width:64px;height:64px;border-radius:16px;margin:0 auto 16px;
+  display:flex;align-items:center;justify-content:center;
+  font-family:"Noto Serif JP",serif;font-weight:900;font-size:30px;color:#fff;
+}
+.rika .subject-mark{background:linear-gradient(155deg,#1a6e5c,#0f4a3d);}
+.rekishi .subject-mark{background:linear-gradient(155deg,#1a3c6e,#122a4d);}
+.sansuu .subject-mark{background:linear-gradient(155deg,#1a4a8c,#0f3161);}
+.shakai .subject-mark{background:linear-gradient(155deg,#8c4a1e,#5c3013);}
+.subject-card h2{font-family:"Noto Serif JP",serif;font-size:19px;margin:0 0 6px;color:var(--navy-deep);font-weight:900;}
+.subject-card p{margin:0 0 18px;font-size:12.5px;color:var(--ink-soft);line-height:1.7;}
+.subject-go{
+  display:inline-block;font-size:13px;font-weight:800;padding:10px 22px;border-radius:999px;color:#fff;
+}
+.rika .subject-go{background:#1a6e5c;}
+.rekishi .subject-go{background:#1a3c6e;}
+.sansuu .subject-go{background:#1a4a8c;}
+.shakai .subject-go{background:#8c4a1e;}
+
+footer{text-align:center;padding:18px;font-size:11px;color:#9aa0a8;border-top:1px solid #edece6;}
+
+/* ---------- Analysis entry card ---------- */
+.analysis-card{
+  display:flex;align-items:center;gap:18px;width:100%;margin-top:20px;text-align:left;font:inherit;color:inherit;
+  background:linear-gradient(135deg,#fdfbf4,#f3f6fb);border:1px solid var(--line);border-radius:18px;cursor:pointer;
+  padding:20px 22px;box-shadow:var(--shadow);transition:transform .15s ease,box-shadow .15s ease;
+}
+.analysis-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg);}
+.analysis-card .subject-mark{margin:0;flex-shrink:0;background:linear-gradient(155deg,#a8761a,#6e4c0f);font-size:26px;}
+.analysis-card h2{font-family:"Noto Serif JP",serif;font-size:18px;margin:0 0 4px;color:var(--navy-deep);font-weight:900;}
+.analysis-card p{margin:0;font-size:12.5px;color:var(--ink-soft);line-height:1.7;}
+.analysis-card .subject-go{background:#8a6214;margin-left:auto;flex-shrink:0;}
+@media (max-width:600px){ .analysis-card{flex-wrap:wrap;} .analysis-card .subject-go{margin-left:0;} }
+
+/* ---------- Analysis view ---------- */
+:root{
+  --good:#2e7d4f; --good-bg:#e8f4ec;
+  --mid:#a86a12;  --mid-bg:#fbf1df;
+  --low:#b23a2e;  --low-bg:#fbe9e6;
+  --none:#8a919b; --none-bg:#f1f2f4;
+}
+#analysisView{flex:1;display:none;overflow:auto;}
+#analysisView.show{display:block;}
+.an-wrap{max-width:860px;margin:0 auto;padding:24px 18px 60px;}
+.an-head h1{font-family:"Noto Serif JP",serif;font-size:clamp(20px,4.5vw,28px);color:var(--navy-deep);margin:0 0 6px;font-weight:900;}
+.an-head p{margin:0 0 20px;color:var(--ink-soft);font-size:12.5px;line-height:1.7;}
+.an-sec{margin:28px 0 0;}
+.an-sec > h2{font-family:"Noto Serif JP",serif;font-size:17px;color:var(--navy-deep);margin:0 0 12px;font-weight:900;
+  padding-left:10px;border-left:4px solid var(--navy);}
+.an-sec > .an-note{margin:-6px 0 12px;font-size:11.5px;color:var(--ink-soft);}
+
+.tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
+@media (max-width:600px){ .tiles{grid-template-columns:1fr 1fr;} }
+.tile{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:14px 14px 12px;box-shadow:var(--shadow);}
+.tile-label{font-size:11.5px;color:var(--ink-soft);font-weight:700;}
+.tile-value{font-family:"Noto Serif JP",serif;font-size:26px;font-weight:900;color:var(--navy-deep);line-height:1.3;}
+.tile-value small{font-size:13px;margin-left:2px;font-family:"Noto Sans JP",sans-serif;}
+.tile-sub{font-size:11px;color:var(--ink-soft);}
+
+.summary-box{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:16px 18px;
+  font-size:14px;line-height:1.9;margin-bottom:14px;}
+.summary-box strong{color:var(--navy-deep);}
+
+.subj-list{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+@media (max-width:600px){ .subj-list{grid-template-columns:1fr;} }
+.subj{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:14px 16px;box-shadow:var(--shadow);}
+.subj-top{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.subj-dot{width:30px;height:30px;border-radius:8px;color:#fff;font-family:"Noto Serif JP",serif;font-weight:900;
+  display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;}
+.subj-name{font-weight:900;color:var(--navy-deep);font-size:15px;}
+.subj-acc{margin-left:auto;font-family:"Noto Serif JP",serif;font-weight:900;font-size:20px;color:var(--ink);}
+.subj-acc small{font-size:11px;color:var(--ink-soft);font-family:"Noto Sans JP",sans-serif;font-weight:500;}
+.meter{position:relative;height:8px;background:#eef0f2;border-radius:4px;overflow:visible;margin:4px 0 10px;}
+.meter-fill{height:100%;border-radius:4px;}
+.meter-line{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--ink);opacity:.35;}
+.subj-stats{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:11.5px;color:var(--ink-soft);}
+.subj-stats b{color:var(--ink);}
+
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:11.5px;color:var(--ink-soft);margin-bottom:12px;}
+.legend span{display:inline-flex;align-items:center;gap:5px;}
+.legend i{width:12px;height:12px;border-radius:3px;display:inline-block;}
+.legend i.lv-good{background:var(--good);} .legend i.lv-mid{background:var(--mid);}
+.legend i.lv-low{background:var(--low);} .legend i.lv-few{background:var(--none);}
+.unit-block{margin-bottom:16px;}
+.unit-block h3{font-size:13.5px;margin:0 0 8px;color:var(--navy-deep);font-weight:900;}
+.unit-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:6px;}
+.unit{border-radius:10px;padding:8px 10px;border-left:4px solid;font-size:11.5px;line-height:1.5;cursor:default;}
+.unit-name{font-weight:700;color:var(--ink);display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.unit-meta{color:var(--ink-soft);}
+.lv-good{background:var(--good-bg);border-color:var(--good);}
+.lv-mid{background:var(--mid-bg);border-color:var(--mid);}
+.lv-low{background:var(--low-bg);border-color:var(--low);}
+.lv-few,.lv-none{background:var(--none-bg);border-color:var(--none);}
+.lv-none .unit-name{color:var(--ink-soft);font-weight:500;}
+.lv-tag{font-weight:800;}
+.lv-good .lv-tag{color:var(--good);} .lv-mid .lv-tag{color:var(--mid);} .lv-low .lv-tag{color:var(--low);}
+.lv-few .lv-tag,.lv-none .lv-tag{color:var(--none);}
+
+.advice-list{display:flex;flex-direction:column;gap:10px;}
+.advice{display:flex;gap:12px;background:var(--white);border:1px solid var(--line);border-radius:14px;padding:14px 16px;box-shadow:var(--shadow);}
+.advice-icon{width:30px;height:30px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;
+  font-weight:900;font-size:14px;color:#fff;}
+.ad-good .advice-icon{background:var(--good);}
+.ad-warn .advice-icon{background:var(--low);}
+.ad-tip .advice-icon{background:var(--mid);}
+.ad-info .advice-icon{background:var(--navy);}
+.advice h3{margin:2px 0 4px;font-size:14px;color:var(--navy-deep);font-weight:900;}
+.advice p{margin:0;font-size:13px;line-height:1.85;color:var(--ink);}
+.advice ul{margin:4px 0 0;padding-left:1.2em;font-size:13px;line-height:1.85;}
+
+.plan{display:flex;flex-direction:column;gap:10px;counter-reset:step;}
+.plan-step{display:flex;align-items:center;gap:14px;background:var(--white);border:1px solid var(--line);border-radius:14px;
+  padding:14px 16px;box-shadow:var(--shadow);}
+.plan-step::before{counter-increment:step;content:counter(step);width:30px;height:30px;border-radius:50%;flex-shrink:0;
+  background:var(--navy-deep);color:#fff;font-weight:900;display:flex;align-items:center;justify-content:center;}
+.plan-body{flex:1;min-width:0;}
+.plan-body h3{margin:0 0 2px;font-size:14px;color:var(--navy-deep);font-weight:900;}
+.plan-body p{margin:0;font-size:12.5px;color:var(--ink-soft);line-height:1.7;}
+.plan-go{border:none;color:#fff;font-weight:800;font-size:12.5px;padding:9px 16px;border-radius:999px;cursor:pointer;flex-shrink:0;}
+@media (max-width:600px){ .plan-step{flex-wrap:wrap;} .plan-body{flex-basis:calc(100% - 44px);} .plan-go{margin-left:44px;} }
+
+.empty-box{text-align:center;background:var(--paper);border:1px dashed var(--line);border-radius:14px;padding:30px 18px;
+  color:var(--ink-soft);font-size:13.5px;line-height:1.9;}
+.an-foot{margin-top:28px;font-size:11px;color:#9aa0a8;line-height:1.8;}
+
+/* ---------- Quiz view ---------- */
+#quizView{flex:1;display:none;}
+#quizView.show{display:flex;}
+#quizFrame{flex:1;width:100%;border:none;}
+</style>
+</head>
+<body>
+<div class="topbar" id="topbar">
+  <span class="topbar-title" id="topbarTitle"></span>
+  <button class="back-btn" onclick="goSelect()">⇦ 教科をえらびなおす</button>
+</div>
+
+<div id="selectView">
+  <header>
+    <h1>教科をえらぼう</h1>
+    <p>やりたいクイズをタップしてスタート</p>
+  </header>
+
+  <main>
+    <div class="card-row">
+      <button type="button" class="subject-card rika" onclick="openSubject('理科kuizu.html','理科クイズ')">
+        <div class="subject-mark">理</div>
+        <h2>理科クイズ</h2>
+        <p>小学校 全単元対応<br>10単元・1120問</p>
+        <span class="subject-go">はじめる</span>
+      </button>
+      <button type="button" class="subject-card rekishi" onclick="openSubject('歴史クイズ1000.html','歴史クイズ1000')">
+        <div class="subject-mark">史</div>
+        <h2>歴史クイズ1000</h2>
+        <p>都内難関中学受験 対応<br>全11時代・1000問以上</p>
+        <span class="subject-go">はじめる</span>
+      </button>
+      <button type="button" class="subject-card sansuu" onclick="openSubject('算数kuizu.html','算数クイズ')">
+        <div class="subject-mark">算</div>
+        <h2>算数クイズ</h2>
+        <p>小学校 全単元対応<br>10単元・1150問以上</p>
+        <span class="subject-go">はじめる</span>
+      </button>
+      <button type="button" class="subject-card shakai" onclick="openSubject('社会kuizu.html','社会クイズ')">
+        <div class="subject-mark">社</div>
+        <h2>社会クイズ</h2>
+        <p>地理・公民 対応<br>10単元・1070問以上</p>
+        <span class="subject-go">はじめる</span>
+      </button>
+    </div>
+
+    <button type="button" class="analysis-card" onclick="openAnalysis()">
+      <div class="subject-mark">析</div>
+      <div>
+        <h2>総合分析とアドバイス</h2>
+        <p>4教科の記録をまとめて分析し、得意・苦手と<br>次にやるべき学習メニューを提案します</p>
+      </div>
+      <span class="subject-go">分析する</span>
+    </button>
+  </main>
+
+  <footer>
+    <p>記録はこの端末のブラウザだけに保存されます（総合分析もこの記録を使います）</p>
+  </footer>
+</div>
+
+<div id="quizView">
+  <iframe id="quizFrame" title="クイズ" src="about:blank"></iframe>
+</div>
+
+<div id="analysisView">
+  <div class="an-wrap" id="analysisBody"></div>
+</div>
+
+<script>
+function openSubject(url, title) {
+  markVisit(url);
+  document.getElementById('quizFrame').src = url;
+  document.getElementById('topbarTitle').textContent = title;
+  document.getElementById('topbar').classList.add('show');
+  document.getElementById('selectView').style.display = 'none';
+  document.getElementById('analysisView').classList.remove('show');
+  document.getElementById('quizView').classList.add('show');
+}
+function goSelect() {
+  document.getElementById('quizFrame').src = 'about:blank';
+  document.getElementById('topbar').classList.remove('show');
+  document.getElementById('quizView').classList.remove('show');
+  document.getElementById('analysisView').classList.remove('show');
+  document.getElementById('selectView').style.display = 'flex';
+}
+function openAnalysis() {
+  renderAnalysis();
+  document.getElementById('topbarTitle').textContent = '総合分析とアドバイス';
+  document.getElementById('topbar').classList.add('show');
+  document.getElementById('selectView').style.display = 'none';
+  document.getElementById('quizView').classList.remove('show');
+  document.getElementById('analysisView').classList.add('show');
+  document.getElementById('analysisView').scrollTop = 0;
+}
+
+/* =========================================================
+   総合分析 ―― 各クイズが保存している記録を読み取って分析する
+   各クイズの保存形式:
+     {prefix}_stat_v1 = { 単元ID: { ans:解答数, cor:正解数, best:テスト最高点(%) } }
+     {prefix}_weak_v1 = { "単元ID-問題番号": { m:まちがえた回数, s:連続正解, t:時刻 } }
+   ========================================================= */
+var SUBJECTS = [
+  { id: 'rika', name: '理科', mark: '理', color: '#1a6e5c', prefix: 'rika1000',
+    file: '理科kuizu.html', title: '理科クイズ', units: [
+    ['shokubutsu', '植物のからだとはたらき', 112], ['konchu', 'こん虫と動物のなかま', 112],
+    ['hito', '人のからだのはたらき', 112], ['tenki', '天気の変化', 112], ['tenmon', '太陽・月と星', 112],
+    ['daichi', '大地のつくりと変化', 112], ['hikari', '光・音・力のはたらき', 112],
+    ['denki', '電気と電磁石のはたらき', 112], ['busshitsu', '物の性質・水溶液と気体', 112],
+    ['rikigaku', 'てこ・ふりこ・もののもえ方', 112] ] },
+  { id: 'rekishi', name: '歴史', mark: '史', color: '#1a3c6e', prefix: 'rekishi1000',
+    file: '歴史クイズ1000.html', title: '歴史クイズ1000', units: [
+    ['genshi', '原始', 138], ['kofun_asuka', '古墳・飛鳥', 138], ['nara', '奈良時代', 133],
+    ['heian', '平安時代', 142], ['kamakura', '鎌倉時代', 138], ['muromachi', '室町時代', 143],
+    ['azuchi', '安土桃山時代', 135], ['edo', '江戸時代', 208], ['meiji', '明治時代', 159],
+    ['taisho', '大正・昭和戦前', 149], ['sengo', '戦後・平成・令和', 150] ] },
+  { id: 'sansuu', name: '算数', mark: '算', color: '#1a4a8c', prefix: 'sansuu',
+    file: '算数kuizu.html', title: '算数クイズ', units: [
+    ['seisuu', '整数のけいさん', 110], ['shousuu', '小数のしくみと計算', 110],
+    ['bunsuu', '分数のしくみと計算', 110], ['wariai', '割合・百分率・速さ', 107],
+    ['heimen', '平面図形', 107], ['rittai', '立体図形', 107],
+    ['tanni', '単位のしくみと単位量あたり', 157], ['hiritsu', '比とその利用', 115],
+    ['baai', '場合の数と資料の調べ方', 116], ['kankei', '変わり方ときまり', 111] ] },
+  { id: 'shakai', name: '社会', mark: '社', color: '#8c4a1e', prefix: 'shakai',
+    file: '社会kuizu.html', title: '社会クイズ', units: [
+    ['kokudo', '日本の国土と地形', 108], ['kikou', '日本の気候と自然災害への備え', 108],
+    ['sangyou', '農業・水産業とわたしたちの食生活', 108], ['kougyou', '工業生産と貿易・運輸', 110],
+    ['seiji', '日本国憲法と政治のしくみ', 104], ['kokusai', '生活と政治・世界とのつながり', 105],
+    ['jouhou', '情報化社会とわたしたちのくらし', 117], ['kankyou', '環境を守る取り組みとくらし', 104],
+    ['chihou', '地域の産業とまちづくり', 106], ['sekai', '世界の国々と日本とのつながり', 106] ] }
+];
+
+var PASS = 80;        // 各クイズで「合格ライン」とされている正答率
+var MIN_JUDGE = 5;    // この解答数に満たない単元は判定しない（数問だけで決めつけないため）
+var DAY = 86400000;
+var AN_KEY = { snap: 'hiroba_analysis_snap_v1', visit: 'hiroba_visit_v1' };
+
+function readJSON(key, def) {
+  try {
+    var s = localStorage.getItem(key);
+    var v = s ? JSON.parse(s) : def;
+    return (v && typeof v === 'object' && !Array.isArray(v)) ? v : def;
+  } catch (e) { return def; }
+}
+function writeJSON(key, val) {
+  try { localStorage.setItem(key, JSON.stringify(val)); } catch (e) {}
+}
+function num(v) { v = Number(v); return isFinite(v) && v > 0 ? v : 0; }
+function pct(c, a) { return a ? Math.round(c / a * 100) : 0; }
+function esc(s) {
+  return String(s).replace(/[&<>"']/g, function (c) {
+    return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+  });
+}
+
+function markVisit(file) {
+  var v = readJSON(AN_KEY.visit, {});
+  SUBJECTS.forEach(function (s) { if (s.file === file) v[s.id] = Date.now(); });
+  writeJSON(AN_KEY.visit, v);
+}
+
+/* 単元のレベル判定 */
+function levelOf(u) {
+  if (u.ans === 0) return 'none';
+  if (u.ans < MIN_JUDGE) return 'few';
+  if (u.acc >= PASS) return 'good';
+  if (u.acc >= 60) return 'mid';
+  return 'low';
+}
+var LV_LABEL = { good: '得意', mid: 'もう少し', low: '苦手', few: '判定前', none: '未挑戦' };
+
+/* 記録の集計 */
+function collect() {
+  var visit = readJSON(AN_KEY.visit, {});
+  var subjects = SUBJECTS.map(function (s) {
+    var stat = readJSON(s.prefix + '_stat_v1', {});
+    var weak = readJSON(s.prefix + '_weak_v1', {});
+    var weakBy = {}, lastT = 0;
+    Object.keys(weak).forEach(function (qid) {
+      var i = qid.lastIndexOf('-');
+      if (i < 0) return;
+      var uid = qid.slice(0, i);
+      weakBy[uid] = (weakBy[uid] || 0) + 1;
+      var w = weak[qid];
+      if (w && typeof w === 'object') lastT = Math.max(lastT, num(w.t));
+    });
+    var units = s.units.map(function (d, idx) {
+      var e = stat[d[0]] || {};
+      var ans = num(e.ans), cor = Math.min(num(e.cor), ans);
+      var u = {
+        subj: s, id: d[0], name: d[1], total: d[2], order: idx,
+        ans: ans, cor: cor, acc: pct(cor, ans),
+        best: Math.min(num(e.best), 100), weak: weakBy[d[0]] || 0
+      };
+      // 解答数が少ない単元の正答率がぶれすぎないよう、優先度づけには補正した正答率を使う
+      u.adj = (cor + 2) / (ans + 4);
+      u.level = levelOf(u);
+      return u;
+    });
+    var ans = 0, cor = 0, weakN = 0, touched = 0;
+    units.forEach(function (u) { ans += u.ans; cor += u.cor; weakN += u.weak; if (u.ans) touched++; });
+    return {
+      def: s, units: units, ans: ans, cor: cor, acc: pct(cor, ans), weak: weakN, touched: touched,
+      lastT: Math.max(lastT, num(visit[s.id]))
+    };
+  });
+  var all = { ans: 0, cor: 0, weak: 0, touched: 0, unitTotal: 0 };
+  subjects.forEach(function (x) {
+    all.ans += x.ans; all.cor += x.cor; all.weak += x.weak;
+    all.touched += x.touched; all.unitTotal += x.units.length;
+  });
+  all.acc = pct(all.cor, all.ans);
+  return { subjects: subjects, all: all };
+}
+
+/* 前回分析時との比較（解いた問題が増えたときだけスナップショットを更新） */
+function compareSnapshot(data) {
+  var prev = readJSON(AN_KEY.snap, null);
+  var cur = { t: Date.now(), ans: data.all.ans, cor: data.all.cor, weak: data.all.weak };
+  if (!prev || num(prev.ans) !== cur.ans || num(prev.weak) !== cur.weak) writeJSON(AN_KEY.snap, cur);
+  if (!prev || !num(prev.t)) return null;
+  var dAns = cur.ans - num(prev.ans), dCor = cur.cor - num(prev.cor);
+  if (dAns <= 0 || dCor < 0) return null;
+  return { since: num(prev.t), ans: dAns, acc: pct(dCor, dAns), weakDiff: cur.weak - num(prev.weak), prevAcc: pct(num(prev.cor), num(prev.ans)) };
+}
+
+function daysAgo(t) { return t ? Math.floor((Date.now() - t) / DAY) : null; }
+function unitLabel(u) { return u.name + '（' + u.subj.name + '）'; }
+
+/* ---------- アドバイスを考える ---------- */
+function buildAdvice(data, diff) {
+  var A = data.all, S = data.subjects, out = [];
+  var units = [];
+  S.forEach(function (x) { units = units.concat(x.units); });
+  var judged = units.filter(function (u) { return u.ans >= MIN_JUDGE; });
+
+  // 1. 前回からの変化
+  if (diff) {
+    var d = daysAgo(diff.since);
+    var txt = (d === 0 ? '前回（今日）の分析' : d + '日前の分析') + 'から <b>' + diff.ans + '問</b> 解きました。その正答率は <b>' + diff.acc + '%</b> で、';
+    if (diff.acc >= diff.prevAcc + 3) txt += 'それまでの平均（' + diff.prevAcc + '%）より上がっています。勉強の成果が出ています！';
+    else if (diff.acc <= diff.prevAcc - 5) txt += 'それまでの平均（' + diff.prevAcc + '%）より下がっています。新しい単元に挑戦した結果なら心配いりません。解説をしっかり読んでおきましょう。';
+    else txt += 'それまでの平均（' + diff.prevAcc + '%）と同じくらいです。安定して力を出せています。';
+    if (diff.weakDiff < 0) txt += '苦手の問題も ' + (-diff.weakDiff) + '問 減りました。';
+    out.push({ kind: 'info', icon: '↗', title: '前回の分析からの変化', html: '<p>' + txt + '</p>' });
+  }
+
+  // 2. 得意な単元
+  var strong = judged.filter(function (u) { return u.acc >= PASS && u.ans >= 10; })
+    .sort(function (a, b) { return b.adj - a.adj; }).slice(0, 3);
+  if (strong.length) {
+    out.push({ kind: 'good', icon: '◎', title: '得意な単元',
+      html: '<ul>' + strong.map(function (u) {
+        return '<li><b>' + esc(unitLabel(u)) + '</b> ― 正答率 ' + u.acc + '%（' + u.ans + '問）' +
+          (u.best >= 100 ? '・テスト満点達成' : u.best ? '・テスト最高 ' + u.best + '%' : '') + '</li>';
+      }).join('') + '</ul><p>ここは自信を持ってよい単元です。忘れないよう、ときどきテストで満点を確認しましょう。</p>' });
+  }
+
+  // 3. 優先して復習すべき単元（正答率の低さ＋苦手の数で点数化）
+  var prio = priorities(units);
+  if (prio.length) {
+    out.push({ kind: 'warn', icon: '!', title: '優先して復習したい単元',
+      html: '<ul>' + prio.slice(0, 3).map(function (u) {
+        var why = ['正答率 ' + u.acc + '%'];
+        if (u.weak) why.push('苦手 ' + u.weak + '問');
+        if (u.best && u.best < PASS) why.push('テスト最高 ' + u.best + '%');
+        return '<li><b>' + esc(unitLabel(u)) + '</b> ― ' + why.join('・') + '<br>→ ' + actionFor(u) + '</li>';
+      }).join('') + '</ul>' });
+  }
+
+  // 4. 教科ごとの差
+  var active = S.filter(function (x) { return x.ans >= 20; });
+  if (active.length >= 2) {
+    var sorted = active.slice().sort(function (a, b) { return a.acc - b.acc; });
+    var lo = sorted[0], hi = sorted[sorted.length - 1];
+    if (hi.acc - lo.acc >= 15) {
+      out.push({ kind: 'tip', icon: '⚖', title: '教科ごとの差',
+        html: '<p><b>' + lo.def.name + '</b>の正答率（' + lo.acc + '%）が<b>' + hi.def.name + '</b>（' + hi.acc + '%）より ' +
+          (hi.acc - lo.acc) + 'ポイント低くなっています。' + lo.def.name +
+          'は「正解を当てる」より「解説を読んで理由を説明できる」ことを目標に、1回10問ずつ取り組むのがおすすめです。</p>' });
+    }
+  }
+
+  // 5. 取り組む量のかたより
+  if (A.ans >= 40) {
+    var zero = S.filter(function (x) { return x.ans === 0; });
+    var heavy = S.filter(function (x) { return x.ans / A.ans >= 0.6; })[0];
+    var light = S.filter(function (x) { return x.ans > 0 && x.ans / A.ans < 0.1; });
+    var msg = [];
+    if (zero.length) msg.push('<b>' + zero.map(function (x) { return x.def.name; }).join('・') + '</b>はまだ1問も解いていません。');
+    if (heavy) msg.push('解いた問題の ' + pct(heavy.ans, A.ans) + '% が<b>' + heavy.def.name + '</b>に集中しています。');
+    if (light.length) msg.push('<b>' + light.map(function (x) { return x.def.name; }).join('・') + '</b>は全体の1割未満です。');
+    if (msg.length) {
+      out.push({ kind: 'tip', icon: '◐', title: '教科のバランス',
+        html: '<p>' + msg.join('') + '入試ではどの教科も得点源になります。1日の最初の10問を、取り組みが少ない教科にあてると自然にバランスがとれます。</p>' });
+    }
+  }
+
+  // 6. しばらく開いていない教科
+  var stale = S.filter(function (x) { return x.ans > 0 && x.lastT && daysAgo(x.lastT) >= 7; });
+  if (stale.length) {
+    out.push({ kind: 'tip', icon: '⏰', title: 'しばらく手をつけていない教科',
+      html: '<p>' + stale.map(function (x) { return '<b>' + x.def.name + '</b>（' + daysAgo(x.lastT) + '日前）'; }).join('、') +
+        'は前回から日があいています。人は覚えたことを数日で忘れはじめるので、まず「苦手」タブから数問だけでも解き直すと記憶が長持ちします。</p>' });
+  }
+
+  // 7. 苦手のたまり具合
+  if (A.weak >= 30) {
+    var most = S.slice().sort(function (a, b) { return b.weak - a.weak; })[0];
+    out.push({ kind: 'warn', icon: '✎', title: '苦手がたまっています（' + A.weak + '問）',
+      html: '<p>特に<b>' + most.def.name + '</b>に ' + most.weak + '問 たまっています。苦手の問題は<b>2回続けて正解すると自動で外れる</b>しくみです。新しい問題に進む前に「苦手克服」で数を減らしておくと、知識の穴がふさがって効率よく伸びます。</p>' });
+  } else if (A.weak === 0 && A.ans >= 30) {
+    out.push({ kind: 'good', icon: '✓', title: '苦手ゼロ',
+      html: '<p>まちがえた問題をすべて克服できています。次はまだ挑戦していない単元に進みましょう。</p>' });
+  }
+
+  // 8. 未挑戦の単元
+  var untouched = units.filter(function (u) { return u.ans === 0; });
+  if (untouched.length && A.ans > 0) {
+    var picks = S.map(function (x) {
+      for (var i = 0; i < x.units.length; i++) if (x.units[i].ans === 0) return x.units[i];
+      return null;
+    }).filter(Boolean).slice(0, 4);
+    out.push({ kind: 'info', icon: '＋', title: 'まだ挑戦していない単元（' + untouched.length + '単元）',
+      html: '<p>全' + A.unitTotal + '単元のうち ' + A.touched + '単元に挑戦済みです。次に進むなら、各教科の順番で次はここ：</p><ul>' +
+        picks.map(function (u) { return '<li>' + esc(unitLabel(u)) + '</li>'; }).join('') + '</ul>' });
+  }
+
+  return out;
+}
+
+function priorities(units) {
+  return units.filter(function (u) {
+    return u.ans >= MIN_JUDGE && (u.acc < PASS || u.weak >= 5);
+  }).map(function (u) {
+    u.score = (1 - u.adj) * 100 + Math.min(u.weak, 15) * 1.5 + (u.best && u.best < PASS ? 5 : 0);
+    return u;
+  }).sort(function (a, b) { return b.score - a.score; });
+}
+
+function actionFor(u) {
+  if (u.weak >= 5) return '「苦手」タブの苦手克服で、この単元の ' + u.weak + '問 を出し直す';
+  if (u.acc < 60) return 'この単元を10問ずつ、正解・不正解にかかわらず解説をすべて読みながら解く';
+  return 'この単元のテストに挑戦し、合格ライン' + PASS + '%を目指す';
+}
+
+/* ---------- 今日のおすすめ学習メニュー ---------- */
+function buildPlan(data) {
+  var units = [];
+  data.subjects.forEach(function (x) { units = units.concat(x.units); });
+  var plan = [], usedSubj = {};
+  var prio = priorities(units);
+
+  if (prio[0]) {
+    plan.push({ u: prio[0], title: '復習：' + unitLabel(prio[0]), text: actionFor(prio[0]) + '（約5〜10分）' });
+    usedSubj[prio[0].subj.id] = 1;
+  }
+  // 2つ目は別の教科から選び、1教科に偏らないようにする
+  var second = prio.filter(function (u) { return !usedSubj[u.subj.id]; })[0];
+  if (second) {
+    plan.push({ u: second, title: '復習：' + unitLabel(second), text: actionFor(second) + '（約5〜10分）' });
+    usedSubj[second.subj.id] = 1;
+  }
+  // 新しい単元への挑戦（取り組みが少ない教科を優先）
+  var subjByLeast = data.subjects.slice().sort(function (a, b) { return a.ans - b.ans; });
+  for (var i = 0; i < subjByLeast.length && plan.length < 3; i++) {
+    var x = subjByLeast[i];
+    if (usedSubj[x.def.id]) continue;
+    var next = x.units.filter(function (u) { return u.ans < MIN_JUDGE; })[0];
+    if (next) {
+      plan.push({ u: next, title: '挑戦：' + unitLabel(next),
+        text: (next.ans ? 'あと少し解くと判定できます。' : 'まだ解いていない単元です。') + 'まずは10問で力だめし（約5分）' });
+      usedSubj[x.def.id] = 1;
+    }
+  }
+  // 得意単元の確認
+  if (plan.length < 3) {
+    var strong = units.filter(function (u) { return u.level === 'good' && u.best < 100; })
+      .sort(function (a, b) { return b.acc - a.acc; })[0];
+    if (strong) plan.push({ u: strong, title: '腕だめし：' + unitLabel(strong),
+      text: 'テスト最高 ' + (strong.best || 0) + '%。満点でベスト更新を狙う（約5分）' });
+  }
+  return plan.slice(0, 3);
+}
+
+/* ---------- 画面の組み立て ---------- */
+function renderAnalysis() {
+  var data = collect(), A = data.all;
+  var diff = compareSnapshot(data);
+  var h = '';
+
+  h += '<div class="an-head"><h1>総合分析とアドバイス</h1>' +
+       '<p>4教科のクイズの記録をまとめて分析しました。正答率は解答数が' + MIN_JUDGE + '問以上の単元だけで判定しています。</p></div>';
+
+  if (!A.ans) {
+    h += '<div class="empty-box">まだクイズの記録がありません。<br>好きな教科を選んで、まずは10問解いてみましょう。<br>' +
+         '解いた結果がたまると、ここに得意・苦手の分析とおすすめの学習メニューが表示されます。</div>';
+    h += footNote();
+    document.getElementById('analysisBody').innerHTML = h;
+    return;
+  }
+
+  // 数字のまとめ
+  h += '<div class="tiles">' +
+    tile('解いた問題', A.ans.toLocaleString(), '問', '4教科の合計') +
+    tile('全体の正答率', A.acc, '%', '合格ライン ' + PASS + '%') +
+    tile('挑戦した単元', A.touched, '/' + A.unitTotal, '単元') +
+    tile('苦手の問題', A.weak, '問', '2回連続正解で外れます') +
+    '</div>';
+
+  // 総評
+  h += '<section class="an-sec"><h2>総評</h2><div class="summary-box">' + overall(data) + '</div></section>';
+
+  // アドバイス
+  var adv = buildAdvice(data, diff);
+  if (adv.length) {
+    h += '<section class="an-sec"><h2>アドバイス</h2><div class="advice-list">' + adv.map(function (a) {
+      return '<div class="advice ad-' + a.kind + '"><div class="advice-icon" aria-hidden="true">' + a.icon + '</div>' +
+             '<div><h3>' + esc(a.title) + '</h3>' + a.html + '</div></div>';
+    }).join('') + '</div></section>';
+  }
+
+  // おすすめメニュー
+  var plan = buildPlan(data);
+  if (plan.length) {
+    h += '<section class="an-sec"><h2>今日のおすすめ学習メニュー</h2><p class="an-note">上から順に取り組むと15〜25分ほどです。</p><div class="plan">' +
+      plan.map(function (p, i) {
+        return '<div class="plan-step"><div class="plan-body"><h3>' + esc(p.title) + '</h3><p>' + esc(p.text) + '</p></div>' +
+               '<button type="button" class="plan-go" style="background:' + p.u.subj.color + '" data-plan="' + i + '">' +
+               esc(p.u.subj.name) + 'をひらく</button></div>';
+      }).join('') + '</div></section>';
+  }
+
+  // 教科別
+  h += '<section class="an-sec"><h2>教科別の成績</h2><div class="subj-list">' + data.subjects.map(function (x) {
+    var s = x.def;
+    return '<div class="subj"><div class="subj-top"><div class="subj-dot" style="background:' + s.color + '">' + s.mark + '</div>' +
+      '<span class="subj-name">' + s.name + '</span>' +
+      '<span class="subj-acc">' + (x.ans ? x.acc + '<small>%</small>' : '<small>記録なし</small>') + '</span></div>' +
+      '<div class="meter" title="正答率 ' + x.acc + '%（線は合格ライン' + PASS + '%）"><div class="meter-fill" style="width:' + x.acc + '%;background:' + s.color + '"></div>' +
+      '<div class="meter-line" style="left:' + PASS + '%"></div></div>' +
+      '<div class="subj-stats"><span>解いた問題 <b>' + x.ans + '</b>問</span><span>挑戦した単元 <b>' + x.touched + '/' + x.units.length + '</b></span>' +
+      '<span>苦手 <b>' + x.weak + '</b>問</span>' +
+      (x.lastT ? '<span>最終学習 <b>' + lastLabel(x.lastT) + '</b></span>' : '') + '</div></div>';
+  }).join('') + '</div></section>';
+
+  // 単元マップ
+  h += '<section class="an-sec"><h2>単元マップ</h2>' +
+    '<div class="legend">' + ['good', 'mid', 'low', 'few'].map(function (k) {
+      var txt = { good: '得意（' + PASS + '%以上）', mid: 'もう少し（60〜79%）', low: '苦手（60%未満）', few: '判定前・未挑戦' }[k];
+      return '<span><i class="lv-' + k + '" style="border-left:none"></i>' + txt + '</span>';
+    }).join('') + '</div>' +
+    data.subjects.map(function (x) {
+      return '<div class="unit-block"><h3>' + x.def.name + '</h3><div class="unit-grid">' + x.units.map(function (u) {
+        var meta = u.ans ? u.acc + '%・' + u.ans + '問' + (u.weak ? '・苦手' + u.weak : '') : '—';
+        var tip = u.name + '\n解答 ' + u.ans + '問 / 正解 ' + u.cor + '問' + (u.best ? '\nテスト最高 ' + u.best + '%' : '') + '\n苦手 ' + u.weak + '問';
+        return '<div class="unit lv-' + u.level + '" title="' + esc(tip) + '"><span class="unit-name">' + esc(u.name) + '</span>' +
+               '<span class="lv-tag">' + LV_LABEL[u.level] + '</span> <span class="unit-meta">' + meta + '</span></div>';
+      }).join('') + '</div></div>';
+    }).join('') + '</section>';
+
+  h += footNote();
+  var body = document.getElementById('analysisBody');
+  body.innerHTML = h;
+  Array.prototype.forEach.call(body.querySelectorAll('[data-plan]'), function (btn) {
+    var p = plan[Number(btn.getAttribute('data-plan'))];
+    btn.addEventListener('click', function () { openSubject(p.u.subj.file, p.u.subj.title); });
+  });
+}
+
+function tile(label, value, unit, sub) {
+  return '<div class="tile"><div class="tile-label">' + label + '</div><div class="tile-value">' + value + '<small>' + unit + '</small></div>' +
+         '<div class="tile-sub">' + sub + '</div></div>';
+}
+function lastLabel(t) {
+  var d = daysAgo(t);
+  return d === 0 ? '今日' : d === 1 ? '昨日' : d + '日前';
+}
+function footNote() {
+  return '<p class="an-foot">※ 分析はこの端末のブラウザに保存されたクイズの記録だけを使っています。各クイズで「全データをリセット」すると、その教科の分析もリセットされます。<br>' +
+         '※ 最終学習日は、この画面から教科をひらいた日と、まちがえた問題の記録日から推定しています。</p>';
+}
+
+/* 総評の文章 */
+function overall(data) {
+  var A = data.all, S = data.subjects;
+  var lv;
+  if (A.ans < 30) lv = 'まだ記録が少ないので、分析は目安です。どの教科も1単元10問ずつ解いてみると、得意・苦手がはっきりしてきます。';
+  else if (A.acc >= 85) lv = '全体としてとても高い正答率です。基礎はしっかり身についています。苦手を残さないことと、未挑戦の単元を広げることが次の目標です。';
+  else if (A.acc >= PASS) lv = '全体として合格ラインに届いています。あとは正答率の低い単元をつぶしていけば、さらに安定します。';
+  else if (A.acc >= 60) lv = '合格ラインまであと一歩です。新しい問題に進むより、まちがえた問題の解説を読み直して「苦手」を減らすほうが早く伸びます。';
+  else lv = 'いまは「伸びしろ」が大きい状態です。1回の問題数を少なめにして、解説をていねいに読む学習から始めましょう。';
+
+  var touchedS = S.filter(function (x) { return x.ans >= 20; });
+  var line = '';
+  if (touchedS.length >= 2) {
+    var best = touchedS.slice().sort(function (a, b) { return b.acc - a.acc; })[0];
+    var worst = touchedS.slice().sort(function (a, b) { return a.acc - b.acc; })[0];
+    if (best !== worst) line = 'いちばん得意な教科は<strong>' + best.def.name + '（' + best.acc + '%）</strong>、いちばん伸ばしたい教科は<strong>' + worst.def.name + '（' + worst.acc + '%）</strong>です。';
+  }
+  return '<strong>' + A.ans.toLocaleString() + '問</strong>に取り組み、全体の正答率は<strong>' + A.acc + '%</strong>です。' + line + '<br>' + lv;
+}
+</script>
+</body>
+</html>
