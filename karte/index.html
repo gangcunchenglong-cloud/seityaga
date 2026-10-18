@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>電子カルテシステム</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="app-header">
+    <h1>🏥 電子カルテシステム</h1>
+    <div class="header-actions">
+      <button id="btn-export" class="btn btn-light" title="全データをJSONファイルに保存">データ書き出し</button>
+      <label class="btn btn-light" title="JSONファイルからデータを読み込み">
+        データ読み込み
+        <input type="file" id="input-import" accept="application/json" hidden>
+      </label>
+    </div>
+  </header>
+
+  <div class="layout">
+    <!-- 左側:患者一覧 -->
+    <aside class="sidebar">
+      <div class="sidebar-top">
+        <input type="search" id="patient-search" placeholder="患者ID・氏名・カナで検索">
+        <button id="btn-new-patient" class="btn btn-primary btn-block">+ 新規患者登録</button>
+      </div>
+      <ul id="patient-list" class="patient-list"></ul>
+    </aside>
+
+    <!-- 右側:メイン領域 -->
+    <main id="main" class="main">
+      <div class="empty-state">
+        <p>左の一覧から患者を選択するか、新規患者を登録してください。</p>
+      </div>
+    </main>
+  </div>
+
+  <!-- 患者登録・編集ダイアログ -->
+  <dialog id="patient-dialog">
+    <form id="patient-form" method="dialog">
+      <h2 id="patient-dialog-title">新規患者登録</h2>
+      <div class="form-grid">
+        <label>氏名 <span class="req">*</span>
+          <input name="name" required placeholder="山田 太郎">
+        </label>
+        <label>フリガナ <span class="req">*</span>
+          <input name="kana" required placeholder="ヤマダ タロウ">
+        </label>
+        <label>生年月日 <span class="req">*</span>
+          <input name="birthDate" type="date" required>
+        </label>
+        <label>性別 <span class="req">*</span>
+          <select name="sex" required>
+            <option value="">選択</option>
+            <option value="男性">男性</option>
+            <option value="女性">女性</option>
+            <option value="その他">その他</option>
+          </select>
+        </label>
+        <label>血液型
+          <select name="bloodType">
+            <option value="">不明</option>
+            <option>A+</option><option>A-</option>
+            <option>B+</option><option>B-</option>
+            <option>O+</option><option>O-</option>
+            <option>AB+</option><option>AB-</option>
+          </select>
+        </label>
+        <label>電話番号
+          <input name="phone" type="tel" placeholder="090-1234-5678">
+        </label>
+        <label class="span-2">住所
+          <input name="address" placeholder="東京都〇〇区…">
+        </label>
+        <label>保険者番号
+          <input name="insurance" placeholder="12345678">
+        </label>
+        <label>緊急連絡先
+          <input name="emergencyContact" placeholder="山田 花子(妻) 090-…">
+        </label>
+        <label class="span-2">アレルギー(カンマ区切り)
+          <input name="allergies" placeholder="ペニシリン, 卵">
+        </label>
+        <label class="span-2">既往歴
+          <textarea name="history" rows="2" placeholder="高血圧(2018〜)など"></textarea>
+        </label>
+      </div>
+      <div class="dialog-actions">
+        <button type="button" class="btn" data-close>キャンセル</button>
+        <button type="submit" class="btn btn-primary">保存</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- 診療記録ダイアログ -->
+  <dialog id="record-dialog">
+    <form id="record-form" method="dialog">
+      <h2 id="record-dialog-title">診療記録の作成</h2>
+      <div class="form-grid">
+        <label>診療日時 <span class="req">*</span>
+          <input name="date" type="datetime-local" required>
+        </label>
+        <label>診療科 <span class="req">*</span>
+          <select name="department" required>
+            <option value="">選択</option>
+            <option>内科</option><option>外科</option><option>小児科</option>
+            <option>整形外科</option><option>皮膚科</option><option>眼科</option>
+            <option>耳鼻咽喉科</option><option>産婦人科</option><option>精神科</option>
+            <option>循環器内科</option><option>消化器内科</option><option>救急科</option>
+          </select>
+        </label>
+        <label>担当医 <span class="req">*</span>
+          <input name="doctor" required placeholder="佐藤 医師">
+        </label>
+        <label>傷病名
+          <input name="diagnosis" placeholder="急性上気道炎">
+        </label>
+      </div>
+
+      <fieldset>
+        <legend>バイタルサイン</legend>
+        <div class="vitals-grid">
+          <label>血圧(上)<input name="bpHigh" type="number" min="40" max="300" placeholder="mmHg"></label>
+          <label>血圧(下)<input name="bpLow" type="number" min="20" max="200" placeholder="mmHg"></label>
+          <label>脈拍<input name="pulse" type="number" min="20" max="250" placeholder="回/分"></label>
+          <label>体温<input name="temp" type="number" step="0.1" min="30" max="45" placeholder="℃"></label>
+          <label>SpO2<input name="spo2" type="number" min="50" max="100" placeholder="%"></label>
+          <label>体重<input name="weight" type="number" step="0.1" min="0" max="300" placeholder="kg"></label>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>SOAP</legend>
+        <label>S(主観的情報:患者の訴え)
+          <textarea name="s" rows="2" placeholder="2日前から咽頭痛と微熱がある"></textarea>
+        </label>
+        <label>O(客観的情報:所見・検査結果)
+          <textarea name="o" rows="2" placeholder="咽頭発赤あり、肺音清"></textarea>
+        </label>
+        <label>A(評価:アセスメント)
+          <textarea name="a" rows="2" placeholder="ウイルス性上気道炎の疑い"></textarea>
+        </label>
+        <label>P(計画:治療方針)
+          <textarea name="p" rows="2" placeholder="対症療法、3日後再診"></textarea>
+        </label>
+      </fieldset>
+
+      <fieldset>
+        <legend>処方</legend>
+        <div id="rx-allergy-warning" class="alert alert-danger" hidden></div>
+        <table class="rx-table">
+          <thead>
+            <tr><th>薬剤名</th><th>用量</th><th>用法</th><th>日数</th><th></th></tr>
+          </thead>
+          <tbody id="rx-rows"></tbody>
+        </table>
+        <button type="button" id="btn-add-rx" class="btn btn-small">+ 薬剤を追加</button>
+      </fieldset>
+
+      <div class="dialog-actions">
+        <button type="button" class="btn" data-close>キャンセル</button>
+        <button type="submit" class="btn btn-primary">保存</button>
+      </div>
+    </form>
+  </dialog>
+
+  <template id="rx-row-template">
+    <tr>
+      <td><input name="rxName" placeholder="カロナール錠200mg"></td>
+      <td><input name="rxDose" placeholder="1回2錠"></td>
+      <td><input name="rxUsage" placeholder="1日3回 毎食後"></td>
+      <td><input name="rxDays" type="number" min="1" placeholder="日"></td>
+      <td><button type="button" class="btn btn-small btn-danger" data-remove-rx>削除</button></td>
+    </tr>
+  </template>
+
+  <script src="app.js"></script>
+</body>
+</html>
