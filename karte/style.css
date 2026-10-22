@@ -171,6 +171,20 @@ body {
 }
 .soap dd { margin: 0; white-space: pre-wrap; line-height: 22px; }
 
+.free-text { margin: 8px 0; }
+.free-text div {
+  white-space: pre-wrap;
+  background: #fafbfc;
+  border: 1px dashed var(--border);
+  border-radius: 4px;
+  padding: 6px 10px;
+  margin-top: 4px;
+}
+
+/* ---------- フリーメモ ---------- */
+.memo { resize: vertical; min-height: 100px; line-height: 1.6; background: #fffdf3; }
+.memo-print { display: none; white-space: pre-wrap; }
+
 .rx-list { margin: 6px 0 0; padding-left: 20px; }
 .rx-list li { margin: 2px 0; }
 
@@ -255,7 +269,8 @@ dialog h2 { margin-top: 0; }
 
 /* ---------- 印刷 ---------- */
 @media print {
-  .app-header, .sidebar, .btn, .btn-group, .filter-bar { display: none !important; }
+  .app-header, .sidebar, .btn, .btn-group, .filter-bar, .memo { display: none !important; }
+  .memo-print { display: block; }
   .layout { display: block; height: auto; }
   .main { overflow: visible; padding: 0; }
   .panel, .record { break-inside: avoid; border-color: #999; }

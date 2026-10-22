@@ -221,6 +221,16 @@ function renderMain() {
       </dl>
     </section>
 
+    <section class="panel">
+      <div class="panel-header">
+        <h2>フリーメモ</h2>
+        <span id="memo-status" class="record-meta">${patient.memoUpdatedAt ? `最終保存 ${formatDateTime(patient.memoUpdatedAt)}` : '入力すると自動で保存されます'}</span>
+      </div>
+      <textarea id="patient-memo" class="memo" rows="5"
+        placeholder="この患者について自由に書き留められます(生活背景、注意事項、次回確認したいことなど)">${escapeHtml(patient.memo)}</textarea>
+      <div class="memo-print">${escapeHtml(patient.memo || '—')}</div>
+    </section>
+
     ${renderVitalsTrend(allRecords)}
 
     <section class="panel">
@@ -256,7 +266,7 @@ function matchesRecordFilter(record) {
   const kw = recordFilter.keyword.trim().toLowerCase();
   if (!kw) return true;
   const haystack = [
-    record.diagnosis, record.doctor, record.department, record.s, record.o, record.a, record.p,
+    record.diagnosis, record.doctor, record.department, record.s, record.o, record.a, record.p, record.freeText,
     ...(record.prescriptions || []).map((rx) => rx.name),
   ].join(' ').toLowerCase();
   return haystack.includes(kw);
@@ -302,6 +312,7 @@ function renderRecord(r) {
       ${r.diagnosis ? `<div class="record-diagnosis"><strong>傷病名:</strong>${escapeHtml(r.diagnosis)}</div>` : ''}
       ${vitalParts.length ? `<div class="vitals-line">${vitalParts.join('')}</div>` : ''}
       ${soap ? `<dl class="soap">${soap}</dl>` : ''}
+      ${r.freeText ? `<div class="free-text"><strong>フリー記載:</strong><div>${escapeHtml(r.freeText)}</div></div>` : ''}
       ${rx ? `<div><strong>処方:</strong><ul class="rx-list">${rx}</ul></div>` : ''}
     </article>`;
 }
@@ -419,7 +430,7 @@ function openRecordDialog(record = null) {
   $('#record-dialog-title').textContent = record ? '診療記録の編集' : '診療記録の作成';
 
   if (record) {
-    ['date', 'department', 'doctor', 'diagnosis', 's', 'o', 'a', 'p']
+    ['date', 'department', 'doctor', 'diagnosis', 's', 'o', 'a', 'p', 'freeText']
       .forEach((key) => { form.elements[key].value = record[key] || ''; });
     Object.keys(VITAL_RULES).forEach((key) => {
       form.elements[key].value = record.vitals?.[key] ?? '';
@@ -491,6 +502,7 @@ function handleRecordSubmit(event) {
     o: form.elements.o.value.trim(),
     a: form.elements.a.value.trim(),
     p: form.elements.p.value.trim(),
+    freeText: form.elements.freeText.value.trim(),
     vitals,
     prescriptions,
   };
@@ -585,6 +597,15 @@ function setupEvents() {
   });
 
   $('#main').addEventListener('input', (e) => {
+    // フリーメモは入力のたびに自動保存する(画面全体は再描画しない)
+    if (e.target.id === 'patient-memo') {
+      const patient = state.patients.find((p) => p.id === selectedPatientId);
+      patient.memo = e.target.value;
+      patient.memoUpdatedAt = new Date().toISOString();
+      saveState();
+      $('#memo-status').textContent = `保存しました ${formatDateTime(patient.memoUpdatedAt)}`;
+      return;
+    }
     if (e.target.id === 'record-keyword') {
       recordFilter.keyword = e.target.value;
       renderMain();
