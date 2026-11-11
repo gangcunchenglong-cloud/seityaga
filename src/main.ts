@@ -18,9 +18,14 @@ import { initSpeech } from './ui/speech';
 import { resultExtras } from './ui/screens/resultExtras';
 import { saveArea } from './ui/save';
 
-/** URL に ?mode=trial を付けると試作モード（draft の問題も出題） */
+/**
+ * URL に ?mode=trial を付けると試作モード（draft の問題も出題）、?mode=production で本番モード。
+ * 指定がなければビルドの既定値（npm run build:trial で作ったファイルは試作モード）。
+ */
 function readMode(): Mode {
-  return new URLSearchParams(location.search).get('mode') === 'trial' ? 'trial' : 'production';
+  const q = new URLSearchParams(location.search).get('mode');
+  if (q === 'trial' || q === 'production') return q;
+  return __DEFAULT_MODE__ === 'trial' ? 'trial' : 'production';
 }
 
 const mode = readMode();

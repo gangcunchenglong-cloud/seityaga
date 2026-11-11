@@ -33,6 +33,7 @@ function noNetworkCsp(): Plugin {
  *
  *   vite build                 → dist/index.html   （受験アプリ）
  *   vite build --mode teacher  → dist/teacher.html （先生用ツール）
+ *   vite build --mode trial    → dist-trial/index.html（最初から試作モードで開く受験アプリ・確認用）
  *   vite build --mode review   → dist-tools/scripts/review.html（問題レビュー用・開発者向け）
  */
 export default defineConfig(({ mode }) => {
@@ -40,9 +41,11 @@ export default defineConfig(({ mode }) => {
     mode === 'teacher' ? 'teacher.html' : mode === 'review' ? 'scripts/review.html' : 'index.html';
   return {
     base: './',
+    // 受験アプリの既定のモード（npm run build:trial のときだけ試作モード）
+    define: { __DEFAULT_MODE__: JSON.stringify(mode === 'trial' ? 'trial' : 'production') },
     plugins: [noNetworkCsp(), viteSingleFile({ removeViteModuleLoader: true })],
     build: {
-      outDir: mode === 'review' ? 'dist-tools' : 'dist',
+      outDir: mode === 'review' ? 'dist-tools' : mode === 'trial' ? 'dist-trial' : 'dist',
       // index を先にビルドし、teacher は同じ dist に追加する
       emptyOutDir: mode !== 'teacher',
       target: 'es2019',

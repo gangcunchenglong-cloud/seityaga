@@ -1,6 +1,7 @@
 node_modules/
 dist/
 dist-tools/
+dist-trial/
 .env
 .env.*
 !.env.example

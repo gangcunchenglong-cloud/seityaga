@@ -19,6 +19,7 @@
 | `npm test` | 単体テスト（出題・採点・合否・30分制限・CSV・確認コード・問題バンクの形式など） |
 | `npm run typecheck` | TypeScript の型チェック |
 | `npm run generate -- …` | Claude API で問題の候補を生成（開発者用、`ANTHROPIC_API_KEY` が必要） |
+| `npm run build:trial` | 最初から試作モードで開く受験アプリを `dist-trial/index.html` に作る（draft の問題で動作確認する用） |
 | `npm run build:review` | 問題レビュー用ツールを `dist-tools/scripts/review.html` に作る |
 | `npm run merge -- <file>` | レビューで承認した問題を問題バンクに反映 |
 
