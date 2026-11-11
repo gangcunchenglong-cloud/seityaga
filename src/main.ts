@@ -16,6 +16,7 @@ import { questionScreen } from './ui/screens/question';
 import { startScreen } from './ui/screens/start';
 import { initSpeech } from './ui/speech';
 import { resultExtras } from './ui/screens/resultExtras';
+import { saveArea } from './ui/save';
 
 /** URL に ?mode=trial を付けると試作モード（draft の問題も出題） */
 function readMode(): Mode {
@@ -109,7 +110,7 @@ function showFinal() {
   clearInterval(timerId);
   layout.setTimer(null);
   window.removeEventListener('beforeunload', guardUnload);
-  layout.show(finalScreen(r, resultExtras(r, showStart)));
+  layout.show(finalScreen(r, resultExtras(r, showStart, saveArea(r))));
 }
 
 initSpeech();

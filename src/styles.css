@@ -353,3 +353,8 @@ kbd { display: inline-block; border: 1px solid #8a93a6; border-bottom-width: 3px
   .card, .question { padding: 14px; }
   .q-text { font-size: 1.15rem; }
 }
+
+.save { margin-top: 24px; }
+.save h2 { text-align: left; }
+.guide p { margin: 0; }
+.guide-text li { display: block; }
