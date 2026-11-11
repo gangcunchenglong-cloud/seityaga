@@ -1,0 +1,18 @@
+.rv-card { margin-top: 12px; }
+.rv-nav { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.rv-meta { display: grid; grid-template-columns: max-content 1fr; gap: 4px 12px; font-size: 0.9rem; }
+.rv-meta dt { color: var(--muted); font-weight: 700; }
+.rv-meta dd { margin: 0; }
+.rv-meta .mono { font-family: ui-monospace, Menlo, Consolas, monospace; }
+.rv-meta .strong { font-weight: 700; color: var(--ok); }
+.rv-check { margin: 8px 0; font-size: 0.9rem; }
+.rv-check summary { cursor: pointer; font-weight: 700; min-height: 44px; display: flex; align-items: center; }
+.rv-preview { border: 2px dashed var(--line); border-radius: var(--radius); padding: 4px; background: var(--bg); }
+.rv-result { font-weight: 700; min-height: 1.5em; }
+.rv-result.ok { color: var(--ok); }
+.rv-result.ng { color: var(--ng); }
+.rv-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.rv-actions .btn-primary { flex: 1 1 160px; }
+.rv-reject { color: var(--ng); border-color: var(--ng); }
+.rv-editor { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 0.85rem; margin-top: 12px; }
+.rv-export { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }

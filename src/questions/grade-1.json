@@ -313,15 +313,15 @@
     "field": "safety",
     "device": "all",
     "type": "choice",
-    "question": "次のメールで、最も疑うべき点はどれ？（このお店の公式サイトは shopmart.co.jp です）",
+    "question": "次のメールで、最も疑うべき点はどれ？（このお店の公式サイトは shopmart.example.jp です）",
     "ruby": false,
     "figure": {
       "kind": "screen",
       "title": "【重要】アカウントが停止されます",
       "lines": [
-        "差出人：support@shopmart-security.xyz",
+        "差出人：support@shopmart-security.example.com",
         "24時間以内に、下のリンクから本人確認をしてください。",
-        "▶ https://shopmart-security.xyz/login"
+        "▶ https://shopmart-security.example.com/login"
       ]
     },
     "choices": [
