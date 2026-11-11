@@ -41,8 +41,10 @@ export const GRADE_GUIDE: Record<Grade, string> = {
   5: '小学4年生',
   4: '小学5年生',
   3: '小学6年生',
-  2: '中学生',
-  1: '高校生〜大人',
+  2.5: '中学1〜2年生',
+  2: '中学3年生',
+  1.5: '高校生',
+  1: '高校卒業〜大人',
 };
 
 export const DEVICE_LABELS: Record<DeviceKind, string> = {

@@ -1,5 +1,5 @@
 import { RULES } from '../config';
-import { FIELDS, type DeviceTarget, type Field, type Grade, type Mode, type Question } from '../types';
+import { FIELDS, gradeLabel, type DeviceTarget, type Field, type Grade, type Mode, type Question } from '../types';
 import { shuffle, type Rng } from './random';
 
 /** モードに応じて出題してよい問題か */
@@ -55,7 +55,7 @@ export function selectQuestions(
   for (const field of FIELDS) {
     const candidates = pool(bank, grade, field, device, mode).filter((q) => !usedIds.has(q.id));
     if (candidates.length < RULES.questionsPerField) {
-      throw new Error(`${grade}級の「${field}」の問題が足りません（${candidates.length}問）`);
+      throw new Error(`${gradeLabel(grade)}の「${field}」の問題が足りません（${candidates.length}問）`);
     }
     picked.push(...shuffle(candidates, rng).slice(0, RULES.questionsPerField));
   }

@@ -6,6 +6,7 @@ import { renderFigure } from '../figure';
 import { speakButton, stopSpeaking } from '../speech';
 import { rich } from '../text';
 import { renderQuestionBody } from '../types';
+import { gradeLabel } from '../../types';
 
 export interface QuestionScreenOpts {
   q: Question;
@@ -62,10 +63,14 @@ export function questionScreen(o: QuestionScreenOpts): { el: HTMLElement; dispos
     h(
       'div',
       { class: 'q-meta' },
-      h('span', { class: 'chip chip-grade' }, `${q.grade}級`),
+      h('span', { class: 'chip chip-grade' }, gradeLabel(q.grade)),
       h('span', { class: `chip chip-${q.field}` }, FIELD_LABELS[q.field]),
-      h('span', { class: 'q-count' }, `${o.index + 1} / ${o.total}`),
-      h('progress', { max: o.total, value: o.index, 'aria-hidden': 'true' }),
+      h('span', { class: 'q-count', 'aria-label': `${o.total}問中 ${o.index + 1}問目` }, `Q ${String(o.index + 1).padStart(2, '0')}/${String(o.total).padStart(2, '0')}`),
+      h(
+        'div',
+        { class: 'q-seg', 'aria-hidden': 'true' },
+        Array.from({ length: o.total }, (_, i) => h('span', { class: i < o.index ? 'done' : i === o.index ? 'now' : '' })),
+      ),
     ),
     o.overTime
       ? h('p', { class: 'overtime', role: 'status' }, '時間になりました。この級をさいごまで解いたら終わりです。')

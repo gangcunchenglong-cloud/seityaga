@@ -1,7 +1,7 @@
 import { CLASSES, DEVICE_LABELS, GRADE_GUIDE, MAX_NUMBER, RULES, deviceTarget } from '../../config';
 import { missingFields } from '../../logic/select';
 import type { Profile } from '../../state';
-import { GRADES, type DeviceKind, type Grade, type Mode, type Question } from '../../types';
+import { GRADES, gradeLabel, type DeviceKind, type Grade, type Mode, type Question } from '../../types';
 import { h } from '../dom';
 
 /** スタート画面：クラス・出席番号・開始する級・端末を選ぶ */
@@ -47,7 +47,7 @@ export function startScreen(
         h(
           'option',
           { value: g, disabled: !ok, selected: ok && String(g) === keep },
-          `${g}級（めやす：${GRADE_GUIDE[g]}）${ok ? '' : ' ― 準備中'}`,
+          `${gradeLabel(g)}（めやす：${GRADE_GUIDE[g]}）${ok ? '' : ' ― 準備中'}`,
         ),
       );
     }
@@ -65,7 +65,16 @@ export function startScreen(
   const form = h(
     'form',
     { class: 'card start-form', novalidate: true },
-    h('h1', {}, 'ICT活用能力テスト'),
+    h('h1', { 'data-sec': 'SETUP' }, 'ICT活用能力テスト'),
+    h(
+      'div',
+      { class: 'status-row' },
+      h('span', { class: 'status-dot' }, h('b', {}, 'READY')),
+      h('span', {}, 'GRADES ', h('b', {}, String(GRADES.length))),
+      h('span', {}, 'Q/GRADE ', h('b', {}, String(RULES.questionsPerField * 3))),
+      h('span', {}, 'LIMIT ', h('b', {}, `${RULES.timeLimitMs / 60000}:00`)),
+      h('span', {}, 'MODE ', h('b', {}, mode === 'trial' ? 'TRIAL' : 'PRODUCTION')),
+    ),
     h('p', { class: 'lead' }, 'いまの自分の「ICTを使う力」をたしかめるテストです。名前は入力しません。'),
     h('div', { class: 'form-row' }, h('label', { for: 'cls' }, 'クラス'), clsSel),
     h('div', { class: 'form-row' }, h('label', { for: 'num' }, '出席番号'), numSel),
@@ -80,7 +89,7 @@ export function startScreen(
     h(
       'div',
       { class: 'rules' },
-      h('h2', {}, 'テストのきまり'),
+      h('h2', { 'data-sec': 'RULES' }, 'テストのきまり'),
       h(
         'ul',
         {},

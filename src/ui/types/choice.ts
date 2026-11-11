@@ -50,7 +50,14 @@ export const renderChoice: Renderer<ChoiceQuestion | MultiQuestion> = (q, api) =
     el: h(
       'div',
       {},
-      multi ? h('p', { class: 'hint' }, rich('{当|あ}てはまるものを ぜんぶ えらんでね', api.showRuby)) : null,
+      multi
+        ? h(
+            'p',
+            { class: 'hint' },
+            // 8〜6級（ふりがな表示あり）は子ども向けの言い方、それ以外はふつうの言い方
+            api.showRuby ? rich('{当|あ}てはまるものを ぜんぶ えらんでね', true) : '当てはまるものをすべて選んでください。',
+          )
+        : null,
       list,
     ),
     getResponse: () => (selected.size ? { type: q.type, selected: [...selected] } : null),

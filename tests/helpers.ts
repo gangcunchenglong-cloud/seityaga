@@ -1,4 +1,4 @@
-import type { Field, Grade, Question } from '../src/types';
+import { GRADES, gradeKey, type Field, type Grade, type Question } from '../src/types';
 
 /** テスト用の問題を作る */
 export function makeQ(
@@ -29,9 +29,9 @@ export function makeQ(
 /** 各級・各分野に n 問ずつの問題バンク */
 export function makeBank(n = 4, status: Question['status'] = 'approved'): Question[] {
   const bank: Question[] = [];
-  for (const g of [1, 2, 3, 4, 5, 6, 7, 8] as Grade[]) {
+  for (const g of GRADES) {
     for (const f of ['operation', 'information', 'safety'] as Field[]) {
-      for (let i = 0; i < n; i++) bank.push(makeQ(`g${g}-${f}-${i}`, g, f, { status }));
+      for (let i = 0; i < n; i++) bank.push(makeQ(`g${gradeKey(g)}-${f}-${i}`, g, f, { status }));
     }
   }
   return bank;

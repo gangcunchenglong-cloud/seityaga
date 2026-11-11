@@ -738,5 +738,386 @@
     "source": "ai",
     "reviewedBy": "",
     "reviewedAt": ""
+  },
+  {
+    "id": "g2-op-pc-09",
+    "grade": 2,
+    "field": "operation",
+    "device": "pc",
+    "type": "ui-task",
+    "question": "選んだ文字に下線を引くショートカットキーをおそう。",
+    "ruby": false,
+    "task": {
+      "kind": "shortcut",
+      "key": "u",
+      "ctrl": true,
+      "shift": false,
+      "context": "（選んだ文字：提出期限）"
+    },
+    "explanation": "多くの文書作成ソフトでは、Ctrl + U で下線を引けます。U は Underline の頭文字です。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g2-op-pc-10",
+    "grade": 2,
+    "field": "operation",
+    "device": "pc",
+    "type": "choice",
+    "question": "表計算で「=IF(B2>=60,\"合格\",\"不合格\")」はどういう意味？",
+    "ruby": false,
+    "choices": [
+      "B2が60以上なら「合格」、そうでなければ「不合格」と表示する",
+      "B2に60を足す",
+      "B2が60のときだけ「不合格」と表示する",
+      "合格した人数を数える"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "IF は条件によって結果を変える関数です。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g2-op-pc-11",
+    "grade": 2,
+    "field": "operation",
+    "device": "pc",
+    "type": "ui-task",
+    "question": "古い版のファイルを「アーカイブ（保管）」フォルダーへ移そう。",
+    "ruby": false,
+    "task": {
+      "kind": "drag-to-folder",
+      "file": "📄 生徒会だより_旧版",
+      "folders": [
+        "📁 アーカイブ（保管）",
+        "📁 作業中",
+        "📁 公開用"
+      ],
+      "answer": 0
+    },
+    "explanation": "古い版を分けて保管すると、まちがえて使うことを防げます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g2-op-pc-12",
+    "grade": 2,
+    "field": "operation",
+    "device": "pc",
+    "type": "input",
+    "question": "ファイル名「Student_Council-2026」を正確に入力しよう。",
+    "ruby": false,
+    "target": "Student_Council-2026",
+    "timeLimitSec": 40,
+    "explanation": "アンダーバーとハイフンを区別して入力します。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g2-op-touch-09",
+    "grade": 2,
+    "field": "operation",
+    "device": "touch",
+    "type": "input",
+    "question": "ファイル名「Student_Council-2026」を正確に入力しよう。",
+    "ruby": false,
+    "target": "Student_Council-2026",
+    "timeLimitSec": 55,
+    "explanation": "記号は記号のキーボードで入力します。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g2-op-touch-10",
+    "grade": 2,
+    "field": "operation",
+    "device": "touch",
+    "type": "choice",
+    "question": "スマホで撮った写真を、パソコンでも見られるようにする方法として適切なのは？",
+    "ruby": false,
+    "choices": [
+      "クラウドストレージにアップロードして同期する",
+      "写真を削除する",
+      "画面を暗くする",
+      "機内モードにする"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "クラウドを使うと、ほかの端末からも同じファイルを開けます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g2-op-touch-11",
+    "grade": 2,
+    "field": "operation",
+    "device": "touch",
+    "type": "ui-task",
+    "question": "共有ファイルを長おしして、共有用のリンクをコピーしよう。",
+    "ruby": false,
+    "task": {
+      "kind": "context-menu",
+      "trigger": "long-press",
+      "target": "📄 文化祭_企画書",
+      "menu": [
+        "開く",
+        "リンクをコピー",
+        "削除",
+        "名前を変更"
+      ],
+      "answer": 1
+    },
+    "explanation": "リンクを送れば、ファイルそのものを送らなくても共有できます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g2-op-touch-12",
+    "grade": 2,
+    "field": "operation",
+    "device": "touch",
+    "type": "ui-task",
+    "question": "友だちのタブレットを借りて自分のアカウントでログインしたら、確認が出た。どれをおす？",
+    "ruby": false,
+    "task": {
+      "kind": "button",
+      "style": "dialog",
+      "title": "パスワードの保存",
+      "message": "このパスワードを保存しますか？",
+      "buttons": [
+        "保存する",
+        "保存しない"
+      ],
+      "answer": 1
+    },
+    "explanation": "人の端末にパスワードを保存すると、ほかの人にログインされるおそれがあります。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g2-info-09",
+    "grade": 2,
+    "field": "information",
+    "device": "all",
+    "type": "choice",
+    "question": "「平均値」だけを見ると誤解しやすいのは、どんなとき？",
+    "ruby": false,
+    "choices": [
+      "一部に極端に大きい（小さい）値があるとき",
+      "データが10個以上あるとき",
+      "単位が「円」のとき",
+      "棒グラフで表したとき"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "極端な値があると、平均値は多くの人の実感とずれることがあります。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g2-info-10",
+    "grade": 2,
+    "field": "information",
+    "device": "all",
+    "type": "multi",
+    "question": "だれでも編集できる百科事典サイトを使うときの注意を全部えらぼう。",
+    "ruby": false,
+    "choices": [
+      "まちがいがふくまれることがある",
+      "記事の出典（参考文献）を確かめる",
+      "必ず正しいので確かめなくてよい",
+      "レポートにそのまま写す"
+    ],
+    "answer": [
+      0,
+      1
+    ],
+    "explanation": "出典をたどって、元の情報を確かめましょう。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g2-info-11",
+    "grade": 2,
+    "field": "information",
+    "device": "all",
+    "type": "choice",
+    "question": "2つの店の売り上げです。前の年からの増加率が高いのはどちら？",
+    "ruby": false,
+    "figure": {
+      "kind": "table",
+      "caption": "売り上げ",
+      "headers": [
+        "店",
+        "前の年",
+        "今年"
+      ],
+      "rows": [
+        [
+          "A店",
+          "100万円",
+          "120万円"
+        ],
+        [
+          "B店",
+          "400万円",
+          "460万円"
+        ]
+      ]
+    },
+    "choices": [
+      "A店（20%増）",
+      "B店（15%増）",
+      "どちらも同じ",
+      "比べられない"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "A店は20万円÷100万円＝20%、B店は60万円÷400万円＝15%です。増えた金額ではなく割合で比べます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g2-info-12",
+    "grade": 2,
+    "field": "information",
+    "device": "all",
+    "type": "choice",
+    "question": "SNSなどで、自分の考えに近い情報ばかりが表示されやすくなる現象を何という？",
+    "ruby": false,
+    "choices": [
+      "フィルターバブル",
+      "フィッシング",
+      "ストリーミング",
+      "バックアップ"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "いろいろな立場の情報に、自分から目を向けることが大切です。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g2-safety-09",
+    "grade": 2,
+    "field": "safety",
+    "device": "all",
+    "type": "choice",
+    "question": "二段階認証を設定すると、どうなる？",
+    "ruby": false,
+    "choices": [
+      "パスワードがもれても、別の確認がないとログインされにくい",
+      "パスワードがいらなくなる",
+      "ウイルスが消える",
+      "通信が速くなる"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "二段階認証は、不正ログインを防ぐのに役立ちます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g2-safety-10",
+    "grade": 2,
+    "field": "safety",
+    "device": "all",
+    "type": "multi",
+    "question": "ソフトウェアの更新（アップデート）について、正しいものを全部えらぼう。",
+    "ruby": false,
+    "choices": [
+      "セキュリティの弱点が直されることがある",
+      "公式の方法で更新する",
+      "更新のお知らせは全部無視してよい",
+      "知らないサイトの「更新」ボタンをおす"
+    ],
+    "answer": [
+      0,
+      1
+    ],
+    "explanation": "にせの更新画面でウイルスを入れさせる手口もあります。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g2-safety-11",
+    "grade": 2,
+    "field": "safety",
+    "device": "all",
+    "type": "choice",
+    "question": "他人のIDとパスワードを使って、勝手にログインした。どうなる？",
+    "ruby": false,
+    "choices": [
+      "不正アクセス禁止法に違反する",
+      "問題はない",
+      "友だちなら許される",
+      "見るだけなら問題ない"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "他人のIDやパスワードを無断で使うことは法律で禁止されています。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g2-safety-12",
+    "grade": 2,
+    "field": "safety",
+    "device": "all",
+    "type": "choice",
+    "question": "生成AIの答えをレポートで使うときに、適切なのはどれ？",
+    "ruby": false,
+    "choices": [
+      "内容をほかの資料で確かめ、AIを使ったことを明記する",
+      "確かめずにそのまま使う",
+      "自分の考えとして書く",
+      "AIの答えは必ず正しいと考える"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "確かめることと、使ったことを示すことが大切です。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
   }
 ]

@@ -4,15 +4,17 @@
  * ファイルはブラウザの中だけで処理し、どこにも送信しない。
  */
 import '../src/styles.css';
+import '../src/theme.css';
 import '../src/teacher/teacher.css';
 import './review.css';
 import { FIELD_LABELS } from '../src/config';
 import { seededRng } from '../src/logic/random';
 import { isCorrect } from '../src/logic/score';
 import { validateQuestion } from '../src/logic/validate';
-import type { Question, QuestionStatus } from '../src/types';
+import { gradeLabel, type Question, type QuestionStatus } from '../src/types';
 import { clear, h } from '../src/ui/dom';
 import { downloadText } from '../src/ui/save';
+import { brand } from '../src/ui/layout';
 import { questionScreen } from '../src/ui/screens/question';
 import { plainText } from '../src/ui/text';
 
@@ -51,7 +53,7 @@ const drop = h(
 const view = h('div', { class: 'rv-view' });
 
 root.append(
-  h('header', { class: 'app-header' }, h('div', { class: 'app-title' }, 'ICT活用能力テスト 問題レビュー')),
+  h('header', { class: 'app-header' }, brand('ICT活用能力テスト 問題レビュー', 'ICT SKILL ASSESSMENT ／ ITEM REVIEW')),
   h(
     'main',
     { class: 'app-main t-main' },
@@ -254,7 +256,7 @@ function render() {
         'dl',
         { class: 'rv-meta' },
         h('dt', {}, 'id'), h('dd', { class: 'mono' }, q.id),
-        h('dt', {}, '級・分野'), h('dd', {}, `${q.grade}級・${FIELD_LABELS[q.field] ?? q.field}`),
+        h('dt', {}, '級・分野'), h('dd', {}, `${gradeLabel(q.grade)}・${FIELD_LABELS[q.field] ?? q.field}`),
         h('dt', {}, '端末・形式'), h('dd', {}, `${q.device}・${q.type}${q.type === 'ui-task' ? `（${q.task.kind}）` : ''}`),
         h('dt', {}, '状態'), h('dd', {}, `${q.status}${q.reviewedBy ? `（${q.reviewedBy} ${q.reviewedAt}）` : ''}　出典：${q.source}`),
         h('dt', {}, '正解'), h('dd', { class: 'strong' }, answerText(q)),

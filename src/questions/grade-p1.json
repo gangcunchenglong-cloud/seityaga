@@ -1,0 +1,1166 @@
+[
+  {
+    "id": "gp1-op-pc-01",
+    "grade": 1.5,
+    "field": "operation",
+    "device": "pc",
+    "type": "choice",
+    "question": "表計算で「=COUNTIF(C2:C40,\"欠席\")」の結果は何？",
+    "ruby": false,
+    "choices": [
+      "C2〜C40 の中で「欠席」と入っているセルの数",
+      "C2〜C40 の合計",
+      "欠席した人の名前",
+      "C2 と C40 の差"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "COUNTIF は、条件に合うセルの数を数える関数です。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "gp1-op-pc-02",
+    "grade": 1.5,
+    "field": "operation",
+    "device": "pc",
+    "type": "choice",
+    "question": "表計算で、条件に合う行だけを表示する機能はどれ？",
+    "ruby": false,
+    "choices": [
+      "フィルター",
+      "並べ替え",
+      "セルの結合",
+      "ウィンドウ枠の固定"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "フィルターを使うと、必要なデータだけを表示できます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "gp1-op-pc-03",
+    "grade": 1.5,
+    "field": "operation",
+    "device": "pc",
+    "type": "choice",
+    "question": "表計算で「=VLOOKUP(A2,商品表,2,FALSE)」の役割はどれ？",
+    "ruby": false,
+    "choices": [
+      "A2 の値を商品表から探し、その行の2列目の値を取り出す",
+      "A2 を2倍する",
+      "商品表の2行目を削除する",
+      "A2 が2かどうかを調べる"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "VLOOKUP は、表から条件に合う値を探して取り出す関数です。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "gp1-op-pc-04",
+    "grade": 1.5,
+    "field": "operation",
+    "device": "pc",
+    "type": "ui-task",
+    "question": "表のデータをすべて選ぶショートカットキーをおそう。",
+    "ruby": false,
+    "task": {
+      "kind": "shortcut",
+      "key": "a",
+      "ctrl": true,
+      "shift": false,
+      "context": "（アンケート集計表）"
+    },
+    "explanation": "Ctrl + A ですべて選択できます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "gp1-op-pc-05",
+    "grade": 1.5,
+    "field": "operation",
+    "device": "pc",
+    "type": "choice",
+    "question": "2進数の「1010」を10進数で表すといくつ？",
+    "ruby": false,
+    "choices": [
+      "10",
+      "8",
+      "12",
+      "1010"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "1×8＋0×4＋1×2＋0×1＝10 です。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "gp1-op-pc-06",
+    "grade": 1.5,
+    "field": "operation",
+    "device": "pc",
+    "type": "choice",
+    "question": "1バイトは何ビット？",
+    "ruby": false,
+    "choices": [
+      "8ビット",
+      "2ビット",
+      "10ビット",
+      "16ビット"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "1バイト＝8ビットです。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "gp1-op-pc-07",
+    "grade": 1.5,
+    "field": "operation",
+    "device": "pc",
+    "type": "choice",
+    "question": "画像の解像度（画素数）を下げると、一般にどうなる？",
+    "ruby": false,
+    "choices": [
+      "ファイルサイズが小さくなり、細かい部分があらくなる",
+      "ファイルサイズが大きくなる",
+      "色の数が増える",
+      "画質がよくなる"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "画素数がへると、データ量はへりますが細かさが失われます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "gp1-op-pc-08",
+    "grade": 1.5,
+    "field": "operation",
+    "device": "pc",
+    "type": "ui-task",
+    "question": "ファイルを右クリックして、以前の版（変更の履歴）を確かめよう。",
+    "ruby": false,
+    "task": {
+      "kind": "context-menu",
+      "trigger": "right-click",
+      "target": "📄 探究_レポート",
+      "menu": [
+        "開く",
+        "共有",
+        "版の履歴",
+        "削除"
+      ],
+      "answer": 2
+    },
+    "explanation": "クラウドのファイルは、版の履歴から以前の状態を確かめられます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "gp1-op-pc-09",
+    "grade": 1.5,
+    "field": "operation",
+    "device": "pc",
+    "type": "ui-task",
+    "question": "個人情報をふくむ「アンケート回答_元データ」を、管理に適切なフォルダーへ移そう。",
+    "ruby": false,
+    "task": {
+      "kind": "drag-to-folder",
+      "file": "📊 アンケート回答_元データ",
+      "folders": [
+        "📁 班メンバーのみ（アクセス制限）",
+        "📁 学年全体に公開",
+        "📁 Webに公開"
+      ],
+      "answer": 0
+    },
+    "explanation": "個人情報は、必要な人だけが見られる場所で管理します。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "gp1-op-pc-10",
+    "grade": 1.5,
+    "field": "operation",
+    "device": "pc",
+    "type": "input",
+    "question": "式「=AVERAGE(B2:B31)」を正確に入力しよう。",
+    "ruby": false,
+    "target": "=AVERAGE(B2:B31)",
+    "timeLimitSec": 40,
+    "explanation": "関数名・かっこ・コロンを正確に入力します。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "gp1-op-pc-11",
+    "grade": 1.5,
+    "field": "operation",
+    "device": "pc",
+    "type": "choice",
+    "question": "プログラムで「同じ処理を何回もくり返す」構造を何という？",
+    "ruby": false,
+    "choices": [
+      "反復（ループ）",
+      "分岐",
+      "順次",
+      "変数"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "プログラムの基本の構造は、順次・分岐・反復の3つです。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "gp1-op-pc-12",
+    "grade": 1.5,
+    "field": "operation",
+    "device": "pc",
+    "type": "order",
+    "question": "数の列の中から、いちばん大きい数を探す手順（アルゴリズム）にならべよう。",
+    "ruby": false,
+    "choices": [
+      "最初の数を「最大」として覚える",
+      "次の数と「最大」を比べる",
+      "次の数のほうが大きければ「最大」を入れかえる",
+      "最後の数まで、比べて入れかえる処理をくり返す"
+    ],
+    "answer": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "explanation": "比べて入れかえる処理をくり返すと、最後に最大の数が残ります。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "gp1-op-touch-01",
+    "grade": 1.5,
+    "field": "operation",
+    "device": "touch",
+    "type": "input",
+    "question": "式「=AVERAGE(B2:B31)」を正確に入力しよう。",
+    "ruby": false,
+    "target": "=AVERAGE(B2:B31)",
+    "timeLimitSec": 60,
+    "explanation": "記号のキーボードを切りかえて入力します。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "gp1-op-touch-02",
+    "grade": 1.5,
+    "field": "operation",
+    "device": "touch",
+    "type": "input",
+    "question": "ファイル名「tanq-report_v2.docx」を正確に入力しよう。",
+    "ruby": false,
+    "target": "tanq-report_v2.docx",
+    "timeLimitSec": 55,
+    "explanation": "ハイフン・アンダーバー・ピリオドを区別します。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "gp1-op-touch-03",
+    "grade": 1.5,
+    "field": "operation",
+    "device": "touch",
+    "type": "choice",
+    "question": "スマホの位置情報を、アプリごとに設定する理由として最も適切なのは？",
+    "ruby": false,
+    "choices": [
+      "必要なアプリにだけ位置を知らせ、プライバシーを守るため",
+      "電話番号を変えるため",
+      "画面を大きくするため",
+      "アプリの料金を下げるため"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "位置情報は、使うアプリを選んで許可します。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "gp1-op-touch-04",
+    "grade": 1.5,
+    "field": "operation",
+    "device": "touch",
+    "type": "choice",
+    "question": "スマホのテザリングを使うと、何ができる？",
+    "ruby": false,
+    "choices": [
+      "スマホの通信を使って、ほかの機器をインターネットにつなぐ",
+      "ほかの機器に電池を送る",
+      "写真を印刷する",
+      "画面をテレビに映す"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "テザリングは、スマホを通信の中継に使う機能です。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "gp1-op-touch-05",
+    "grade": 1.5,
+    "field": "operation",
+    "device": "touch",
+    "type": "ui-task",
+    "question": "写真を送る前に、位置情報をふくめないようにしたい。共有画面でどれをおす？",
+    "ruby": false,
+    "task": {
+      "kind": "button",
+      "style": "share",
+      "title": "共有",
+      "message": "🖼 部活動の写真",
+      "buttons": [
+        "オプション（位置情報をオフ）",
+        "メッセージ",
+        "プリント",
+        "コピー"
+      ],
+      "answer": 0
+    },
+    "explanation": "写真には撮影場所が記録されていることがあります。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "gp1-op-touch-06",
+    "grade": 1.5,
+    "field": "operation",
+    "device": "touch",
+    "type": "choice",
+    "question": "クラウドで共同編集しているファイルの内容を、だれかがまちがえて消した。どうする？",
+    "ruby": false,
+    "choices": [
+      "版の履歴（変更履歴）から前の状態にもどす",
+      "あきらめて最初から作り直す",
+      "ファイルを削除する",
+      "ほかの人の編集をすべて禁止する"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "クラウドのファイルは、以前の版にもどせることが多いです。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "gp1-op-touch-07",
+    "grade": 1.5,
+    "field": "operation",
+    "device": "touch",
+    "type": "ui-task",
+    "question": "動画ファイル「探究発表_最終版」を「提出用」フォルダーへ移そう。",
+    "ruby": false,
+    "task": {
+      "kind": "drag-to-folder",
+      "file": "🎬 探究発表_最終版",
+      "folders": [
+        "📁 提出用",
+        "📁 下書き",
+        "📁 素材"
+      ],
+      "answer": 0
+    },
+    "explanation": "提出するファイルを分けておくと、まちがいを防げます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "gp1-op-touch-08",
+    "grade": 1.5,
+    "field": "operation",
+    "device": "touch",
+    "type": "ui-task",
+    "question": "アプリに「利用規約が変わりました」と表示された。適切なのはどれ？",
+    "ruby": false,
+    "task": {
+      "kind": "button",
+      "style": "dialog",
+      "title": "利用規約の変更",
+      "message": "新しい利用規約に同意してください。",
+      "buttons": [
+        "内容を確認する",
+        "読まずに同意する"
+      ],
+      "answer": 0
+    },
+    "explanation": "個人情報の扱いなど、大切な変更がふくまれていることがあります。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "gp1-op-touch-09",
+    "grade": 1.5,
+    "field": "operation",
+    "device": "touch",
+    "type": "choice",
+    "question": "スマホのOSを最新の状態にする主な理由は？",
+    "ruby": false,
+    "choices": [
+      "セキュリティの弱点の修正や機能の改善のため",
+      "電話番号を変えるため",
+      "保存容量を増やすため",
+      "通信料金を下げるため"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "古いOSのままだと、弱点をねらわれるおそれがあります。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "gp1-op-touch-10",
+    "grade": 1.5,
+    "field": "operation",
+    "device": "touch",
+    "type": "order",
+    "question": "紙の資料を撮影して、PDFにまとめて提出する流れにならべよう。",
+    "ruby": false,
+    "choices": [
+      "資料を撮影する",
+      "不要な部分をトリミングする",
+      "PDFにまとめて保存する",
+      "提出先にアップロードする"
+    ],
+    "answer": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "explanation": "整えてからまとめ、最後に提出します。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "gp1-op-touch-11",
+    "grade": 1.5,
+    "field": "operation",
+    "device": "touch",
+    "type": "choice",
+    "question": "スマホで動画を見るとき、通信量を節約したい。適切なのはどれ？",
+    "ruby": false,
+    "choices": [
+      "Wi-Fiにつないで見る、または画質を下げる",
+      "画面を明るくする",
+      "音量を上げる",
+      "モバイルデータ通信で最高画質にする"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "高画質の動画ほど、通信量が多くなります。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "gp1-op-touch-12",
+    "grade": 1.5,
+    "field": "operation",
+    "device": "touch",
+    "type": "ui-task",
+    "question": "共同編集の画面で、ほかの人にコメントを残したい。どのボタンをおす？",
+    "ruby": false,
+    "task": {
+      "kind": "button",
+      "style": "toolbar",
+      "title": "共同編集",
+      "message": "（探究レポートの本文）",
+      "buttons": [
+        "🖨 印刷",
+        "💬 コメント",
+        "🔍 検索",
+        "↩ 元に戻す"
+      ],
+      "answer": 1
+    },
+    "explanation": "本文を直接書きかえずに、コメントで意見を伝えられます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "gp1-info-01",
+    "grade": 1.5,
+    "field": "information",
+    "device": "all",
+    "type": "choice",
+    "question": "データの代表値のうち、極端な値の影響を受けにくいのはどれ？",
+    "ruby": false,
+    "choices": [
+      "中央値",
+      "平均値",
+      "合計",
+      "最大値"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "中央値は、データを順に並べたときの真ん中の値です。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "gp1-info-02",
+    "grade": 1.5,
+    "field": "information",
+    "device": "all",
+    "type": "choice",
+    "question": "5人のおこづかいのデータです。中央値はいくら？",
+    "ruby": false,
+    "figure": {
+      "kind": "table",
+      "caption": "おこづかい（月）",
+      "headers": [
+        "",
+        "Aさん",
+        "Bさん",
+        "Cさん",
+        "Dさん",
+        "Eさん"
+      ],
+      "rows": [
+        [
+          "金額",
+          "1000円",
+          "1200円",
+          "1300円",
+          "1500円",
+          "9000円"
+        ]
+      ]
+    },
+    "choices": [
+      "1300円",
+      "2800円",
+      "1500円",
+      "9000円"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "小さい順に並べた3番目が1300円です。平均値（2800円）は9000円に引っぱられています。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "gp1-info-03",
+    "grade": 1.5,
+    "field": "information",
+    "device": "all",
+    "type": "choice",
+    "question": "散布図で、点が右上がりに並んでいた。読み取れることはどれ？",
+    "ruby": false,
+    "choices": [
+      "一方が大きいほど、もう一方も大きい傾向（正の相関）がある",
+      "一方が原因で、もう一方が起きている",
+      "2つの間に関係はまったくない",
+      "負の相関がある"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "相関があっても、原因と結果の関係があるとは限りません。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "gp1-info-04",
+    "grade": 1.5,
+    "field": "information",
+    "device": "all",
+    "type": "choice",
+    "question": "アンケートで「〇〇に賛成ですよね？」と質問すると、どんな問題がある？",
+    "ruby": false,
+    "choices": [
+      "答えを一方に誘導してしまう",
+      "回答が速くなる",
+      "問題はない",
+      "反対の人だけが答える"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "質問は、どちらにもかたよらない聞き方にします。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "gp1-info-05",
+    "grade": 1.5,
+    "field": "information",
+    "device": "all",
+    "type": "multi",
+    "question": "オープンデータ（公開データ）を使うときに大切なことを全部えらぼう。",
+    "ruby": false,
+    "choices": [
+      "出典と利用条件を確かめる",
+      "データの更新日を確かめる",
+      "加工したときは加工したことを示す",
+      "出典は書かない"
+    ],
+    "answer": [
+      0,
+      1,
+      2
+    ],
+    "explanation": "利用条件を守り、出典を示して使います。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "gp1-info-06",
+    "grade": 1.5,
+    "field": "information",
+    "device": "all",
+    "type": "choice",
+    "question": "一部の人を調べて全体を推測する（標本調査）とき、大切なことはどれ？",
+    "ruby": false,
+    "choices": [
+      "かたよりがないように対象を選ぶ",
+      "知り合いだけに聞く",
+      "調べやすい人だけに聞く",
+      "1人に聞けば十分"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "対象がかたよると、全体のようすを正しく推測できません。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "gp1-info-07",
+    "grade": 1.5,
+    "field": "information",
+    "device": "all",
+    "type": "choice",
+    "question": "ある商品の月ごとの売り上げです。前の月からの増加がいちばん大きいのは何月？",
+    "ruby": false,
+    "figure": {
+      "kind": "line",
+      "caption": "売り上げ（万円）",
+      "labels": [
+        "1月",
+        "2月",
+        "3月",
+        "4月",
+        "5月"
+      ],
+      "values": [
+        40,
+        45,
+        60,
+        62,
+        70
+      ],
+      "unit": "万円"
+    },
+    "choices": [
+      "3月",
+      "2月",
+      "4月",
+      "5月"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "2月＋5、3月＋15、4月＋2、5月＋8（万円）です。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "gp1-info-08",
+    "grade": 1.5,
+    "field": "information",
+    "device": "all",
+    "type": "match",
+    "question": "情報デザインの言葉と意味を組み合わせよう。",
+    "ruby": false,
+    "pairs": [
+      {
+        "left": "ピクトグラム",
+        "right": "言葉がなくても意味が伝わる図記号"
+      },
+      {
+        "left": "ユニバーサルデザイン",
+        "right": "できるだけ多くの人が使いやすいように考えられた設計"
+      },
+      {
+        "left": "アクセシビリティ",
+        "right": "障害のある人や高齢者も利用できること"
+      }
+    ],
+    "explanation": "情報は、受け取る人のことを考えてデザインします。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "gp1-info-09",
+    "grade": 1.5,
+    "field": "information",
+    "device": "all",
+    "type": "choice",
+    "question": "一次情報にあたるのはどれ？",
+    "ruby": false,
+    "choices": [
+      "自分で行ったアンケートの結果",
+      "まとめサイトの記事",
+      "ニュースを要約した動画",
+      "友だちから聞いた話"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "一次情報は、自分で調べたり体験したりした元の情報です。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "gp1-info-10",
+    "grade": 1.5,
+    "field": "information",
+    "device": "all",
+    "type": "choice",
+    "question": "検索エンジンの検索結果の順位について、正しいのはどれ？",
+    "ruby": false,
+    "choices": [
+      "順位が高いからといって内容が正しいとは限らない",
+      "1位は必ず正しい",
+      "順位はいつも同じ",
+      "広告は表示されない"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "順位はさまざまな基準で決まり、正しさを保証するものではありません。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "gp1-info-11",
+    "grade": 1.5,
+    "field": "information",
+    "device": "all",
+    "type": "order",
+    "question": "問題解決の手順（PPDACサイクル）にならべよう。",
+    "ruby": false,
+    "choices": [
+      "Problem：問題を見つける",
+      "Plan：調査を計画する",
+      "Data：データを集める",
+      "Analysis：データを分析する",
+      "Conclusion：結論を出す"
+    ],
+    "answer": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "explanation": "データにもとづいて問題を解決する手順です。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "gp1-info-12",
+    "grade": 1.5,
+    "field": "information",
+    "device": "all",
+    "type": "choice",
+    "question": "年ごとに「割合の変化」を比べたい。適しているグラフはどれ？",
+    "ruby": false,
+    "choices": [
+      "帯グラフ（100%積み上げ棒グラフ）",
+      "円グラフ1つ",
+      "散布図",
+      "絵グラフ"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "帯グラフを並べると、割合の変化を比べやすくなります。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "gp1-safety-01",
+    "grade": 1.5,
+    "field": "safety",
+    "device": "all",
+    "type": "choice",
+    "question": "情報セキュリティの「可用性」とは何か？",
+    "ruby": false,
+    "choices": [
+      "必要なときに情報やシステムを使える状態にあること",
+      "許可された人だけが情報を見られること",
+      "情報が正確で改ざんされていないこと",
+      "情報を暗号化すること"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "機密性・完全性・可用性を情報セキュリティの三要素といいます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "gp1-safety-02",
+    "grade": 1.5,
+    "field": "safety",
+    "device": "all",
+    "type": "match",
+    "question": "情報セキュリティの三要素と、その意味を組み合わせよう。",
+    "ruby": false,
+    "pairs": [
+      {
+        "left": "機密性",
+        "right": "許可された人だけが情報を見られる"
+      },
+      {
+        "left": "完全性",
+        "right": "情報が正確で改ざんされていない"
+      },
+      {
+        "left": "可用性",
+        "right": "必要なときに情報を使える"
+      }
+    ],
+    "explanation": "3つのバランスをとって情報を守ります。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "gp1-safety-03",
+    "grade": 1.5,
+    "field": "safety",
+    "device": "all",
+    "type": "choice",
+    "question": "公開鍵暗号方式について、正しいのはどれ？",
+    "ruby": false,
+    "choices": [
+      "公開鍵で暗号化したものは、対になる秘密鍵でしか復号できない",
+      "公開鍵はだれにも見せない",
+      "秘密鍵はネットで公開する",
+      "暗号化すると二度と元にもどせない"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "公開鍵は公開してよく、秘密鍵は本人だけが持ちます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "gp1-safety-04",
+    "grade": 1.5,
+    "field": "safety",
+    "device": "all",
+    "type": "choice",
+    "question": "著作物を、作った人の許可なく使える例として正しいのはどれ？",
+    "ruby": false,
+    "choices": [
+      "ルールを守った引用",
+      "好きな曲を動画のBGMにして公開する",
+      "雑誌の記事を全部コピーしてSNSにのせる",
+      "アニメの画像をグッズにして売る"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "引用など、法律で認められた例外があります。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "gp1-safety-05",
+    "grade": 1.5,
+    "field": "safety",
+    "device": "all",
+    "type": "multi",
+    "question": "生成AIを使うときの注意を全部えらぼう。",
+    "ruby": false,
+    "choices": [
+      "事実の誤りがないか確かめる",
+      "著作権や肖像権を侵害する生成物を公開しない",
+      "個人情報や秘密の情報を入力しない",
+      "生成物をすべて自分の作品として発表する"
+    ],
+    "answer": [
+      0,
+      1,
+      2
+    ],
+    "explanation": "AIの出力は、自分で確かめ、責任をもって使います。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "gp1-safety-06",
+    "grade": 1.5,
+    "field": "safety",
+    "device": "all",
+    "type": "choice",
+    "question": "データのバックアップの考え方として、最も適切なのはどれ？",
+    "ruby": false,
+    "choices": [
+      "大切なデータは、別の機器やクラウドなど別の場所にも保存しておく",
+      "同じフォルダーにコピーを1つ作れば十分",
+      "バックアップは必要ない",
+      "元のデータを消してからバックアップする"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "同じ場所だけだと、機器がこわれたときにまとめて失います。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "gp1-safety-07",
+    "grade": 1.5,
+    "field": "safety",
+    "device": "all",
+    "type": "choice",
+    "question": "マルウェアに感染したかもしれない。まずすることは？",
+    "ruby": false,
+    "choices": [
+      "ネットワークから切断し、管理者や大人に連絡する",
+      "そのまま使い続ける",
+      "友だちにファイルを送って調べてもらう",
+      "パスワードをメモに書く"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "被害が広がらないように、まず切りはなします。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "gp1-safety-08",
+    "grade": 1.5,
+    "field": "safety",
+    "device": "all",
+    "type": "choice",
+    "question": "SNSの投稿から個人が特定される例として、正しいのはどれ？",
+    "ruby": false,
+    "choices": [
+      "写真の背景・制服・投稿時間などを組み合わせると、住所や学校が分かることがある",
+      "名前を書かなければ絶対に特定されない",
+      "鍵アカウントなら絶対に安全",
+      "写真は特定に使われない"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "一つ一つは小さな情報でも、組み合わさると個人が分かります。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "gp1-safety-09",
+    "grade": 1.5,
+    "field": "safety",
+    "device": "all",
+    "type": "choice",
+    "question": "「デジタルタトゥー」とは何か？",
+    "ruby": false,
+    "choices": [
+      "一度ネットに出た情報が、消えずに残り続けること",
+      "スマホのデザイン",
+      "タトゥーの写真",
+      "電子マネーの名前"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "発信する前に、ずっと残ってもよい内容か考えましょう。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "gp1-safety-10",
+    "grade": 1.5,
+    "field": "safety",
+    "device": "all",
+    "type": "multi",
+    "question": "駅や店の無料Wi-Fiを安全に使う方法を全部えらぼう。",
+    "ruby": false,
+    "choices": [
+      "暗号化された（鍵マークのある）Wi-Fiを選ぶ",
+      "大切な手続き（買い物の決済など）はしない",
+      "HTTPSのサイトを使う",
+      "名前がそれらしいWi-Fiなら何でもつなぐ"
+    ],
+    "answer": [
+      0,
+      1,
+      2
+    ],
+    "explanation": "お店の名前に似せた、にせのWi-Fiもあります。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "gp1-safety-11",
+    "grade": 1.5,
+    "field": "safety",
+    "device": "all",
+    "type": "choice",
+    "question": "Cookie（クッキー）について、正しい説明はどれ？",
+    "ruby": false,
+    "choices": [
+      "サイトがブラウザーに保存する小さなデータで、ログイン状態の保持などに使われる",
+      "ウイルスの一種",
+      "パスワードを暗号化するしくみ",
+      "画像の形式"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "広告のために閲覧の記録に使われることもあります。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "gp1-safety-12",
+    "grade": 1.5,
+    "field": "safety",
+    "device": "all",
+    "type": "choice",
+    "question": "生成AIで作った他人の顔の合成画像を、SNSに投稿した。何が問題？",
+    "ruby": false,
+    "choices": [
+      "本人の肖像権や名誉を傷つけるおそれがある",
+      "画質が低い",
+      "「いいね」が少ない",
+      "問題はない"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "実在の人の画像を勝手に作って公開すると、大きな被害につながります。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  }
+]

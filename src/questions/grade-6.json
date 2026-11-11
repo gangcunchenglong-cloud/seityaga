@@ -733,5 +733,392 @@
     "source": "ai",
     "reviewedBy": "",
     "reviewedAt": ""
+  },
+  {
+    "id": "g6-op-pc-09",
+    "grade": 6,
+    "field": "operation",
+    "device": "pc",
+    "type": "input",
+    "question": "ローマ{字|じ}{入力|にゅうりょく}で「りんご」と{入力|にゅうりょく}しよう（R I N G O）。",
+    "ruby": true,
+    "target": "りんご",
+    "timeLimitSec": 45,
+    "explanation": "「ん」の あとに「ご」が つづくので、N は1{回|かい}で だいじょうぶです。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g6-op-pc-10",
+    "grade": 6,
+    "field": "operation",
+    "device": "pc",
+    "type": "input",
+    "question": "ローマ{字|じ}{入力|にゅうりょく}で「でんしゃ」と{入力|にゅうりょく}しよう。",
+    "ruby": true,
+    "target": "でんしゃ",
+    "timeLimitSec": 60,
+    "explanation": "「しゃ」は SHA、「ん」は NN と{打|う}つと たしかです。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g6-op-pc-11",
+    "grade": 6,
+    "field": "operation",
+    "device": "pc",
+    "type": "choice",
+    "question": "{大文字|おおもじ}の「A」を{入力|にゅうりょく}するには？",
+    "ruby": true,
+    "choices": [
+      "Shift キーを おしながら A を おす",
+      "A を 2{回|かい} おす",
+      "Enter を おしてから A を おす",
+      "BackSpace を おしてから A を おす"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "Shift キーを おしながら{打|う}つと{大文字|おおもじ}に なります。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g6-op-pc-12",
+    "grade": 6,
+    "field": "operation",
+    "device": "pc",
+    "type": "ui-task",
+    "question": "「ザリガニの{観察|かんさつ}」を「{理科|りか}」フォルダーへ ドラッグしよう。",
+    "ruby": true,
+    "task": {
+      "kind": "drag-to-folder",
+      "file": "📄 ザリガニの{観察|かんさつ}",
+      "folders": [
+        "📁 {理科|りか}",
+        "📁 {国語|こくご}",
+        "📁 {音楽|おんがく}"
+      ],
+      "answer": 0
+    },
+    "explanation": "{教科|きょうか}ごとの フォルダーに{分|わ}けて しまいます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g6-op-touch-09",
+    "grade": 6,
+    "field": "operation",
+    "device": "touch",
+    "type": "input",
+    "question": "がめんの キーボードで「りんご」と{入力|にゅうりょく}しよう。",
+    "ruby": true,
+    "target": "りんご",
+    "timeLimitSec": 45,
+    "explanation": "ローマ{字|じ}でも かなでも{入力|にゅうりょく}できます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g6-op-touch-10",
+    "grade": 6,
+    "field": "operation",
+    "device": "touch",
+    "type": "input",
+    "question": "がめんの キーボードで「でんしゃ」と{入力|にゅうりょく}しよう。",
+    "ruby": true,
+    "target": "でんしゃ",
+    "timeLimitSec": 60,
+    "explanation": "{小|ちい}さい「ゃ」に なって いるか たしかめましょう。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g6-op-touch-11",
+    "grade": 6,
+    "field": "operation",
+    "device": "touch",
+    "type": "choice",
+    "question": "タブレットの がめんを、そのまま{写真|しゃしん}のように のこす ことを なんと いう？",
+    "ruby": true,
+    "choices": [
+      "スクリーンショット",
+      "ズーム",
+      "スワイプ",
+      "ログイン"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "スクリーンショットで、がめんを{画像|がぞう}として のこせます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g6-op-touch-12",
+    "grade": 6,
+    "field": "operation",
+    "device": "touch",
+    "type": "ui-task",
+    "question": "「ザリガニの{観察|かんさつ}」を{指|ゆび}で「{理科|りか}」フォルダーへ ドラッグしよう。",
+    "ruby": true,
+    "task": {
+      "kind": "drag-to-folder",
+      "file": "📄 ザリガニの{観察|かんさつ}",
+      "folders": [
+        "📁 {理科|りか}",
+        "📁 {国語|こくご}",
+        "📁 {音楽|おんがく}"
+      ],
+      "answer": 0
+    },
+    "explanation": "{指|ゆび}を はなさずに{動|うご}かします。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g6-info-09",
+    "grade": 6,
+    "field": "information",
+    "device": "all",
+    "type": "choice",
+    "question": "けんさく{結果|けっか}の いちばん{上|うえ}に「{広告|こうこく}」と{書|か}いて あった。これは{何|なん}？",
+    "ruby": true,
+    "choices": [
+      "お{金|かね}を はらって{表示|ひょうじ}している{宣伝|せんでん}",
+      "いちばん{正|ただ}しい{答|こた}え",
+      "{先生|せんせい}が えらんだ ページ",
+      "{国|くに}の ページ"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "{広告|こうこく}は{宣伝|せんでん}です。{調|しら}べものの{答|こた}えとは かぎりません。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g6-info-10",
+    "grade": 6,
+    "field": "information",
+    "device": "all",
+    "type": "choice",
+    "question": "{読書|どくしょ}{記録|きろく}の{表|ひょう}です。{読|よ}んだ{本|ほん}の{数|かず}が{同|おな}じなのは だれと だれ？",
+    "ruby": true,
+    "figure": {
+      "kind": "table",
+      "caption": "{読|よ}んだ{本|ほん}",
+      "headers": [
+        "{名前|なまえ}",
+        "さっ{数|すう}"
+      ],
+      "rows": [
+        [
+          "たろう",
+          "5さつ"
+        ],
+        [
+          "はなこ",
+          "7さつ"
+        ],
+        [
+          "けん",
+          "5さつ"
+        ],
+        [
+          "ゆい",
+          "3さつ"
+        ]
+      ]
+    },
+    "choices": [
+      "たろう と けん",
+      "はなこ と ゆい",
+      "たろう と はなこ",
+      "けん と ゆい"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "たろうと けんは、どちらも 5さつです。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g6-info-11",
+    "grade": 6,
+    "field": "information",
+    "device": "all",
+    "type": "choice",
+    "question": "ミニトマトの{高|たか}さの グラフです。いちばん{大|おお}きく のびたのは どの{間|あいだ}？",
+    "ruby": true,
+    "figure": {
+      "kind": "line",
+      "caption": "ミニトマトの{高|たか}さ（cm）",
+      "labels": [
+        "1週",
+        "2週",
+        "3週",
+        "4週"
+      ],
+      "values": [
+        5,
+        8,
+        14,
+        17
+      ],
+      "unit": "cm"
+    },
+    "choices": [
+      "2{週|しゅう}から3{週|しゅう}",
+      "1{週|しゅう}から2{週|しゅう}",
+      "3{週|しゅう}から4{週|しゅう}",
+      "どれも{同|おな}じ"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "2{週|しゅう}から3{週|しゅう}で 6cm のびて います。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g6-info-12",
+    "grade": 6,
+    "field": "information",
+    "device": "all",
+    "type": "multi",
+    "question": "{調|しら}べた ことを まとめる ときに よい ことを{全部|ぜんぶ}えらぼう。",
+    "ruby": true,
+    "choices": [
+      "{大事|だいじ}な ことを{短|みじか}く{書|か}く",
+      "{調|しら}べた{本|ほん}の{名前|なまえ}を{書|か}く",
+      "{分|わ}からない ことも{分|わ}かった ふりを する",
+      "{友|とも}だちの まとめを そのまま うつす"
+    ],
+    "answer": [
+      0,
+      1
+    ],
+    "explanation": "{自分|じぶん}で{調|しら}べた ことを、{自分|じぶん}の ことばで まとめます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g6-safety-09",
+    "grade": 6,
+    "field": "safety",
+    "device": "all",
+    "type": "choice",
+    "question": "{家|いえ}の{人|ひと}の スマホの ゲームに「{課金|かきん}する」ボタンが あった。どうする？",
+    "ruby": true,
+    "choices": [
+      "おさないで{家|いえ}の{人|ひと}に{聞|き}く",
+      "すぐ おす",
+      "{何回|なんかい}も おす",
+      "だまって おす"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "{課金|かきん}すると{本当|ほんとう}の お{金|かね}が かかります。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g6-safety-10",
+    "grade": 6,
+    "field": "safety",
+    "device": "all",
+    "type": "multi",
+    "question": "パスワードを{守|まも}る{方法|ほうほう}を{全部|ぜんぶ}えらぼう。",
+    "ruby": true,
+    "choices": [
+      "{人|ひと}に{教|おし}えない",
+      "{入力|にゅうりょく}する ときに{見|み}られないように する",
+      "{友|とも}だちと{同|おな}じに する",
+      "ノートの{表紙|ひょうし}に{書|か}く"
+    ],
+    "answer": [
+      0,
+      1
+    ],
+    "explanation": "パスワードは{自分|じぶん}だけの ひみつです。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g6-safety-11",
+    "grade": 6,
+    "field": "safety",
+    "device": "all",
+    "type": "choice",
+    "question": "{友|とも}だちの{写真|しゃしん}に いたずらで{落書|らくが}きを して{送|おく}った。どう なる かもしれない？",
+    "ruby": true,
+    "choices": [
+      "{友|とも}だちが いやな{気持|きも}ちに なる",
+      "みんなが{必|かなら}ず{喜|よろこ}ぶ",
+      "{何|なに}も{起|お}きない",
+      "{写真|しゃしん}が きれいに なる"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "じょうだんの つもりでも、{相手|あいて}を きずつける ことが あります。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g6-safety-12",
+    "grade": 6,
+    "field": "safety",
+    "device": "all",
+    "type": "choice",
+    "question": "{知|し}らない{人|ひと}から「{友|とも}だちに なろう」と{申請|しんせい}が{来|き}た。どうする？",
+    "ruby": true,
+    "choices": [
+      "{承認|しょうにん}しないで{家|いえ}の{人|ひと}に{相談|そうだん}する",
+      "すぐ{承認|しょうにん}する",
+      "{住所|じゅうしょ}を{教|おし}える",
+      "{写真|しゃしん}を{送|おく}る"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "{知|し}らない{人|ひと}とは つながらないように しましょう。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
   }
 ]

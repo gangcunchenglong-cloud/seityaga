@@ -814,5 +814,414 @@
     "source": "ai",
     "reviewedBy": "",
     "reviewedAt": ""
+  },
+  {
+    "id": "g5-op-pc-09",
+    "grade": 5,
+    "field": "operation",
+    "device": "pc",
+    "type": "ui-task",
+    "question": "作文の文章をすべて選ぶショートカットキーをおそう。",
+    "ruby": false,
+    "task": {
+      "kind": "shortcut",
+      "key": "a",
+      "ctrl": true,
+      "shift": false,
+      "context": "（作文の文章）"
+    },
+    "explanation": "Ctrl + A で、文章をすべて選べます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g5-op-pc-10",
+    "grade": 5,
+    "field": "operation",
+    "device": "pc",
+    "type": "input",
+    "question": "「Hello」と入力しよう（はじめの H は大文字）。",
+    "ruby": false,
+    "target": "Hello",
+    "timeLimitSec": 40,
+    "explanation": "大文字は Shift キーをおしながら入力します。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g5-op-pc-11",
+    "grade": 5,
+    "field": "operation",
+    "device": "pc",
+    "type": "ui-task",
+    "question": "入力らんを右クリックして、コピーしておいた文字を貼り付けよう。",
+    "ruby": false,
+    "task": {
+      "kind": "context-menu",
+      "trigger": "right-click",
+      "target": "📝 （文字を入れるらん）",
+      "menu": [
+        "切り取り",
+        "コピー",
+        "貼り付け",
+        "削除"
+      ],
+      "answer": 2
+    },
+    "explanation": "右クリックのメニューからも貼り付けができます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g5-op-pc-12",
+    "grade": 5,
+    "field": "operation",
+    "device": "pc",
+    "type": "choice",
+    "question": "社会見学の感想文を保存する。あとで探しやすい名前はどれ？",
+    "ruby": false,
+    "choices": [
+      "20261111_社会見学_感想",
+      "新しいファイル",
+      "ああああ",
+      "1"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "日付と内容が分かる名前にすると探しやすくなります。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g5-op-touch-09",
+    "grade": 5,
+    "field": "operation",
+    "device": "touch",
+    "type": "input",
+    "question": "「Hello」と入力しよう（はじめの H は大文字）。",
+    "ruby": false,
+    "target": "Hello",
+    "timeLimitSec": 50,
+    "explanation": "⇧ キーをおしてから入力すると大文字になります。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g5-op-touch-10",
+    "grade": 5,
+    "field": "operation",
+    "device": "touch",
+    "type": "ui-task",
+    "question": "撮った写真を印刷したい。共有メニューでどれを選ぶ？",
+    "ruby": false,
+    "task": {
+      "kind": "button",
+      "style": "share",
+      "title": "共有",
+      "message": "🖼 社会見学の写真",
+      "buttons": [
+        "プリント",
+        "“ファイル”に保存",
+        "メッセージ",
+        "コピー"
+      ],
+      "answer": 0
+    },
+    "explanation": "印刷は「プリント」から行います。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g5-op-touch-11",
+    "grade": 5,
+    "field": "operation",
+    "device": "touch",
+    "type": "choice",
+    "question": "タブレットで撮った写真は、ふつうどこに保存される？",
+    "ruby": false,
+    "choices": [
+      "写真（アルバム）アプリ",
+      "時計アプリ",
+      "設定アプリ",
+      "電卓アプリ"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "撮った写真は写真アプリにたまっていきます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g5-op-touch-12",
+    "grade": 5,
+    "field": "operation",
+    "device": "touch",
+    "type": "order",
+    "question": "タブレットのカメラで写真を撮る順番にならべよう。",
+    "ruby": false,
+    "choices": [
+      "カメラアプリを開く",
+      "とりたいものを画面に入れる",
+      "シャッターをおす",
+      "写真を確かめる"
+    ],
+    "answer": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "explanation": "撮ったあとに確かめると、とり直しができます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g5-info-09",
+    "grade": 5,
+    "field": "information",
+    "device": "all",
+    "type": "choice",
+    "question": "調べものをした。いちばん信頼しやすいのはどれ？",
+    "ruby": false,
+    "choices": [
+      "市役所の公式サイト",
+      "名前の分からない人のブログ",
+      "知らない人のSNSのうわさ",
+      "広告のページ"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "だれが発信しているか分かる、公式の情報は信頼しやすいです。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g5-info-10",
+    "grade": 5,
+    "field": "information",
+    "device": "all",
+    "type": "choice",
+    "question": "すきな教科のグラフです。算数と理科の差は何人？",
+    "ruby": false,
+    "figure": {
+      "kind": "bar",
+      "caption": "すきな教科（人）",
+      "labels": [
+        "国語",
+        "算数",
+        "理科",
+        "社会"
+      ],
+      "values": [
+        8,
+        14,
+        9,
+        5
+      ],
+      "unit": "人"
+    },
+    "choices": [
+      "5人",
+      "23人",
+      "14人",
+      "9人"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "14人－9人＝5人です。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g5-info-11",
+    "grade": 5,
+    "field": "information",
+    "device": "all",
+    "type": "order",
+    "question": "調べ学習の流れにならべよう。",
+    "ruby": false,
+    "choices": [
+      "課題を決める",
+      "調べる計画を立てる",
+      "本やインターネットで調べる",
+      "まとめて発表する"
+    ],
+    "answer": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "explanation": "計画を立ててから調べると、むだなく進められます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g5-info-12",
+    "grade": 5,
+    "field": "information",
+    "device": "all",
+    "type": "choice",
+    "question": "図書委員の当番表です。水曜日の当番はだれ？",
+    "ruby": false,
+    "figure": {
+      "kind": "table",
+      "caption": "図書委員の当番",
+      "headers": [
+        "曜日",
+        "当番"
+      ],
+      "rows": [
+        [
+          "月",
+          "あおい"
+        ],
+        [
+          "火",
+          "そうた"
+        ],
+        [
+          "水",
+          "ゆな"
+        ],
+        [
+          "木",
+          "けんじ"
+        ]
+      ]
+    },
+    "choices": [
+      "ゆな",
+      "そうた",
+      "けんじ",
+      "あおい"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "水曜日の行を見ると、ゆなさんです。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g5-safety-09",
+    "grade": 5,
+    "field": "safety",
+    "device": "all",
+    "type": "choice",
+    "question": "無料のイラストのサイトにあった絵を使いたい。まず確かめることは？",
+    "ruby": false,
+    "choices": [
+      "利用規約（使ってよい条件）",
+      "イラストの色",
+      "ファイルの大きさ",
+      "サイトの背景"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "「無料」でも、使ってよい条件が決まっていることがあります。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g5-safety-10",
+    "grade": 5,
+    "field": "safety",
+    "device": "all",
+    "type": "multi",
+    "question": "ネットで知り合った人について、正しいものを全部えらぼう。",
+    "ruby": false,
+    "choices": [
+      "本当の年れいや名前は分からない",
+      "会う約束をしてはいけない",
+      "やさしい人なら必ず安心できる",
+      "写真を送ってもよい"
+    ],
+    "answer": [
+      0,
+      1
+    ],
+    "explanation": "ネットでは、相手が本当はだれか分かりません。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g5-safety-11",
+    "grade": 5,
+    "field": "safety",
+    "device": "all",
+    "type": "choice",
+    "question": "友だちのパスワードを、たまたま見てしまった。どうする？",
+    "ruby": false,
+    "choices": [
+      "使わずに、本人に変えるよう伝える",
+      "こっそり使う",
+      "ほかの人に教える",
+      "メモしておく"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "人のパスワードを使うのはいけないことです。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g5-safety-12",
+    "grade": 5,
+    "field": "safety",
+    "device": "all",
+    "type": "choice",
+    "question": "学校のタブレットで、授業と関係ない動画をこっそり見た。何がいけない？",
+    "ruby": false,
+    "choices": [
+      "学校の決まりを守っていない",
+      "画面が小さい",
+      "音が出ない",
+      "いけないことはない"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "学校のタブレットは、決まりを守って使います。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
   }
 ]

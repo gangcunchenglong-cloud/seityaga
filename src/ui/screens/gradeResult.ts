@@ -1,6 +1,6 @@
 import { FIELD_LABELS, RULES } from '../../config';
 import type { NextStep } from '../../logic/session';
-import { FIELDS, type GradeResult, type Question } from '../../types';
+import { FIELDS, gradeLabel, type GradeResult, type Question } from '../../types';
 import { h } from '../dom';
 import { rich } from '../text';
 
@@ -12,12 +12,12 @@ export function gradeResultScreen(
   showRuby: boolean,
   onNext: () => void,
 ): HTMLElement {
-  const nextLabel = step.kind === 'next' ? `${step.grade}級へすすむ` : '結果を見る';
+  const nextLabel = step.kind === 'next' ? `${gradeLabel(step.grade)}へすすむ` : '結果を見る';
   let headline: string;
-  if (r.passed && step.kind === 'next') headline = `${r.grade}級 合格！ つぎは ${step.grade}級`;
+  if (r.passed && step.kind === 'next') headline = `${gradeLabel(r.grade)} 合格！ つぎは ${gradeLabel(step.grade)}`;
   else if (r.passed && step.kind === 'end' && step.reason === 'completed') headline = '1級 合格！ すべての級に合格しました';
-  else if (r.passed) headline = `${r.grade}級 合格！`;
-  else headline = `${r.grade}級は 不合格でした`;
+  else if (r.passed) headline = `${gradeLabel(r.grade)} 合格！`;
+  else headline = `${gradeLabel(r.grade)}は 不合格でした`;
 
   let note = '';
   if (step.kind === 'end' && step.reason === 'timeout') note = '時間になったので、ここで終わりです。';
@@ -28,7 +28,7 @@ export function gradeResultScreen(
     'section',
     { class: `card grade-result ${r.passed ? 'passed' : 'failed'}` },
     h('p', { class: 'result-icon', 'aria-hidden': 'true' }, r.passed ? '🎉' : '📘'),
-    h('h1', { class: 'result-headline' }, headline),
+    h('h1', { class: 'result-headline', 'data-sec': r.passed ? 'GRADE CLEAR' : 'GRADE NOT CLEARED' }, headline),
     h(
       'p',
       { class: 'result-score' },

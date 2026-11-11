@@ -24,7 +24,7 @@ export function validateQuestion(raw: unknown): string[] {
     if (!cond) e.push(msg);
   };
   req(typeof q.id === 'string' && /^[a-z0-9-]+$/.test(q.id as string), 'id は英小文字・数字・ハイフンで書いてください');
-  req(GRADES.includes(q.grade as never), 'grade は 1〜8');
+  req(GRADES.includes(q.grade as never), 'grade は 8〜1（準2級は 2.5、準1級は 1.5）');
   req(FIELDS.includes(q.field as never), 'field は operation / information / safety');
   req(DEVICES.includes(q.device as string), 'device は all / pc / touch');
   req(TYPES.includes(q.type as string), 'type が不正です');

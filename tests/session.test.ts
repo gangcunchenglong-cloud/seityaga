@@ -12,6 +12,12 @@ describe('階段型の進行', () => {
   it('不合格ならそこで終了', () => {
     expect(nextStep(5, false, 5 * MIN, always)).toEqual({ kind: 'end', reason: 'failed' });
   });
+  it('準級をはさむ：3級→準2級→2級→準1級→1級', () => {
+    expect(nextStep(3, true, 5 * MIN, always)).toEqual({ kind: 'next', grade: 2.5 });
+    expect(nextStep(2.5, true, 5 * MIN, always)).toEqual({ kind: 'next', grade: 2 });
+    expect(nextStep(2, true, 5 * MIN, always)).toEqual({ kind: 'next', grade: 1.5 });
+    expect(nextStep(1.5, true, 5 * MIN, always)).toEqual({ kind: 'next', grade: 1 });
+  });
   it('1級に合格したら終了', () => {
     expect(nextStep(1, true, 5 * MIN, always)).toEqual({ kind: 'end', reason: 'completed' });
   });

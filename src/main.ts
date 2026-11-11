@@ -1,4 +1,5 @@
 import './styles.css';
+import './theme.css';
 import { deviceTarget, isYoungGrade } from './config';
 import { judgeGrade } from './logic/judge';
 import { defaultRng } from './logic/random';
@@ -8,6 +9,7 @@ import { isOverTime, nextStep } from './logic/session';
 import { BANK } from './questions';
 import type { Profile, Run } from './state';
 import type { Grade, Mode, QuestionResult } from './types';
+import type { LadderState } from './ui/layout';
 import { detectDevice } from './ui/device';
 import { createLayout, type Layout } from './ui/layout';
 import { finalScreen } from './ui/screens/final';
@@ -36,6 +38,17 @@ let run: Run | null = null;
 
 const elapsed = () => (run ? performance.now() - run.startMs : 0);
 
+/** 級のステッパーに今の状態を出す */
+function ladderState(current: Grade | null): LadderState | null {
+  if (!run) return null;
+  return {
+    startGrade: run.profile.startGrade,
+    passed: run.results.filter((r) => r.passed).map((r) => r.grade),
+    failed: run.results.filter((r) => !r.passed).map((r) => r.grade),
+    current,
+  };
+}
+
 /** 受験中にページを閉じようとしたら確認する（データは保存されないため） */
 function guardUnload(e: BeforeUnloadEvent) {
   e.preventDefault();
@@ -45,6 +58,7 @@ function guardUnload(e: BeforeUnloadEvent) {
 function showStart() {
   run = null;
   layout.setTimer(null);
+  layout.setLadder(null);
   window.removeEventListener('beforeunload', guardUnload);
   layout.show(startScreen(BANK, mode, detectDevice(), begin));
 }
@@ -72,6 +86,7 @@ function runGrade(grade: Grade) {
   questions.forEach((q) => r.usedIds.add(q.id));
   const results: QuestionResult[] = [];
   const gradeStart = performance.now();
+  layout.setLadder(ladderState(grade));
 
   const ask = (i: number) => {
     if (i >= questions.length) return finishGrade();
@@ -95,6 +110,7 @@ function runGrade(grade: Grade) {
     const sec = Math.round((performance.now() - gradeStart) / 1000);
     const gr = judgeGrade(grade, results, sec);
     r.results.push(gr);
+    layout.setLadder(ladderState(null));
     const step = nextStep(grade, gr.passed, elapsed(), (g) => missingFields(BANK, g, device, r.profile.mode).length === 0);
     layout.show(
       gradeResultScreen(gr, questions, step, isYoungGrade(grade), () => {

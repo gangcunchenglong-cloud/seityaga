@@ -12,7 +12,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { parseArgs } from 'node:util';
 import { validateQuestion } from '../src/logic/validate';
-import type { Question } from '../src/types';
+import { gradeKey, type Grade, type Question } from '../src/types';
 
 const { values, positionals } = parseArgs({
   allowPositionals: true,
@@ -24,9 +24,9 @@ if (positionals.length === 0) {
 }
 
 const dir = path.join('src', 'questions');
-const banks = new Map<number, Question[]>();
-const load = (g: number) => {
-  if (!banks.has(g)) banks.set(g, JSON.parse(fs.readFileSync(path.join(dir, `grade-${g}.json`), 'utf8')));
+const banks = new Map<Grade, Question[]>();
+const load = (g: Grade) => {
+  if (!banks.has(g)) banks.set(g, JSON.parse(fs.readFileSync(path.join(dir, `grade-${gradeKey(g)}.json`), 'utf8')));
   return banks.get(g)!;
 };
 
@@ -60,7 +60,7 @@ for (const file of positionals) {
 }
 
 for (const [g, bank] of banks) {
-  fs.writeFileSync(path.join(dir, `grade-${g}.json`), JSON.stringify(bank, null, 2) + '\n');
+  fs.writeFileSync(path.join(dir, `grade-${gradeKey(g)}.json`), JSON.stringify(bank, null, 2) + '\n');
 }
 console.log(`追加 ${added}問・置きかえ ${replaced}問・反映しなかった ${skipped}問`);
 console.log('npm test で問題バンク全体をチェックしてから、npm run build してください。');

@@ -1,8 +1,11 @@
 import '../styles.css';
+import '../theme.css';
 import './teacher.css';
 import { FIELD_LABELS } from '../config';
+import { gradeLabel } from '../types';
 import { BANK } from '../questions';
 import { h, clear } from '../ui/dom';
+import { brand } from '../ui/layout';
 import { plainText } from '../ui/text';
 import { downloadText } from '../ui/save';
 import { aggregate, difficultyLabel, mergedCsv, questionStats, type LoadedFile } from './aggregate';
@@ -29,7 +32,7 @@ root.append(
   h(
     'header',
     { class: 'app-header' },
-    h('div', { class: 'app-title' }, 'ICT活用能力テスト 先生用ツール'),
+    brand('ICT活用能力テスト 先生用ツール', 'ICT SKILL ASSESSMENT ／ TEACHER CONSOLE'),
   ),
   h(
     'main',
@@ -110,7 +113,7 @@ function render() {
 
   // 全員の一覧
   out.append(
-    h('h2', {}, '受験者の一覧'),
+    h('h2', { 'data-sec': 'STUDENTS' }, '受験者の一覧'),
     h('p', { class: 'small muted' }, '分野別の点数は、最後に受けた級（3問中）のものです。'),
     h(
       'div',
@@ -162,7 +165,7 @@ function render() {
   // 問題ごとの正答率
   const stats = questionStats(a.rows, trialBox.checked);
   out.append(
-    h('h2', {}, '問題ごとの正答率'),
+    h('h2', { 'data-sec': 'ITEM ANALYSIS' }, '問題ごとの正答率'),
     h(
       'p',
       { class: 'small' },
@@ -186,7 +189,7 @@ function render() {
               'tr',
               { class: label ? 'flag' : '' },
               h('td', { class: 'mono' }, s.id),
-              h('td', {}, q ? `${q.grade}級` : ''),
+              h('td', {}, q ? gradeLabel(q.grade) : ''),
               h('td', {}, q ? FIELD_LABELS[q.field] : ''),
               h('td', { class: 'qtext' }, q ? plainText(q.question) : '（この版の問題バンクにない問題）'),
               h('td', {}, s.attempts),

@@ -841,5 +841,425 @@
     "source": "ai",
     "reviewedBy": "",
     "reviewedAt": ""
+  },
+  {
+    "id": "g8-op-pc-09",
+    "grade": 8,
+    "field": "operation",
+    "device": "pc",
+    "type": "choice",
+    "question": "がめんの もじを うえや したに うごかして よむ ときに つかう マウスの ところは？",
+    "ruby": true,
+    "choices": [
+      "まんなかの ホイール（くるくる まわる ところ）",
+      "ひだりの ボタン",
+      "マウスの コード",
+      "マウスの うら"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "ホイールを まわすと、がめんが うえや したに うごきます（スクロール）。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g8-op-pc-10",
+    "grade": 8,
+    "field": "operation",
+    "device": "pc",
+    "type": "ui-task",
+    "question": "「おんがく」を ダブルクリックで ひらこう。",
+    "ruby": true,
+    "task": {
+      "kind": "open-item",
+      "action": "double-click",
+      "items": [
+        "🎵 おんがく",
+        "📷 カメラ",
+        "🎨 おえかき"
+      ],
+      "answer": 0
+    },
+    "explanation": "2かい つづけて すばやく おすと ひらきます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g8-op-pc-11",
+    "grade": 8,
+    "field": "operation",
+    "device": "pc",
+    "type": "ui-task",
+    "question": "「りんごの え」を「たべもの」の フォルダーへ ドラッグしよう。",
+    "ruby": true,
+    "task": {
+      "kind": "drag-to-folder",
+      "file": "🍎 りんごの え",
+      "folders": [
+        "📁 たべもの",
+        "📁 のりもの",
+        "📁 どうぶつ"
+      ],
+      "answer": 0
+    },
+    "explanation": "りんごは たべものです。なかまの フォルダーに いれます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g8-op-pc-12",
+    "grade": 8,
+    "field": "operation",
+    "device": "pc",
+    "type": "ui-task",
+    "question": "えを かきおわったよ。のこして おわりに したい。どの ボタンを おす？",
+    "ruby": true,
+    "task": {
+      "kind": "button",
+      "style": "dialog",
+      "title": "おえかき",
+      "message": "えを のこして おわりますか？",
+      "buttons": [
+        "はい",
+        "いいえ"
+      ],
+      "answer": 0
+    },
+    "explanation": "がめんの ことばを よく よんで えらびましょう。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g8-op-touch-09",
+    "grade": 8,
+    "field": "operation",
+    "device": "touch",
+    "type": "choice",
+    "question": "2ほんの ゆびで がめんを ひろげるように うごかすと、どう なる？",
+    "ruby": true,
+    "choices": [
+      "おおきく みえる",
+      "ちいさく みえる",
+      "がめんが きえる",
+      "おとが でる"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "ひろげると おおきく、せばめると ちいさく なります。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g8-op-touch-10",
+    "grade": 8,
+    "field": "operation",
+    "device": "touch",
+    "type": "ui-task",
+    "question": "「おんがく」を タップして ひらこう。",
+    "ruby": true,
+    "task": {
+      "kind": "open-item",
+      "action": "tap",
+      "items": [
+        "🎵 おんがく",
+        "📷 カメラ",
+        "🎨 おえかき"
+      ],
+      "answer": 0
+    },
+    "explanation": "アイコンを かるく 1かい タップします。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g8-op-touch-11",
+    "grade": 8,
+    "field": "operation",
+    "device": "touch",
+    "type": "ui-task",
+    "question": "「バスの しゃしん」を ゆびで「のりもの」の はこへ うごかそう。",
+    "ruby": true,
+    "task": {
+      "kind": "drag-to-folder",
+      "file": "🚌 バスの しゃしん",
+      "folders": [
+        "📁 のりもの",
+        "📁 たべもの",
+        "📁 どうぶつ"
+      ],
+      "answer": 0
+    },
+    "explanation": "ゆびを はなさずに うごかして、はこの うえで はなします。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g8-op-touch-12",
+    "grade": 8,
+    "field": "operation",
+    "device": "touch",
+    "type": "ui-task",
+    "question": "しゃしんを とりたい。どの ボタンを おす？",
+    "ruby": true,
+    "task": {
+      "kind": "button",
+      "style": "toolbar",
+      "title": "カメラ",
+      "message": "（カメラの がめん）",
+      "buttons": [
+        "⚪ シャッター",
+        "🔁 きりかえ",
+        "⚡ フラッシュ"
+      ],
+      "answer": 0
+    },
+    "explanation": "まるい シャッターボタンで しゃしんが とれます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g8-info-09",
+    "grade": 8,
+    "field": "information",
+    "device": "all",
+    "type": "choice",
+    "question": "すきな のりもの しらべ。でんしゃは なんにん？",
+    "ruby": true,
+    "figure": {
+      "kind": "bar",
+      "caption": "すきな のりもの（にん）",
+      "labels": [
+        "でんしゃ",
+        "バス",
+        "ひこうき"
+      ],
+      "values": [
+        7,
+        3,
+        5
+      ],
+      "unit": "にん"
+    },
+    "choices": [
+      "7にん",
+      "3にん",
+      "5にん",
+      "15にん"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "でんしゃの ぼうの うえの かずを よみます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g8-info-10",
+    "grade": 8,
+    "field": "information",
+    "device": "all",
+    "type": "choice",
+    "question": "あした あめが ふるか しりたい。なにを みると よい？",
+    "ruby": true,
+    "choices": [
+      "てんきよほう",
+      "じかんわり",
+      "えほん",
+      "カレンダー"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "てんきの ことは、てんきよほうで しらべます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g8-info-11",
+    "grade": 8,
+    "field": "information",
+    "device": "all",
+    "type": "match",
+    "question": "どうぐと、できる ことを むすぼう。",
+    "ruby": true,
+    "pairs": [
+      {
+        "left": "カメラ",
+        "right": "しゃしんを とる"
+      },
+      {
+        "left": "マイク",
+        "right": "こえを いれる"
+      },
+      {
+        "left": "スピーカー",
+        "right": "おとを だす"
+      }
+    ],
+    "explanation": "どうぐに よって できる ことが ちがいます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g8-info-12",
+    "grade": 8,
+    "field": "information",
+    "device": "all",
+    "type": "choice",
+    "question": "あさがおの はっぱの かず。いちばん おおい ひは？",
+    "ruby": true,
+    "figure": {
+      "kind": "table",
+      "caption": "あさがおの はっぱ",
+      "headers": [
+        "ひ",
+        "はっぱ"
+      ],
+      "rows": [
+        [
+          "げつ",
+          "4まい"
+        ],
+        [
+          "すい",
+          "6まい"
+        ],
+        [
+          "きん",
+          "9まい"
+        ]
+      ]
+    },
+    "choices": [
+      "きんようび",
+      "げつようび",
+      "すいようび",
+      "どの ひも おなじ"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "ひょうの かずを くらべると、きんようびが 9まいで いちばん おおいです。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g8-safety-09",
+    "grade": 8,
+    "field": "safety",
+    "device": "all",
+    "type": "choice",
+    "question": "しらない ひとから「なまえを おしえて」と メッセージが きたよ。どうする？",
+    "ruby": true,
+    "choices": [
+      "おしえないで おとなに いう",
+      "すぐ おしえる",
+      "あだなを おしえる",
+      "ともだちの なまえを おしえる"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "しらない ひとには なまえを おしえません。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g8-safety-10",
+    "grade": 8,
+    "field": "safety",
+    "device": "all",
+    "type": "choice",
+    "question": "タブレットを つかう ばしょ。よいのは どこ？",
+    "ruby": true,
+    "choices": [
+      "つくえの うえで すわって",
+      "あるきながら",
+      "おふろの なか",
+      "ねる ふとんの なか"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "すわって つかうと、けがや こしょうを ふせげます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g8-safety-11",
+    "grade": 8,
+    "field": "safety",
+    "device": "all",
+    "type": "multi",
+    "question": "インターネットで こまった ことが あったら、そうだん する ひとを ぜんぶ えらぼう。",
+    "ruby": true,
+    "choices": [
+      "おうちの ひと",
+      "せんせい",
+      "しらない ひと",
+      "ゲームで しりあった ひと"
+    ],
+    "answer": [
+      0,
+      1
+    ],
+    "explanation": "こまったら、みじかな おとなに そうだん しましょう。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g8-safety-12",
+    "grade": 8,
+    "field": "safety",
+    "device": "all",
+    "type": "choice",
+    "question": "ともだちが かいた えを、ともだちに きかずに じぶんの なまえで インターネットに だしても いい？",
+    "ruby": true,
+    "choices": [
+      "だめ",
+      "いい",
+      "すこし かえれば いい",
+      "ひみつに すれば いい"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "えは かいた ひとの ものです。かってに じぶんの ものに しては いけません。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
   }
 ]

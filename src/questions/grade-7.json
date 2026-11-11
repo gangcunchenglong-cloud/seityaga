@@ -780,5 +780,372 @@
     "source": "ai",
     "reviewedBy": "",
     "reviewedAt": ""
+  },
+  {
+    "id": "g7-op-pc-09",
+    "grade": 7,
+    "field": "operation",
+    "device": "pc",
+    "type": "input",
+    "question": "キーボードで「うさぎ」と にゅうりょく しよう。",
+    "ruby": true,
+    "target": "うさぎ",
+    "timeLimitSec": 75,
+    "explanation": "1もじずつ おちついて うちましょう。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g7-op-pc-10",
+    "grade": 7,
+    "field": "operation",
+    "device": "pc",
+    "type": "input",
+    "question": "キーボードで すうじの「2026」を にゅうりょく しよう。",
+    "ruby": true,
+    "target": "2026",
+    "timeLimitSec": 45,
+    "explanation": "すうじの キーは キーボードの うえの ほうや みぎがわに あります。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g7-op-pc-11",
+    "grade": 7,
+    "field": "operation",
+    "device": "pc",
+    "type": "choice",
+    "question": "がめんの ボタンを マウスで おす とき、ボタンに あわせるのは どこ？",
+    "ruby": true,
+    "choices": [
+      "やじるし（マウスポインター）の さき",
+      "マウスの おしり",
+      "キーボード",
+      "がめんの すみ"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "やじるしの さきを ボタンに あわせて クリックします。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g7-op-pc-12",
+    "grade": 7,
+    "field": "operation",
+    "device": "pc",
+    "type": "ui-task",
+    "question": "まちがえて「けす」を おしたら「ほんとうに けしますか？」と でた。けしたく ないよ。どれを おす？",
+    "ruby": true,
+    "task": {
+      "kind": "button",
+      "style": "dialog",
+      "title": "メモ",
+      "message": "ほんとうに けしますか？",
+      "buttons": [
+        "けす",
+        "やめる"
+      ],
+      "answer": 1
+    },
+    "explanation": "けしたく ない ときは「やめる」を おします。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g7-op-touch-09",
+    "grade": 7,
+    "field": "operation",
+    "device": "touch",
+    "type": "input",
+    "question": "がめんの キーボードで「うさぎ」と にゅうりょく しよう。",
+    "ruby": true,
+    "target": "うさぎ",
+    "timeLimitSec": 75,
+    "explanation": "「ぎ」は「き」に てんてんを つけます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g7-op-touch-10",
+    "grade": 7,
+    "field": "operation",
+    "device": "touch",
+    "type": "input",
+    "question": "がめんの キーボードで すうじの「2026」を にゅうりょく しよう。",
+    "ruby": true,
+    "target": "2026",
+    "timeLimitSec": 45,
+    "explanation": "すうじの キーに きりかえて うちます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g7-op-touch-11",
+    "grade": 7,
+    "field": "operation",
+    "device": "touch",
+    "type": "choice",
+    "question": "がめんの キーボードで、ひらがなと えいごを きりかえる キーは どれ？",
+    "ruby": true,
+    "choices": [
+      "🌐（きりかえ キー）",
+      "⌫（けす キー）",
+      "{改行|かいぎょう}",
+      "{空白|くうはく}"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "🌐の キーで キーボードを きりかえられます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g7-op-touch-12",
+    "grade": 7,
+    "field": "operation",
+    "device": "touch",
+    "type": "ui-task",
+    "question": "しゃしんを ながおし して、「きょうゆう」を えらぼう。",
+    "ruby": true,
+    "task": {
+      "kind": "context-menu",
+      "trigger": "long-press",
+      "target": "🖼 えんそくの しゃしん",
+      "menu": [
+        "コピー",
+        "きょうゆう",
+        "けす"
+      ],
+      "answer": 1
+    },
+    "explanation": "ながおし すると、できる ことの メニューが でます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g7-info-09",
+    "grade": 7,
+    "field": "information",
+    "device": "all",
+    "type": "choice",
+    "question": "がっこうで みつけた むし。いちばん おおいのは どれ？",
+    "ruby": true,
+    "figure": {
+      "kind": "bar",
+      "caption": "みつけた むし（ひき）",
+      "labels": [
+        "ちょう",
+        "あり",
+        "だんごむし"
+      ],
+      "values": [
+        4,
+        9,
+        6
+      ],
+      "unit": "ひき"
+    },
+    "choices": [
+      "あり",
+      "ちょう",
+      "だんごむし",
+      "どれも おなじ"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "ぼうが いちばん たかいのは ありです。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g7-info-10",
+    "grade": 7,
+    "field": "information",
+    "device": "all",
+    "type": "choice",
+    "question": "インターネットで きょうりゅうの しゃしんを さがしたい。なんと いれる？",
+    "ruby": true,
+    "choices": [
+      "きょうりゅう",
+      "おおきい",
+      "むかし",
+      "どうぶつ"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "さがしたい ものの なまえを いれます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g7-info-11",
+    "grade": 7,
+    "field": "information",
+    "device": "all",
+    "type": "order",
+    "question": "かいた カードを はっぴょう する じゅんばんに ならべよう。",
+    "ruby": true,
+    "choices": [
+      "なにを いうか きめる",
+      "れんしゅう する",
+      "みんなの まえで はなす"
+    ],
+    "answer": [
+      0,
+      1,
+      2
+    ],
+    "explanation": "じゅんびを してから はっぴょう します。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g7-info-12",
+    "grade": 7,
+    "field": "information",
+    "device": "all",
+    "type": "match",
+    "question": "マークと いみを むすぼう。",
+    "ruby": true,
+    "pairs": [
+      {
+        "left": "🔊",
+        "right": "おとが でる"
+      },
+      {
+        "left": "🔍",
+        "right": "さがす（けんさく）"
+      },
+      {
+        "left": "🗑",
+        "right": "けす"
+      }
+    ],
+    "explanation": "マークの いみを しって いると、がめんが よみやすく なります。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g7-safety-09",
+    "grade": 7,
+    "field": "safety",
+    "device": "all",
+    "type": "choice",
+    "question": "ゲームで「タダで コインを あげる」と でてきた。どうする？",
+    "ruby": true,
+    "choices": [
+      "おさないで おとなに きく",
+      "すぐ おす",
+      "ともだちに おしえる",
+      "なんども おす"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "「タダ」と いって だます ことが あります。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g7-safety-10",
+    "grade": 7,
+    "field": "safety",
+    "device": "all",
+    "type": "choice",
+    "question": "ともだちに おくる メッセージ。よいのは どれ？",
+    "ruby": true,
+    "choices": [
+      "「あしたも いっしょに あそぼうね」",
+      "「きみは へただね」",
+      "「みんなで なかまはずれに しよう」",
+      "「へんじ しないと おこるよ」"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "うけとった ひとの きもちを かんがえて かきます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g7-safety-11",
+    "grade": 7,
+    "field": "safety",
+    "device": "all",
+    "type": "multi",
+    "question": "インターネットに だしては いけない ものを ぜんぶ えらぼう。",
+    "ruby": true,
+    "choices": [
+      "じぶんの いえの しゃしん",
+      "がっこうの なまえ",
+      "すきな どうぶつの なまえ",
+      "でんわばんごう"
+    ],
+    "answer": [
+      0,
+      1,
+      3
+    ],
+    "explanation": "すんで いる ばしょや じぶんが わかる ことは だしません。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g7-safety-12",
+    "grade": 7,
+    "field": "safety",
+    "device": "all",
+    "type": "choice",
+    "question": "タブレットで しらない ページが ひらいて、おとが なりだした。どうする？",
+    "ruby": true,
+    "choices": [
+      "おとなに しらせる",
+      "がめんを たたく",
+      "タブレットを かくす",
+      "そのまま つかう"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "こまった ときは すぐに おとなに しらせます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
   }
 ]

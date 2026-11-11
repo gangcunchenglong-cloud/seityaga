@@ -2,6 +2,7 @@
  * 問題の候補を Claude API で生成する（開発者用）。
  *
  *   npm run generate -- --grade 5 --field safety --type choice --count 5
+ *   npm run generate -- --grade 準2 --field information --type multi --count 5   （準2級・準1級は「準2」「準1」）
  *   npm run generate -- --grade 4 --field operation --device touch --type ui-task --count 3
  *   npm run generate -- --grade 3 --field information --type match --dry-run   （APIを呼ばずにプロンプトを表示）
  *
@@ -18,7 +19,7 @@ import { z } from 'zod';
 import { FIELD_LABELS, GRADE_GUIDE } from '../src/config';
 import { validateQuestion } from '../src/logic/validate';
 import { BANK } from '../src/questions';
-import type { DeviceTarget, Field, Grade, Question, QuestionType } from '../src/types';
+import { gradeKey, gradeLabel, parseGradeCode, type DeviceTarget, type Field, type Grade, type Question, type QuestionType } from '../src/types';
 
 const MODEL_DEFAULT = 'claude-opus-5-5';
 
@@ -39,7 +40,7 @@ const { values: args } = parseArgs({
 function usage(msg?: string): never {
   if (msg) console.error(`エラー: ${msg}\n`);
   console.error(`使い方:
-  npm run generate -- --grade <1-8> --field <operation|information|safety> --type <形式> [--count 5] [--device pc|touch] [--dry-run]
+  npm run generate -- --grade <8〜1、準2、準1> --field <operation|information|safety> --type <形式> [--count 5] [--device pc|touch] [--dry-run]
 
   形式: choice / multi / order / match / input / ui-task
   基本操作（operation）では --device pc か --device touch が必要です。
@@ -48,11 +49,11 @@ function usage(msg?: string): never {
 }
 
 if (args.help) usage();
-const grade = Number(args.grade) as Grade;
+const grade = parseGradeCode(String(args.grade ?? '')) as Grade;
 const field = args.field as Field;
 const qtype = args.type as QuestionType;
 const count = Number(args.count);
-if (!(grade >= 1 && grade <= 8 && Number.isInteger(grade))) usage('--grade は 1〜8');
+if (grade === null) usage('--grade は 8〜1、または 準2・準1');
 if (!['operation', 'information', 'safety'].includes(field)) usage('--field が不正です');
 if (!['choice', 'multi', 'order', 'match', 'input', 'ui-task'].includes(qtype)) usage('--type が不正です');
 if (!(count >= 1 && count <= 20)) usage('--count は 1〜20');
@@ -71,10 +72,12 @@ const GRADE_DETAIL: Record<Grade, string> = {
   5: 'コピー＆ペースト、著作権の入口、写真の扱い',
   4: '情報の比べ方、表やスライドの基本、SNSの危険',
   3: '複数の情報源の比較、グラフの読み取り、個人情報の範囲',
+  2.5: '検索結果の見きわめ（広告と記事の区別、発信者・日付の確認）、ネット上のトラブル（課金・契約・炎上）、ファイル共有の基本',
   2: 'ネット情報の真偽、セキュリティの基本、生成AIの使い方',
+  1.5: '情報Ⅰ程度：データの活用（代表値・表計算の関数）、情報セキュリティのしくみ、著作権の例外と引用、生成AIの適切な利用',
   1: '出典の確認、フィッシング詐欺の見分け方、AIの出力の批判的な読み方',
 };
-const MEXT_STEP: Record<Grade, string> = { 8: '1', 7: '1', 6: '2', 5: '2', 4: '3', 3: '3', 2: '4', 1: '5' };
+const MEXT_STEP: Record<Grade, string> = { 8: '1', 7: '1', 6: '2', 5: '2', 4: '3', 3: '3', 2.5: '4', 2: '4', 1.5: '5', 1: '5' };
 
 const FIELD_DETAIL: Record<Field, string> = {
   operation: 'タップ・ドラッグ、文字入力、コピー＆ペースト、ファイルの保存、画面の読み取り',
@@ -164,7 +167,7 @@ const system = `あなたは日本の学校で使う「ICT活用能力テスト�
 
 const prompt = `次の条件で、テストの問題を ${count} 問作ってください。
 
-- 級：${grade}級（対象：${GRADE_GUIDE[grade]}。文部科学省「情報活用能力の体系表例」のステップ${MEXT_STEP[grade]}程度）
+- 級：${gradeLabel(grade)}（対象：${GRADE_GUIDE[grade]}。文部科学省「情報活用能力の体系表例」のステップ${MEXT_STEP[grade]}程度）
 - この級の内容のイメージ：${GRADE_DETAIL[grade]}
 - 分野：${FIELD_LABELS[field]}（${FIELD_DETAIL[field]}）
 - 端末：${DEVICE_DETAIL[device]}
@@ -185,7 +188,7 @@ if (!process.env.ANTHROPIC_API_KEY) {
 }
 
 const client = new Anthropic();
-console.log(`${grade}級・${FIELD_LABELS[field]}・${qtype}${field === 'operation' ? `（${device}）` : ''} を ${count} 問生成しています…`);
+console.log(`${gradeLabel(grade)}・${FIELD_LABELS[field]}・${qtype}${field === 'operation' ? `（${device}）` : ''} を ${count} 問生成しています…`);
 
 let response;
 try {
@@ -230,7 +233,7 @@ const ok: Question[] = [];
 parsed.questions.forEach((item, i) => {
   const { figure, ...rest } = item as typeof item & { figure: unknown };
   const q = {
-    id: `g${grade}-${f}${dev}-ai${stamp.toLowerCase()}-${String(i + 1).padStart(2, '0')}`,
+    id: `g${gradeKey(grade)}-${f}${dev}-ai${stamp.toLowerCase()}-${String(i + 1).padStart(2, '0')}`,
     grade,
     field,
     device,
@@ -257,7 +260,7 @@ if (ok.length === 0) {
 }
 const outDir = path.join('questions', 'drafts');
 fs.mkdirSync(outDir, { recursive: true });
-const outFile = path.join(outDir, `grade-${grade}-${field}${dev}-${qtype}-${stamp}.json`);
+const outFile = path.join(outDir, `grade-${gradeKey(grade)}-${field}${dev}-${qtype}-${stamp}.json`);
 fs.writeFileSync(outFile, JSON.stringify(ok, null, 2) + '\n');
 console.log(`✓ ${ok.length}問を ${outFile} に保存しました（status: draft）。`);
 console.log('  次は npm run dev → http://localhost:5173/scripts/review.html で確認してください。');

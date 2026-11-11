@@ -61,6 +61,10 @@ describe('最高合格級', () => {
     expect(highestPassed([])).toBeNull();
     expect(highestPassed([r(5, false)])).toBeNull();
   });
+  it('準級もふくめて、いちばん上の級を返す', () => {
+    expect(highestPassed([r(3, true), r(2.5, true), r(2, false)])).toBe(2.5);
+    expect(highestPassed([r(2, true), r(1.5, true), r(1, false)])).toBe(1.5);
+  });
   it('いちばん上の級（数字が小さい）を返す', () => {
     expect(highestPassed([r(6, true), r(5, true), r(4, false)])).toBe(5);
   });

@@ -821,5 +821,408 @@
     "source": "ai",
     "reviewedBy": "",
     "reviewedAt": ""
+  },
+  {
+    "id": "g4-op-pc-09",
+    "grade": 4,
+    "field": "operation",
+    "device": "pc",
+    "type": "ui-task",
+    "question": "選んだ文字をななめ（斜体）にするショートカットキーをおそう。",
+    "ruby": false,
+    "task": {
+      "kind": "shortcut",
+      "key": "i",
+      "ctrl": true,
+      "shift": false,
+      "context": "（選んだ文字：Science）"
+    },
+    "explanation": "Ctrl + I で斜体になります。I は Italic の頭文字です。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g4-op-pc-10",
+    "grade": 4,
+    "field": "operation",
+    "device": "pc",
+    "type": "choice",
+    "question": "表計算ソフトで、1, 2, 3 … と続く番号を下へ入力したい。便利な方法は？",
+    "ruby": false,
+    "choices": [
+      "1と2を入力して選び、右下の角を下へドラッグする（オートフィル）",
+      "1つずつ全部手で入力する",
+      "Enter を何回もおす",
+      "セルを削除する"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "オートフィルを使うと、続きの数を自動で入力できます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g4-op-pc-11",
+    "grade": 4,
+    "field": "operation",
+    "device": "pc",
+    "type": "ui-task",
+    "question": "「委員会_お知らせ」を正しいフォルダーへドラッグしよう。",
+    "ruby": false,
+    "task": {
+      "kind": "drag-to-folder",
+      "file": "📄 委員会_お知らせ",
+      "folders": [
+        "📁 委員会",
+        "📁 クラブ",
+        "📁 学習"
+      ],
+      "answer": 0
+    },
+    "explanation": "ファイル名を見て、合うフォルダーに整理します。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g4-op-pc-12",
+    "grade": 4,
+    "field": "operation",
+    "device": "pc",
+    "type": "input",
+    "question": "「Green Project」と入力しよう（大文字・小文字・スペースも同じに）。",
+    "ruby": false,
+    "target": "Green Project",
+    "timeLimitSec": 40,
+    "explanation": "単語と単語の間にスペースを入れます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g4-op-touch-07",
+    "grade": 4,
+    "field": "operation",
+    "device": "touch",
+    "type": "input",
+    "question": "「Green Project」と入力しよう（大文字・小文字・スペースも同じに）。",
+    "ruby": false,
+    "target": "Green Project",
+    "timeLimitSec": 55,
+    "explanation": "大文字は ⇧ キーをおしてから入力します。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g4-op-touch-08",
+    "grade": 4,
+    "field": "operation",
+    "device": "touch",
+    "type": "ui-task",
+    "question": "スライドの写真を長おしして、写真を削除しよう。",
+    "ruby": false,
+    "task": {
+      "kind": "context-menu",
+      "trigger": "long-press",
+      "target": "🖼 スライドの写真",
+      "menu": [
+        "切り取り",
+        "コピー",
+        "削除",
+        "複製"
+      ],
+      "answer": 2
+    },
+    "explanation": "長おしのメニューから削除できます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g4-op-touch-09",
+    "grade": 4,
+    "field": "operation",
+    "device": "touch",
+    "type": "choice",
+    "question": "タブレットで、文字を入力する位置（カーソル）を動かしたい。どうする？",
+    "ruby": false,
+    "choices": [
+      "動かしたい場所をタップする",
+      "本体をふる",
+      "電源ボタンをおす",
+      "音量ボタンをおす"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "タップした場所にカーソルが動きます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g4-op-touch-10",
+    "grade": 4,
+    "field": "operation",
+    "device": "touch",
+    "type": "ui-task",
+    "question": "「委員会_お知らせ」を指で正しいフォルダーへドラッグしよう。",
+    "ruby": false,
+    "task": {
+      "kind": "drag-to-folder",
+      "file": "📄 委員会_お知らせ",
+      "folders": [
+        "📁 委員会",
+        "📁 クラブ",
+        "📁 学習"
+      ],
+      "answer": 0
+    },
+    "explanation": "指をはなさずに動かします。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g4-info-09",
+    "grade": 4,
+    "field": "information",
+    "device": "all",
+    "type": "choice",
+    "question": "2つの商品の値段です。100gあたりが安いのはどちら？",
+    "ruby": false,
+    "figure": {
+      "kind": "table",
+      "caption": "商品の値段",
+      "headers": [
+        "商品",
+        "量",
+        "値段"
+      ],
+      "rows": [
+        [
+          "A",
+          "200g",
+          "300円"
+        ],
+        [
+          "B",
+          "300g",
+          "420円"
+        ]
+      ]
+    },
+    "choices": [
+      "Bの商品（100gあたり140円）",
+      "Aの商品（100gあたり150円）",
+      "どちらも同じ",
+      "比べられない"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "A：300÷2＝150円、B：420÷3＝140円です。量をそろえて比べます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g4-info-10",
+    "grade": 4,
+    "field": "information",
+    "device": "all",
+    "type": "choice",
+    "question": "2つのグラフを比べるとき、まず確かめることは？",
+    "ruby": false,
+    "choices": [
+      "目もりや単位が同じかどうか",
+      "グラフの色",
+      "グラフの大きさ",
+      "題名の文字の大きさ"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "目もりや単位がちがうと、見た目だけでは比べられません。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g4-info-11",
+    "grade": 4,
+    "field": "information",
+    "device": "all",
+    "type": "choice",
+    "question": "ある町の雨の量のグラフです。いちばん多いのは何月？",
+    "ruby": false,
+    "figure": {
+      "kind": "line",
+      "caption": "雨の量（mm）",
+      "labels": [
+        "4月",
+        "5月",
+        "6月",
+        "7月",
+        "8月"
+      ],
+      "values": [
+        120,
+        140,
+        210,
+        180,
+        110
+      ],
+      "unit": "mm"
+    },
+    "choices": [
+      "6月",
+      "7月",
+      "5月",
+      "8月"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "折れ線がいちばん高いのは6月（210mm）です。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g4-info-12",
+    "grade": 4,
+    "field": "information",
+    "device": "all",
+    "type": "match",
+    "question": "伝えたいことと、分かりやすいグラフを組み合わせよう。",
+    "ruby": false,
+    "pairs": [
+      {
+        "left": "数の大きさを比べる",
+        "right": "棒グラフ"
+      },
+      {
+        "left": "変化のようすを表す",
+        "right": "折れ線グラフ"
+      },
+      {
+        "left": "全体の中の割合を表す",
+        "right": "円グラフ"
+      }
+    ],
+    "explanation": "目的に合ったグラフを選ぶと伝わりやすくなります。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g4-safety-09",
+    "grade": 4,
+    "field": "safety",
+    "device": "all",
+    "type": "choice",
+    "question": "SNSにのせた写真は、消したら完全になくなる？",
+    "ruby": false,
+    "choices": [
+      "だれかに保存されていれば残ってしまうことがある",
+      "必ず完全に消える",
+      "消すと持ち主にもどる",
+      "1日たつと自動で消える"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "一度公開すると、完全に消すことはむずかしいです。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g4-safety-10",
+    "grade": 4,
+    "field": "safety",
+    "device": "all",
+    "type": "multi",
+    "question": "グループのメッセージでのマナーとして正しいものを全部えらぼう。",
+    "ruby": false,
+    "choices": [
+      "夜おそくの送信はひかえる",
+      "全員に関係ないことは個別に送る",
+      "既読がついたらすぐ返事をさせる",
+      "一人を話題からはずす"
+    ],
+    "answer": [
+      0,
+      1
+    ],
+    "explanation": "相手の都合や気持ちを考えてやりとりします。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g4-safety-11",
+    "grade": 4,
+    "field": "safety",
+    "device": "all",
+    "type": "choice",
+    "question": "ゲームのチャットで、悪口を言う人がいた。よい行動は？",
+    "ruby": false,
+    "choices": [
+      "相手にせず、ブロックや通報をして大人に相談する",
+      "悪口を言い返す",
+      "もっとひどい悪口を書く",
+      "自分の名前を教えて話し合う"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "言い返さず、しくみを使って自分を守りましょう。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g4-safety-12",
+    "grade": 4,
+    "field": "safety",
+    "device": "all",
+    "type": "choice",
+    "question": "知らない人から「プレゼントをあげるから住所を教えて」とメッセージがきた。どうする？",
+    "ruby": false,
+    "choices": [
+      "教えずに、家の人に相談する",
+      "住所だけ教える",
+      "学校の住所を教える",
+      "友だちの住所を教える"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "住所を知られると、危ない目にあうおそれがあります。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
   }
 ]

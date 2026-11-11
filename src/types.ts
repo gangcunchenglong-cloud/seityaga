@@ -2,9 +2,42 @@
 export type Field = 'operation' | 'information' | 'safety';
 export const FIELDS: readonly Field[] = ['operation', 'information', 'safety'];
 
-/** 級（8級がいちばんやさしく、1級がいちばん難しい） */
-export type Grade = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
-export const GRADES: readonly Grade[] = [8, 7, 6, 5, 4, 3, 2, 1];
+/**
+ * 級（8級がいちばんやさしく、1級がいちばん難しい）。
+ * 準2級は 2.5、準1級は 1.5 で表す（数が小さいほど上の級）。
+ */
+export type Grade = 1 | 1.5 | 2 | 2.5 | 3 | 4 | 5 | 6 | 7 | 8;
+/** 受験の順番（やさしい級から） */
+export const GRADES: readonly Grade[] = [8, 7, 6, 5, 4, 3, 2.5, 2, 1.5, 1];
+
+/** 画面に出す級の名前：5 → 「5級」、2.5 → 「準2級」 */
+export function gradeLabel(g: Grade): string {
+  return `${gradeCode(g)}級`;
+}
+
+/** CSV に書く級の表記：5 → 「5」、2.5 → 「準2」 */
+export function gradeCode(g: Grade): string {
+  return Number.isInteger(g) ? String(g) : `準${Math.floor(g)}`;
+}
+
+/** CSV の表記から級に戻す（読めなければ null） */
+export function parseGradeCode(s: string): Grade | null {
+  const t = s.trim().replace(/級$/, '');
+  const m = t.match(/^準\s*([12])$/);
+  const g = m ? Number(m[1]) + 0.5 : Number(t);
+  return GRADES.includes(g as Grade) ? (g as Grade) : null;
+}
+
+/** 問題IDやファイル名に使う表記：5 → 「5」、2.5 → 「p2」（p は pre＝準） */
+export function gradeKey(g: Grade): string {
+  return Number.isInteger(g) ? String(g) : `p${Math.floor(g)}`;
+}
+
+/** 次に受ける級（1級の次はない） */
+export function nextGrade(g: Grade): Grade | null {
+  const i = GRADES.indexOf(g);
+  return i >= 0 && i < GRADES.length - 1 ? GRADES[i + 1] : null;
+}
 
 /** 問題の対象端末 */
 export type DeviceTarget = 'all' | 'pc' | 'touch';

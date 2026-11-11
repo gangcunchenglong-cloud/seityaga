@@ -812,5 +812,397 @@
     "source": "ai",
     "reviewedBy": "",
     "reviewedAt": ""
+  },
+  {
+    "id": "g1-op-pc-09",
+    "grade": 1,
+    "field": "operation",
+    "device": "pc",
+    "type": "choice",
+    "question": "表計算で「=SUMIF(A2:A100,\"東京\",C2:C100)」はどういう意味？",
+    "ruby": false,
+    "choices": [
+      "A列が「東京」の行の、C列の値を合計する",
+      "A列とC列をすべて合計する",
+      "「東京」の文字数を数える",
+      "C列が「東京」の行の数を数える"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "SUMIF は、条件に合う行の値だけを合計します。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g1-op-pc-10",
+    "grade": 1,
+    "field": "operation",
+    "device": "pc",
+    "type": "choice",
+    "question": "ピボットテーブルを使うと何ができる？",
+    "ruby": false,
+    "choices": [
+      "大量のデータを、項目ごとに集計・分析できる",
+      "セルの色を変える",
+      "文字を翻訳する",
+      "ファイルを圧縮する"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "行や列の項目を入れかえて、さまざまな角度から集計できます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g1-op-pc-11",
+    "grade": 1,
+    "field": "operation",
+    "device": "pc",
+    "type": "ui-task",
+    "question": "報告書をPDFで保存するために、印刷の画面を開くショートカットキーをおそう。",
+    "ruby": false,
+    "task": {
+      "kind": "shortcut",
+      "key": "p",
+      "ctrl": true,
+      "shift": false,
+      "context": "（校外向けの報告書）"
+    },
+    "explanation": "印刷の画面で「PDFに保存」を選ぶ方法もあります。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g1-op-pc-12",
+    "grade": 1,
+    "field": "operation",
+    "device": "pc",
+    "type": "ui-task",
+    "question": "校外の人にファイルを見せたいが、書きかえはされたくない。右クリックのメニューから選ぼう。",
+    "ruby": false,
+    "task": {
+      "kind": "context-menu",
+      "trigger": "right-click",
+      "target": "📄 校外向け_報告書",
+      "menu": [
+        "開く",
+        "共有（閲覧者として）",
+        "共有（編集者として）",
+        "削除"
+      ],
+      "answer": 1
+    },
+    "explanation": "共有するときは、必要最小限の権限にします。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g1-op-touch-09",
+    "grade": 1,
+    "field": "operation",
+    "device": "touch",
+    "type": "input",
+    "question": "ファイル名「R8-0715_meeting-notes.pdf」を正確に入力しよう。",
+    "ruby": false,
+    "target": "R8-0715_meeting-notes.pdf",
+    "timeLimitSec": 55,
+    "explanation": "記号と大文字・小文字を区別して入力します。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g1-op-touch-10",
+    "grade": 1,
+    "field": "operation",
+    "device": "touch",
+    "type": "choice",
+    "question": "「パスキー」について、正しい説明はどれ？",
+    "ruby": false,
+    "choices": [
+      "パスワードの代わりに、端末の生体認証や画面ロックを使ってログインするしくみ",
+      "パスワードを紙に書いて保管する方法",
+      "Wi-Fiのパスワードのこと",
+      "画面ロックを使わない設定"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "パスキーは、フィッシングに強いログイン方法として広がっています。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g1-op-touch-11",
+    "grade": 1,
+    "field": "operation",
+    "device": "touch",
+    "type": "ui-task",
+    "question": "SMSのリンクを開いたら「提供元不明のアプリのインストールを許可しますか」と出た。どれをおす？",
+    "ruby": false,
+    "task": {
+      "kind": "button",
+      "style": "dialog",
+      "title": "アプリのインストール",
+      "message": "提供元不明のアプリのインストールを許可しますか？",
+      "buttons": [
+        "許可",
+        "許可しない"
+      ],
+      "answer": 1
+    },
+    "explanation": "アプリは公式のストアから入れます。不明なアプリはマルウェアのおそれがあります。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g1-op-touch-12",
+    "grade": 1,
+    "field": "operation",
+    "device": "touch",
+    "type": "choice",
+    "question": "スマホをなくしたときに備えて、あらかじめしておくとよいことは？",
+    "ruby": false,
+    "choices": [
+      "端末を探す機能と画面ロックを設定しておく",
+      "画面ロックを解除しておく",
+      "パスワードをメモアプリに書いておく",
+      "バックアップをとらないでおく"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "画面ロックと探す機能があれば、情報を守りやすくなります。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g1-info-09",
+    "grade": 1,
+    "field": "information",
+    "device": "all",
+    "type": "choice",
+    "question": "グラフの「誤解をまねく表現」にあたるのはどれ？",
+    "ruby": false,
+    "choices": [
+      "たて軸の途中を省略して、差を大きく見せる",
+      "単位を書く",
+      "出典を書く",
+      "目もりを等間隔にする"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "グラフを見るときは、目もりや軸の始まりを確かめます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g1-info-10",
+    "grade": 1,
+    "field": "information",
+    "device": "all",
+    "type": "choice",
+    "question": "「平均年収600万円」という調査結果が、多くの人の実感とずれている。考えられる理由は？",
+    "ruby": false,
+    "choices": [
+      "一部の高い収入の人が、平均値を押し上げている",
+      "平均値は必ず実感と一致する",
+      "調査した人数が多すぎる",
+      "年収は平均で表せない"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "分布にかたよりがあるときは、中央値も確かめます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g1-info-11",
+    "grade": 1,
+    "field": "information",
+    "device": "all",
+    "type": "multi",
+    "question": "ファクトチェック（事実確認）の方法として適切なものを全部えらぼう。",
+    "ruby": false,
+    "choices": [
+      "発信元や一次情報をたどる",
+      "複数の信頼できる情報源で確かめる",
+      "画像検索で写真が最初に出た場所を探す",
+      "拡散された数で真偽を決める"
+    ],
+    "answer": [
+      0,
+      1,
+      2
+    ],
+    "explanation": "拡散の多さは、正しさとは関係がありません。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g1-info-12",
+    "grade": 1,
+    "field": "information",
+    "device": "all",
+    "type": "choice",
+    "question": "2つの方法の結果（架空のデータ）です。読み取りとして最も適切なのはどれ？",
+    "ruby": false,
+    "figure": {
+      "kind": "table",
+      "caption": "結果（架空のデータ）",
+      "headers": [
+        "方法",
+        "対象",
+        "改善",
+        "改善率"
+      ],
+      "rows": [
+        [
+          "A法",
+          "200人",
+          "150人",
+          "75%"
+        ],
+        [
+          "B法",
+          "50人",
+          "40人",
+          "80%"
+        ]
+      ]
+    },
+    "choices": [
+      "B法の改善率は高いが、対象人数が少ないため慎重に判断する",
+      "B法が確実に優れている",
+      "A法が確実に優れている",
+      "改善した人数が多いA法が優れている"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "割合だけでなく、対象の人数も見て判断します。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g1-safety-09",
+    "grade": 1,
+    "field": "safety",
+    "device": "all",
+    "type": "choice",
+    "question": "組織で個人情報の漏えいが分かった。最初にとるべき対応は？",
+    "ruby": false,
+    "choices": [
+      "被害が広がらないようにし、責任者に報告して決められた手順に従う",
+      "かくして様子を見る",
+      "自分の判断でSNSに投稿する",
+      "証拠になるデータを自分で消す"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "早い報告と、決められた手順での対応が大切です。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g1-safety-10",
+    "grade": 1,
+    "field": "safety",
+    "device": "all",
+    "type": "choice",
+    "question": "ソーシャルエンジニアリングの例はどれ？",
+    "ruby": false,
+    "choices": [
+      "電話で管理者を名乗り、パスワードを聞き出す",
+      "ウイルス対策ソフトを更新する",
+      "パスワードを長くする",
+      "二段階認証を使う"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "人の油断や信頼につけこむ手口です。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g1-safety-11",
+    "grade": 1,
+    "field": "safety",
+    "device": "all",
+    "type": "multi",
+    "question": "生成AIの出力をそのまま公開すると起こりうる問題を全部えらぼう。",
+    "ruby": false,
+    "choices": [
+      "事実とちがう内容を広めてしまう",
+      "既存の作品に似ていて、権利を侵害する",
+      "人を傷つける表現がふくまれる",
+      "必ずだれかの役に立つ"
+    ],
+    "answer": [
+      0,
+      1,
+      2
+    ],
+    "explanation": "公開する前に、内容と権利を確かめます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g1-safety-12",
+    "grade": 1,
+    "field": "safety",
+    "device": "all",
+    "type": "choice",
+    "question": "パスワードの管理方法として、最も適切なのはどれ？",
+    "ruby": false,
+    "choices": [
+      "パスワード管理アプリを使い、サービスごとに強いパスワードを使う",
+      "すべて同じパスワードにして覚えやすくする",
+      "付せんに書いて画面にはる",
+      "メモアプリにそのまま書いておく"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "使い回しをさけ、安全な方法で管理します。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
   }
 ]

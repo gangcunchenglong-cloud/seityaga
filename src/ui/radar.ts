@@ -5,7 +5,7 @@ import { s } from './dom';
 /** 3分野の正答率のレーダーチャート（SVG で自作。外部ライブラリなし） */
 export function radarChart(scores: FieldScores, max: number = RULES.questionsPerField): SVGSVGElement {
   const W = 360;
-  const H = 320;
+  const H = 280;
   const cx = W / 2;
   const cy = 170;
   const R = 110;

@@ -1,5 +1,5 @@
 import { RULES } from '../config';
-import type { EndReason, Grade } from '../types';
+import { nextGrade, type EndReason, type Grade } from '../types';
 
 export type NextStep = { kind: 'next'; grade: Grade } | { kind: 'end'; reason: EndReason };
 
@@ -19,9 +19,9 @@ export function nextStep(
   limitMs: number = RULES.timeLimitMs,
 ): NextStep {
   if (!passed) return { kind: 'end', reason: 'failed' };
-  if (grade === 1) return { kind: 'end', reason: 'completed' };
+  const next = nextGrade(grade);
+  if (next === null) return { kind: 'end', reason: 'completed' };
   if (elapsedMs >= limitMs) return { kind: 'end', reason: 'timeout' };
-  const next = (grade - 1) as Grade;
   if (!hasQuestions(next)) return { kind: 'end', reason: 'no-questions' };
   return { kind: 'next', grade: next };
 }

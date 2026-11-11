@@ -1,3 +1,4 @@
+import { parseGradeCode } from '../types';
 import { CSV_COLUMNS, csvToRecords, toCsv, verifyRecord, type CsvRecord } from '../logic/csv';
 
 export interface LoadedFile {
@@ -45,6 +46,8 @@ export interface Aggregate {
 }
 
 const num = (s: string) => (Number.isFinite(Number(s)) ? Number(s) : Number.MAX_SAFE_INTEGER);
+/** 級の表記（"5"・"準2"）を数に（読めなければいちばん下） */
+const gnum = (s: string) => parseGradeCode(s) ?? Number.MAX_SAFE_INTEGER;
 
 /** クラス → 出席番号 → 開始日時 の順に並べる */
 function compareStudent(a: { class: string; number: string; startedAt: string }, b: typeof a): number {
@@ -83,7 +86,7 @@ export function aggregate(files: readonly LoadedFile[]): Aggregate {
   }
   const students: StudentSummary[] = [...byFile.values()].map((rs) => {
     // 最後に受けた級 = 数字がいちばん小さい級
-    const last = rs.reduce((a, b) => (num(b.grade) < num(a.grade) ? b : a));
+    const last = rs.reduce((a, b) => (gnum(b.grade) < gnum(a.grade) ? b : a));
     return {
       fileName: last.fileName,
       class: last.class,
@@ -103,7 +106,7 @@ export function aggregate(files: readonly LoadedFile[]): Aggregate {
     };
   });
   students.sort(compareStudent);
-  rows.sort((a, b) => compareStudent(a, b) || num(b.grade) - num(a.grade));
+  rows.sort((a, b) => compareStudent(a, b) || gnum(b.grade) - gnum(a.grade));
   return { rows, students, errors };
 }
 

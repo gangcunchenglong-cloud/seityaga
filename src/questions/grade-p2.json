@@ -1,0 +1,1165 @@
+[
+  {
+    "id": "gp2-op-pc-01",
+    "grade": 2.5,
+    "field": "operation",
+    "device": "pc",
+    "type": "ui-task",
+    "question": "直前の操作を元にもどすショートカットキーをおそう。",
+    "ruby": false,
+    "task": {
+      "kind": "shortcut",
+      "key": "z",
+      "ctrl": true,
+      "shift": false,
+      "context": "（まちがえて消した文章）"
+    },
+    "explanation": "Ctrl + Z で、直前の操作を取り消せます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "gp2-op-pc-02",
+    "grade": 2.5,
+    "field": "operation",
+    "device": "pc",
+    "type": "ui-task",
+    "question": "Webページの中で「温暖化」という言葉を探すショートカットキーをおそう。",
+    "ruby": false,
+    "task": {
+      "kind": "shortcut",
+      "key": "f",
+      "ctrl": true,
+      "shift": false,
+      "context": "（長いWebページ）"
+    },
+    "explanation": "Ctrl + F でページ内を検索できます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "gp2-op-pc-03",
+    "grade": 2.5,
+    "field": "operation",
+    "device": "pc",
+    "type": "choice",
+    "question": "ファイルを別のフォルダーへ「移動」すると、元の場所のファイルはどうなる？",
+    "ruby": false,
+    "choices": [
+      "元の場所からなくなる",
+      "元の場所にも残る",
+      "中身が消える",
+      "名前が変わる"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "「移動」は場所を変えること、「コピー」は同じものをもう1つ作ることです。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "gp2-op-pc-04",
+    "grade": 2.5,
+    "field": "operation",
+    "device": "pc",
+    "type": "choice",
+    "question": "ファイルの拡張子「.mp4」は、ふつう何のファイル？",
+    "ruby": false,
+    "choices": [
+      "動画",
+      "表計算",
+      "文書",
+      "圧縮ファイル"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": ".mp4 は動画によく使われる形式です。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "gp2-op-pc-05",
+    "grade": 2.5,
+    "field": "operation",
+    "device": "pc",
+    "type": "choice",
+    "question": "表計算ソフトで、B2〜B10 の中の最大の値を求める式はどれ？",
+    "ruby": false,
+    "choices": [
+      "=MAX(B2:B10)",
+      "=MIN(B2:B10)",
+      "=SUM(B2:B10)",
+      "=MAX(B2,B10)"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "MAX は最大、MIN は最小です。「,」だと2つのセルだけを比べます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "gp2-op-pc-06",
+    "grade": 2.5,
+    "field": "operation",
+    "device": "pc",
+    "type": "ui-task",
+    "question": "フォルダーを右クリックして、ZIP 形式に圧縮しよう。",
+    "ruby": false,
+    "task": {
+      "kind": "context-menu",
+      "trigger": "right-click",
+      "target": "📁 修学旅行_写真",
+      "menu": [
+        "開く",
+        "圧縮（ZIP）",
+        "印刷",
+        "プロパティ"
+      ],
+      "answer": 1
+    },
+    "explanation": "圧縮すると、たくさんのファイルを1つにまとめて送れます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "gp2-op-pc-07",
+    "grade": 2.5,
+    "field": "operation",
+    "device": "pc",
+    "type": "ui-task",
+    "question": "「2年_英語_スピーチ原稿」を、いちばんふさわしいフォルダーへドラッグしよう。",
+    "ruby": false,
+    "task": {
+      "kind": "drag-to-folder",
+      "file": "📄 2年_英語_スピーチ原稿",
+      "folders": [
+        "📁 2年 › 英語",
+        "📁 2年 › 国語",
+        "📁 1年 › 英語"
+      ],
+      "answer": 0
+    },
+    "explanation": "学年と教科の両方が合うフォルダーを選びます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "gp2-op-pc-08",
+    "grade": 2.5,
+    "field": "operation",
+    "device": "pc",
+    "type": "input",
+    "question": "メールアドレス「chugaku-2026@example.jp」を正確に入力しよう。",
+    "ruby": false,
+    "target": "chugaku-2026@example.jp",
+    "timeLimitSec": 40,
+    "explanation": "アドレスは1文字ちがうと届きません。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "gp2-op-pc-09",
+    "grade": 2.5,
+    "field": "operation",
+    "device": "pc",
+    "type": "choice",
+    "question": "Webブラウザーで、前に見ていたページにもどるボタンはどれ？",
+    "ruby": false,
+    "choices": [
+      "←（戻る）",
+      "⟳（再読み込み）",
+      "☆（ブックマーク）",
+      "⌂（ホーム）"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "左向きの矢印が「戻る」です。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "gp2-op-pc-10",
+    "grade": 2.5,
+    "field": "operation",
+    "device": "pc",
+    "type": "ui-task",
+    "question": "ダウンロードした部活動の予定表（PDF）を開こう。",
+    "ruby": false,
+    "task": {
+      "kind": "open-item",
+      "action": "double-click",
+      "items": [
+        "📄 部活動_予定表.pdf",
+        "📊 学級会計.xlsx",
+        "🗜 写真.zip"
+      ],
+      "answer": 0
+    },
+    "explanation": "拡張子 .pdf がPDFのファイルです。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "gp2-op-pc-11",
+    "grade": 2.5,
+    "field": "operation",
+    "device": "pc",
+    "type": "ui-task",
+    "question": "ファイルを閉じようとしたら確認が出た。書いた内容を残したい。どれをおす？",
+    "ruby": false,
+    "task": {
+      "kind": "button",
+      "style": "dialog",
+      "title": "文書",
+      "message": "変更内容を保存しますか？",
+      "buttons": [
+        "保存",
+        "保存しない",
+        "キャンセル"
+      ],
+      "answer": 0
+    },
+    "explanation": "「保存しない」を選ぶと、書いた内容が消えてしまいます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "gp2-op-pc-12",
+    "grade": 2.5,
+    "field": "operation",
+    "device": "pc",
+    "type": "choice",
+    "question": "メールの「CC」に入れた人について、正しいのはどれ？",
+    "ruby": false,
+    "choices": [
+      "同じメールを受け取り、ほかの受取人にもアドレスが見える",
+      "メールを受け取れない",
+      "ほかの受取人からアドレスが見えない",
+      "返信しかできない"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "アドレスを見せたくないときは「BCC」を使います。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "gp2-op-touch-01",
+    "grade": 2.5,
+    "field": "operation",
+    "device": "touch",
+    "type": "input",
+    "question": "メールアドレス「chugaku-2026@example.jp」を正確に入力しよう。",
+    "ruby": false,
+    "target": "chugaku-2026@example.jp",
+    "timeLimitSec": 55,
+    "explanation": "「@」「-」「.」は記号のキーボードで入力します。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "gp2-op-touch-02",
+    "grade": 2.5,
+    "field": "operation",
+    "device": "touch",
+    "type": "input",
+    "question": "ファイル名「Tokyo_Trip_Day1」を正確に入力しよう。",
+    "ruby": false,
+    "target": "Tokyo_Trip_Day1",
+    "timeLimitSec": 50,
+    "explanation": "アンダーバー（_）と大文字の位置に気をつけます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "gp2-op-touch-03",
+    "grade": 2.5,
+    "field": "operation",
+    "device": "touch",
+    "type": "choice",
+    "question": "スマホで、通知をしばらく止めて勉強に集中したい。使う機能は？",
+    "ruby": false,
+    "choices": [
+      "おやすみモード（集中モード）",
+      "ダークモード",
+      "低電力モード",
+      "画面の回転ロック"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "集中モードを使うと、通知を一時的に止められます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "gp2-op-touch-04",
+    "grade": 2.5,
+    "field": "operation",
+    "device": "touch",
+    "type": "choice",
+    "question": "スマホの保存容量（ストレージ）がいっぱいになった。まずできることは？",
+    "ruby": false,
+    "choices": [
+      "いらない写真や動画、アプリを削除する",
+      "画面を明るくする",
+      "音量を上げる",
+      "充電する"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "使わないデータを消すと、空き容量が増えます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "gp2-op-touch-05",
+    "grade": 2.5,
+    "field": "operation",
+    "device": "touch",
+    "type": "ui-task",
+    "question": "使っていないアプリのアイコンを長おしして、アプリを削除しよう。",
+    "ruby": false,
+    "task": {
+      "kind": "context-menu",
+      "trigger": "long-press",
+      "target": "📱 使っていないゲーム",
+      "menu": [
+        "共有",
+        "ホーム画面を編集",
+        "アプリを削除"
+      ],
+      "answer": 2
+    },
+    "explanation": "アイコンの長おしで、アプリの削除ができます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "gp2-op-touch-06",
+    "grade": 2.5,
+    "field": "operation",
+    "device": "touch",
+    "type": "ui-task",
+    "question": "撮った動画を Teams の課題に出したい。共有メニューでどれを選ぶ？",
+    "ruby": false,
+    "task": {
+      "kind": "button",
+      "style": "share",
+      "title": "共有",
+      "message": "🎬 理科の実験動画",
+      "buttons": [
+        "メッセージ",
+        "Teams",
+        "メモ",
+        "プリント"
+      ],
+      "answer": 1
+    },
+    "explanation": "送り先のアプリを共有メニューから選びます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "gp2-op-touch-07",
+    "grade": 2.5,
+    "field": "operation",
+    "device": "touch",
+    "type": "ui-task",
+    "question": "「理科_実験動画」を「理科」フォルダーへドラッグしよう。",
+    "ruby": false,
+    "task": {
+      "kind": "drag-to-folder",
+      "file": "🎬 理科_実験動画",
+      "folders": [
+        "📁 理科",
+        "📁 数学",
+        "📁 英語"
+      ],
+      "answer": 0
+    },
+    "explanation": "教科ごとのフォルダーに整理します。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "gp2-op-touch-08",
+    "grade": 2.5,
+    "field": "operation",
+    "device": "touch",
+    "type": "choice",
+    "question": "学校の無線LANにつなぐとき、スマホやタブレットで設定するのはどれ？",
+    "ruby": false,
+    "choices": [
+      "Wi-Fi",
+      "モバイルデータ通信",
+      "Bluetooth",
+      "位置情報"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "無線LANにつなぐには Wi-Fi の設定を使います。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "gp2-op-touch-09",
+    "grade": 2.5,
+    "field": "operation",
+    "device": "touch",
+    "type": "choice",
+    "question": "Bluetooth を使ってできることは？",
+    "ruby": false,
+    "choices": [
+      "近くのイヤホンなどの機器と無線でつなぐ",
+      "インターネットの速度を上げる",
+      "電池を充電する",
+      "写真を印刷用紙に変える"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "Bluetooth は近くの機器と無線でつなぐしくみです。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "gp2-op-touch-10",
+    "grade": 2.5,
+    "field": "operation",
+    "device": "touch",
+    "type": "ui-task",
+    "question": "ショッピングアプリが「通知を送ります」と聞いてきた。必要ない通知は受け取りたくない。どれをおす？",
+    "ruby": false,
+    "task": {
+      "kind": "button",
+      "style": "dialog",
+      "title": "「ショッピング」は通知を送信します",
+      "message": "通知には、お知らせやセール情報が含まれます。",
+      "buttons": [
+        "許可",
+        "許可しない"
+      ],
+      "answer": 1
+    },
+    "explanation": "必要な通知だけを許可すると、集中しやすくなります。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "gp2-op-touch-11",
+    "grade": 2.5,
+    "field": "operation",
+    "device": "touch",
+    "type": "order",
+    "question": "スマホで撮った写真をトリミングする順番にならべよう。",
+    "ruby": false,
+    "choices": [
+      "写真アプリで写真を開く",
+      "「編集」をタップする",
+      "切り取る範囲を調整する",
+      "「完了」をタップして保存する"
+    ],
+    "answer": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "explanation": "編集が終わったら保存（完了）します。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "gp2-op-touch-12",
+    "grade": 2.5,
+    "field": "operation",
+    "device": "touch",
+    "type": "choice",
+    "question": "QRコードを読み取ってWebページを開く前に、確かめるとよいことは？",
+    "ruby": false,
+    "choices": [
+      "表示されたURL（アドレス）があやしくないか",
+      "QRコードの色",
+      "QRコードの大きさ",
+      "読み取った時間"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "QRコードからにせのサイトに誘導されることもあります。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "gp2-info-01",
+    "grade": 2.5,
+    "field": "information",
+    "device": "all",
+    "type": "choice",
+    "question": "検索結果に「スポンサー」と書かれたものがあった。これは何？",
+    "ruby": false,
+    "choices": [
+      "お金をはらって表示されている広告",
+      "検索でいちばん正しい答え",
+      "国や市のページ",
+      "最新のニュース"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "広告は、内容の正しさで上に表示されているわけではありません。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "gp2-info-02",
+    "grade": 2.5,
+    "field": "information",
+    "device": "all",
+    "type": "multi",
+    "question": "ネットの口コミ（レビュー）を読むときの注意を全部えらぼう。",
+    "ruby": false,
+    "choices": [
+      "宣伝目的のレビューがまじることがある",
+      "よい評価と悪い評価の両方を読む",
+      "星の数だけで判断する",
+      "1件のレビューを全員の意見と考える"
+    ],
+    "answer": [
+      0,
+      1
+    ],
+    "explanation": "いくつものレビューを、かたよらずに読みます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "gp2-info-03",
+    "grade": 2.5,
+    "field": "information",
+    "device": "all",
+    "type": "choice",
+    "question": "一方のグラフは「%」、もう一方は「人数」で表されていた。比べるときに大切なことは？",
+    "ruby": false,
+    "choices": [
+      "単位がちがうので、そのままでは比べられない",
+      "グラフの色をそろえる",
+      "数が大きいほうが正しい",
+      "比べる必要はない"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "単位をそろえてから比べます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "gp2-info-04",
+    "grade": 2.5,
+    "field": "information",
+    "device": "all",
+    "type": "choice",
+    "question": "部活動の部員数（全体120人）です。運動部（サッカー・バスケ・陸上）は全体の何%？",
+    "ruby": false,
+    "figure": {
+      "kind": "bar",
+      "caption": "部員数（人）",
+      "labels": [
+        "サッカー",
+        "バスケ",
+        "陸上",
+        "吹奏楽",
+        "美術"
+      ],
+      "values": [
+        30,
+        24,
+        18,
+        30,
+        18
+      ],
+      "unit": "人"
+    },
+    "choices": [
+      "60%",
+      "72%",
+      "40%",
+      "50%"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "30＋24＋18＝72人、72÷120＝0.6 なので60%です。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "gp2-info-05",
+    "grade": 2.5,
+    "field": "information",
+    "device": "all",
+    "type": "choice",
+    "question": "「〇〇を食べるだけでやせる！」というSNSの投稿。最初に確かめることは？",
+    "ruby": false,
+    "choices": [
+      "だれが、どんな根拠で言っているか",
+      "「いいね」の数",
+      "投稿された時間",
+      "写真のきれいさ"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "健康の情報は、発信者と根拠を確かめることが大切です。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "gp2-info-06",
+    "grade": 2.5,
+    "field": "information",
+    "device": "all",
+    "type": "match",
+    "question": "言葉と意味を組み合わせよう。",
+    "ruby": false,
+    "pairs": [
+      {
+        "left": "事実",
+        "right": "実際に起きたことや、確かめられること"
+      },
+      {
+        "left": "意見",
+        "right": "人の考えや感想"
+      },
+      {
+        "left": "うわさ",
+        "right": "出どころがはっきりしない話"
+      }
+    ],
+    "explanation": "事実と意見を区別して読みましょう。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "gp2-info-07",
+    "grade": 2.5,
+    "field": "information",
+    "device": "all",
+    "type": "choice",
+    "question": "検索する言葉を変えると、検索結果はどうなる？",
+    "ruby": false,
+    "choices": [
+      "見つかるページが変わる",
+      "いつも同じ",
+      "必ず少なくなる",
+      "正しい答えだけになる"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "言葉を工夫すると、ほしい情報に近づけます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "gp2-info-08",
+    "grade": 2.5,
+    "field": "information",
+    "device": "all",
+    "type": "choice",
+    "question": "3つの班のアンケート結果です。賛成の割合がいちばん高いのはどの班？",
+    "ruby": false,
+    "figure": {
+      "kind": "table",
+      "caption": "アンケート結果",
+      "headers": [
+        "班",
+        "人数",
+        "賛成"
+      ],
+      "rows": [
+        [
+          "1班",
+          "10人",
+          "6人"
+        ],
+        [
+          "2班",
+          "8人",
+          "6人"
+        ],
+        [
+          "3班",
+          "12人",
+          "8人"
+        ]
+      ]
+    },
+    "choices": [
+      "2班",
+      "1班",
+      "3班",
+      "すべて同じ"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "1班60%、2班75%、3班約67%です。人数ではなく割合で比べます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "gp2-info-09",
+    "grade": 2.5,
+    "field": "information",
+    "device": "all",
+    "type": "choice",
+    "question": "SNSで見た写真が本物か確かめたい。役に立つ方法は？",
+    "ruby": false,
+    "choices": [
+      "画像検索で、元の写真や最初の発信元を探す",
+      "写真を拡大して色を見る",
+      "「いいね」が多いか見る",
+      "写真を保存する"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "古い写真や別の場所の写真が使われていることがあります。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "gp2-info-10",
+    "grade": 2.5,
+    "field": "information",
+    "device": "all",
+    "type": "order",
+    "question": "グラフを作って発表する流れにならべよう。",
+    "ruby": false,
+    "choices": [
+      "伝えたいことを決める",
+      "必要なデータを集める",
+      "目的に合うグラフを選んで作る",
+      "グラフから分かることを説明する"
+    ],
+    "answer": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "explanation": "目的を決めてからデータを集めます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "gp2-info-11",
+    "grade": 2.5,
+    "field": "information",
+    "device": "all",
+    "type": "choice",
+    "question": "ニュースの「速報」について正しいのはどれ？",
+    "ruby": false,
+    "choices": [
+      "あとから内容が訂正されることがある",
+      "必ず正しい",
+      "くわしい調査が終わっている",
+      "いつも1年前の情報である"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "速報は早さを優先するため、あとで内容が変わることがあります。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "gp2-info-12",
+    "grade": 2.5,
+    "field": "information",
+    "device": "all",
+    "type": "multi",
+    "question": "人の文章を引用するときに必要なことを全部えらぼう。",
+    "ruby": false,
+    "choices": [
+      "引用した部分をかぎかっこなどで区別する",
+      "出典を示す",
+      "自分の文章が主で、引用は必要な分だけにする",
+      "引用した文を自分の言葉のように書く"
+    ],
+    "answer": [
+      0,
+      1,
+      2
+    ],
+    "explanation": "ルールを守った引用は、許可がなくても認められています。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "gp2-safety-01",
+    "grade": 2.5,
+    "field": "safety",
+    "device": "all",
+    "type": "choice",
+    "question": "家の人のクレジットカードで、ゲームに勝手に課金した。何が問題？",
+    "ruby": false,
+    "choices": [
+      "お金を勝手に使っており、高額な請求になることがある",
+      "ゲームが強くなるだけ",
+      "問題はない",
+      "ポイントがもらえる"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "課金は本当のお金を使うことです。必ず家の人の許可をもらいます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "gp2-safety-02",
+    "grade": 2.5,
+    "field": "safety",
+    "device": "all",
+    "type": "choice",
+    "question": "SNSで人の悪口を書いて「炎上」した。炎上について正しいのはどれ？",
+    "ruby": false,
+    "choices": [
+      "書きこみが広がり、消しても残り続けることがある",
+      "すぐにみんな忘れる",
+      "匿名なので必ずだれか分からない",
+      "消せば完全になくなる"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "一度広がった情報は、完全には消せません。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "gp2-safety-03",
+    "grade": 2.5,
+    "field": "safety",
+    "device": "all",
+    "type": "multi",
+    "question": "匿名の書きこみについて、正しいものを全部えらぼう。",
+    "ruby": false,
+    "choices": [
+      "発信者が特定されることがある",
+      "人を傷つける書きこみは法律で罰せられることがある",
+      "匿名なら何を書いてもよい",
+      "匿名なら責任はない"
+    ],
+    "answer": [
+      0,
+      1
+    ],
+    "explanation": "匿名でも、書きこみには責任がともないます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "gp2-safety-04",
+    "grade": 2.5,
+    "field": "safety",
+    "device": "all",
+    "type": "choice",
+    "question": "無料のアプリなのに、アイテムを買うとお金がかかった。このしくみを何という？",
+    "ruby": false,
+    "choices": [
+      "アプリ内課金",
+      "月額料金",
+      "送料",
+      "入会金"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "無料のアプリでも、中で買い物ができるものがあります。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "gp2-safety-05",
+    "grade": 2.5,
+    "field": "safety",
+    "device": "all",
+    "type": "choice",
+    "question": "ネット通販でとても安い店を見つけた。日本語がおかしく、連絡先も書いていない。どうする？",
+    "ruby": false,
+    "choices": [
+      "にせの通販サイトのおそれがあるので買わない",
+      "安いのですぐ買う",
+      "カード番号だけ入れてみる",
+      "友だちにすすめる"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "連絡先がない、日本語が不自然などは、にせサイトの特ちょうです。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "gp2-safety-06",
+    "grade": 2.5,
+    "field": "safety",
+    "device": "all",
+    "type": "choice",
+    "question": "パスワードとして最も安全なのはどれ？",
+    "ruby": false,
+    "choices": [
+      "長くて推測されにくい文字列（例：tsuki-Kumo-2026-Ame）",
+      "12345678",
+      "自分の名前と誕生日",
+      "password"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "長く、推測されにくいものにします。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "gp2-safety-07",
+    "grade": 2.5,
+    "field": "safety",
+    "device": "all",
+    "type": "match",
+    "question": "言葉と意味を組み合わせよう。",
+    "ruby": false,
+    "pairs": [
+      {
+        "left": "利用規約",
+        "right": "サービスを使うときのルール"
+      },
+      {
+        "left": "アカウント",
+        "right": "サービスを使うための自分の登録"
+      },
+      {
+        "left": "ログアウト",
+        "right": "サービスの利用を終えて、ログインした状態をやめること"
+      }
+    ],
+    "explanation": "言葉の意味を知って、安全にサービスを使いましょう。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "gp2-safety-08",
+    "grade": 2.5,
+    "field": "safety",
+    "device": "all",
+    "type": "choice",
+    "question": "生成AIで宿題の答えを出した。最も適切な使い方は？",
+    "ruby": false,
+    "choices": [
+      "考え方のヒントにして、自分で確かめ、自分の言葉でまとめる",
+      "答えをそのまま写して出す",
+      "友だちにも答えを配る",
+      "AIの答えは確かめなくてよい"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "AIはまちがえることがあります。学ぶための道具として使います。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "gp2-safety-09",
+    "grade": 2.5,
+    "field": "safety",
+    "device": "all",
+    "type": "choice",
+    "question": "スマホを夜おそくまで使って、ねる時間がへっている。最もよい対策は？",
+    "ruby": false,
+    "choices": [
+      "使う時間を決め、ねる前は使わない",
+      "夜中も使い続ける",
+      "画面を暗くすれば何時間でもよい",
+      "朝早く起きて使う"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "睡眠は健康や学習にとって大切です。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "gp2-safety-10",
+    "grade": 2.5,
+    "field": "safety",
+    "device": "all",
+    "type": "multi",
+    "question": "写真をSNSにのせる前に確かめることを全部えらぼう。",
+    "ruby": false,
+    "choices": [
+      "制服や校章が写っていないか",
+      "窓の外の景色などから場所が分からないか",
+      "写っている人の許可",
+      "写真のフィルターの種類"
+    ],
+    "answer": [
+      0,
+      1,
+      2
+    ],
+    "explanation": "写真の細かい部分から、学校や住所が分かってしまうことがあります。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "gp2-safety-11",
+    "grade": 2.5,
+    "field": "safety",
+    "device": "all",
+    "type": "choice",
+    "question": "友だちが、いじめの動画を送ってきた。どうする？",
+    "ruby": false,
+    "choices": [
+      "広めずに、先生や家の人に相談する",
+      "ほかの人にも送る",
+      "コメントをつけて投稿する",
+      "保存してSNSにのせる"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "広めることは、いじめに加わることになります。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "gp2-safety-12",
+    "grade": 2.5,
+    "field": "safety",
+    "device": "all",
+    "type": "choice",
+    "question": "「アカウントがロックされました。今すぐこちらでパスワードを入力」というメールが来た。どうする？",
+    "ruby": false,
+    "choices": [
+      "リンクを開かず、公式アプリや公式サイトから確かめる",
+      "すぐにリンクからパスワードを入れる",
+      "返信してパスワードを送る",
+      "友だちに転送する"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "あせらせてパスワードを入力させるのは、フィッシングの手口です。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  }
+]

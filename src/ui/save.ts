@@ -44,7 +44,7 @@ export function saveArea(run: Run): HTMLElement {
   return h(
     'div',
     { class: 'save' },
-    h('h2', {}, '結果を提出しよう'),
+    h('h2', { 'data-sec': 'EXPORT' }, '結果を提出しよう'),
     saveBtn,
     shareBtn,
     status,

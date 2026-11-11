@@ -1,6 +1,6 @@
 import { CHECK_SALT, DEVICE_CSV } from '../config';
 import type { Profile } from '../state';
-import type { EndReason, GradeResult } from '../types';
+import { gradeCode, type EndReason, type GradeResult } from '../types';
 import { highestPassed } from './judge';
 import { END_REASON_LABELS } from './session';
 import { sha256Hex } from './sha256';
@@ -75,9 +75,9 @@ export function buildRecords(run: RunData): CsvRecord[] {
       number: String(run.profile.number),
       startedAt: formatDateTime(run.startedAt),
       device: DEVICE_CSV[run.profile.device],
-      startGrade: String(run.profile.startGrade),
-      highestPassed: best === null ? 'なし' : String(best),
-      grade: String(r.grade),
+      startGrade: gradeCode(run.profile.startGrade),
+      highestPassed: best === null ? 'なし' : gradeCode(best),
+      grade: gradeCode(r.grade),
       result: r.passed ? '合格' : '不合格',
       total: String(r.total),
       operation: String(r.byField.operation),

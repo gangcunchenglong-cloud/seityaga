@@ -74,6 +74,14 @@ describe('CSV 出力', () => {
     );
   });
 
+  it('準級は「準2」のように書く', () => {
+    const r = buildRecords({
+      ...run,
+      profile: { ...run.profile, startGrade: 2.5 },
+      results: [judgeGrade(2.5, qr(2, { operation: 3, information: 3, safety: 3 }), 100)],
+    });
+    expect(r[0]).toMatchObject({ startGrade: '準2', grade: '準2', highestPassed: '準2' });
+  });
   it('合格がなければ highestPassed は「なし」', () => {
     const r = buildRecords({ ...run, results: [run.results[1]] });
     expect(r[0].highestPassed).toBe('なし');

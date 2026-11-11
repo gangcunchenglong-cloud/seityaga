@@ -781,5 +781,392 @@
     "source": "ai",
     "reviewedBy": "",
     "reviewedAt": ""
+  },
+  {
+    "id": "g3-op-pc-09",
+    "grade": 3,
+    "field": "operation",
+    "device": "pc",
+    "type": "ui-task",
+    "question": "社会科の新聞を印刷する画面を開くショートカットキーをおそう。",
+    "ruby": false,
+    "task": {
+      "kind": "shortcut",
+      "key": "p",
+      "ctrl": true,
+      "shift": false,
+      "context": "（社会科の新聞）"
+    },
+    "explanation": "Ctrl + P で印刷の画面が開きます。P は Print の頭文字です。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g3-op-pc-10",
+    "grade": 3,
+    "field": "operation",
+    "device": "pc",
+    "type": "choice",
+    "question": "表計算ソフトで、データを大きい順に並べかえる機能はどれ？",
+    "ruby": false,
+    "choices": [
+      "並べ替え（降順）",
+      "フィルター",
+      "セルの結合",
+      "印刷"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "大きい順は「降順」、小さい順は「昇順」です。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g3-op-pc-11",
+    "grade": 3,
+    "field": "operation",
+    "device": "pc",
+    "type": "ui-task",
+    "question": "共有フォルダーの「6年_卒業文集」を開こう。",
+    "ruby": false,
+    "task": {
+      "kind": "open-item",
+      "action": "double-click",
+      "items": [
+        "📄 6年_卒業文集",
+        "📄 5年_学習発表",
+        "📊 6年_体力テスト"
+      ],
+      "answer": 0
+    },
+    "explanation": "ファイル名をよく見て、ダブルクリックで開きます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g3-op-pc-12",
+    "grade": 3,
+    "field": "operation",
+    "device": "pc",
+    "type": "input",
+    "question": "アドレス「kids.example.jp/eco」を正確に入力しよう。",
+    "ruby": false,
+    "target": "kids.example.jp/eco",
+    "timeLimitSec": 45,
+    "explanation": "「.」や「/」も正確に入力します。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g3-op-touch-09",
+    "grade": 3,
+    "field": "operation",
+    "device": "touch",
+    "type": "input",
+    "question": "アドレス「kids.example.jp/eco」を正確に入力しよう。",
+    "ruby": false,
+    "target": "kids.example.jp/eco",
+    "timeLimitSec": 60,
+    "explanation": "記号は記号のキーボードに切りかえて入力します。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g3-op-touch-10",
+    "grade": 3,
+    "field": "operation",
+    "device": "touch",
+    "type": "choice",
+    "question": "インターネットにつながらない。画面に Wi-Fi のマークがない。まず確かめることは？",
+    "ruby": false,
+    "choices": [
+      "設定で Wi-Fi がオンになっているか",
+      "画面の明るさ",
+      "音量",
+      "カメラ"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "Wi-Fi がオフになっていないかを、まず確かめます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g3-op-touch-11",
+    "grade": 3,
+    "field": "operation",
+    "device": "touch",
+    "type": "ui-task",
+    "question": "ファイルを共有するとき、相手が内容を書きかえられないようにしたい。どれを選ぶ？",
+    "ruby": false,
+    "task": {
+      "kind": "button",
+      "style": "dialog",
+      "title": "リンクの共有設定",
+      "message": "共有する相手の権限を選んでください。",
+      "buttons": [
+        "閲覧のみ",
+        "編集可能"
+      ],
+      "answer": 0
+    },
+    "explanation": "「閲覧のみ」にすると、相手は見ることだけができます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g3-op-touch-12",
+    "grade": 3,
+    "field": "operation",
+    "device": "touch",
+    "type": "ui-task",
+    "question": "ファイルを長おしして、ファイルの複製（コピー）を作ろう。",
+    "ruby": false,
+    "task": {
+      "kind": "context-menu",
+      "trigger": "long-press",
+      "target": "📄 社会_まとめ",
+      "menu": [
+        "名前を変更",
+        "複製",
+        "移動",
+        "削除"
+      ],
+      "answer": 1
+    },
+    "explanation": "複製を作っておくと、元のファイルを残したまま作業できます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g3-info-09",
+    "grade": 3,
+    "field": "information",
+    "device": "all",
+    "type": "choice",
+    "question": "同じ出来事について、3つのニュースサイトを読み比べた。いちばん大切な見方は？",
+    "ruby": false,
+    "choices": [
+      "共通している事実と、ちがっている点を分けて考える",
+      "いちばん長い記事を信じる",
+      "いちばん新しい記事だけ読む",
+      "写真が多い記事を信じる"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "共通点は確かな事実である可能性が高く、ちがいは確かめが必要です。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g3-info-10",
+    "grade": 3,
+    "field": "information",
+    "device": "all",
+    "type": "choice",
+    "question": "図書の貸し出しの表です。1人あたりの冊数が多いのはどちら？",
+    "ruby": false,
+    "figure": {
+      "kind": "table",
+      "caption": "図書の貸し出し",
+      "headers": [
+        "学年",
+        "人数",
+        "冊数"
+      ],
+      "rows": [
+        [
+          "5年",
+          "50人",
+          "150冊"
+        ],
+        [
+          "6年",
+          "40人",
+          "140冊"
+        ]
+      ]
+    },
+    "choices": [
+      "6年生（1人あたり3.5冊）",
+      "5年生（1人あたり3冊）",
+      "どちらも同じ",
+      "比べられない"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "5年：150÷50＝3冊、6年：140÷40＝3.5冊です。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g3-info-11",
+    "grade": 3,
+    "field": "information",
+    "device": "all",
+    "type": "choice",
+    "question": "円グラフで、全体の4分の1を表すのは何%？",
+    "ruby": false,
+    "choices": [
+      "25%",
+      "4%",
+      "40%",
+      "75%"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "全体が100%なので、4分の1は25%です。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g3-info-12",
+    "grade": 3,
+    "field": "information",
+    "device": "all",
+    "type": "multi",
+    "question": "Webページが信頼できるかを確かめるポイントを全部えらぼう。",
+    "ruby": false,
+    "choices": [
+      "だれが書いたか",
+      "いつ更新されたか",
+      "ほかの資料と同じ内容か",
+      "ページのデザインがおしゃれか"
+    ],
+    "answer": [
+      0,
+      1,
+      2
+    ],
+    "explanation": "見た目のよさは、内容の正しさとは関係がありません。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g3-safety-09",
+    "grade": 3,
+    "field": "safety",
+    "device": "all",
+    "type": "choice",
+    "question": "オンラインで知り合った同じ年の人から「会おう」と言われた。最も適切な行動は？",
+    "ruby": false,
+    "choices": [
+      "一人で会わず、家の人に相談する",
+      "一人で会いに行く",
+      "公園なら会ってもよい",
+      "友だちと二人で会いに行く"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "同じ年と言っていても、本当かどうかは分かりません。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g3-safety-10",
+    "grade": 3,
+    "field": "safety",
+    "device": "all",
+    "type": "choice",
+    "question": "動画サイトに、クラスの授業のようすを勝手にアップロードした。何が問題？",
+    "ruby": false,
+    "choices": [
+      "写っている人の許可がなく、プライバシーをおかしている",
+      "動画が短い",
+      "再生回数が少ない",
+      "問題はない"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "人が写っている動画は、許可をもらわずに公開してはいけません。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g3-safety-11",
+    "grade": 3,
+    "field": "safety",
+    "device": "all",
+    "type": "multi",
+    "question": "安全なパスワードの条件を全部えらぼう。",
+    "ruby": false,
+    "choices": [
+      "長い",
+      "英字・数字・記号を組み合わせる",
+      "誕生日を使う",
+      "ほかのサービスと同じにする"
+    ],
+    "answer": [
+      0,
+      1
+    ],
+    "explanation": "長く、推測されにくく、使い回さないことが大切です。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g3-safety-12",
+    "grade": 3,
+    "field": "safety",
+    "device": "all",
+    "type": "match",
+    "question": "こまったことと、相談先を組み合わせよう。",
+    "ruby": false,
+    "pairs": [
+      {
+        "left": "ネットでいじめを受けた",
+        "right": "先生や家の人"
+      },
+      {
+        "left": "身に覚えのない請求が来た",
+        "right": "家の人と消費生活センター"
+      },
+      {
+        "left": "命の危険を感じる書きこみを見た",
+        "right": "すぐに大人に知らせる（必要なら警察）"
+      }
+    ],
+    "explanation": "一人でかかえず、適切な相談先に相談しましょう。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
   }
 ]

@@ -1,6 +1,7 @@
 import { FIELD_LABELS } from '../../config';
 import { pickAdvice } from '../../content/advice';
 import type { Run } from '../../state';
+import { gradeLabel } from '../../types';
 import { h } from '../dom';
 import { radarChart } from '../radar';
 
@@ -10,9 +11,9 @@ export function resultExtras(run: Run, onRestart: () => void, saveArea?: HTMLEle
   if (!last) return [];
   const advice = pickAdvice(last);
   return [
-    h('h2', {}, `${last.grade}級の分野ごとの正答率`),
+    h('h2', { 'data-sec': 'ANALYSIS' }, `${gradeLabel(last.grade)}の分野ごとの正答率`),
     radarChart(last.byField),
-    h('h2', {}, 'つぎに学ぶとよいこと'),
+    h('h2', { 'data-sec': 'NEXT STEP' }, 'つぎに学ぶとよいこと'),
     advice.length
       ? h(
           'div',
@@ -21,7 +22,7 @@ export function resultExtras(run: Run, onRestart: () => void, saveArea?: HTMLEle
             h('div', { class: `advice-item ${a.field}` }, h('h3', {}, FIELD_LABELS[a.field]), h('p', {}, a.text)),
           ),
         )
-      : h('p', { class: 'advice-item' }, `${last.grade}級は全分野で満点でした。この調子で、身につけた力を授業や生活で使ってみましょう。`),
+      : h('p', { class: 'advice-item' }, `${gradeLabel(last.grade)}は全分野で満点でした。この調子で、身につけた力を授業や生活で使ってみましょう。`),
     saveArea ?? null,
     h(
       'div',
