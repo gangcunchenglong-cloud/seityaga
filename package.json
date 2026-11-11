@@ -1,0 +1,26 @@
+{
+  "name": "ict-skill-test",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "ICT活用能力テスト（級別・階段型）",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build && vite build --mode teacher",
+    "build:review": "vite build --mode review",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
+    "generate": "tsx scripts/generate-questions.ts",
+    "merge": "tsx scripts/merge-approved.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.6",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.8",
+    "vite-plugin-singlefile": "^2.3.4",
+    "vitest": "^5.1.0"
+  }
+}
