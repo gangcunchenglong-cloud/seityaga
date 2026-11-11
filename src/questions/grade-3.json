@@ -1,1 +1,399 @@
-[]
+[
+  {
+    "id": "g3-op-pc-01",
+    "grade": 3,
+    "field": "operation",
+    "device": "pc",
+    "type": "ui-task",
+    "question": "長いWebページから「光合成」という言葉を探したい。ページ内を検索するショートカットキーをおそう。",
+    "ruby": false,
+    "task": {
+      "kind": "shortcut",
+      "key": "f",
+      "ctrl": true,
+      "shift": false,
+      "context": "（長いWebページ）"
+    },
+    "explanation": "Ctrl + F で、ページの中の言葉を検索できます。F は Find（見つける）の頭文字です。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g3-op-pc-02",
+    "grade": 3,
+    "field": "operation",
+    "device": "pc",
+    "type": "ui-task",
+    "question": "上の文をコピーして、下のらんに貼り付けよう。",
+    "ruby": false,
+    "task": {
+      "kind": "copy-paste",
+      "text": "持続可能な開発目標（SDGs）"
+    },
+    "explanation": "Ctrl + C でコピー、Ctrl + V で貼り付け。長い言葉も正確に写せます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g3-op-pc-03",
+    "grade": 3,
+    "field": "operation",
+    "device": "pc",
+    "type": "choice",
+    "question": "ファイルの名前のつけ方で、あとから探しやすいのはどれ？",
+    "ruby": false,
+    "choices": [
+      "20261111_理科_実験まとめ",
+      "新しいファイル(3)",
+      "あああ",
+      "ファイル"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "日付・教科・内容を入れておくと、並べたときにも探しやすくなります。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g3-op-pc-04",
+    "grade": 3,
+    "field": "operation",
+    "device": "pc",
+    "type": "ui-task",
+    "question": "ファイルを右クリックして、名前を変えよう。",
+    "ruby": false,
+    "task": {
+      "kind": "context-menu",
+      "trigger": "right-click",
+      "target": "📄 新しいドキュメント",
+      "menu": [
+        "開く",
+        "名前の変更",
+        "削除",
+        "プロパティ"
+      ],
+      "answer": 1
+    },
+    "explanation": "右クリックのメニューから「名前の変更」を選べます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g3-op-touch-01",
+    "grade": 3,
+    "field": "operation",
+    "device": "touch",
+    "type": "ui-task",
+    "question": "上の文をコピーして、下のらんに貼り付けよう。",
+    "ruby": false,
+    "task": {
+      "kind": "copy-paste",
+      "text": "持続可能な開発目標（SDGs）"
+    },
+    "explanation": "長おしで選んでコピーし、貼り付けたい所を長おしして「ペースト」を選びます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g3-op-touch-02",
+    "grade": 3,
+    "field": "operation",
+    "device": "touch",
+    "type": "ui-task",
+    "question": "作った資料を「ファイル」アプリに保存したい。共有メニューでどれを選ぶ？",
+    "ruby": false,
+    "task": {
+      "kind": "button",
+      "style": "share",
+      "title": "共有",
+      "message": "📄 社会_まとめ.pdf",
+      "buttons": [
+        "メッセージ",
+        "プリント",
+        "ファイルに保存",
+        "コピー"
+      ],
+      "answer": 2
+    },
+    "explanation": "「ファイルに保存」を選ぶと、ファイルアプリの好きな場所に保存できます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g3-op-touch-03",
+    "grade": 3,
+    "field": "operation",
+    "device": "touch",
+    "type": "choice",
+    "question": "タブレットで、2つのアプリを同時に並べて使う機能はどれ？",
+    "ruby": false,
+    "choices": [
+      "画面分割（スプリットビュー）",
+      "スクリーンショット",
+      "機内モード",
+      "画面ロック"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "画面分割を使うと、資料を見ながらノートを書くことができます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g3-op-touch-04",
+    "grade": 3,
+    "field": "operation",
+    "device": "touch",
+    "type": "order",
+    "question": "タブレットで撮った写真を Teams の課題に提出する手順にならべよう。",
+    "ruby": false,
+    "choices": [
+      "Teams で課題を開く",
+      "「作業を追加」から写真を選ぶ",
+      "写真が追加されたか確かめる",
+      "「提出」をおす"
+    ],
+    "answer": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "explanation": "提出前に、正しいファイルが追加されたか確かめましょう。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g3-info-01",
+    "grade": 3,
+    "field": "information",
+    "device": "all",
+    "type": "choice",
+    "question": "2つのWebサイトで、書いてある数字がちがっていた。どうするのがよい？",
+    "ruby": false,
+    "choices": [
+      "公式サイトや本など、ほかの情報源でも確かめる",
+      "先に見たほうを信じる",
+      "文字が多いほうを信じる",
+      "好きなほうを使う"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "情報がちがうときは、信頼できる別の情報源で確かめましょう。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g3-info-02",
+    "grade": 3,
+    "field": "information",
+    "device": "all",
+    "type": "choice",
+    "question": "グラフから言えることとして正しいのはどれ？",
+    "ruby": false,
+    "figure": {
+      "kind": "line",
+      "caption": "ある町の人口（万人）",
+      "labels": [
+        "2000年",
+        "2005年",
+        "2010年",
+        "2015年",
+        "2020年"
+      ],
+      "values": [
+        12,
+        11.5,
+        10.8,
+        10,
+        9.1
+      ],
+      "unit": "万人"
+    },
+    "choices": [
+      "人口は減り続けている",
+      "2010年から増えている",
+      "2020年がいちばん多い",
+      "人口は変わっていない"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "折れ線が右に向かってずっと下がっているので、減り続けています。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g3-info-03",
+    "grade": 3,
+    "field": "information",
+    "device": "all",
+    "type": "choice",
+    "question": "グラフのたての目もりが0から始まっていないとき、気をつけることは？",
+    "ruby": false,
+    "choices": [
+      "差が実際より大きく見えることがある",
+      "データがまちがっている",
+      "かならず正しいグラフである",
+      "数字が読めなくなる"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "目もりの始まりを変えると、小さな差でも大きく見えます。目もりを確かめましょう。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g3-info-04",
+    "grade": 3,
+    "field": "information",
+    "device": "all",
+    "type": "match",
+    "question": "情報源と、その特ちょうを組み合わせよう。",
+    "ruby": false,
+    "pairs": [
+      {
+        "left": "新聞",
+        "right": "記者が取材し、内容を確認してから出される"
+      },
+      {
+        "left": "個人のSNS投稿",
+        "right": "だれでもすぐ発信でき、確認されていないこともある"
+      },
+      {
+        "left": "図鑑",
+        "right": "専門家が書き、くわしい説明や図がある"
+      }
+    ],
+    "explanation": "情報源によって確かさがちがいます。特ちょうを知って使い分けましょう。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g3-safety-01",
+    "grade": 3,
+    "field": "safety",
+    "device": "all",
+    "type": "multi",
+    "question": "個人情報にあたるものを全部えらぼう。",
+    "ruby": false,
+    "choices": [
+      "名前",
+      "住所",
+      "顔がはっきり写った写真",
+      "好きな季節"
+    ],
+    "answer": [
+      0,
+      1,
+      2
+    ],
+    "explanation": "名前・住所・顔写真など、その人がだれか分かる情報は個人情報です。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g3-safety-02",
+    "grade": 3,
+    "field": "safety",
+    "device": "all",
+    "type": "choice",
+    "question": "アプリを入れたら「連絡先へのアクセスを許可しますか？」と出た。どうする？",
+    "ruby": false,
+    "choices": [
+      "必要かどうか考え、分からなければ大人に相談する",
+      "よく読まずに「許可」をおす",
+      "友だちの連絡先も入れておく",
+      "すぐに別のアプリも入れる"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "アプリに必要のない情報まで渡さないよう、許可は考えてから決めましょう。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g3-safety-03",
+    "grade": 3,
+    "field": "safety",
+    "device": "all",
+    "type": "choice",
+    "question": "友だちのテストの点数を、本人に聞かずにグループに書きこんだ。何が問題？",
+    "ruby": false,
+    "choices": [
+      "人の個人情報を勝手に広めている",
+      "字がまちがっているかもしれない",
+      "問題はない",
+      "書くのに時間がかかる"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "人の情報を勝手に広めると、相手を深く傷つけます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g3-safety-04",
+    "grade": 3,
+    "field": "safety",
+    "device": "all",
+    "type": "match",
+    "question": "場面と、安全な行動を組み合わせよう。",
+    "ruby": false,
+    "pairs": [
+      {
+        "left": "学校のタブレットを使い終わった",
+        "right": "ログアウトする"
+      },
+      {
+        "left": "パスワードを入力する",
+        "right": "まわりに見られていないか確かめる"
+      },
+      {
+        "left": "知らない人から友だち申請が来た",
+        "right": "承認せず、必要なら大人に相談する"
+      }
+    ],
+    "explanation": "ちょっとした行動で、自分の情報を守ることができます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  }
+]

@@ -1,1 +1,391 @@
-[]
+[
+  {
+    "id": "g7-op-pc-01",
+    "grade": 7,
+    "field": "operation",
+    "device": "pc",
+    "type": "input",
+    "question": "キーボードで「いぬ」と にゅうりょく しよう。",
+    "ruby": true,
+    "target": "いぬ",
+    "timeLimitSec": 60,
+    "explanation": "もじを うって、さいごに Enter（エンター）キーで かくてい します。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g7-op-pc-02",
+    "grade": 7,
+    "field": "operation",
+    "device": "pc",
+    "type": "input",
+    "question": "キーボードで すうじの「123」を にゅうりょく しよう。",
+    "ruby": true,
+    "target": "123",
+    "timeLimitSec": 45,
+    "explanation": "すうじの キーは キーボードの 上の ほうや、右がわに あります。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g7-op-pc-03",
+    "grade": 7,
+    "field": "operation",
+    "device": "pc",
+    "type": "choice",
+    "question": "まちがえて うった もじを けす キーは どれ？",
+    "ruby": true,
+    "choices": [
+      "BackSpace（バックスペース）",
+      "Enter（エンター）",
+      "Shift（シフト）",
+      "Space（スペース）"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "BackSpace キーを おすと、カーソルの ひだりの もじが きえます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g7-op-pc-04",
+    "grade": 7,
+    "field": "operation",
+    "device": "pc",
+    "type": "choice",
+    "question": "うった もじを「かくてい」する ときに おす キーは どれ？",
+    "ruby": true,
+    "choices": [
+      "Enter（エンター）",
+      "BackSpace（バックスペース）",
+      "Tab（タブ）",
+      "Esc（エスケープ）"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "Enter キーで、うった もじが かくてい します。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g7-op-touch-01",
+    "grade": 7,
+    "field": "operation",
+    "device": "touch",
+    "type": "input",
+    "question": "がめんの キーボードで「いぬ」と にゅうりょく しよう。",
+    "ruby": true,
+    "target": "いぬ",
+    "timeLimitSec": 60,
+    "explanation": "がめんの キーボードを ゆびで おして もじを うちます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g7-op-touch-02",
+    "grade": 7,
+    "field": "operation",
+    "device": "touch",
+    "type": "input",
+    "question": "がめんの キーボードで すうじの「123」を にゅうりょく しよう。",
+    "ruby": true,
+    "target": "123",
+    "timeLimitSec": 45,
+    "explanation": "すうじは「123」の キーを おすと でてきます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g7-op-touch-03",
+    "grade": 7,
+    "field": "operation",
+    "device": "touch",
+    "type": "choice",
+    "question": "がめんの キーボードで、まちがえた もじを けす キーは どれ？",
+    "ruby": true,
+    "choices": [
+      "⌫（けす キー）",
+      "{改行|かいぎょう}",
+      "{空白|くうはく}",
+      "🌐（きりかえ キー）"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "⌫ の キーを おすと、1もじずつ きえます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g7-op-touch-04",
+    "grade": 7,
+    "field": "operation",
+    "device": "touch",
+    "type": "ui-task",
+    "question": "しゃしんを けしたいよ。どの ボタンを おす？",
+    "ruby": true,
+    "task": {
+      "kind": "button",
+      "style": "toolbar",
+      "title": "しゃしん",
+      "message": "🌻 ひまわりの しゃしん",
+      "buttons": [
+        "🗑 ごみばこ",
+        "↗ きょうゆう",
+        "♡ おきにいり"
+      ],
+      "answer": 0
+    },
+    "explanation": "ごみばこの マークは「けす」と いう いみです。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g7-info-01",
+    "grade": 7,
+    "field": "information",
+    "device": "all",
+    "type": "choice",
+    "question": "クラスの すきな あそび しらべ。ドッジボールは なんにん？",
+    "ruby": true,
+    "figure": {
+      "kind": "bar",
+      "caption": "すきな あそび（にん）",
+      "labels": [
+        "おにごっこ",
+        "ドッジボール",
+        "なわとび"
+      ],
+      "values": [
+        9,
+        7,
+        4
+      ],
+      "unit": "にん"
+    },
+    "choices": [
+      "7にん",
+      "9にん",
+      "4にん",
+      "20にん"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "ドッジボールの ぼうの 上の かずを よみます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g7-info-02",
+    "grade": 7,
+    "field": "information",
+    "device": "all",
+    "type": "choice",
+    "question": "「パンダ」の ことを しらべたい。インターネットで けんさく するとき、なんと いれる？",
+    "ruby": true,
+    "choices": [
+      "パンダ",
+      "どうぶつ",
+      "しろ",
+      "おおきい"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "しらべたい ものの なまえを そのまま いれると みつけやすいです。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g7-info-03",
+    "grade": 7,
+    "field": "information",
+    "device": "all",
+    "type": "order",
+    "question": "しらべて はっぴょう する じゅんばんに ならべよう。",
+    "ruby": true,
+    "choices": [
+      "しらべたい ことを きめる",
+      "ほんや インターネットで しらべる",
+      "わかった ことを まとめる",
+      "みんなに はっぴょう する"
+    ],
+    "answer": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "explanation": "さいしょに なにを しらべるか きめると、しらべやすく なります。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g7-info-04",
+    "grade": 7,
+    "field": "information",
+    "device": "all",
+    "type": "choice",
+    "question": "たんじょうびの つき しらべ。いちばん すくない つきは どれ？",
+    "ruby": true,
+    "figure": {
+      "kind": "table",
+      "caption": "たんじょうびの つき",
+      "headers": [
+        "つき",
+        "にんずう"
+      ],
+      "rows": [
+        [
+          "4がつ",
+          "3にん"
+        ],
+        [
+          "5がつ",
+          "5にん"
+        ],
+        [
+          "6がつ",
+          "2にん"
+        ],
+        [
+          "7がつ",
+          "4にん"
+        ]
+      ]
+    },
+    "choices": [
+      "6がつ",
+      "4がつ",
+      "5がつ",
+      "7がつ"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "ひょうの かずを くらべると、6がつが 2にんで いちばん すくないです。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g7-safety-01",
+    "grade": 7,
+    "field": "safety",
+    "device": "all",
+    "type": "choice",
+    "question": "しらない ひとから「あそぼう」と メッセージが きたよ。どうする？",
+    "ruby": true,
+    "choices": [
+      "へんじを しないで、おうちの ひとに しらせる",
+      "すぐに へんじを する",
+      "じゅうしょを おしえる",
+      "あう やくそくを する"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "しらない ひとからの メッセージには へんじを せず、おとなに しらせましょう。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g7-safety-02",
+    "grade": 7,
+    "field": "safety",
+    "device": "all",
+    "type": "multi",
+    "question": "しらない ひとに おしえては いけない ものを ぜんぶ えらぼう。",
+    "ruby": true,
+    "choices": [
+      "じぶんの なまえ",
+      "じゅうしょ",
+      "でんわばんごう",
+      "きょうの てんき"
+    ],
+    "answer": [
+      0,
+      1,
+      2
+    ],
+    "explanation": "なまえ・じゅうしょ・でんわばんごうは、じぶんを まもる ための だいじな じょうほうです。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g7-safety-03",
+    "grade": 7,
+    "field": "safety",
+    "device": "all",
+    "type": "choice",
+    "question": "ゲームの なかで「アイテムを あげるから パスワードを おしえて」と いわれたよ。どうする？",
+    "ruby": true,
+    "choices": [
+      "おしえないで、おとなに そうだん する",
+      "アイテムが ほしいので おしえる",
+      "ともだちの パスワードを おしえる",
+      "パスワードを ヒントだけ おしえる"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "パスワードを ききだそうと する ひとは、わるい ことを かんがえて いるかも しれません。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g7-safety-04",
+    "grade": 7,
+    "field": "safety",
+    "device": "all",
+    "type": "choice",
+    "question": "ともだちの しゃしんを ほかの ひとに みせたい。まず どうする？",
+    "ruby": true,
+    "choices": [
+      "ともだちに みせても いいか きく",
+      "だまって みせる",
+      "たくさんの ひとに おくる",
+      "かってに なまえを かきこむ"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "しゃしんに うつって いる ひとの きもちを たいせつに しましょう。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  }
+]

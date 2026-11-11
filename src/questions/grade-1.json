@@ -1,1 +1,413 @@
-[]
+[
+  {
+    "id": "g1-op-pc-01",
+    "grade": 1,
+    "field": "operation",
+    "device": "pc",
+    "type": "ui-task",
+    "question": "文書の中の文字をすべて選択するショートカットキーをおそう。",
+    "ruby": false,
+    "task": {
+      "kind": "shortcut",
+      "key": "a",
+      "ctrl": true,
+      "shift": false,
+      "context": "（報告書の本文）"
+    },
+    "explanation": "Ctrl + A ですべて選択できます。A は All の頭文字です。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g1-op-pc-02",
+    "grade": 1,
+    "field": "operation",
+    "device": "pc",
+    "type": "choice",
+    "question": "表計算ソフトで、A1からA10までの合計を求める式はどれ？",
+    "ruby": false,
+    "choices": [
+      "=SUM(A1:A10)",
+      "=SUM(A1,A10)",
+      "=A1+A10",
+      "=TOTAL(A1-A10)"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "「:」は範囲を表します。「,」だと A1 と A10 の2つだけの合計になります。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g1-op-pc-03",
+    "grade": 1,
+    "field": "operation",
+    "device": "pc",
+    "type": "choice",
+    "question": "ファイルを ZIP 形式に圧縮する、おもな目的はどれ？",
+    "ruby": false,
+    "choices": [
+      "複数のファイルをまとめ、サイズを小さくして送りやすくする",
+      "ウイルスを取りのぞく",
+      "画像の画質を上げる",
+      "ファイルの中身を自動で翻訳する"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "圧縮はまとめて小さくするためのもので、ウイルス対策ではありません。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g1-op-pc-04",
+    "grade": 1,
+    "field": "operation",
+    "device": "pc",
+    "type": "ui-task",
+    "question": "Webページのリンクを右クリックして、リンク先のアドレス（URL）をコピーしよう。",
+    "ruby": false,
+    "task": {
+      "kind": "context-menu",
+      "trigger": "right-click",
+      "target": "🔗 詳しくはこちら",
+      "menu": [
+        "新しいタブで開く",
+        "リンクのアドレスをコピー",
+        "名前を付けてリンク先を保存",
+        "検証"
+      ],
+      "answer": 1
+    },
+    "explanation": "リンクを開かずにアドレスを確かめたり共有したりするときに便利です。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g1-op-touch-01",
+    "grade": 1,
+    "field": "operation",
+    "device": "touch",
+    "type": "input",
+    "question": "メールアドレス「info@school.example.jp」を正確に入力しよう。",
+    "ruby": false,
+    "target": "info@school.example.jp",
+    "timeLimitSec": 45,
+    "explanation": "「@」や「.」は記号のキーボードに切りかえて入力します。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g1-op-touch-02",
+    "grade": 1,
+    "field": "operation",
+    "device": "touch",
+    "type": "choice",
+    "question": "スマホのメールアプリで、差出人の本当のメールアドレスを確かめるには？",
+    "ruby": false,
+    "choices": [
+      "差出人の名前をタップして詳細を表示する",
+      "件名を長おしする",
+      "本文のリンクを開く",
+      "メールを削除する"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "表示名は自由に変えられます。実際のアドレスを確かめましょう。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g1-op-touch-03",
+    "grade": 1,
+    "field": "operation",
+    "device": "touch",
+    "type": "ui-task",
+    "question": "見ているページのアドレス（URL）を共有メニューからコピーしよう。",
+    "ruby": false,
+    "task": {
+      "kind": "button",
+      "style": "share",
+      "title": "共有",
+      "message": "🌐 市の防災情報ページ",
+      "buttons": [
+        "ブックマークを追加",
+        "リーディングリストに追加",
+        "コピー",
+        "プリント"
+      ],
+      "answer": 2
+    },
+    "explanation": "共有メニューの「コピー」で、ページのアドレスをコピーできます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g1-op-touch-04",
+    "grade": 1,
+    "field": "operation",
+    "device": "touch",
+    "type": "order",
+    "question": "二段階認証でログインするときの流れにならべよう。",
+    "ruby": false,
+    "choices": [
+      "IDとパスワードを入力する",
+      "スマホに届いた確認コードを見る",
+      "確認コードを入力する",
+      "ログインが完了する"
+    ],
+    "answer": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "explanation": "パスワードがもれても、確認コードがなければログインできないしくみです。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g1-info-01",
+    "grade": 1,
+    "field": "information",
+    "device": "all",
+    "type": "choice",
+    "question": "ある記事に「研究で証明された」とだけ書かれていた。最も適切な確かめ方は？",
+    "ruby": false,
+    "choices": [
+      "元の研究（論文や発表元）を探し、内容と発表者を確かめる",
+      "記事の閲覧数を見る",
+      "SNSで同じ意見の人を探す",
+      "見出しが強い言葉なので信じる"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "一次情報（元の研究）にあたり、だれがどんな方法で調べたのかを確かめましょう。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g1-info-02",
+    "grade": 1,
+    "field": "information",
+    "device": "all",
+    "type": "multi",
+    "question": "Webページを出典として示すときに必要な情報を全部えらぼう。",
+    "ruby": false,
+    "choices": [
+      "著者や発信者",
+      "ページのタイトル",
+      "URLと閲覧した日",
+      "自分の感想"
+    ],
+    "answer": [
+      0,
+      1,
+      2
+    ],
+    "explanation": "Webページは内容が変わることがあるので、閲覧日も書いておきます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g1-info-03",
+    "grade": 1,
+    "field": "information",
+    "device": "all",
+    "type": "choice",
+    "question": "2つの案の満足度調査の結果です。解釈として最も適切なのは？",
+    "ruby": false,
+    "figure": {
+      "kind": "table",
+      "caption": "満足度調査",
+      "headers": [
+        "",
+        "回答数",
+        "満足と答えた人",
+        "割合"
+      ],
+      "rows": [
+        [
+          "A案",
+          "20人",
+          "15人",
+          "75%"
+        ],
+        [
+          "B案",
+          "400人",
+          "280人",
+          "70%"
+        ]
+      ]
+    },
+    "choices": [
+      "A案は回答数が少なく、差は偶然の可能性もあるので慎重に判断する",
+      "A案のほうが確実に優れている",
+      "満足した人の数が多いので、B案のほうが確実に優れている",
+      "割合が5ポイントちがうので、A案を採用すべきだ"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "割合だけでなく、回答数（母数）や調べ方も見て判断します。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g1-info-04",
+    "grade": 1,
+    "field": "information",
+    "device": "all",
+    "type": "match",
+    "question": "誤った情報の種類と、その説明を組み合わせよう。",
+    "ruby": false,
+    "pairs": [
+      {
+        "left": "ディープフェイク",
+        "right": "AIで本物そっくりに作られたにせの映像や音声"
+      },
+      {
+        "left": "切り取り",
+        "right": "発言の一部だけを取り出し、元の意味を変えて伝える"
+      },
+      {
+        "left": "なりすまし",
+        "right": "他人や公式機関のふりをして発信する"
+      }
+    ],
+    "explanation": "手口を知っておくと、だまされにくくなります。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g1-safety-01",
+    "grade": 1,
+    "field": "safety",
+    "device": "all",
+    "type": "choice",
+    "question": "次のメールで、最も疑うべき点はどれ？（このお店の公式サイトは shopmart.co.jp です）",
+    "ruby": false,
+    "figure": {
+      "kind": "screen",
+      "title": "【重要】アカウントが停止されます",
+      "lines": [
+        "差出人：support@shopmart-security.xyz",
+        "24時間以内に、下のリンクから本人確認をしてください。",
+        "▶ https://shopmart-security.xyz/login"
+      ]
+    },
+    "choices": [
+      "差出人とリンクのドメインが、公式のものとちがう",
+      "件名がかぎかっこで始まっている",
+      "文章が短い",
+      "メールが届いた時間"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "フィッシング詐欺では、公式に似せたドメインで、急がせて情報を入力させようとします。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g1-safety-02",
+    "grade": 1,
+    "field": "safety",
+    "device": "all",
+    "type": "multi",
+    "question": "フィッシング詐欺の被害を防ぐための行動を全部えらぼう。",
+    "ruby": false,
+    "choices": [
+      "メールのリンクではなく、公式アプリやブックマークから開く",
+      "二段階認証を設定しておく",
+      "「急いで」と書かれていたら、すぐに入力する",
+      "不審なメールは公式サイトの注意情報で確かめる"
+    ],
+    "answer": [
+      0,
+      1,
+      3
+    ],
+    "explanation": "急がせるのは詐欺の典型的な手口です。落ち着いて公式の窓口から確かめましょう。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g1-safety-03",
+    "grade": 1,
+    "field": "safety",
+    "device": "all",
+    "type": "choice",
+    "question": "生成AIが参考文献つきで答えを出した。最も適切な対応は？",
+    "ruby": false,
+    "choices": [
+      "文献が実在し、その内容が本当に書かれているか自分で確かめる",
+      "参考文献があるので、そのまま正しいと考える",
+      "文献の数が多いほど正しいと考える",
+      "文献は読まずに答えだけ使う"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "生成AIは、実在しない文献を示すことがあります。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g1-safety-04",
+    "grade": 1,
+    "field": "safety",
+    "device": "all",
+    "type": "choice",
+    "question": "生成AIの回答についての説明として、正しいものはどれ？",
+    "ruby": false,
+    "choices": [
+      "もっともらしい誤り（ハルシネーション）をふくむことがある",
+      "つねに最新で正確な情報を答える",
+      "人間と同じように気持ちをもって判断している",
+      "インターネット上のすべての情報を確かめてから答えている"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "AIの答えはうのみにせず、根拠を確かめて使いましょう。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  }
+]

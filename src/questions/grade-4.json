@@ -1,1 +1,412 @@
-[]
+[
+  {
+    "id": "g4-op-pc-01",
+    "grade": 4,
+    "field": "operation",
+    "device": "pc",
+    "type": "ui-task",
+    "question": "まちがえて文字を消してしまいました。直前の操作を取り消す（元にもどす）ショートカットキーをおそう。",
+    "ruby": false,
+    "task": {
+      "kind": "shortcut",
+      "key": "z",
+      "ctrl": true,
+      "shift": false,
+      "context": "（消してしまった文章）"
+    },
+    "explanation": "Ctrl + Z で、直前の操作を取り消せます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g4-op-pc-02",
+    "grade": 4,
+    "field": "operation",
+    "device": "pc",
+    "type": "choice",
+    "question": "表計算ソフトで、セル A1 の右どなりのセルはどれ？",
+    "ruby": false,
+    "choices": [
+      "B1",
+      "A2",
+      "B2",
+      "A0"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "列はアルファベット（A, B, C…）、行は数字（1, 2, 3…）で表します。右どなりは列が1つ進みます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g4-op-pc-03",
+    "grade": 4,
+    "field": "operation",
+    "device": "pc",
+    "type": "ui-task",
+    "question": "「理科_実験レポート」を正しいフォルダーにドラッグしよう。",
+    "ruby": false,
+    "task": {
+      "kind": "drag-to-folder",
+      "file": "📄 理科_実験レポート",
+      "folders": [
+        "📁 理科",
+        "📁 社会",
+        "📁 算数"
+      ],
+      "answer": 0
+    },
+    "explanation": "ファイルを教科ごとのフォルダーに分けておくと、あとで探しやすくなります。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g4-op-pc-04",
+    "grade": 4,
+    "field": "operation",
+    "device": "pc",
+    "type": "input",
+    "question": "「Hello World」と入力しよう（大文字・小文字・スペースも同じに）。",
+    "ruby": false,
+    "target": "Hello World",
+    "timeLimitSec": 40,
+    "explanation": "大文字は Shift キーをおしながら入力します。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g4-op-touch-01",
+    "grade": 4,
+    "field": "operation",
+    "device": "touch",
+    "type": "ui-task",
+    "question": "「理科_実験レポート」を正しいフォルダーに指でドラッグしよう。",
+    "ruby": false,
+    "task": {
+      "kind": "drag-to-folder",
+      "file": "📄 理科_実験レポート",
+      "folders": [
+        "📁 理科",
+        "📁 社会",
+        "📁 算数"
+      ],
+      "answer": 0
+    },
+    "explanation": "ファイルを教科ごとのフォルダーに分けておくと、あとで探しやすくなります。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g4-op-touch-02",
+    "grade": 4,
+    "field": "operation",
+    "device": "touch",
+    "type": "input",
+    "question": "「Hello World」と入力しよう（大文字・小文字・スペースも同じに）。",
+    "ruby": false,
+    "target": "Hello World",
+    "timeLimitSec": 50,
+    "explanation": "大文字は ⇧ キーをおしてから入力します。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g4-op-all-01",
+    "grade": 4,
+    "field": "operation",
+    "device": "all",
+    "type": "ui-task",
+    "question": "スライドに写真を入れたい。どのボタンをおす？",
+    "ruby": false,
+    "task": {
+      "kind": "button",
+      "style": "toolbar",
+      "title": "スライド",
+      "message": "（1まい目のスライド）",
+      "buttons": [
+        "🔤 文字の大きさ",
+        "📷 写真を挿入",
+        "🎨 背景の色",
+        "▶ 再生"
+      ],
+      "answer": 1
+    },
+    "explanation": "「挿入」は、写真や図などを入れるという意味です。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g4-op-touch-03",
+    "grade": 4,
+    "field": "operation",
+    "device": "touch",
+    "type": "ui-task",
+    "question": "ファイルを長おしして、名前を変えよう。",
+    "ruby": false,
+    "task": {
+      "kind": "context-menu",
+      "trigger": "long-press",
+      "target": "📄 新しいファイル",
+      "menu": [
+        "複製",
+        "名前を変更",
+        "削除",
+        "共有"
+      ],
+      "answer": 1
+    },
+    "explanation": "長おしのメニューから、名前の変更や削除ができます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g4-info-01",
+    "grade": 4,
+    "field": "information",
+    "device": "all",
+    "type": "choice",
+    "question": "2つの店のりんごです。1個あたりの値段が安いのはどちら？",
+    "ruby": false,
+    "figure": {
+      "kind": "table",
+      "caption": "りんごの値段",
+      "headers": [
+        "店",
+        "個数",
+        "値段"
+      ],
+      "rows": [
+        [
+          "Aの店",
+          "3個",
+          "300円"
+        ],
+        [
+          "Bの店",
+          "5個",
+          "450円"
+        ]
+      ]
+    },
+    "choices": [
+      "Bの店（1個90円）",
+      "Aの店（1個100円）",
+      "どちらも同じ",
+      "比べられない"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "Aは300÷3＝100円、Bは450÷5＝90円。そろえて比べるのがコツです。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g4-info-02",
+    "grade": 4,
+    "field": "information",
+    "device": "all",
+    "type": "multi",
+    "question": "情報を比べるときに大切なことを全部えらぼう。",
+    "ruby": false,
+    "choices": [
+      "いくつかの情報を見比べる",
+      "いつの情報かを確かめる",
+      "最初に見た1つだけを信じる",
+      "人気があれば正しいと考える"
+    ],
+    "answer": [
+      0,
+      1
+    ],
+    "explanation": "情報は複数を比べ、新しさも確かめましょう。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g4-info-03",
+    "grade": 4,
+    "field": "information",
+    "device": "all",
+    "type": "order",
+    "question": "スライドで発表を作る手順にならべよう。",
+    "ruby": false,
+    "choices": [
+      "伝えたいことを決める",
+      "内容の順番（構成）を考える",
+      "スライドを作る",
+      "練習してから発表する"
+    ],
+    "answer": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "explanation": "先に伝えたいことと構成を決めると、分かりやすいスライドになります。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g4-info-04",
+    "grade": 4,
+    "field": "information",
+    "device": "all",
+    "type": "choice",
+    "question": "グラフを見て答えよう。3年生と6年生の利用人数の差は何人？",
+    "ruby": false,
+    "figure": {
+      "kind": "bar",
+      "caption": "図書室を利用した人数（人）",
+      "labels": [
+        "3年",
+        "4年",
+        "5年",
+        "6年"
+      ],
+      "values": [
+        45,
+        38,
+        30,
+        25
+      ],
+      "unit": "人"
+    },
+    "choices": [
+      "20人",
+      "15人",
+      "70人",
+      "25人"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "45人－25人＝20人です。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g4-safety-01",
+    "grade": 4,
+    "field": "safety",
+    "device": "all",
+    "type": "choice",
+    "question": "SNSに「今、○○公園にいるよ」と写真つきで投稿すると、どんな危険がある？",
+    "ruby": false,
+    "choices": [
+      "知らない人に、いる場所が分かってしまう",
+      "写真がきれいになる",
+      "友だちが増えるだけ",
+      "危険は何もない"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "今いる場所を投稿すると、知らない人に居場所を知られるおそれがあります。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g4-safety-02",
+    "grade": 4,
+    "field": "safety",
+    "device": "all",
+    "type": "multi",
+    "question": "SNSに書きこんではいけないことを全部えらぼう。",
+    "ruby": false,
+    "choices": [
+      "友だちの悪口",
+      "自分の住所や学校名",
+      "「今日は晴れだった」という感想",
+      "人のはずかしい写真"
+    ],
+    "answer": [
+      0,
+      1,
+      3
+    ],
+    "explanation": "悪口や個人情報、人がいやがる写真は書きこみません。一度広がると消せません。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g4-safety-03",
+    "grade": 4,
+    "field": "safety",
+    "device": "all",
+    "type": "choice",
+    "question": "グループのメッセージで、自分の書いたことが誤解されてしまった。どうする？",
+    "ruby": false,
+    "choices": [
+      "落ち着いて、言いたかったことをていねいに説明する",
+      "怒って言い返す",
+      "グループの全員をブロックする",
+      "相手の悪口を別の場所に書く"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "文字だけのやりとりは誤解が起きやすいので、落ち着いて伝え直しましょう。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g4-safety-04",
+    "grade": 4,
+    "field": "safety",
+    "device": "all",
+    "type": "match",
+    "question": "SNSの言葉と、その意味を組み合わせよう。",
+    "ruby": false,
+    "pairs": [
+      {
+        "left": "既読（きどく）",
+        "right": "相手がメッセージを読んだしるし"
+      },
+      {
+        "left": "ブロック",
+        "right": "特定の相手から連絡が来ないようにすること"
+      },
+      {
+        "left": "スタンプ",
+        "right": "気持ちを絵で伝えるもの"
+      }
+    ],
+    "explanation": "「既読」がついても、すぐに返事ができるとはかぎりません。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  }
+]

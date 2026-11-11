@@ -1,1 +1,416 @@
-[]
+[
+  {
+    "id": "g5-op-pc-01",
+    "grade": 5,
+    "field": "operation",
+    "device": "pc",
+    "type": "ui-task",
+    "question": "上の文をコピーして、下のらんに貼り付けよう。",
+    "ruby": false,
+    "task": {
+      "kind": "copy-paste",
+      "text": "しぜんを大切にしよう"
+    },
+    "explanation": "コピーは Ctrl + C、貼り付けは Ctrl + V。右クリックのメニューからもできます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g5-op-pc-02",
+    "grade": 5,
+    "field": "operation",
+    "device": "pc",
+    "type": "ui-task",
+    "question": "「春の小川」という文字が選ばれています。この文字をコピーするショートカットキーをおそう。",
+    "ruby": false,
+    "task": {
+      "kind": "shortcut",
+      "key": "c",
+      "ctrl": true,
+      "shift": false,
+      "context": "春の小川（選択中）"
+    },
+    "explanation": "Ctrl キーをおしながら C をおすとコピーできます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g5-op-pc-03",
+    "grade": 5,
+    "field": "operation",
+    "device": "pc",
+    "type": "ui-task",
+    "question": "画像を右クリックして、画像をパソコンに保存しよう。",
+    "ruby": false,
+    "task": {
+      "kind": "context-menu",
+      "trigger": "right-click",
+      "target": "🖼 花の写真",
+      "menu": [
+        "コピー",
+        "名前を付けて画像を保存",
+        "印刷",
+        "削除"
+      ],
+      "answer": 1
+    },
+    "explanation": "右クリックすると、その場でできることのメニューが出ます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g5-op-pc-04",
+    "grade": 5,
+    "field": "operation",
+    "device": "pc",
+    "type": "choice",
+    "question": "コピーした文字を貼り付けるショートカットキーは？",
+    "ruby": false,
+    "choices": [
+      "Ctrl + V",
+      "Ctrl + C",
+      "Ctrl + X",
+      "Ctrl + Z"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "C はコピー、X は切り取り、Z は元にもどす、V は貼り付けです。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g5-op-touch-01",
+    "grade": 5,
+    "field": "operation",
+    "device": "touch",
+    "type": "ui-task",
+    "question": "上の文をコピーして、下のらんに貼り付けよう。",
+    "ruby": false,
+    "task": {
+      "kind": "copy-paste",
+      "text": "しぜんを大切にしよう"
+    },
+    "explanation": "文字を長おしして選び「コピー」、貼り付けたい所を長おしして「ペースト」（貼り付け）を選びます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g5-op-touch-02",
+    "grade": 5,
+    "field": "operation",
+    "device": "touch",
+    "type": "ui-task",
+    "question": "写真を長おししてメニューを出し、写真を端末に保存しよう。",
+    "ruby": false,
+    "task": {
+      "kind": "context-menu",
+      "trigger": "long-press",
+      "target": "🖼 花の写真",
+      "menu": [
+        "コピー",
+        "写真に保存",
+        "共有…"
+      ],
+      "answer": 1
+    },
+    "explanation": "長おしすると、保存やコピーなどのメニューが出ます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g5-op-touch-03",
+    "grade": 5,
+    "field": "operation",
+    "device": "touch",
+    "type": "ui-task",
+    "question": "写真を Teams で先生に送りたいので、共有ボタンをおしました。どれを選ぶ？",
+    "ruby": false,
+    "task": {
+      "kind": "button",
+      "style": "share",
+      "title": "共有",
+      "message": "🖼 花の写真",
+      "buttons": [
+        "プリント",
+        "Teams",
+        "メモ",
+        "コピー"
+      ],
+      "answer": 1
+    },
+    "explanation": "共有メニューでは、送り先のアプリを選びます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g5-op-touch-04",
+    "grade": 5,
+    "field": "operation",
+    "device": "touch",
+    "type": "order",
+    "question": "タブレットで文字をコピーして貼り付ける順番にならべよう。",
+    "ruby": false,
+    "choices": [
+      "コピーしたい文字を長おしして選ぶ",
+      "「コピー」をタップする",
+      "貼り付けたい場所を長おしする",
+      "「ペースト」をタップする"
+    ],
+    "answer": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "explanation": "「選ぶ → コピー → 場所を決める → 貼り付け」の順です。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g5-info-01",
+    "grade": 5,
+    "field": "information",
+    "device": "all",
+    "type": "choice",
+    "question": "図書室で借りられた本の数です。前の月より いちばん増えたのは何月？",
+    "ruby": false,
+    "figure": {
+      "kind": "bar",
+      "caption": "借りられた本（冊）",
+      "labels": [
+        "4月",
+        "5月",
+        "6月",
+        "7月"
+      ],
+      "values": [
+        120,
+        150,
+        140,
+        200
+      ],
+      "unit": "冊"
+    },
+    "choices": [
+      "7月",
+      "5月",
+      "6月",
+      "4月"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "5月は30冊、6月は10冊へって、7月は60冊増えています。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g5-info-02",
+    "grade": 5,
+    "field": "information",
+    "device": "all",
+    "type": "choice",
+    "question": "調べ学習で使った本やサイトの名前をメモしておくのはなぜ？",
+    "ruby": false,
+    "choices": [
+      "どこから知ったかを、あとで示せるようにするため",
+      "ノートのページを増やすため",
+      "字の練習のため",
+      "かっこよく見せるため"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "どこから知った情報かを書いておくと、確かめたり、紹介したりできます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g5-info-03",
+    "grade": 5,
+    "field": "information",
+    "device": "all",
+    "type": "multi",
+    "question": "調べたことをノートにまとめるときの よい方法を全部えらぼう。",
+    "ruby": false,
+    "choices": [
+      "大事なところを自分の言葉でまとめる",
+      "調べた本やサイトの名前を書いておく",
+      "文章を全部そのまま写して自分の考えとして書く",
+      "分からない言葉も調べずにそのまま書く"
+    ],
+    "answer": [
+      0,
+      1
+    ],
+    "explanation": "人の文章をそのまま自分の考えとして書くのはよくありません。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g5-info-04",
+    "grade": 5,
+    "field": "information",
+    "device": "all",
+    "type": "choice",
+    "question": "給食の残りの量の表です。残りが2kg以下だった日は何日ある？",
+    "ruby": false,
+    "figure": {
+      "kind": "table",
+      "caption": "給食の残りの量",
+      "headers": [
+        "曜日",
+        "月",
+        "火",
+        "水",
+        "木",
+        "金"
+      ],
+      "rows": [
+        [
+          "残り",
+          "3kg",
+          "5kg",
+          "2kg",
+          "4kg",
+          "1kg"
+        ]
+      ]
+    },
+    "choices": [
+      "2日",
+      "1日",
+      "3日",
+      "4日"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "水曜日（2kg）と金曜日（1kg）の2日です。「以下」はその数もふくみます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g5-safety-01",
+    "grade": 5,
+    "field": "safety",
+    "device": "all",
+    "type": "choice",
+    "question": "インターネットで見つけたイラストを、クラスの発表スライドに使いたいとき、まず確認することは？",
+    "ruby": false,
+    "choices": [
+      "使ってよいかどうかのルール",
+      "イラストの大きさ",
+      "ファイルの名前",
+      "色の数"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "イラストには作った人の権利（著作権）があります。使ってよいか、ルールを確認しましょう。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g5-safety-02",
+    "grade": 5,
+    "field": "safety",
+    "device": "all",
+    "type": "choice",
+    "question": "友だちが写っている写真を、クラスのページにのせたい。まず どうする？",
+    "ruby": false,
+    "choices": [
+      "友だちに、のせてよいか聞く",
+      "先にのせてから友だちに伝える",
+      "だまってのせる",
+      "顔を少しだけ小さくしてのせる"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "写っている人の許可をもらってからのせましょう。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g5-safety-03",
+    "grade": 5,
+    "field": "safety",
+    "device": "all",
+    "type": "match",
+    "question": "場面と、よい行動を組み合わせよう。",
+    "ruby": false,
+    "pairs": [
+      {
+        "left": "ネットで見つけた絵を使いたい",
+        "right": "使ってよいかルールを確かめる"
+      },
+      {
+        "left": "友だちの写真をのせたい",
+        "right": "本人に許可をもらう"
+      },
+      {
+        "left": "知らない人からメールが来た",
+        "right": "開かずに大人に知らせる"
+      }
+    ],
+    "explanation": "こまったときは、ルールを確かめたり、大人に相談したりしましょう。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g5-safety-04",
+    "grade": 5,
+    "field": "safety",
+    "device": "all",
+    "type": "multi",
+    "question": "写真をインターネットにのせる前に、安全のために確かめることを全部えらぼう。",
+    "ruby": false,
+    "choices": [
+      "家や学校の場所が分かるものが写っていないか",
+      "写っている人が、のせてよいと言っているか",
+      "写真のファイルが大きいか",
+      "写真を何枚とったか"
+    ],
+    "answer": [
+      0,
+      1
+    ],
+    "explanation": "写真から住んでいる場所が分かってしまうことがあります。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  }
+]

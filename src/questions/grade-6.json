@@ -1,1 +1,370 @@
-[]
+[
+  {
+    "id": "g6-op-pc-01",
+    "grade": 6,
+    "field": "operation",
+    "device": "pc",
+    "type": "input",
+    "question": "ローマ{字|じ}{入力|にゅうりょく}で「さくら」と{入力|にゅうりょく}しよう（S A K U R A）。",
+    "ruby": true,
+    "target": "さくら",
+    "timeLimitSec": 45,
+    "explanation": "ローマ{字|じ}{入力|にゅうりょく}では、「さ」は S と A のように、{子音|しいん}と{母音|ぼいん}の キーを{組|く}み{合|あ}わせます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g6-op-pc-02",
+    "grade": 6,
+    "field": "operation",
+    "device": "pc",
+    "type": "input",
+    "question": "ローマ{字|じ}{入力|にゅうりょく}で「がっこう」と{入力|にゅうりょく}しよう。",
+    "ruby": true,
+    "target": "がっこう",
+    "timeLimitSec": 60,
+    "explanation": "「っ」は、つぎの{文字|もじ}の{子音|しいん}を2{回|かい}{打|う}つと{入力|にゅうりょく}できます（GAKKOU）。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g6-op-pc-03",
+    "grade": 6,
+    "field": "operation",
+    "device": "pc",
+    "type": "choice",
+    "question": "ローマ{字|じ}{入力|にゅうりょく}で「ん」を まちがいなく{入力|にゅうりょく}するには？",
+    "ruby": true,
+    "choices": [
+      "N を2{回|かい}おす（NN）",
+      "M をおす",
+      "H をおす",
+      "U をおす"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "N を1{回|かい}だけだと、つぎの{文字|もじ}と つながって しまうことが あります。NN と{打|う}つと たしかです。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g6-op-pc-04",
+    "grade": 6,
+    "field": "operation",
+    "device": "pc",
+    "type": "ui-task",
+    "question": "{作|つく}った カードを{保存|ほぞん}したい。どの ボタンを おす？",
+    "ruby": true,
+    "task": {
+      "kind": "button",
+      "style": "dialog",
+      "title": "{名前|なまえ}を{付|つ}けて{保存|ほぞん}",
+      "message": "ファイル{名|めい}：たんけんカード",
+      "buttons": [
+        "キャンセル",
+        "{保存|ほぞん}"
+      ],
+      "answer": 1
+    },
+    "explanation": "「キャンセル」は やめる という{意味|いみ}です。のこすときは「{保存|ほぞん}」を おします。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g6-op-touch-01",
+    "grade": 6,
+    "field": "operation",
+    "device": "touch",
+    "type": "input",
+    "question": "がめんの キーボードで「さくら」と{入力|にゅうりょく}しよう。",
+    "ruby": true,
+    "target": "さくら",
+    "timeLimitSec": 45,
+    "explanation": "ローマ{字|じ}でも、かなの キーボードでも{入力|にゅうりょく}できます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g6-op-touch-02",
+    "grade": 6,
+    "field": "operation",
+    "device": "touch",
+    "type": "input",
+    "question": "がめんの キーボードで「がっこう」と{入力|にゅうりょく}しよう。",
+    "ruby": true,
+    "target": "がっこう",
+    "timeLimitSec": 60,
+    "explanation": "{小|ちい}さい「っ」は、かなキーボードでは「つ」を{入力|にゅうりょく}してから{小|ちい}さくする キーで{入力|にゅうりょく}できます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g6-op-touch-03",
+    "grade": 6,
+    "field": "operation",
+    "device": "touch",
+    "type": "ui-task",
+    "question": "しゃしんを{長|なが}おし（しばらく おしたまま）して、「コピー」を えらぼう。",
+    "ruby": true,
+    "task": {
+      "kind": "context-menu",
+      "trigger": "long-press",
+      "target": "🖼 しゃしん",
+      "menu": [
+        "コピー",
+        "{削除|さくじょ}",
+        "{共有|きょうゆう}"
+      ],
+      "answer": 0
+    },
+    "explanation": "{長|なが}おしすると、できることの メニューが{出|で}てきます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g6-op-touch-04",
+    "grade": 6,
+    "field": "operation",
+    "device": "touch",
+    "type": "choice",
+    "question": "がめんを2本の{指|ゆび}で{広|ひろ}げるように うごかすと どうなる？",
+    "ruby": true,
+    "choices": [
+      "{大|おお}きく{見|み}える（ズーム）",
+      "{小|ちい}さく{見|み}える",
+      "がめんが{消|き}える",
+      "{音|おと}が{出|で}る"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "2本の{指|ゆび}で{広|ひろ}げると{大|おお}きく、せばめると{小|ちい}さく なります（ピンチ）。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g6-info-01",
+    "grade": 6,
+    "field": "information",
+    "device": "all",
+    "type": "choice",
+    "question": "カブトムシの えさを{調|しら}べたい。けんさくに{入|い}れる ことばで いちばん よいのは？",
+    "ruby": true,
+    "choices": [
+      "カブトムシ えさ",
+      "むし",
+      "えさ",
+      "こんちゅう"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "{知|し}りたいことの{大事|だいじ}な ことばを{組|く}み{合|あ}わせると、ほしい{情報|じょうほう}が{見|み}つかりやすく なります。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g6-info-02",
+    "grade": 6,
+    "field": "information",
+    "device": "all",
+    "type": "multi",
+    "question": "キーワードけんさくの コツとして{正|ただ}しいものを{全部|ぜんぶ}えらぼう。",
+    "ruby": true,
+    "choices": [
+      "{大事|だいじ}な ことばを{入|い}れる",
+      "ことばと ことばの{間|あいだ}に スペースを{入|い}れる",
+      "ことばは なるべく{長|なが}い{文|ぶん}に する",
+      "1{文字|もじ}だけ{入|い}れる"
+    ],
+    "answer": [
+      0,
+      1
+    ],
+    "explanation": "{大事|だいじ}な ことばを スペースで{区切|くぎ}って{入|い}れるのが{基本|きほん}です。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g6-info-03",
+    "grade": 6,
+    "field": "information",
+    "device": "all",
+    "type": "choice",
+    "question": "1{日|にち}の{気温|きおん}の グラフです。いちばん{気温|きおん}が{高|たか}いのは{何時|なんじ}？",
+    "ruby": true,
+    "figure": {
+      "kind": "line",
+      "caption": "1{日|にち}の{気温|きおん}（℃）",
+      "labels": [
+        "9時",
+        "11時",
+        "13時",
+        "15時"
+      ],
+      "values": [
+        18,
+        22,
+        25,
+        21
+      ],
+      "unit": "℃"
+    },
+    "choices": [
+      "13{時|じ}",
+      "9{時|じ}",
+      "11{時|じ}",
+      "15{時|じ}"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "おれ{線|せん}が いちばん{上|うえ}に ある ところを{見|み}ます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g6-info-04",
+    "grade": 6,
+    "field": "information",
+    "device": "all",
+    "type": "match",
+    "question": "{調|しら}べたいことと、{調|しら}べる{方法|ほうほう}を{組|く}み{合|あ}わせよう。",
+    "ruby": true,
+    "pairs": [
+      {
+        "left": "ことばの{意味|いみ}",
+        "right": "{国語|こくご}{辞典|じてん}"
+      },
+      {
+        "left": "{昔|むかし}の{町|まち}の ようす",
+        "right": "{地域|ちいき}の{人|ひと}に インタビュー"
+      },
+      {
+        "left": "あしたの{天気|てんき}",
+        "right": "{天気|てんき}{予報|よほう}"
+      }
+    ],
+    "explanation": "{調|しら}べたい ことに よって、{合|あ}った{調|しら}べ{方|かた}が ちがいます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g6-safety-01",
+    "grade": 6,
+    "field": "safety",
+    "device": "all",
+    "type": "choice",
+    "question": "パスワードを{作|つく}るとき、よいのは どれ？",
+    "ruby": true,
+    "choices": [
+      "{人|ひと}に{当|あ}てられにくい もの",
+      "{自分|じぶん}の{名前|なまえ}",
+      "1234",
+      "{自分|じぶん}の{誕生日|たんじょうび}"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "{名前|なまえ}や{誕生日|たんじょうび}、かんたんな{数字|すうじ}は{当|あ}てられやすいので、さけましょう。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g6-safety-02",
+    "grade": 6,
+    "field": "safety",
+    "device": "all",
+    "type": "choice",
+    "question": "{友|とも}だちと メッセージを する とき、{気|き}をつける ことは？",
+    "ruby": true,
+    "choices": [
+      "{相手|あいて}の{気持|きも}ちを{考|かんが}えて{書|か}く",
+      "{思|おも}ったことを すぐ{全部|ぜんぶ}{書|か}く",
+      "わる{口|くち}を{書|か}く",
+      "{夜|よる}おそくに{何回|なんかい}も{送|おく}る"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "{文字|もじ}だけだと{気持|きも}ちが つたわりにくいので、{読|よ}む{人|ひと}の{気持|きも}ちを{考|かんが}えましょう。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g6-safety-03",
+    "grade": 6,
+    "field": "safety",
+    "device": "all",
+    "type": "multi",
+    "question": "インターネットを つかう ときの よい{約束|やくそく}を{全部|ぜんぶ}えらぼう。",
+    "ruby": true,
+    "choices": [
+      "こまったら{大人|おとな}に{相談|そうだん}する",
+      "つかう{時間|じかん}を{家|いえ}の{人|ひと}と{決|き}める",
+      "{知|し}らない{人|ひと}から{届|とど}いた ファイルを{開|ひら}く",
+      "かってに アプリを{入|い}れる"
+    ],
+    "answer": [
+      0,
+      1
+    ],
+    "explanation": "{知|し}らない ファイルや アプリには、わるい プログラムが かくれて いることが あります。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g6-safety-04",
+    "grade": 6,
+    "field": "safety",
+    "device": "all",
+    "type": "choice",
+    "question": "ゲームの{中|なか}で{知|し}らない{人|ひと}に「{会|あ}おうよ」と{言|い}われた。どうする？",
+    "ruby": true,
+    "choices": [
+      "{会|あ}わずに、{家|いえ}の{人|ひと}や{先生|せんせい}に{相談|そうだん}する",
+      "{会|あ}いに{行|い}く",
+      "{住所|じゅうしょ}を{教|おし}える",
+      "{友|とも}だちを{連|つ}れて{会|あ}いに{行|い}く"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "ネットで{知|し}り{合|あ}った{人|ひと}が、{本当|ほんとう}は どんな{人|ひと}か は わかりません。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  }
+]
