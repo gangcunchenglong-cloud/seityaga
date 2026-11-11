@@ -8,7 +8,7 @@
 - 対応端末：Chromebook / iPad / Windows PC / スマホ（基本操作の問題は端末で切り替え）
 - サンプル問題：480問（各級48問＝情報収集12問・モラル安全12問・基本操作はPC用12問＋タッチ用12問。すべて確認前の draft）
 
-先生向けの使い方は [docs/teacher-guide.md](docs/teacher-guide.md) を見てください。
+先生向けの使い方は [docs/teacher-guide.md](docs/teacher-guide.md) を、問題を承認する前の点検結果は [docs/question-review.md](docs/question-review.md) を見てください。
 
 ## コマンド
 
