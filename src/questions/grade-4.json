@@ -408,5 +408,418 @@
     "source": "ai",
     "reviewedBy": "",
     "reviewedAt": ""
+  },
+  {
+    "id": "g4-op-pc-05",
+    "grade": 4,
+    "field": "operation",
+    "device": "pc",
+    "type": "ui-task",
+    "question": "選んだ文字を太字にするショートカットキーをおそう。",
+    "ruby": false,
+    "task": {
+      "kind": "shortcut",
+      "key": "b",
+      "ctrl": true,
+      "shift": false,
+      "context": "（選んだ文字：大切なお知らせ）"
+    },
+    "explanation": "Ctrl + B で太字になります。B は Bold（太い）の頭文字です。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g4-op-pc-06",
+    "grade": 4,
+    "field": "operation",
+    "device": "pc",
+    "type": "choice",
+    "question": "表計算ソフトで表を作るとき、いちばん上の行に入れるとよいものは？",
+    "ruby": false,
+    "choices": [
+      "それぞれの列が何を表すかの見出し",
+      "合計の数字",
+      "作った人の住所",
+      "何も入れない"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "見出しがあると、表を読む人が何の数字か分かります。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g4-op-pc-07",
+    "grade": 4,
+    "field": "operation",
+    "device": "pc",
+    "type": "ui-task",
+    "question": "デスクトップの何もない所を右クリックして、新しいフォルダーを作ろう。",
+    "ruby": false,
+    "task": {
+      "kind": "context-menu",
+      "trigger": "right-click",
+      "target": "🖥 デスクトップ（何もない所）",
+      "menu": [
+        "表示",
+        "並べ替え",
+        "新しいフォルダーを作成",
+        "プロパティ"
+      ],
+      "answer": 2
+    },
+    "explanation": "右クリックのメニューから、新しいフォルダーを作れます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g4-op-pc-08",
+    "grade": 4,
+    "field": "operation",
+    "device": "pc",
+    "type": "input",
+    "question": "「Science Fair 2026」と入力しよう（大文字・小文字・スペースも同じに）。",
+    "ruby": false,
+    "target": "Science Fair 2026",
+    "timeLimitSec": 45,
+    "explanation": "大文字は Shift キーをおしながら入力します。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g4-op-touch-04",
+    "grade": 4,
+    "field": "operation",
+    "device": "touch",
+    "type": "input",
+    "question": "「Science Fair 2026」と入力しよう（大文字・小文字・スペースも同じに）。",
+    "ruby": false,
+    "target": "Science Fair 2026",
+    "timeLimitSec": 60,
+    "explanation": "数字は「123」のキーで切りかえて入力します。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g4-op-touch-05",
+    "grade": 4,
+    "field": "operation",
+    "device": "touch",
+    "type": "choice",
+    "question": "スライドの写真を大きくしたい。写真を選んだあと、どこをドラッグする？",
+    "ruby": false,
+    "choices": [
+      "写真の角に出る小さな丸（ハンドル）",
+      "写真の真ん中",
+      "スライドの外",
+      "画面の上のタイトル"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "角のハンドルをドラッグすると、形をくずさずに大きさを変えられます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g4-op-all-02",
+    "grade": 4,
+    "field": "operation",
+    "device": "all",
+    "type": "ui-task",
+    "question": "スライドの文字を太くしたい。どのボタンをおす？",
+    "ruby": false,
+    "task": {
+      "kind": "button",
+      "style": "toolbar",
+      "title": "スライド",
+      "message": "（選んだ文字：大切なお知らせ）",
+      "buttons": [
+        "B（太字）",
+        "I（斜体）",
+        "U（下線）",
+        "🎨 文字の色"
+      ],
+      "answer": 0
+    },
+    "explanation": "B は太字、I は斜体（ななめ）、U は下線です。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g4-op-touch-06",
+    "grade": 4,
+    "field": "operation",
+    "device": "touch",
+    "type": "order",
+    "question": "タブレットで撮った写真をスライドに入れる順番にならべよう。",
+    "ruby": false,
+    "choices": [
+      "スライドを開く",
+      "「挿入」から「写真」を選ぶ",
+      "入れたい写真を選ぶ",
+      "大きさや位置を整える"
+    ],
+    "answer": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "explanation": "写真を入れたら、見やすい大きさと位置に整えます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g4-info-05",
+    "grade": 4,
+    "field": "information",
+    "device": "all",
+    "type": "choice",
+    "question": "3つの店のノートの値段です。1冊あたりいちばん安いのは？",
+    "ruby": false,
+    "figure": {
+      "kind": "table",
+      "caption": "ノートの値段",
+      "headers": [
+        "店",
+        "冊数",
+        "値段"
+      ],
+      "rows": [
+        [
+          "Aの店",
+          "2冊",
+          "240円"
+        ],
+        [
+          "Bの店",
+          "3冊",
+          "330円"
+        ],
+        [
+          "Cの店",
+          "5冊",
+          "600円"
+        ]
+      ]
+    },
+    "choices": [
+      "Bの店（1冊110円）",
+      "Aの店（1冊120円）",
+      "Cの店（1冊120円）",
+      "どれも同じ"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "A：240÷2＝120円、B：330÷3＝110円、C：600÷5＝120円です。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g4-info-06",
+    "grade": 4,
+    "field": "information",
+    "device": "all",
+    "type": "choice",
+    "question": "新聞とインターネットで同じ出来事の記事を読み比べたら、内容が少しちがった。どうする？",
+    "ruby": false,
+    "choices": [
+      "ほかの情報源も見て、どこがちがうか確かめる",
+      "先に読んだほうだけを信じる",
+      "どちらも読まなかったことにする",
+      "ちがうほうの記事をSNSで悪く言う"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "情報がちがうときは、ほかの情報源で確かめます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g4-info-07",
+    "grade": 4,
+    "field": "information",
+    "device": "all",
+    "type": "choice",
+    "question": "リサイクル回収の量のグラフです。4つの学年の合計は何kg？",
+    "ruby": false,
+    "figure": {
+      "kind": "bar",
+      "caption": "学年ごとの回収量（kg）",
+      "labels": [
+        "3年",
+        "4年",
+        "5年",
+        "6年"
+      ],
+      "values": [
+        12,
+        15,
+        20,
+        18
+      ],
+      "unit": "kg"
+    },
+    "choices": [
+      "65kg",
+      "55kg",
+      "20kg",
+      "75kg"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "12＋15＋20＋18＝65kg です。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g4-info-08",
+    "grade": 4,
+    "field": "information",
+    "device": "all",
+    "type": "multi",
+    "question": "発表のスライドを見やすくする工夫を全部えらぼう。",
+    "ruby": false,
+    "choices": [
+      "文字を大きくする",
+      "1枚で伝えることをしぼる",
+      "文字をできるだけたくさんつめこむ",
+      "背景と文字を似た色にする"
+    ],
+    "answer": [
+      0,
+      1
+    ],
+    "explanation": "文字が多すぎたり、背景と似た色だったりすると読みにくくなります。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g4-safety-05",
+    "grade": 4,
+    "field": "safety",
+    "device": "all",
+    "type": "choice",
+    "question": "オンラインゲームで、知らない人に「アイテムをあげるから写真を送って」と言われた。どうする？",
+    "ruby": false,
+    "choices": [
+      "送らずに、家の人に相談する",
+      "送る",
+      "顔をかくして送る",
+      "友だちの写真を送る"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "写真を送ると、悪いことに使われるおそれがあります。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g4-safety-06",
+    "grade": 4,
+    "field": "safety",
+    "device": "all",
+    "type": "choice",
+    "question": "SNSで、友だちの悪口が書かれているのを見つけた。よい行動は？",
+    "ruby": false,
+    "choices": [
+      "悪口を広げず、先生や家の人に知らせる",
+      "悪口に「いいね」をおす",
+      "自分も悪口を書きこむ",
+      "悪口の画面をほかの人に送る"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "悪口を広げないことと、大人に知らせることが大切です。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g4-safety-07",
+    "grade": 4,
+    "field": "safety",
+    "device": "all",
+    "type": "multi",
+    "question": "SNSのプロフィールにのせないほうがよいものを全部えらぼう。",
+    "ruby": false,
+    "choices": [
+      "本名",
+      "通っている学校の名前",
+      "自分の顔写真",
+      "好きな食べ物"
+    ],
+    "answer": [
+      0,
+      1,
+      2
+    ],
+    "explanation": "本名・学校名・顔写真から、住んでいる場所や本人が分かってしまうことがあります。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g4-safety-08",
+    "grade": 4,
+    "field": "safety",
+    "device": "all",
+    "type": "match",
+    "question": "場面と、よい行動を組み合わせよう。",
+    "ruby": false,
+    "pairs": [
+      {
+        "left": "夜おそくまでメッセージが続く",
+        "right": "時間を決めて、終わりのあいさつを送る"
+      },
+      {
+        "left": "グループで一人が仲間外れにされている",
+        "right": "先生や大人に相談する"
+      },
+      {
+        "left": "知らない人から友だち申請が来た",
+        "right": "相手を確かめ、知らない人なら承認しない"
+      }
+    ],
+    "explanation": "こまったときは一人でかかえずに、ルールを決めたり相談したりしましょう。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
   }
 ]

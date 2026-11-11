@@ -412,5 +412,407 @@
     "source": "ai",
     "reviewedBy": "",
     "reviewedAt": ""
+  },
+  {
+    "id": "g5-op-pc-05",
+    "grade": 5,
+    "field": "operation",
+    "device": "pc",
+    "type": "ui-task",
+    "question": "「たんぽぽ」という文字が選ばれています。この文字を切り取るショートカットキーをおそう。",
+    "ruby": false,
+    "task": {
+      "kind": "shortcut",
+      "key": "x",
+      "ctrl": true,
+      "shift": false,
+      "context": "たんぽぽ（選択中）"
+    },
+    "explanation": "Ctrl + X で切り取りです。切り取った文字は、Ctrl + V で別の場所に貼り付けられます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g5-op-pc-06",
+    "grade": 5,
+    "field": "operation",
+    "device": "pc",
+    "type": "choice",
+    "question": "ファイルを保存するとき、あとで探しやすくするために大切なことは？",
+    "ruby": false,
+    "choices": [
+      "保存する場所と名前を決めて保存する",
+      "名前を付けずに保存する",
+      "毎回ちがう場所にばらばらに保存する",
+      "保存しないで閉じる"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "どこに、どんな名前で保存したかが分かると、すぐに見つけられます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g5-op-pc-07",
+    "grade": 5,
+    "field": "operation",
+    "device": "pc",
+    "type": "ui-task",
+    "question": "「遠足の写真」を「写真」フォルダーへドラッグしよう。",
+    "ruby": false,
+    "task": {
+      "kind": "drag-to-folder",
+      "file": "🖼 遠足の写真",
+      "folders": [
+        "📁 写真",
+        "📁 作文",
+        "📁 プリント"
+      ],
+      "answer": 0
+    },
+    "explanation": "種類ごとにフォルダーに分けておくと整理しやすくなります。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g5-op-pc-08",
+    "grade": 5,
+    "field": "operation",
+    "device": "pc",
+    "type": "order",
+    "question": "パソコンで文字をコピーして貼り付ける順番にならべよう。",
+    "ruby": false,
+    "choices": [
+      "コピーしたい文字をドラッグして選ぶ",
+      "Ctrl + C をおす",
+      "貼り付けたい場所をクリックする",
+      "Ctrl + V をおす"
+    ],
+    "answer": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "explanation": "「選ぶ → コピー → 場所を決める → 貼り付け」の順です。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g5-op-touch-05",
+    "grade": 5,
+    "field": "operation",
+    "device": "touch",
+    "type": "ui-task",
+    "question": "撮った写真を「ファイル」アプリに保存したい。共有メニューでどれを選ぶ？",
+    "ruby": false,
+    "task": {
+      "kind": "button",
+      "style": "share",
+      "title": "共有",
+      "message": "🖼 運動会の写真",
+      "buttons": [
+        "“ファイル”に保存",
+        "プリント",
+        "メッセージ",
+        "壁紙に設定"
+      ],
+      "answer": 0
+    },
+    "explanation": "「“ファイル”に保存」で、ファイルアプリの好きな場所に保存できます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g5-op-touch-06",
+    "grade": 5,
+    "field": "operation",
+    "device": "touch",
+    "type": "choice",
+    "question": "写真の一部分だけを使いたい。どの機能を使う？",
+    "ruby": false,
+    "choices": [
+      "トリミング（切り取り）",
+      "明るさの調整",
+      "フィルター",
+      "回転"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "トリミングで、写真のいらない部分を切り取れます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g5-op-touch-07",
+    "grade": 5,
+    "field": "operation",
+    "device": "touch",
+    "type": "ui-task",
+    "question": "文字を長おししてメニューを出し、文字をコピーしよう。",
+    "ruby": false,
+    "task": {
+      "kind": "context-menu",
+      "trigger": "long-press",
+      "target": "📝 「春の小川」の文字",
+      "menu": [
+        "コピー",
+        "調べる",
+        "共有…",
+        "翻訳"
+      ],
+      "answer": 0
+    },
+    "explanation": "長おしで出るメニューから「コピー」を選びます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g5-op-touch-08",
+    "grade": 5,
+    "field": "operation",
+    "device": "touch",
+    "type": "ui-task",
+    "question": "「遠足の写真」を指で「写真」フォルダーへドラッグしよう。",
+    "ruby": false,
+    "task": {
+      "kind": "drag-to-folder",
+      "file": "🖼 遠足の写真",
+      "folders": [
+        "📁 写真",
+        "📁 作文",
+        "📁 プリント"
+      ],
+      "answer": 0
+    },
+    "explanation": "指をはなさずに動かし、フォルダーの上ではなします。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g5-info-05",
+    "grade": 5,
+    "field": "information",
+    "device": "all",
+    "type": "choice",
+    "question": "教室の気温のグラフです。気温が20℃をこえたのは何回？",
+    "ruby": false,
+    "figure": {
+      "kind": "line",
+      "caption": "教室の気温（℃）",
+      "labels": [
+        "8時",
+        "10時",
+        "12時",
+        "14時"
+      ],
+      "values": [
+        17,
+        19,
+        22,
+        21
+      ],
+      "unit": "℃"
+    },
+    "choices": [
+      "2回",
+      "1回",
+      "3回",
+      "4回"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "12時（22℃）と14時（21℃）の2回です。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g5-info-06",
+    "grade": 5,
+    "field": "information",
+    "device": "all",
+    "type": "choice",
+    "question": "百科事典とインターネットの両方で調べたら、内容が同じだった。言えることは？",
+    "ruby": false,
+    "choices": [
+      "2つの情報源で確かめられたので、より確かだと言える",
+      "インターネットは必ずまちがっている",
+      "百科事典は必ずまちがっている",
+      "調べる必要はなかった"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "いくつかの情報源で確かめると、情報の確かさが高まります。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g5-info-07",
+    "grade": 5,
+    "field": "information",
+    "device": "all",
+    "type": "match",
+    "question": "調べ方と、そのよいところを組み合わせよう。",
+    "ruby": false,
+    "pairs": [
+      {
+        "left": "本や事典",
+        "right": "内容が確かめられていることが多い"
+      },
+      {
+        "left": "インターネット",
+        "right": "新しい情報をすぐに調べられる"
+      },
+      {
+        "left": "インタビュー",
+        "right": "くわしい人から直接話を聞ける"
+      }
+    ],
+    "explanation": "調べ方によってよいところがちがいます。目的に合わせて使い分けましょう。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g5-info-08",
+    "grade": 5,
+    "field": "information",
+    "device": "all",
+    "type": "multi",
+    "question": "アンケートを作るときに大切なことを全部えらぼう。",
+    "ruby": false,
+    "choices": [
+      "何を知りたいかを決めてから質問を作る",
+      "答えやすい質問にする",
+      "答えた人の名前を全員に公開する",
+      "答えを自分の思いどおりに書き直す"
+    ],
+    "answer": [
+      0,
+      1
+    ],
+    "explanation": "答えた人の情報を守り、結果はそのまま正しく使います。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g5-safety-05",
+    "grade": 5,
+    "field": "safety",
+    "device": "all",
+    "type": "choice",
+    "question": "人が書いた文章を、自分の作文の中で使ってよいのはどんなとき？",
+    "ruby": false,
+    "choices": [
+      "かぎかっこでくくり、だれが書いたかを示して引用するとき",
+      "だまって使うとき",
+      "少しだけ言葉を変えたとき",
+      "インターネットにあった文章のとき"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "引用するときは、自分の文と区別し、出どころを書きます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g5-safety-06",
+    "grade": 5,
+    "field": "safety",
+    "device": "all",
+    "type": "multi",
+    "question": "写真をとるときに気をつけることを全部えらぼう。",
+    "ruby": false,
+    "choices": [
+      "写る人に「とってもいい？」と聞く",
+      "とってはいけない場所ではとらない",
+      "人のいやがる顔をわざととる",
+      "こっそり人をとる"
+    ],
+    "answer": [
+      0,
+      1
+    ],
+    "explanation": "写る人の気持ちや、場所のきまりを大切にしましょう。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g5-safety-07",
+    "grade": 5,
+    "field": "safety",
+    "device": "all",
+    "type": "choice",
+    "question": "タブレットにアプリを入れたいとき、まずどうする？",
+    "ruby": false,
+    "choices": [
+      "家の人や先生に聞いてから入れる",
+      "好きなだけ入れる",
+      "友だちのアカウントで入れる",
+      "広告に出たアプリをすぐ入れる"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "アプリの中には、お金がかかるものや危ないものもあります。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g5-safety-08",
+    "grade": 5,
+    "field": "safety",
+    "device": "all",
+    "type": "choice",
+    "question": "好きなアニメの動画を、許可なくインターネットにアップロードした。どうなる？",
+    "ruby": false,
+    "choices": [
+      "作った人の権利（著作権）をおかすことになる",
+      "みんなが喜ぶので問題ない",
+      "自分のものになる",
+      "画質がよくなる"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "作品には作った人の権利があります。許可なく公開してはいけません。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
   }
 ]

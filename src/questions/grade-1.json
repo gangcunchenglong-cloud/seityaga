@@ -409,5 +409,408 @@
     "source": "ai",
     "reviewedBy": "",
     "reviewedAt": ""
+  },
+  {
+    "id": "g1-op-pc-05",
+    "grade": 1,
+    "field": "operation",
+    "device": "pc",
+    "type": "choice",
+    "question": "表計算ソフトで、セルC1に「=A1*B1」と入力し、C2にコピーした。C2の式はどうなる？",
+    "ruby": false,
+    "choices": [
+      "=A2*B2",
+      "=A1*B1",
+      "=A2*B1",
+      "=C1*C2"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "ふつうの参照（相対参照）は、コピーした位置に合わせて行や列がずれます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g1-op-pc-06",
+    "grade": 1,
+    "field": "operation",
+    "device": "pc",
+    "type": "choice",
+    "question": "表計算ソフトで、コピーしても参照するセルが変わらない（絶対参照）書き方はどれ？",
+    "ruby": false,
+    "choices": [
+      "$A$1",
+      "A1$",
+      "#A1",
+      "A:1"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "列と行の前に $ を付けると絶対参照になります。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g1-op-pc-07",
+    "grade": 1,
+    "field": "operation",
+    "device": "pc",
+    "type": "ui-task",
+    "question": "文書の中の言葉を、別の言葉にまとめて置き換える（置換）画面を開くショートカットキーをおそう。",
+    "ruby": false,
+    "task": {
+      "kind": "shortcut",
+      "key": "h",
+      "ctrl": true,
+      "shift": false,
+      "context": "（報告書の本文）"
+    },
+    "explanation": "多くの文書作成ソフトでは、Ctrl + H で置換の画面が開きます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g1-op-pc-08",
+    "grade": 1,
+    "field": "operation",
+    "device": "pc",
+    "type": "ui-task",
+    "question": "個人情報をふくむ「名簿_2026」を、いちばん適切なフォルダーへ移そう。",
+    "ruby": false,
+    "task": {
+      "kind": "drag-to-folder",
+      "file": "📊 名簿_2026",
+      "folders": [
+        "📁 共有（全員が閲覧可）",
+        "📁 担当者のみ（アクセス制限あり）",
+        "📁 公開Webサイト用"
+      ],
+      "answer": 1
+    },
+    "explanation": "個人情報は、見る必要のある人だけがアクセスできる場所で管理します。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g1-op-touch-05",
+    "grade": 1,
+    "field": "operation",
+    "device": "touch",
+    "type": "input",
+    "question": "アドレス「https://www.example.jp/docs」を正確に入力しよう。",
+    "ruby": false,
+    "target": "https://www.example.jp/docs",
+    "timeLimitSec": 60,
+    "explanation": "「:」や「/」は記号のキーボードで入力します。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g1-op-touch-06",
+    "grade": 1,
+    "field": "operation",
+    "device": "touch",
+    "type": "choice",
+    "question": "スマホのアプリの権限（アクセス許可）を見直す理由として、最も適切なのは？",
+    "ruby": false,
+    "choices": [
+      "必要以上の個人情報をアプリに渡さないため",
+      "アプリの動きを速くするため",
+      "画面を明るくするため",
+      "電話番号を変えるため"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "設定からアプリごとに、カメラ・位置情報・連絡先などの許可を確かめられます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g1-op-touch-07",
+    "grade": 1,
+    "field": "operation",
+    "device": "touch",
+    "type": "ui-task",
+    "question": "写真を長おしして、撮影場所などの情報（詳細）を確かめよう。",
+    "ruby": false,
+    "task": {
+      "kind": "context-menu",
+      "trigger": "long-press",
+      "target": "🖼 旅行の写真",
+      "menu": [
+        "共有",
+        "詳細を表示",
+        "削除",
+        "コピー"
+      ],
+      "answer": 1
+    },
+    "explanation": "写真には、撮影した場所（位置情報）などの情報がふくまれていることがあります。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g1-op-touch-08",
+    "grade": 1,
+    "field": "operation",
+    "device": "touch",
+    "type": "ui-task",
+    "question": "Webサイトで Cookie の確認が出た。必要なものだけを許可したい。どれをおす？",
+    "ruby": false,
+    "task": {
+      "kind": "button",
+      "style": "dialog",
+      "title": "Cookie の設定",
+      "message": "このサイトでは、サービスの提供や広告のために Cookie を使用します。",
+      "buttons": [
+        "すべて同意する",
+        "必要な Cookie のみ許可",
+        "詳細設定"
+      ],
+      "answer": 1
+    },
+    "explanation": "必要な Cookie だけを許可すると、広告などのための情報の利用をおさえられます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g1-info-05",
+    "grade": 1,
+    "field": "information",
+    "device": "all",
+    "type": "choice",
+    "question": "「満足度90%」という調査結果を評価するとき、最も確認すべきことは？",
+    "ruby": false,
+    "choices": [
+      "だれに、何人に、どのように調査したか",
+      "グラフの色",
+      "見出しの大きさ",
+      "発表した日の天気"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "調査の対象や方法によって、結果の意味は大きく変わります。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g1-info-06",
+    "grade": 1,
+    "field": "information",
+    "device": "all",
+    "type": "multi",
+    "question": "一次情報（元の情報）にあたるものを全部えらぼう。",
+    "ruby": false,
+    "choices": [
+      "政府が公表した統計データ",
+      "研究者が書いた元の論文",
+      "その論文を紹介したまとめブログ",
+      "ニュースを要約したSNS投稿"
+    ],
+    "answer": [
+      0,
+      1
+    ],
+    "explanation": "まとめや要約は二次情報です。できるだけ元の情報にあたりましょう。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g1-info-07",
+    "grade": 1,
+    "field": "information",
+    "device": "all",
+    "type": "choice",
+    "question": "人口1万人あたりの図書館の数が最も多いのはどの市？",
+    "ruby": false,
+    "figure": {
+      "kind": "table",
+      "caption": "人口と図書館の数",
+      "headers": [
+        "市",
+        "人口",
+        "図書館"
+      ],
+      "rows": [
+        [
+          "A市",
+          "20万人",
+          "10館"
+        ],
+        [
+          "B市",
+          "5万人",
+          "4館"
+        ],
+        [
+          "C市",
+          "40万人",
+          "16館"
+        ]
+      ]
+    },
+    "choices": [
+      "B市",
+      "A市",
+      "C市",
+      "すべて同じ"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "A市 10÷20＝0.5館、B市 4÷5＝0.8館、C市 16÷40＝0.4館です。数だけでなく、人口あたりで比べます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g1-info-08",
+    "grade": 1,
+    "field": "information",
+    "device": "all",
+    "type": "order",
+    "question": "レポートを書くときの流れにならべよう。",
+    "ruby": false,
+    "choices": [
+      "問いを立てる",
+      "資料を集め、出典を記録する",
+      "資料を比べて考えをまとめる",
+      "本文を書き、引用と参考文献を示す"
+    ],
+    "answer": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "explanation": "出典は集めるときに記録しておくと、あとで正しく示せます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g1-safety-05",
+    "grade": 1,
+    "field": "safety",
+    "device": "all",
+    "type": "choice",
+    "question": "SMSで「お荷物をお届けしましたが不在のため持ち帰りました。確認はこちら→（URL）」と届いた。最も適切な対応は？",
+    "ruby": false,
+    "choices": [
+      "URLは開かず、配送業者の公式アプリやサイトで確かめる",
+      "すぐにURLを開く",
+      "SMSに返信して問い合わせる",
+      "友だちに転送して確かめてもらう"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "配送業者を名乗るにせのSMS（スミッシング）は代表的な手口です。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g1-safety-06",
+    "grade": 1,
+    "field": "safety",
+    "device": "all",
+    "type": "choice",
+    "question": "学校や会社の内部資料を、生成AIにそのまま入力することの問題点は？",
+    "ruby": false,
+    "choices": [
+      "入力した情報が外部に保存されたり利用されたりするおそれがある",
+      "AIの回答が速くなる",
+      "問題はまったくない",
+      "資料の文字数が増える"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "利用するサービスの規約や設定、組織のルールを確かめてから使いましょう。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g1-safety-07",
+    "grade": 1,
+    "field": "safety",
+    "device": "all",
+    "type": "multi",
+    "question": "ディープフェイク（AIで作られたにせの映像）を見分ける手がかりを全部えらぼう。",
+    "ruby": false,
+    "choices": [
+      "公式の発表や信頼できる報道で同じ内容が確認できるか",
+      "口の動きや影などに不自然な点がないか",
+      "再生回数が多いか",
+      "発信元のアカウントが本物か"
+    ],
+    "answer": [
+      0,
+      1,
+      3
+    ],
+    "explanation": "再生回数の多さは、本物かどうかとは関係がありません。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g1-safety-08",
+    "grade": 1,
+    "field": "safety",
+    "device": "all",
+    "type": "match",
+    "question": "サイバー攻撃の手口と説明を組み合わせよう。",
+    "ruby": false,
+    "pairs": [
+      {
+        "left": "ランサムウェア",
+        "right": "データを使えなくし、元にもどす代わりにお金を要求する"
+      },
+      {
+        "left": "フィッシング",
+        "right": "にせのサイトに誘導して、IDやパスワードを盗む"
+      },
+      {
+        "left": "ソーシャルエンジニアリング",
+        "right": "人の油断やうっかりにつけこんで情報を聞き出す"
+      }
+    ],
+    "explanation": "手口を知っておくと、被害を防ぎやすくなります。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
   }
 ]

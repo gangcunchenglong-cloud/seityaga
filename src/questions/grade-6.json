@@ -366,5 +366,372 @@
     "source": "ai",
     "reviewedBy": "",
     "reviewedAt": ""
+  },
+  {
+    "id": "g6-op-pc-05",
+    "grade": 6,
+    "field": "operation",
+    "device": "pc",
+    "type": "input",
+    "question": "ローマ{字|じ}{入力|にゅうりょく}で「すいか」と{入力|にゅうりょく}しよう（S U I K A）。",
+    "ruby": true,
+    "target": "すいか",
+    "timeLimitSec": 45,
+    "explanation": "「す」は S と U、「い」は I、「か」は K と A です。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g6-op-pc-06",
+    "grade": 6,
+    "field": "operation",
+    "device": "pc",
+    "type": "input",
+    "question": "ローマ{字|じ}{入力|にゅうりょく}で「きって」と{入力|にゅうりょく}しよう。",
+    "ruby": true,
+    "target": "きって",
+    "timeLimitSec": 60,
+    "explanation": "{小|ちい}さい「っ」は、つぎの{文字|もじ}の{子音|しいん}を2{回|かい}{打|う}ちます（KITTE）。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g6-op-pc-07",
+    "grade": 6,
+    "field": "operation",
+    "device": "pc",
+    "type": "choice",
+    "question": "ローマ{字|じ}{入力|にゅうりょく}で「しゃ」と{打|う}つ{順番|じゅんばん}は？",
+    "ruby": true,
+    "choices": [
+      "S → H → A",
+      "S → I → Y → A",
+      "S → A",
+      "H → S → A"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "「しゃ」は SHA（または SYA）と{打|う}ちます。SIYA だと「しや」に なります。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g6-op-pc-08",
+    "grade": 6,
+    "field": "operation",
+    "device": "pc",
+    "type": "ui-task",
+    "question": "「たんけんカード」の ファイルを ダブルクリックして{開|ひら}こう。",
+    "ruby": true,
+    "task": {
+      "kind": "open-item",
+      "action": "double-click",
+      "items": [
+        "📄 たんけんカード",
+        "📄 かんさつきろく",
+        "🖼 えにっき"
+      ],
+      "answer": 0
+    },
+    "explanation": "ファイルは ダブルクリックで{開|ひら}きます。{名前|なまえ}を よく{見|み}て えらびましょう。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g6-op-touch-05",
+    "grade": 6,
+    "field": "operation",
+    "device": "touch",
+    "type": "input",
+    "question": "がめんの キーボードで「すいか」と{入力|にゅうりょく}しよう。",
+    "ruby": true,
+    "target": "すいか",
+    "timeLimitSec": 45,
+    "explanation": "ローマ{字|じ}でも かなでも{入力|にゅうりょく}できます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g6-op-touch-06",
+    "grade": 6,
+    "field": "operation",
+    "device": "touch",
+    "type": "input",
+    "question": "がめんの キーボードで「きって」と{入力|にゅうりょく}しよう。",
+    "ruby": true,
+    "target": "きって",
+    "timeLimitSec": 60,
+    "explanation": "{小|ちい}さい「っ」に なっているか たしかめましょう。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g6-op-touch-07",
+    "grade": 6,
+    "field": "operation",
+    "device": "touch",
+    "type": "ui-task",
+    "question": "{文字|もじ}を{長|なが}おしして、「すべてを{選択|せんたく}」を えらぼう。",
+    "ruby": true,
+    "task": {
+      "kind": "context-menu",
+      "trigger": "long-press",
+      "target": "📝 かんさつの メモ",
+      "menu": [
+        "すべてを{選択|せんたく}",
+        "{貼|は}り{付|つ}け",
+        "{調|しら}べる"
+      ],
+      "answer": 0
+    },
+    "explanation": "「すべてを{選択|せんたく}」で、{文字|もじ}を まとめて えらべます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g6-op-touch-08",
+    "grade": 6,
+    "field": "operation",
+    "device": "touch",
+    "type": "choice",
+    "question": "タブレットの{音|おと}を{大|おお}きく したい。どうする？",
+    "ruby": true,
+    "choices": [
+      "{音量|おんりょう}ボタン（＋）を おす",
+      "{電源|でんげん}ボタンを{長|なが}おしする",
+      "がめんを 2{回|かい} たたく",
+      "カメラを ひらく"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "{音|おと}の{大|おお}きさは{音量|おんりょう}ボタンで かえられます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g6-info-05",
+    "grade": 6,
+    "field": "information",
+    "device": "all",
+    "type": "choice",
+    "question": "{日本|にっぽん}で いちばん{長|なが}い{川|かわ}を{調|しら}べたい。けんさくに{入|い}れる ことばで よいのは？",
+    "ruby": true,
+    "choices": [
+      "{日本|にほん} {川|かわ} {長|なが}さ",
+      "{川|かわ}",
+      "{水|みず}",
+      "ながれる"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "{知|し}りたい ことの{大事|だいじ}な ことばを{組|く}み{合|あ}わせます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g6-info-06",
+    "grade": 6,
+    "field": "information",
+    "device": "all",
+    "type": "choice",
+    "question": "{花|か}だんの{花|はな}の{数|かず}です。いちばん{多|おお}いのは どれ？",
+    "ruby": true,
+    "figure": {
+      "kind": "bar",
+      "caption": "{花|か}だんの{花|はな}（{本|ほん}）",
+      "labels": [
+        "マリーゴールド",
+        "パンジー",
+        "サルビア"
+      ],
+      "values": [
+        12,
+        18,
+        9
+      ],
+      "unit": "本"
+    },
+    "choices": [
+      "パンジー",
+      "マリーゴールド",
+      "サルビア",
+      "どれも{同|おな}じ"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "ぼうが いちばん{高|たか}いのは パンジーです。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g6-info-07",
+    "grade": 6,
+    "field": "information",
+    "device": "all",
+    "type": "choice",
+    "question": "{図書館|としょかん}で{本|ほん}を{探|さが}すとき、{便利|べんり}な ものは？",
+    "ruby": true,
+    "choices": [
+      "{本|ほん}の{検索機|けんさくき}や{分類|ぶんるい}の{番号|ばんごう}",
+      "{本|ほん}の{色|いろ}",
+      "{本|ほん}の{重|おも}さ",
+      "となりの{人|ひと}が{読|よ}んでいる{本|ほん}"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "{図書館|としょかん}の{本|ほん}は{分類|ぶんるい}の{番号|ばんごう}で ならんでいます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g6-info-08",
+    "grade": 6,
+    "field": "information",
+    "device": "all",
+    "type": "order",
+    "question": "{見学|けんがく}で{分|わ}かった ことを{新聞|しんぶん}に まとめる{順番|じゅんばん}に ならべよう。",
+    "ruby": true,
+    "choices": [
+      "{伝|つた}えたい ことを{決|き}める",
+      "{見出|みだ}しと{記事|きじ}の{場所|ばしょ}を{考|かんが}える",
+      "{記事|きじ}を{書|か}く",
+      "{読|よ}み{返|かえ}して{直|なお}す"
+    ],
+    "answer": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "explanation": "{書|か}いた あとに{読|よ}み{返|かえ}すと、まちがいに{気|き}づけます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g6-safety-05",
+    "grade": 6,
+    "field": "safety",
+    "device": "all",
+    "type": "choice",
+    "question": "{学校|がっこう}の タブレットの パスワードを わすれて しまった。どうする？",
+    "ruby": true,
+    "choices": [
+      "{先生|せんせい}に{相談|そうだん}する",
+      "{友|とも}だちの パスワードを つかう",
+      "でたらめに{何回|なんかい}も{入|い}れる",
+      "パスワードを{紙|かみ}に{書|か}いて{机|つくえ}に はる"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "{人|ひと}の パスワードは つかいません。こまったら{先生|せんせい}に{相談|そうだん}しましょう。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g6-safety-06",
+    "grade": 6,
+    "field": "safety",
+    "device": "all",
+    "type": "multi",
+    "question": "{動画|どうが}を{見|み}ていたら「{当|あ}たりました！」と{出|で}た。よい{行動|こうどう}を{全部|ぜんぶ}えらぼう。",
+    "ruby": true,
+    "choices": [
+      "おさずに{閉|と}じる",
+      "{大人|おとな}に{伝|つた}える",
+      "{名前|なまえ}と{住所|じゅうしょ}を{入|い}れる",
+      "{友|とも}だちにも{教|おし}えて おさせる"
+    ],
+    "answer": [
+      0,
+      1
+    ],
+    "explanation": "「{当|あ}たりました」は、{人|ひと}を だます ための ことが あります。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g6-safety-07",
+    "grade": 6,
+    "field": "safety",
+    "device": "all",
+    "type": "choice",
+    "question": "{友|とも}だちが{作|つく}った{作品|さくひん}の{写真|しゃしん}を、{自分|じぶん}が{作|つく}ったことにして{見|み}せた。何が いけない？",
+    "ruby": true,
+    "choices": [
+      "{作|つく}った{人|ひと}を いつわって いる",
+      "{写真|しゃしん}が{暗|くら}い",
+      "{見|み}せた{人数|にんずう}が{少|すく}ない",
+      "いけない ところは ない"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "{作品|さくひん}は{作|つく}った{人|ひと}のものです。{人|ひと}の{作品|さくひん}を{自分|じぶん}のものにしては いけません。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g6-safety-08",
+    "grade": 6,
+    "field": "safety",
+    "device": "all",
+    "type": "match",
+    "question": "{言葉|ことば}と{意味|いみ}を{組|く}み{合|あ}わせよう。",
+    "ruby": true,
+    "pairs": [
+      {
+        "left": "パスワード",
+        "right": "{本人|ほんにん}だと たしかめる ための ひみつの{文字|もじ}"
+      },
+      {
+        "left": "ログイン",
+        "right": "IDとパスワードを{入|い}れて つかい はじめる こと"
+      },
+      {
+        "left": "ログアウト",
+        "right": "つかい おわって、{入|はい}った{状態|じょうたい}を おわらせる こと"
+      }
+    ],
+    "explanation": "つかい おわったら ログアウトすると、ほかの{人|ひと}に つかわれません。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
   }
 ]

@@ -395,5 +395,391 @@
     "source": "ai",
     "reviewedBy": "",
     "reviewedAt": ""
+  },
+  {
+    "id": "g3-op-pc-05",
+    "grade": 3,
+    "field": "operation",
+    "device": "pc",
+    "type": "choice",
+    "question": "Shift キーをおしながら → キーをおすとどうなる？",
+    "ruby": false,
+    "choices": [
+      "文字を選びながらカーソルが動く",
+      "文字が消える",
+      "すべて大文字になる",
+      "画面が閉じる"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "Shift ＋ 矢印キーで、文字の範囲を選べます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g3-op-pc-06",
+    "grade": 3,
+    "field": "operation",
+    "device": "pc",
+    "type": "ui-task",
+    "question": "「6年_理科_実験結果」のファイルを、いちばんふさわしいフォルダーへドラッグしよう。",
+    "ruby": false,
+    "task": {
+      "kind": "drag-to-folder",
+      "file": "📊 6年_理科_実験結果",
+      "folders": [
+        "📁 6年 › 理科",
+        "📁 6年 › 国語",
+        "📁 5年 › 理科"
+      ],
+      "answer": 0
+    },
+    "explanation": "学年と教科の両方が合うフォルダーを選びます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g3-op-pc-07",
+    "grade": 3,
+    "field": "operation",
+    "device": "pc",
+    "type": "choice",
+    "question": "表計算ソフトで、B2からB6までの平均を求める式はどれ？",
+    "ruby": false,
+    "choices": [
+      "=AVERAGE(B2:B6)",
+      "=SUM(B2:B6)",
+      "=AVERAGE(B2,B6)",
+      "=B2+B6/2"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "AVERAGE は平均、「:」は範囲です。「,」だと B2 と B6 の2つだけの平均になります。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g3-op-pc-08",
+    "grade": 3,
+    "field": "operation",
+    "device": "pc",
+    "type": "input",
+    "question": "「My Town Map 2026」と入力しよう（大文字・小文字・スペースも同じに）。",
+    "ruby": false,
+    "target": "My Town Map 2026",
+    "timeLimitSec": 40,
+    "explanation": "大文字と小文字、スペースの位置もよく見て入力しましょう。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g3-op-touch-05",
+    "grade": 3,
+    "field": "operation",
+    "device": "touch",
+    "type": "input",
+    "question": "「My Town Map 2026」と入力しよう（大文字・小文字・スペースも同じに）。",
+    "ruby": false,
+    "target": "My Town Map 2026",
+    "timeLimitSec": 55,
+    "explanation": "大文字は ⇧ キーをおしてから入力します。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g3-op-touch-06",
+    "grade": 3,
+    "field": "operation",
+    "device": "touch",
+    "type": "ui-task",
+    "question": "いらなくなった写真を長おしして、削除しよう。",
+    "ruby": false,
+    "task": {
+      "kind": "context-menu",
+      "trigger": "long-press",
+      "target": "🖼 ぶれてしまった写真",
+      "menu": [
+        "共有",
+        "お気に入り",
+        "削除",
+        "複製"
+      ],
+      "answer": 2
+    },
+    "explanation": "長おしのメニューから削除できます。消してよいか確かめてから選びましょう。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g3-op-touch-07",
+    "grade": 3,
+    "field": "operation",
+    "device": "touch",
+    "type": "choice",
+    "question": "共有されたファイルに「閲覧のみ」と表示されている。できることはどれ？",
+    "ruby": false,
+    "choices": [
+      "ファイルを見ること",
+      "ファイルの内容を書きかえること",
+      "ファイルを削除すること",
+      "ファイルの名前を変えること"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "「閲覧のみ」は、見ることだけができるという意味です。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g3-op-touch-08",
+    "grade": 3,
+    "field": "operation",
+    "device": "touch",
+    "type": "ui-task",
+    "question": "ファイルを削除しようとしたら確認が出た。まちがえて消そうとしていた。どれをおす？",
+    "ruby": false,
+    "task": {
+      "kind": "button",
+      "style": "dialog",
+      "title": "ファイルの削除",
+      "message": "「社会_まとめ」を削除しますか？",
+      "buttons": [
+        "削除",
+        "キャンセル"
+      ],
+      "answer": 1
+    },
+    "explanation": "確認の画面では、ボタンの言葉をよく読んでから選びましょう。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g3-info-05",
+    "grade": 3,
+    "field": "information",
+    "device": "all",
+    "type": "choice",
+    "question": "あるWebページに「この商品を使えば必ず成績が上がる」と書いてあった。最も適切な考え方は？",
+    "ruby": false,
+    "choices": [
+      "「必ず」と言い切る宣伝はうのみにせず、根拠を確かめる",
+      "書いてあるので本当だと考える",
+      "見ている人が多いので本当だと考える",
+      "有名なサイトなので本当だと考える"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "宣伝は売るための情報です。根拠があるかを確かめましょう。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g3-info-06",
+    "grade": 3,
+    "field": "information",
+    "device": "all",
+    "type": "choice",
+    "question": "通学時間のグラフです。10分以上かかる人は何人？",
+    "ruby": false,
+    "figure": {
+      "kind": "bar",
+      "caption": "通学時間（人）",
+      "labels": [
+        "5分未満",
+        "5〜10分未満",
+        "10〜15分未満",
+        "15分以上"
+      ],
+      "values": [
+        6,
+        10,
+        8,
+        4
+      ],
+      "unit": "人"
+    },
+    "choices": [
+      "12人",
+      "8人",
+      "4人",
+      "18人"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "「10〜15分未満」の8人と「15分以上」の4人で12人です。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g3-info-07",
+    "grade": 3,
+    "field": "information",
+    "device": "all",
+    "type": "choice",
+    "question": "Webサイトの情報が、いつ書かれたものかを確かめるのはなぜ？",
+    "ruby": false,
+    "choices": [
+      "情報が古くなっていることがあるから",
+      "新しいサイトは必ずまちがっているから",
+      "日付があるとページがきれいだから",
+      "日付を見ると検索が速くなるから"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "情報は時間がたつと変わることがあります。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g3-info-08",
+    "grade": 3,
+    "field": "information",
+    "device": "all",
+    "type": "order",
+    "question": "インタビューで情報を集める流れにならべよう。",
+    "ruby": false,
+    "choices": [
+      "聞きたいことを決めて質問を準備する",
+      "相手に都合を聞いて約束をする",
+      "インタビューをしてメモをとる",
+      "お礼を伝え、内容をまとめる"
+    ],
+    "answer": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "explanation": "準備をしてから話を聞き、最後にお礼とまとめをします。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g3-safety-05",
+    "grade": 3,
+    "field": "safety",
+    "device": "all",
+    "type": "multi",
+    "question": "個人情報を守るために正しい行動を全部えらぼう。",
+    "ruby": false,
+    "choices": [
+      "パスワードは他人に教えない",
+      "人の多い場所では画面をのぞかれないようにする",
+      "アンケートサイトに住所や電話番号を気軽に入力する",
+      "学校のタブレットのログイン情報を友だちと共有する"
+    ],
+    "answer": [
+      0,
+      1
+    ],
+    "explanation": "自分の情報は、自分で守る意識が大切です。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g3-safety-06",
+    "grade": 3,
+    "field": "safety",
+    "device": "all",
+    "type": "choice",
+    "question": "友だちとふざけて撮った写真を、友だちに断らずにSNSにのせた。何が問題？",
+    "ruby": false,
+    "choices": [
+      "友だちのプライバシーや肖像権を守っていない",
+      "写真の画質が悪い",
+      "フォロワーが少ない",
+      "何も問題はない"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "人が写っている写真は、その人の許可をもらってからのせます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g3-safety-07",
+    "grade": 3,
+    "field": "safety",
+    "device": "all",
+    "type": "choice",
+    "question": "アプリで「位置情報の利用を許可しますか」と出た。考え方として正しいのは？",
+    "ruby": false,
+    "choices": [
+      "必要なアプリだけで使い、むやみに許可しない",
+      "すべてのアプリで、いつも許可する",
+      "位置情報は知られても困らない",
+      "SNSの投稿には必ず位置情報をつける"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "位置情報から、家や学校の場所が分かってしまうことがあります。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g3-safety-08",
+    "grade": 3,
+    "field": "safety",
+    "device": "all",
+    "type": "match",
+    "question": "言葉と意味を組み合わせよう。",
+    "ruby": false,
+    "pairs": [
+      {
+        "left": "肖像権",
+        "right": "自分の顔や姿を勝手に撮られたり使われたりしない権利"
+      },
+      {
+        "left": "著作権",
+        "right": "作品を作った人がもつ権利"
+      },
+      {
+        "left": "個人情報",
+        "right": "その人がだれかが分かる情報"
+      }
+    ],
+    "explanation": "どれも、人を大切にするためのきまりや考え方です。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
   }
 ]

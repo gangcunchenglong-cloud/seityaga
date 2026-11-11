@@ -387,5 +387,398 @@
     "source": "ai",
     "reviewedBy": "",
     "reviewedAt": ""
+  },
+  {
+    "id": "g7-op-pc-05",
+    "grade": 7,
+    "field": "operation",
+    "device": "pc",
+    "type": "input",
+    "question": "キーボードで「ねこ」と にゅうりょく しよう。",
+    "ruby": true,
+    "target": "ねこ",
+    "timeLimitSec": 60,
+    "explanation": "もじを うって、Enter キーで かくてい します。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g7-op-pc-06",
+    "grade": 7,
+    "field": "operation",
+    "device": "pc",
+    "type": "input",
+    "question": "キーボードで「おはよう」と にゅうりょく しよう。",
+    "ruby": true,
+    "target": "おはよう",
+    "timeLimitSec": 75,
+    "explanation": "ながい ことばも、1もじずつ おちついて うちましょう。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g7-op-pc-07",
+    "grade": 7,
+    "field": "operation",
+    "device": "pc",
+    "type": "choice",
+    "question": "もじと もじの あいだを あけたい。どの キーを おす？",
+    "ruby": true,
+    "choices": [
+      "Space（スペース）",
+      "Enter（エンター）",
+      "BackSpace（バックスペース）",
+      "Esc（エスケープ）"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "いちばん よこながの Space キーで、あいだを あけられます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g7-op-pc-08",
+    "grade": 7,
+    "field": "operation",
+    "device": "pc",
+    "type": "ui-task",
+    "question": "かいた ぶんしょうを のこして おわりたい。どの ボタンを おす？",
+    "ruby": true,
+    "task": {
+      "kind": "button",
+      "style": "dialog",
+      "title": "メモ",
+      "message": "かえた ところを のこしますか？",
+      "buttons": [
+        "のこす",
+        "のこさない",
+        "やめる"
+      ],
+      "answer": 0
+    },
+    "explanation": "「のこさない」を おすと、かいた ところが きえて しまいます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g7-op-touch-05",
+    "grade": 7,
+    "field": "operation",
+    "device": "touch",
+    "type": "input",
+    "question": "がめんの キーボードで「ねこ」と にゅうりょく しよう。",
+    "ruby": true,
+    "target": "ねこ",
+    "timeLimitSec": 60,
+    "explanation": "がめんの キーボードを ゆびで おして うちます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g7-op-touch-06",
+    "grade": 7,
+    "field": "operation",
+    "device": "touch",
+    "type": "input",
+    "question": "がめんの キーボードで「おはよう」と にゅうりょく しよう。",
+    "ruby": true,
+    "target": "おはよう",
+    "timeLimitSec": 75,
+    "explanation": "「よ」は、ちいさい「ょ」に ならないように きを つけます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g7-op-touch-07",
+    "grade": 7,
+    "field": "operation",
+    "device": "touch",
+    "type": "choice",
+    "question": "がめんの キーボードで、したの ぎょうに いきたい。どの キーを おす？",
+    "ruby": true,
+    "choices": [
+      "{改行|かいぎょう}",
+      "⌫（けす キー）",
+      "{空白|くうはく}",
+      "🌐（きりかえ キー）"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "「{改行|かいぎょう}」の キーで、つぎの ぎょうに すすみます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g7-op-touch-08",
+    "grade": 7,
+    "field": "operation",
+    "device": "touch",
+    "type": "ui-task",
+    "question": "しゃしんを おきにいりに したいよ。どの ボタンを おす？",
+    "ruby": true,
+    "task": {
+      "kind": "button",
+      "style": "toolbar",
+      "title": "しゃしん",
+      "message": "🌷 チューリップの しゃしん",
+      "buttons": [
+        "🗑 ごみばこ",
+        "↗ きょうゆう",
+        "♡ おきにいり"
+      ],
+      "answer": 2
+    },
+    "explanation": "ハートの マークは「おきにいり」の いみです。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g7-info-05",
+    "grade": 7,
+    "field": "information",
+    "device": "all",
+    "type": "choice",
+    "question": "そだてて いる はなの かずです。チューリップは ひまわりより なんぼん おおい？",
+    "ruby": true,
+    "figure": {
+      "kind": "bar",
+      "caption": "そだてて いる はな（ほん）",
+      "labels": [
+        "チューリップ",
+        "ひまわり",
+        "あさがお"
+      ],
+      "values": [
+        8,
+        5,
+        6
+      ],
+      "unit": "ほん"
+    },
+    "choices": [
+      "3ぼん",
+      "13ぼん",
+      "2ぼん",
+      "5ぼん"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "8ぼん ひく 5ほんで、3ぼん おおいです。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g7-info-06",
+    "grade": 7,
+    "field": "information",
+    "device": "all",
+    "type": "choice",
+    "question": "しらべた ことを ともだちに つたえる とき、だいじな ことは？",
+    "ruby": true,
+    "choices": [
+      "どこで しらべたかも つたえる",
+      "わからない ことも しって いる ふりを する",
+      "しらべて いない ことを つけたす",
+      "こえを ちいさく して はやく いう"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "どこで しらべたかを いうと、きいた ひとも たしかめられます。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g7-info-07",
+    "grade": 7,
+    "field": "information",
+    "device": "all",
+    "type": "match",
+    "question": "しりたい ことと、しらべる ものを むすぼう。",
+    "ruby": true,
+    "pairs": [
+      {
+        "left": "きょうの きゅうしょく",
+        "right": "こんだてひょう"
+      },
+      {
+        "left": "かんじの よみかた",
+        "right": "かんじじてん"
+      },
+      {
+        "left": "あしたの もちもの",
+        "right": "れんらくちょう"
+      }
+    ],
+    "explanation": "しりたい ことに あった ものを つかうと、すぐに わかります。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g7-info-08",
+    "grade": 7,
+    "field": "information",
+    "device": "all",
+    "type": "choice",
+    "question": "すきな きせつ しらべ。はると なつを あわせると なんにん？",
+    "ruby": true,
+    "figure": {
+      "kind": "table",
+      "caption": "すきな きせつ",
+      "headers": [
+        "きせつ",
+        "にんずう"
+      ],
+      "rows": [
+        [
+          "はる",
+          "7にん"
+        ],
+        [
+          "なつ",
+          "9にん"
+        ],
+        [
+          "あき",
+          "6にん"
+        ],
+        [
+          "ふゆ",
+          "4にん"
+        ]
+      ]
+    },
+    "choices": [
+      "16にん",
+      "7にん",
+      "9にん",
+      "26にん"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "はるの 7にんと なつの 9にんを たして 16にんです。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g7-safety-05",
+    "grade": 7,
+    "field": "safety",
+    "device": "all",
+    "type": "choice",
+    "question": "おうちの ひとの スマホで、ゲームの アイテムを かいたく なったよ。どうする？",
+    "ruby": true,
+    "choices": [
+      "かう まえに おうちの ひとに きく",
+      "だまって かう",
+      "たくさん かう",
+      "ともだちに かって もらう"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "インターネットで ものを かうと、ほんとうの おかねが かかります。かならず おうちの ひとに ききましょう。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g7-safety-06",
+    "grade": 7,
+    "field": "safety",
+    "device": "all",
+    "type": "choice",
+    "question": "メッセージで ともだちに いやな ことを いわれたよ。どうする？",
+    "ruby": true,
+    "choices": [
+      "おとなに そうだん する",
+      "いやな ことを いいかえす",
+      "みんなに ひろめる",
+      "ずっと ひとりで なやむ"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "こまった ときは、ひとりで かかえずに おとなに そうだん しましょう。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g7-safety-07",
+    "grade": 7,
+    "field": "safety",
+    "device": "all",
+    "type": "multi",
+    "question": "しらない ひとから メッセージが きたとき、よい ことを ぜんぶ えらぼう。",
+    "ruby": true,
+    "choices": [
+      "へんじを しない",
+      "おうちの ひとに みせる",
+      "じぶんの しゃしんを おくる",
+      "あう やくそくを する"
+    ],
+    "answer": [
+      0,
+      1
+    ],
+    "explanation": "しらない ひとには へんじを せず、おとなに みせましょう。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
+  },
+  {
+    "id": "g7-safety-08",
+    "grade": 7,
+    "field": "safety",
+    "device": "all",
+    "type": "choice",
+    "question": "タブレットを つかう じかんが おわったよ。どうする？",
+    "ruby": true,
+    "choices": [
+      "やくそく どおり おわりに する",
+      "もう すこしだけ つづける",
+      "かくれて つかう",
+      "ともだちに かりて つづける"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "きめた じかんを まもる ことが たいせつです。",
+    "status": "draft",
+    "source": "ai",
+    "reviewedBy": "",
+    "reviewedAt": ""
   }
 ]
